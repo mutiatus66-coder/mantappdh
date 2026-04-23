@@ -30,6 +30,12 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('role')
+                    ->badge()
+                    ->color(fn (string $state) => match ($state) {
+                        'admin' => 'danger',
+                        'user' => 'primary',
+                    }),
             ])
             ->filters([
                 //
