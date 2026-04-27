@@ -27,7 +27,7 @@
         <li class="nav__item">
           <a href="#new" class="nav__link">Know More</a>
         </li>
-        <a href="/admin" class="button button--ghost">Login</a>
+        <a href="/login" class="button button--ghost">Login</a>
       </ul>
       <div class="nav__close" id="nav-close">
         <i class='bx bx-x'></i>
@@ -61,7 +61,7 @@
               <p class="home__description">Wherever Lumi goes, the world feels brighter. Curious and full of wonder, she chases every spark of magic, lighting the path ahead and turning even the smallest moments into something alive and beautiful. <strong> Lumi. </strong></p>
               <div class="home__buttons">
                 <a href="#" class="book--now">
-                  <img src="img/black.png" alt="" />
+                  <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
                 </a>
                 <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i>
                 </a>
@@ -73,17 +73,17 @@
         <section class="swiper-slide">
           <div class="home__content grid">
             <div class="home__group">
-              <img src="img/black.png" alt="" class="home__img">
+              <img src="https://assets.codepen.io/7773162/home2-img.png" alt="" class="home__img">
               <div class="home__indicator"></div>
               <div class="home__details-img">
-                <h4 class="home__details-title">Nox</h4>
-                <span class="home__details-subtitle">Born from the soft glow of twilight, Nox carries warmth even in the darkest places. With a gentle heart and blushing cheeks, he brings comfort to the lost and reminds others that even shadows can feel like home.</span>
+                <h4 class="home__details-title">Adino & Grahami</h4>
+                <span class="home__details-subtitle">No words can describe them</span>
               </div>
             </div>
             <div class="home__data">
-              <h3 class="home__subtitle">#2 </h3>
-              <h1 class="home__title">Nox <br> the Warm Shadow <br> PAGE 2 </h1>
-              <p class="home__description">Born from the soft glow of twilight, Nox carries warmth even in the darkest places. With a gentle heart and blushing cheeks, he brings comfort to the lost and reminds others that even shadows can feel like home. </p>
+              <h3 class="home__subtitle">#2 top Best duo</h3>
+              <h1 class="home__title">BRING BACK <br> MY COTTON <br> CANDY </h1>
+              <p class="home__description">Adino steals cotton candy from his brother and eats them all in one bite, a hungry beast. Grahami can no longer contain his anger towards Adino. </p>
               <div class="home__buttons">
                 <a href="#" class="book--now">
                   <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
