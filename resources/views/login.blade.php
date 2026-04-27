@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>login page</title>
+    <title>Home</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-	<link rel="stylesheet" href="style2.css" />
+	<link rel="stylesheet" href="styles.css" />
 	<link rel='stylesheet' href='https://unicons.iconscout.com/release/v2.1.9/css/unicons.css'>
   </head>
   <body>
