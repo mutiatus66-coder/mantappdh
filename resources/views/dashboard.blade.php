@@ -1,246 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Landing Page - Start Bootstrap Theme</title>
-        <!-- Favicon-->
-        <link rel="icon" type="landing/image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="landing/css/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <!-- Navigation-->
-        <nav class="navbar navbar-light bg-light static-top">
-            <div class="container">
-                <a class="navbar-brand" href="#!">Start Bootstrap</a>
-                <a class="btn btn-primary" href="/">Sign Up</a>
-                <a class="btn btn-primary" href="/admin">Login</a>
-
+  <head>
+    <title>Halloween Landing Page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel='stylesheet' href='https://assets.codepen.io/7773162/swiper-bundle.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css'>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+<header class="header" id="header">
+  <nav class="nav container">
+    <a href="#" class="nav__logo"> Spooky </a>
+    <div class="nav__menu" id="nav-menu">
+      <ul class="nav__list">
+        <li class="nav__item">
+          <a href="#home" class="nav__link active-link">Graveyard</a>
+        </li>
+        <li class="nav__item">
+          <a href="#about" class="nav__link">Track Record</a>
+        </li>
+        <li class="nav__item">
+          <a href="#trick" class="nav__link">Services</a>
+        </li>
+        <li class="nav__item">
+          <a href="#new" class="nav__link">Know More</a>
+        </li>
+        <a href="/admin" class="button button--ghost">Login</a>
+      </ul>
+      <div class="nav__close" id="nav-close">
+        <i class='bx bx-x'></i>
+      </div>
+      <img src="https://assets.codepen.io/7773162/nav-img.png" alt="" class="nav__img">
+    </div>
+    <div class="nav__toggle" id="nav-toggle">
+      <i class='bx bx-grid-alt'></i>
+    </div>
+  </nav>
+</header>
+<main class="main">
+  <!-- HOME -->
+  <section class="home container" id="home">
+    <div class="swiper home-swiper">
+      <div class="swiper-wrapper">
+        <!-- HOME SLIDER 1 -->
+        <section class="swiper-slide">
+          <div class="home__content grid">
+            <div class="home__group">
+              <img src="img/put.png" alt="" class="home__img">
+              <div class="home__indicator"></div>
+              <div class="home__details-img">
+                <h4 class="home__details-title">Lumi</h4>
+                <span class="home__details-subtitle">the Little Light</span>
+              </div>
             </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead">
-            <div class="container position-relative">
-                <div class="row justify-content-center">
-                    <div class="col-xl-6">
-                        <div class="text-center text-white">
-                            <!-- Page heading-->
-                            <h1 class="mb-5">Dashboard!</h1>
-                            <!-- Signup form-->
-                            <!-- * * * * * * * * * * * * * * *-->
-                            <!-- * * SB Forms Contact Form * *-->
-                            <!-- * * * * * * * * * * * * * * *-->
-                            <!-- This form is pre-integrated with SB Forms.-->
-                            <!-- To make this form functional, sign up at-->
-                            <!-- https://startbootstrap.com/solution/contact-forms-->
-                            <!-- to get an API token!-->
-                            <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                <!-- Email address input-->
-                                <div class="row">
-                                    <div class="col">
-                                        <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                                        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
-                                    </div>
-                                    <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                                </div>
-                                <!-- Submit success message-->
-                                <!---->
-                                <!-- This is what your users will see when the form-->
-                                <!-- has successfully submitted-->
-                                <div class="d-none" id="submitSuccessMessage">
-                                    <div class="text-center mb-3">
-                                        <div class="fw-bolder">Form submission successful!</div>
-                                        <p>To activate this form, sign up at</p>
-                                        <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                                    </div>
-                                </div>
-                                <!-- Submit error message-->
-                                <!---->
-                                <!-- This is what your users will see when there is-->
-                                <!-- an error submitting the form-->
-                                <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <div class="home__data">
+              <h3 class="home__subtitle">#1 </h3>
+              <h1 class="home__title">PROJECT <br> LANDING <br> PAGE  1 </h1>
+              <p class="home__description">Wherever Lumi goes, the world feels brighter. Curious and full of wonder, she chases every spark of magic, lighting the path ahead and turning even the smallest moments into something alive and beautiful. <strong> Lumi. </strong></p>
+              <div class="home__buttons">
+                <a href="#" class="book--now">
+                  <img src="img/black.png" alt="" />
+                </a>
+                <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i>
+                </a>
+              </div>
             </div>
-        </header>
-        <!-- Icons Grid-->
-        <section class="features-icons bg-light text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
-                            <h3>Fully Responsive</h3>
-                            <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
-                            <h3>Bootstrap 5 Ready</h3>
-                            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
-                            <h3>Easy to Use</h3>
-                            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </section>
-        <!-- Image Showcases-->
-        <section class="showcase">
-            <div class="container-fluid p-0">
-                <div class="row g-0">
-                    <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('landing/assets/img/bg-showcase-1.jpg')"></div>
-                    <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                        <h2>Fully Responsive Design</h2>
-                        <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
-                    </div>
-                </div>
-                <div class="row g-0">
-                    <div class="col-lg-6 text-white showcase-img" style="background-image: url('landing/assets/img/bg-showcase-2.jpg')"></div>
-                    <div class="col-lg-6 my-auto showcase-text">
-                        <h2>Updated For Bootstrap 5</h2>
-                        <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 5 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 5!</p>
-                    </div>
-                </div>
-                <div class="row g-0">
-                    <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('landing/assets/img/bg-showcase-3.jpg')"></div>
-                    <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                        <h2>Easy to Use & Customize</h2>
-                        <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
-                    </div>
-                </div>
+        <!-- HOME SLIDER 2 -->
+        <section class="swiper-slide">
+          <div class="home__content grid">
+            <div class="home__group">
+              <img src="img/black.png" alt="" class="home__img">
+              <div class="home__indicator"></div>
+              <div class="home__details-img">
+                <h4 class="home__details-title">Nox</h4>
+                <span class="home__details-subtitle">Born from the soft glow of twilight, Nox carries warmth even in the darkest places. With a gentle heart and blushing cheeks, he brings comfort to the lost and reminds others that even shadows can feel like home.</span>
+              </div>
             </div>
+            <div class="home__data">
+              <h3 class="home__subtitle">#2 </h3>
+              <h1 class="home__title">Nox <br> the Warm Shadow <br> PAGE 2 </h1>
+              <p class="home__description">Born from the soft glow of twilight, Nox carries warmth even in the darkest places. With a gentle heart and blushing cheeks, he brings comfort to the lost and reminds others that even shadows can feel like home. </p>
+              <div class="home__buttons">
+                <a href="#" class="book--now">
+                  <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
+                </a>
+                <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i>
+                </a>
+              </div>
+            </div>
+          </div>
         </section>
-        <!-- Testimonials-->
-        <section class="testimonials text-center bg-light">
-            <div class="container">
-                <h2 class="mb-5">What people are saying...</h2>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                            <img class="img-fluid rounded-circle mb-3" src="landing/assets/img/testimonials-1.jpg" alt="..." />
-                            <h5>Margaret E.</h5>
-                            <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                            <img class="img-fluid rounded-circle mb-3" src="landing/assets/img/testimonials-2.jpg" alt="..." />
-                            <h5>Fred S.</h5>
-                            <p class="font-weight-light mb-0">"Bootstrap is amazing. I've been using it to create lots of super nice landing pages."</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                            <img class="img-fluid rounded-circle mb-3" src="landing/assets/img/testimonials-3.jpg" alt="..." />
-                            <h5>Sarah W.</h5>
-                            <p class="font-weight-light mb-0">"Thanks so much for making these free resources available to us!"</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- HOME SLIDER 3 -->
+        <section class="swiper-slide">
+          <div class="home__content grid">
+            <div class="home__group">
+              <img src="" alt="" class="home__img">
+              <div class="home__indicator"></div>
+              <div class="home__details-img">
+                <h4 class="home__details-title">The Labu “Reiza”</h4>
+                <span class="home__details-subtitle">The Living Pumpkin</span>
+              </div>
             </div>
+            <div class="home__data">
+              <h3 class="pumpkin__subtitle">#3 </h3>
+              <h1 class="home__title"> <br> LANDING <br> PAGE  2 </h1>
+              <p class="home__description">Hi I’m Reiza, people call me “The Labu” currently I’m trying to learn something new, building my own bike with parts only made from Malaysia. </p>
+              <div class="home__buttons">
+                <a href="#" class="book--now">
+                  <img src="https://assets.codepen.io/7773162/svgviewer-output+%282%29_2.svg" alt="" />
+                </a>
+                <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i>
+                </a>
+              </div>
+            </div>
+          </div>
         </section>
-        <!-- Call to Action-->
-        <section class="call-to-action text-white text-center" id="signup">
-            <div class="container position-relative">
-                <div class="row justify-content-center">
-                    <div class="col-xl-6">
-                        <h2 class="mb-4">Ready to get started? Sign up now!</h2>
-                        <!-- Signup form-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- * * SB Forms Contact Form * *-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- This form is pre-integrated with SB Forms.-->
-                        <!-- To make this form functional, sign up at-->
-                        <!-- https://startbootstrap.com/solution/contact-forms-->
-                        <!-- to get an API token!-->
-                        <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
-                            <!-- Email address input-->
-                            <div class="row">
-                                <div class="col">
-                                    <input class="form-control form-control-lg" id="emailAddressBelow" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:required">Email Address is required.</div>
-                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:email">Email Address Email is not valid.</div>
-                                </div>
-                                <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                            </div>
-                            <!-- Submit success message-->
-                            <!---->
-                            <!-- This is what your users will see when the form-->
-                            <!-- has successfully submitted-->
-                            <div class="d-none" id="submitSuccessMessage">
-                                <div class="text-center mb-3">
-                                    <div class="fw-bolder">Form submission successful!</div>
-                                    <p>To activate this form, sign up at</p>
-                                    <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                                </div>
-                            </div>
-                            <!-- Submit error message-->
-                            <!---->
-                            <!-- This is what your users will see when there is-->
-                            <!-- an error submitting the form-->
-                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                        </form>
-                    </div>
-                </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+  <!-- CATEGORY -->
+  <section class="section category">
+    <h2 class="section__title">Favorite Scare <br> Category </h2>
+    <div class="category__container container grid">
+      <div class="category__data">
+        <img src="https://assets.codepen.io/7773162/category1-img.png" alt="" class="category__img">
+        <h3 class="category__title">Ghosts</h3>
+        <p class="category__description">Choose the ghosts, the scariest there are.</p>
+      </div>
+      <div class="category__data">
+        <img src="https://assets.codepen.io/7773162/category2-img.png" alt="" class="category__img">
+        <h3 class="category__title">Pumpkins</h3>
+        <p class="category__description">You look at the scariest pumpkins there is.</p>
+      </div>
+      <div class="category__data">
+        <img src="https://assets.codepen.io/7773162/category3-img.png" alt="" class="category__img">
+        <h3 class="category__title">Witch Hat</h3>
+        <p class="category__description">Pick the most stylish witch hats out there.</p>
+      </div>
+    </div>
+  </section>
+  <!-- ABOUT -->
+  <section class="section about" id="about">
+    <div class="about__container container grid">
+      <div class="about__data">
+        <h2 class="section__title about__title">About Halloween <br> Night </h2>
+        <p class="about__description">Night of all the saints, or all the dead, is celebrated on October 31 and it is a very fun international celebration, this celebration comes from ancient origins, and is already celebrated by everyone. </p>
+        <a href="#" class="book--now">
+          <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
+        </a>
+      </div>
+      <img src="https://assets.codepen.io/7773162/about-img.png" alt="" class="about__img">
+    </div>
+  </section>
+  <!-- TRICK OR TREAT -->
+  <section class="section trick" id="trick">
+    <h2 class="section__title">Trick Or Treat</h2>
+    <div class="trick__container container grid">
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat1-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Toffee</h3>
+        <span class="trick__subtitle">Candy</span>
+        <span class="trick__price">$11.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat2-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Bone</h3>
+        <span class="trick__subtitle">Accessory</span>
+        <span class="trick__price">$8.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat3-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Scarecrow</h3>
+        <span class="trick__subtitle">Accessory</span>
+        <span class="trick__price">$15.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat4-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Candy Cane</h3>
+        <span class="trick__subtitle">Candy</span>
+        <span class="trick__price">$7.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat5-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Pumpkin</h3>
+        <span class="trick__subtitle">Candy</span>
+        <span class="trick__price">$19.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+      <div class="trick__content">
+        <img src="https://assets.codepen.io/7773162/trick-treat6-img.png" alt="" class="trick__img">
+        <h3 class="trick__title">Ghost</h3>
+        <span class="trick__subtitle">Accessory</span>
+        <span class="trick__price">$17.99</span>
+        <button class="button trick__button">
+          <i class='bx bx-cart-alt trick__icon'></i>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- DISCOUNT -->
+  <section class="section discount">
+    <div class="discount__container container grid">
+      <div class="discount__data">
+        <h2 class="discount__title">50% Discount <br> On New Products </h2>
+        <a href="#" class="book--now">
+          <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
+        </a>
+      </div>
+      <img src="https://assets.codepen.io/7773162/discount-img.png" alt="" class="discount__img">
+    </div>
+  </section>
+  <!-- NEW ARRIVALS -->
+  <section class="section new" id="new">
+    <h2 class="section__title">New Arrivals</h2>
+    <div class="new__container container">
+      <div class="swiper new-swiper">
+        <div class="swiper-wrapper">
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
             </div>
-        </section>
-        <!-- Footer-->
-        <footer class="footer bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
-                        <ul class="list-inline mb-2">
-                            <li class="list-inline-item"><a href="#">About</a></li>
-                            <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#">Contact</a></li>
-                            <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#">Terms of Use</a></li>
-                            <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
-                        </ul>
-                        <p class="text-muted small mb-4 mb-lg-0">&copy; Project pertama pkl</p>
-                    </div>
-                    <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item me-4">
-                                <a href="#"><i class="bi-facebook fs-3"></i></a>
-                            </li>
-                            <li class="list-inline-item me-4">
-                                <a href="#"><i class="bi-twitter fs-3"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://www.instagram.com/mtiatss_?igsh=bWZncnNqYmMxbWdn"><i class="bi-instagram fs-3"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <img src="https://assets.codepen.io/7773162/new1-img.png" alt="" class="new__img">
+            <h3 class="new__title">Haunted House</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$14.99</span>
+              <span class="new__discount">$29.99</span>
             </div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="('https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="('landing/js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="('https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    </body>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
+            </div>
+            <img src="https://assets.codepen.io/7773162/new2-img.png" alt="" class="new__img">
+            <h3 class="new__title">Halloween Candle</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$11.99</span>
+              <span class="new__discount">$21.99</span>
+            </div>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
+            </div>
+            <img src="https://assets.codepen.io/7773162/new3-img.png" alt="" class="new__img">
+            <h3 class="new__title">Witch Hat</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$4.99</span>
+              <span class="new__discount">$9.99</span>
+            </div>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
+            </div>
+            <img src="https://assets.codepen.io/7773162/new4-img.png" alt="" class="new__img">
+            <h3 class="new__title">Rip</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$24.99</span>
+              <span class="new__discount">$44.99</span>
+            </div>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
+            </div>
+            <img src="https://assets.codepen.io/7773162/new5-img.png" alt="" class="new__img">
+            <h3 class="new__title">Terrifying Crystal Ball</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$5.99</span>
+              <span class="new__discount">$12.99</span>
+            </div>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+          <div class="new__content swiper-slide">
+            <div class="new__tag">
+              <img src="https://assets.codepen.io/7773162/svgviewer-output+%286%29_1.svg" alt="" />
+            </div>
+            <img src="https://assets.codepen.io/7773162/new6-img.png" alt="" class="new__img">
+            <h3 class="new__title">Witch Broom</h3>
+            <span class="new__subtitle">Accessory</span>
+            <div class="new__prices">
+              <span class="new__price">$7.99</span>
+              <span class="new__discount">$14.99</span>
+            </div>
+            <button class="button new__button">
+              <i class='bx bx-cart-alt new__icon'></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- OUR NEWSLETTER -->
+  <section class="section newsletter">
+    <div class="newsletter__container container">
+      <h2 class="section__title">Our Newsletter</h2>
+      <p class="newsletter__description"> Promotion new products and sales. Directly to your inbox </p>
+      <form action="" class="newsletter__form">
+        <input type="text" placeholder="Enter your email" class="newsletter__input">
+        <a href="#" class="book--now">
+          <img src="https://assets.codepen.io/7773162/svgviewer-output+%281%29_3.svg" alt="" />
+        </a>
+      </form>
+    </div>
+  </section>
+</main>
+<!-- SCROLL UP -->
+<a href="#" class="scrollup" id="scroll-up">
+  <i class='bx bx-up-arrow-alt scrollup__icon'></i>
+</a>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.2/swiper-bundle.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js'></script>
+    <script src="script.js"></script>
+  </body>
 </html>
