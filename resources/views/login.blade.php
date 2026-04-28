@@ -1,67 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-	<link rel="stylesheet" href="style2.css" />
-	<link rel='stylesheet' href='https://unicons.iconscout.com/release/v2.1.9/css/unicons.css'>
-  </head>
-  <body>
-	<div class="section">
-		<div class="container">
-			<div class="row full-height justify-content-center">
-				<div class="col-12 text-center align-self-center py-5">
-					<div class="section pb-5 pt-5 pt-sm-2 text-center">
-						<h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
-			          	<input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-			          	<label for="reg-log"></label>
-						<div class="card-3d-wrap mx-auto">
-							<div class="card-3d-wrapper">
-								<div class="card-front">
-									<div class="center-wrap">
-										<div class="section text-center">
-											<h4 class="mb-4 pb-3">Log In</h4>
-											<div class="form-group">
-												<input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-												<i class="input-icon uil uil-at"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-												<i class="input-icon uil uil-lock-alt"></i>
-											</div>
-											<a href="#" class="btn mt-4">submit</a>
-                            				<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
-				      					</div>
-			      					</div>
-			      				</div>
-								<div class="card-back">
-									<div class="center-wrap">
-										<div class="section text-center">
-											<h4 class="mb-4 pb-3">Sign Up</h4>
-											<div class="form-group">
-												<input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
-												<i class="input-icon uil uil-user"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-												<i class="input-icon uil uil-at"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-												<i class="input-icon uil uil-lock-alt"></i>
-											</div>
-											<a href="#" class="btn mt-4">submit</a>
-				      					</div>
-			      					</div>
-			      				</div>
-			      			</div>
-			      		</div>
-			      	</div>
-		      	</div>
-	      	</div>
-	    </div>
-	</div>
-  </body>
+<html>
+    <!--begin::Head-->
+    <head>
+        <!--begin::Fonts(mandatory for all pages)-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+        <!--end::Fonts-->
+
+        <!--begin::Vendor Stylesheets(used for this page only)-->
+        <link href="template.demo6/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="template.de/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Vendor Stylesheets-->
+
+        <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+        <link href="template.demo6/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="template.demo6/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Global Stylesheets Bundle-->
+    </head>
+    <!--end::Head-->
+
+    <!--begin::Body-->
+    <body>
+        <!--begin::Javascript-->
+        <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+        <script src="template.demo6/plugins/global/plugins.bundle.js"></script>
+        <script src="template.demo6/js/scripts.bundle.js"></script>
+        <!--end::Global Javascript Bundle-->
+
+        <!--begin::Vendors Javascript(used for this page only)-->
+        <script src="template.demo6/demo/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+        <!--end::Vendors Javascript-->
+
+        <!--begin::Custom Javascript(used for this page only)-->
+        <script src="template.demo6/js/widgets.bundle.js"></script>
+        <script src="template.demo6/js/custom/widgets.js"></script>
+        <script src="template.demo6/js/custom/apps/chat/chat.js"></script>
+        <script src="template.demo6/js/custom/utilities/modals/upgrade-plan.js"></script>
+        <script src="template.demo6/js/custom/utilities/modals/create-app.js"></script>
+        <script src="template.demo6/js/custom/utilities/modals/new-target.js"></script>
+        <script src="template.demo6/js/custom/utilities/modals/users-search.js"></script>
+        <!--end::Custom Javascript-->
+        <!--end::Javascript-->
+    </body>
+    <!--end::Body-->
 </html>
