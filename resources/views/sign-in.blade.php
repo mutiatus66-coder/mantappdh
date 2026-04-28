@@ -145,7 +145,6 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Logo-->
 						<a href="admin" class="mb-0 mb-lg-12">
 							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/custom-1.png" class="h-60px h-lg-75px" />
-						</a>
 						<!--end::Logo-->
 						<!--begin::Image-->
 						<img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="template.demo6/demo6/assets/media/misc/auth-screens.png" alt="" />
