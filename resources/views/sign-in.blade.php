@@ -55,6 +55,7 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Wrapper-->
 						<div class="w-lg-500px p-10">
 							<!--begin::Form-->
+							<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="index.html" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-11">
 									<!--begin::Title-->
@@ -129,6 +130,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="text-gray-500 text-center fw-semibold fs-6">Not a Member yet? 
 								<a href="template.demo6/demo6/authentication/layouts/corporate/sign-up.html" class="link-primary">Sign up</a></div>
 								<!--end::Sign up-->
+							</form>
 							<!--end::Form-->
 						</div>
 						<!--end::Wrapper-->
@@ -143,7 +145,6 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Logo-->
 						<a href="index.html" class="mb-0 mb-lg-12">
 							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/custom-1.png" class="h-60px h-lg-75px" />
-						</a>
 						<!--end::Logo-->
 						<!--begin::Image-->
 						<img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="template.demo6/demo6/assets/media/misc/auth-screens.png" alt="" />
