@@ -72,7 +72,7 @@ License: For each use you must have a valid license purchased only from above li
 									<div class="col-md-6">
 										<!--begin::Google link=-->
 										<a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-										<img alt="Logo" src="assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />Sign in with Google</a>
+										<img alt="Logo" src="template.demo6/demo6/assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />Sign in with Google</a>
 										<!--end::Google link=-->
 									</div>
 									<!--end::Col-->
@@ -128,7 +128,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
 								<div class="text-gray-500 text-center fw-semibold fs-6">Not a Member yet? 
-								<a href="authentication/layouts/corporate/sign-up.html" class="link-primary">Sign up</a></div>
+								<a href="template.demo6/demo6/authentication/layouts/corporate/sign-up.html" class="link-primary">Sign up</a></div>
 								<!--end::Sign up-->
 							</form>
 							<!--end::Form-->
@@ -185,7 +185,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="menu-item px-3">
 									<a href="#" class="menu-link d-flex px-5" data-kt-lang="Japanese">
 										<span class="symbol symbol-20px me-4">
-											<img data-kt-element="lang-flag" class="rounded-1" src="assets/media/flags/japan.svg" alt="" />
+											<img data-kt-element="lang-flag" class="rounded-1" src="template.demo6/demo6/assets/media/flags/japan.svg" alt="" />
 										</span>
 										<span data-kt-element="lang-name">Japanese</span>
 									</a>
@@ -207,9 +207,9 @@ License: For each use you must have a valid license purchased only from above li
 						<!--end::Languages-->
 						<!--begin::Links-->
 						<div class="d-flex fw-semibold text-primary fs-base gap-5">
-							<a href="pages/team.html" target="_blank">Terms</a>
-							<a href="pages/pricing/column.html" target="_blank">Plans</a>
-							<a href="pages/contact.html" target="_blank">Contact Us</a>
+							<a href="template.demo6/demo6/pages/team.html" target="_blank">Terms</a>
+							<a href="template.demo6/demo6/pages/pricing/column.html" target="_blank">Plans</a>
+							<a href="template.demo6/demo6/pages/contact.html" target="_blank">Contact Us</a>
 						</div>
 						<!--end::Links-->
 					</div>
@@ -217,7 +217,7 @@ License: For each use you must have a valid license purchased only from above li
 				</div>
 				<!--end::Body-->
 				<!--begin::Aside-->
-				<div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(assets/media/misc/auth-bg.png)">
+				<div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(template.demo6/demo6/assets/media/misc/auth-bg.png)">
 					<!--begin::Content-->
 					<div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
 						<!--begin::Logo-->
