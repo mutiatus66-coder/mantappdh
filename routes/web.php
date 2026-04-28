@@ -9,7 +9,9 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('/login');
 });
-
+Route::get('/sign-in', function () {
+    return view('/sign-in');
+});
 Route::get('/dash', function () {
     return view('/dash');
 });
