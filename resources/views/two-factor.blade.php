@@ -116,10 +116,6 @@ License: For each use you must have a valid license purchased only from above li
 					<!--end::Form-->
 				</div>
 				<!--end::Body-->
-				<!--begin::Aside-->
-				<div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(template.demo6/demo6/assets/media/misc/auth-bg.png)">
-				</div>
-				<!--end::Aside-->
 			</div>
 			<!--end::Authentication - Two-factor-->
 		</div>
