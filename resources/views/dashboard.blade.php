@@ -26,7 +26,7 @@ License: For each use you must have a valid license purchased only from above li
 		<meta property="og:url" content="https://keenthemes.com/metronic" />
 		<meta property="og:site_name" content="Metronic by Keenthemes" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/favicon.ico" />
+		<link rel="shortcut icon" href="template.demo6template.demo6/demo6//demo6/assets/media/logos/favicon.ico" />
 		<!--begin::Fonts(mandatory for all pages)-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -64,8 +64,8 @@ License: For each use you must have a valid license purchased only from above li
 									<!--end::Mobile menu toggle-->
 									<!--begin::Logo image-->
 									<a href="landing.html">
-										<img alt="Logo" src="assets/media/logos/landing.svg" class="logo-default h-25px h-lg-30px" />
-										<img alt="Logo" src="assets/media/logos/landing-dark.svg" class="logo-sticky h-20px h-lg-25px" />
+										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/landing.svg" class="logo-default h-25px h-lg-30px" />
+										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/landing-dark.svg" class="logo-sticky h-20px h-lg-25px" />
 									</a>
 									<!--end::Logo image-->
 								</div>
@@ -124,7 +124,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Menu wrapper-->
 								<!--begin::Toolbar-->
 								<div class="flex-equal text-end ms-1">
-									<a href="authentication/layouts/corporate/sign-in.html" class="btn btn-success">Sign In</a>
+									<a href="template.demo6/demo6/authentication/layouts/corporate/sign-in.html" class="btn btn-success">Sign In</a>
 								</div>
 								<!--end::Toolbar-->
 							</div>
@@ -153,42 +153,42 @@ License: For each use you must have a valid license purchased only from above li
 						<div class="d-flex flex-center flex-wrap position-relative px-5">
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Fujifilm">
-								<img src="assets/media/svg/brand-logos/fujifilm.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/fujifilm.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Vodafone">
-								<img src="assets/media/svg/brand-logos/vodafone.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6assets/media/svg/brand-logos/vodafone.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="KPMG International">
-								<img src="assets/media/svg/brand-logos/kpmg.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/kpmg.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Nasa">
-								<img src="assets/media/svg/brand-logos/nasa.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/nasa.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Aspnetzero">
-								<img src="assets/media/svg/brand-logos/aspnetzero.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/aspnetzero.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="AON - Empower Results">
-								<img src="assets/media/svg/brand-logos/aon.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/aon.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Hewlett-Packard">
-								<img src="assets/media/svg/brand-logos/hp-3.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/hp-3.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 							<!--begin::Client-->
 							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Truman">
-								<img src="assets/media/svg/brand-logos/truman.svg" class="mh-30px mh-lg-40px" alt="" />
+								<img src="template.demo6/demo6/assets/media/svg/brand-logos/truman.svg" class="mh-30px mh-lg-40px" alt="" />
 							</div>
 							<!--end::Client-->
 						</div>
@@ -228,7 +228,7 @@ License: For each use you must have a valid license purchased only from above li
 							<!--begin::Story-->
 							<div class="text-center mb-10 mb-md-0">
 								<!--begin::Illustration-->
-								<img src="assets/media/illustrations/sketchy-1/2.png" class="mh-125px mb-9" alt="" />
+								<img src="template.demo6/demo6/assets/media/illustrations/sketchy-1/2.png" class="mh-125px mb-9" alt="" />
 								<!--end::Illustration-->
 								<!--begin::Heading-->
 								<div class="d-flex flex-center mb-5">
@@ -254,7 +254,7 @@ License: For each use you must have a valid license purchased only from above li
 							<!--begin::Story-->
 							<div class="text-center mb-10 mb-md-0">
 								<!--begin::Illustration-->
-								<img src="assets/media/illustrations/sketchy-1/8.png" class="mh-125px mb-9" alt="" />
+								<img src="template.demo6/demo6/assets/media/illustrations/sketchy-1/8.png" class="mh-125px mb-9" alt="" />
 								<!--end::Illustration-->
 								<!--begin::Heading-->
 								<div class="d-flex flex-center mb-5">
@@ -280,7 +280,7 @@ License: For each use you must have a valid license purchased only from above li
 							<!--begin::Story-->
 							<div class="text-center mb-10 mb-md-0">
 								<!--begin::Illustration-->
-								<img src="assets/media/illustrations/sketchy-1/12.png" class="mh-125px mb-9" alt="" />
+								<img src="template.demo6/demo6/assets/media/illustrations/sketchy-1/12.png" class="mh-125px mb-9" alt="" />
 								<!--end::Illustration-->
 								<!--begin::Heading-->
 								<div class="d-flex flex-center mb-5">
@@ -309,22 +309,22 @@ License: For each use you must have a valid license purchased only from above li
 						<div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true" data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false" data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
 							<!--begin::Item-->
 							<div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-								<img src="assets/media/preview/demos/demo1/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
+								<img src="template.demo6/demo6/assets/media/preview/demos/demo1/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
 							</div>
 							<!--end::Item-->
 							<!--begin::Item-->
 							<div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-								<img src="assets/media/preview/demos/demo2/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
+								<img src="template.demo6/demo6/assets/media/preview/demos/demo2/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
 							</div>
 							<!--end::Item-->
 							<!--begin::Item-->
 							<div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-								<img src="assets/media/preview/demos/demo4/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
+								<img src="template.demo6/demo6/assets/media/preview/demos/demo4/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
 							</div>
 							<!--end::Item-->
 							<!--begin::Item-->
 							<div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-								<img src="assets/media/preview/demos/demo5/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
+								<img src="template.demo6/demo6/assets/media/preview/demos/demo5/light-ltr.png" class="card-rounded shadow mh-lg-650px mw-100" alt="" />
 							</div>
 							<!--end::Item-->
 						</div>
@@ -443,7 +443,7 @@ License: For each use you must have a valid license purchased only from above li
 						<!--end::Testimonial-->
 						<!--begin::Author-->
 						<div class="fs-2 fw-semibold text-muted text-center">
-							<a href="account/security.html" class="link-primary fs-4 fw-bold">Marcus Levy,</a>
+							<a href="template.demo6/demo6/account/security.html" class="link-primary fs-4 fw-bold">Marcus Levy,</a>
 							<span class="fs-4 fw-bold text-gray-600">KeenThemes CEO</span>
 						</div>
 						<!--end::Author-->
@@ -1265,7 +1265,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex align-items-center">
 									<!--begin::Avatar-->
 									<div class="symbol symbol-circle symbol-50px me-5">
-										<img src="assets/media/avatars/300-1.jpg" class="" alt="" />
+										<img src="template.demo6/demo6/assets/media/avatars/300-1.jpg" class="" alt="" />
 									</div>
 									<!--end::Avatar-->
 									<!--begin::Name-->
@@ -1318,7 +1318,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex align-items-center">
 									<!--begin::Avatar-->
 									<div class="symbol symbol-circle symbol-50px me-5">
-										<img src="assets/media/avatars/300-2.jpg" class="" alt="" />
+										<img src="template.demo6/demo6/assets/media/avatars/300-2.jpg" class="" alt="" />
 									</div>
 									<!--end::Avatar-->
 									<!--begin::Name-->
@@ -1371,7 +1371,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex align-items-center">
 									<!--begin::Avatar-->
 									<div class="symbol symbol-circle symbol-50px me-5">
-										<img src="assets/media/avatars/300-16.jpg" class="" alt="" />
+										<img src="template.demo6/demo6/assets/media/avatars/300-16.jpg" class="" alt="" />
 									</div>
 									<!--end::Avatar-->
 									<!--begin::Name-->
@@ -1445,7 +1445,7 @@ License: For each use you must have a valid license purchased only from above li
 									<!--end::Title-->
 									<!--begin::Text-->
 									<span class="fw-normal fs-4 text-gray-700">Use Our Custom Development Service.
-									<a href="pages/user-profile/overview.html" class="text-white opacity-50 text-hover-primary">Click to Get a Quote</a></span>
+									<a href="template.demo6/demo6/pages/user-profile/overview.html" class="text-white opacity-50 text-hover-primary">Click to Get a Quote</a></span>
 									<!--end::Text-->
 								</div>
 								<!--end::Block-->
@@ -1487,31 +1487,31 @@ License: For each use you must have a valid license purchased only from above li
 										<!--end::Subtitle-->
 										<!--begin::Link-->
 										<a href="https://www.facebook.com/keenthemes" class="mb-6">
-											<img src="assets/media/svg/brand-logos/facebook-4.svg" class="h-20px me-2" alt="" />
+											<img src="template.demo6/demo6/assets/media/svg/brand-logos/facebook-4.svg" class="h-20px me-2" alt="" />
 											<span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Facebook</span>
 										</a>
 										<!--end::Link-->
 										<!--begin::Link-->
 										<a href="https://github.com/KeenthemesHub" class="mb-6">
-											<img src="assets/media/svg/brand-logos/github.svg" class="h-20px me-2" alt="" />
+											<img src="template.demo6/demo6/assets/media/svg/brand-logos/github.svg" class="h-20px me-2" alt="" />
 											<span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Github</span>
 										</a>
 										<!--end::Link-->
 										<!--begin::Link-->
 										<a href="https://twitter.com/keenthemes" class="mb-6">
-											<img src="assets/media/svg/brand-logos/twitter.svg" class="h-20px me-2" alt="" />
+											<img src="template.demo6/demo6/assets/media/svg/brand-logos/twitter.svg" class="h-20px me-2" alt="" />
 											<span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Twitter</span>
 										</a>
 										<!--end::Link-->
 										<!--begin::Link-->
 										<a href="https://dribbble.com/keenthemes" class="mb-6">
-											<img src="assets/media/svg/brand-logos/dribbble-icon-1.svg" class="h-20px me-2" alt="" />
+											<img src="template.demo6/demo6/assets/media/svg/brand-logos/dribbble-icon-1.svg" class="h-20px me-2" alt="" />
 											<span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Dribbble</span>
 										</a>
 										<!--end::Link-->
 										<!--begin::Link-->
 										<a href="https://www.instagram.com/keenthemes" class="mb-6">
-											<img src="assets/media/svg/brand-logos/instagram-2-1.svg" class="h-20px me-2" alt="" />
+											<img src="template.demo6/demo6/assets/media/svg/brand-logos/instagram-2-1.svg" class="h-20px me-2" alt="" />
 											<span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Instagram</span>
 										</a>
 										<!--end::Link-->

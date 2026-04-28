@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('/dash');
+    return view('/dashboard');
 });
 
 Route::get('/login', function () {
@@ -11,5 +11,5 @@ Route::get('/login', function () {
 });
 
 Route::get('/dash', function () {
-    return view('/dashboard');
+    return view('/dash');
 });
