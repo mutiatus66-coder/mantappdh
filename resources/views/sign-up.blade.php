@@ -157,7 +157,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
 								<div class="text-gray-500 text-center fw-semibold fs-6">Already have an Account? 
-								<a href="template.demo6/demo6/authentication/layouts/corporate/sign-in.html" class="link-primary fw-semibold">Sign in</a></div>
+								<a href="sign-in" class="link-primary fw-semibold">Sign in</a></div>
 								<!--end::Sign up-->
 							</form>
 							<!--end::Form-->
