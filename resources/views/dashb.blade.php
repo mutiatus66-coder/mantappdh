@@ -48,7 +48,7 @@ License: For each use you must have a valid license purchased only from above li
 			<!--begin::Header Section-->
 			<div class="mb-0" id="home">
 				<!--begin::Wrapper-->
-				// <div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-dark-bg" style="background-image: url(template.demo6/demo6/assets/media/svg/illustrations/landing.svg)">
+				<div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-dark-bg" style="background-image: url(template.demo6/demo6/assets/media/svg/illustrations/landing.svg)">
 					<!--begin::Header-->
 					<div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
 						<!--begin::Container-->
@@ -64,8 +64,8 @@ License: For each use you must have a valid license purchased only from above li
 									<!--end::Mobile menu toggle-->
 									<!--begin::Logo image-->
 									<a href="landing.html">
-										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/low.png" class="logo-default h-25px h-lg-30px" />
-										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/low.png" class="logo-sticky h-20px h-lg-25px" />
+										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/landing.svg" class="logo-default h-25px h-lg-30px" />
+										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/landing-dark.svg" class="logo-sticky h-20px h-lg-25px" />
 									</a>
 									<!--end::Logo image-->
 								</div>
@@ -137,11 +137,15 @@ License: For each use you must have a valid license purchased only from above li
 					<div class="d-flex flex-column flex-center w-100 min-h-350px min-h-lg-500px px-9">
 						<!--begin::Heading-->
 						<div class="text-center mb-5 mb-lg-10 py-10 py-lg-20">
-                            <img src="template.demo6/demo6/assets/media/logos/rmh.png" alt="">
+							<!--begin::Title-->
+							<h1 class="text-white lh-base fw-bold fs-2x fs-lg-3x mb-15">Build An Outstanding Solutions
+							<br />with
+							<span style="background: linear-gradient(to right, #12CE5D 0%, #FFD80C 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
+								<span id="kt_landing_hero_text">The Best Theme Ever</span>
+							</span></h1>
 							<!--end::Title-->
-                            <br>
 							<!--begin::Action-->
-							<a href="index.html" class="btn btn-primary">Pendaftaran -></a>
+							<a href="index.html" class="btn btn-primary">Try Metronic</a>
 							<!--end::Action-->
 						</div>
 						<!--end::Heading-->
