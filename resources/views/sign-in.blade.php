@@ -137,7 +137,7 @@ License: For each use you must have a valid license purchased only from above li
 					</div>
 					<!--end::Form-->
 				</div>
-				<!--end::Body-->
+				<!--end::Body--> 
 			</div>
 			<!--end::Authentication - Sign-in-->
 		</div>
