@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @vite('resources/scss')
+    @vite('../resources/scss/index.scss')
     <title>Dashboard · 2026 Redesign Preview</title>
     <script>
       (function () {
