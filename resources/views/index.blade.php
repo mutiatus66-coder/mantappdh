@@ -1,489 +1,643 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    @vite('resources/scss/index.scss')
-    <title>Dashboard · 2026 Redesign Preview</title>
-    <script>
-      (function () {
-        try {
-          var saved = localStorage.getItem('dash26-theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'light');
-        }
-      })();
-    </script>
+    @@include('./_head.html', {
+        "path": ".",
+        "title": "Dashboard"
+    })
   </head>
-  <body data-active="dashboard" data-crumbs="Workspace | Dashboard">
-    <div class="shell">
-      <div data-shell-sidebar></div>
-      <div class="main">
-        <div data-shell-topbar></div>
-        <main class="content">
-        <!-- HERO -->
-        <section class="hero">
-          <div class="hero-text">
-            <span class="eyebrow" id="heroDate">Thursday · April 23 · 2026</span>
-            <h1 class="hero-title">Welcome back, <span class="accent">John</span></h1>
-            <p class="hero-sub">Total visits are <strong>+10%</strong> week over week, unique visitors steady, and bounce rate holding at 33%. Two new regions came online overnight.</p>
-          </div>
-          <div class="hero-actions">
-            <button class="btn btn--ghost">
-              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-              Export
-            </button>
-            <button class="btn btn--primary">
-              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-              New report
-            </button>
-          </div>
-        </section>
+  <body class="app">
+    <!-- @TOC -->
+    <!-- =================================================== -->
+    <!--
+      + @Page Loader
+      + @App Content
+          - #Left Sidebar
+              > $Sidebar Header
+              > $Sidebar Menu
 
-        <!-- KPI CARDS — Total Visits / Page Views / Unique Visitors / Bounce Rate -->
-        <section class="kpi-grid" aria-label="Key metrics">
-          <article class="kpi-card c-success">
-            <div class="kpi-top">
-              <div class="kpi-identity">
-                <div class="kpi-icon success">
-                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </div>
-                <div class="kpi-label">Total visits</div>
-              </div>
-              <span class="kpi-pill up">
-                <svg viewBox="0 0 24 24"><path d="M7 17l10-10M7 7h10v10"/></svg>
-                +10%
-              </span>
-            </div>
-            <div class="kpi-value">1.24<sup>M</sup></div>
-            <div class="kpi-compare">
-              <svg class="up" viewBox="0 0 24 24"><path d="M7 17l10-10M7 7h10v10"/></svg>
-              up from <strong>1.12M</strong> <span class="sep">·</span> last week
-            </div>
-          </article>
+          - #Main
+              > $Topbar
+              > $App Screen Content
+    -->
 
-          <article class="kpi-card c-danger">
-            <div class="kpi-top">
-              <div class="kpi-identity">
-                <div class="kpi-icon danger">
-                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>
-                </div>
-                <div class="kpi-label">Page views</div>
-              </div>
-              <span class="kpi-pill down">
-                <svg viewBox="0 0 24 24"><path d="M7 7l10 10M7 17h10V7"/></svg>
-                −7%
-              </span>
-            </div>
-            <div class="kpi-value">4.08<sup>M</sup></div>
-            <div class="kpi-compare">
-              <svg class="down" viewBox="0 0 24 24"><path d="M7 7l10 10M7 17h10V7"/></svg>
-              down from <strong>4.39M</strong> <span class="sep">·</span> last week
-            </div>
-          </article>
+    <!-- @Page Loader -->
+    <!-- =================================================== -->
+    <div id='loader'>
+      <div class="spinner"></div>
+    </div>
 
-          <article class="kpi-card c-purple">
-            <div class="kpi-top">
-              <div class="kpi-identity">
-                <div class="kpi-icon purple">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-                </div>
-                <div class="kpi-label">Unique visitors</div>
-              </div>
-              <span class="kpi-pill flat">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                ~12%
-              </span>
-            </div>
-            <div class="kpi-value">842<sup>K</sup></div>
-            <div class="kpi-compare">
-              <svg class="flat" viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-              holding around <strong>835K</strong> <span class="sep">·</span> last week
-            </div>
-          </article>
+    <script>
+      window.addEventListener('load', function load() {
+        const loader = document.getElementById('loader');
+        setTimeout(function() {
+          loader.classList.add('fadeOut');
+        }, 300);
+      });
+    </script>
 
-          <article class="kpi-card c-primary">
-            <div class="kpi-top">
-              <div class="kpi-identity">
-                <div class="kpi-icon primary">
-                  <svg viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
-                </div>
-                <div class="kpi-label">Bounce rate</div>
-              </div>
-              <span class="kpi-pill info">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                steady
-              </span>
-            </div>
-            <div class="kpi-value">33<sup>%</sup></div>
-            <div class="kpi-compare">
-              <svg class="info" viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-              matching <strong>33%</strong> <span class="sep">·</span> last week
-            </div>
-          </article>
-        </section>
+    <!-- @App Content -->
+    <!-- =================================================== -->
+    <div>
 
-        <!-- ============ PANEL GRID ============ -->
-        <div class="grid">
+      @@include('./_sidebar.html', {
+        "path": "."
+      })
 
-          <!-- SITE VISITS — redesigned: 4 region stats + 3 radial KPIs, no fake map -->
-          <section class="col-12 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Geography</span>
-                <h2 class="card-title">Site visits</h2>
-              </div>
-              <a class="card-action" href="#">
-                View report
-                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </a>
-            </div>
+      <!-- #Main ============================ -->
+      <div class="page-container">
 
-            <!-- Regional breakdown -->
-            <div class="sv-regions">
-              <div class="sv-region">
-                <div class="sv-region-head">
-                  <span class="marker" style="background: var(--purple);"></span>
-                  United States
-                </div>
-                <div class="sv-region-value">100K<span class="pct">50%</span></div>
-                <div class="sv-region-bar"><div class="sv-region-bar-fill" style="width: 50%; background: var(--purple);"></div></div>
-              </div>
-              <div class="sv-region">
-                <div class="sv-region-head">
-                  <span class="marker" style="background: var(--success);"></span>
-                  Europe
-                </div>
-                <div class="sv-region-value">1M<span class="pct">80%</span></div>
-                <div class="sv-region-bar"><div class="sv-region-bar-fill" style="width: 80%; background: var(--success);"></div></div>
-              </div>
-              <div class="sv-region">
-                <div class="sv-region-head">
-                  <span class="marker" style="background: var(--info);"></span>
-                  Australia
-                </div>
-                <div class="sv-region-value">450K<span class="pct">40%</span></div>
-                <div class="sv-region-bar"><div class="sv-region-bar-fill" style="width: 40%; background: var(--info);"></div></div>
-              </div>
-              <div class="sv-region">
-                <div class="sv-region-head">
-                  <span class="marker" style="background: #64748B;"></span>
-                  India
-                </div>
-                <div class="sv-region-value">1B<span class="pct">90%</span></div>
-                <div class="sv-region-bar"><div class="sv-region-bar-fill" style="width: 90%; background: #64748B;"></div></div>
-              </div>
-            </div>
+        @@include('./_navigation.html', {
+          "path": "."
+        })
 
-            <div class="sv-divider"></div>
-
-            <!-- 3 radial KPIs: New Users 75% (red) / New Purchases 50% (blue) / Bounce Rate 90% (orange) -->
-            <div class="sv-radials">
-              <div class="sv-radial">
-                <div class="sv-radial-chart">
-                  <svg viewBox="0 0 80 80">
-                    <circle class="radial-track" cx="40" cy="40" r="32"/>
-                    <circle class="radial-fill danger" cx="40" cy="40" r="32"
-                      stroke-dasharray="201.06" stroke-dashoffset="50.27"/>
-                  </svg>
-                  <span class="pct">75%</span>
-                </div>
-                <div class="sv-radial-text">
-                  <div class="sv-radial-name">New users</div>
-                  <div class="sv-radial-caption">first-time visitors</div>
-                </div>
-              </div>
-              <div class="sv-radial">
-                <div class="sv-radial-chart">
-                  <svg viewBox="0 0 80 80">
-                    <circle class="radial-track" cx="40" cy="40" r="32"/>
-                    <circle class="radial-fill info" cx="40" cy="40" r="32"
-                      stroke-dasharray="201.06" stroke-dashoffset="100.53"/>
-                  </svg>
-                  <span class="pct">50%</span>
-                </div>
-                <div class="sv-radial-text">
-                  <div class="sv-radial-name">New purchases</div>
-                  <div class="sv-radial-caption">from new visits</div>
-                </div>
-              </div>
-              <div class="sv-radial">
-                <div class="sv-radial-chart">
-                  <svg viewBox="0 0 80 80">
-                    <circle class="radial-track" cx="40" cy="40" r="32"/>
-                    <circle class="radial-fill warning" cx="40" cy="40" r="32"
-                      stroke-dasharray="201.06" stroke-dashoffset="20.11"/>
-                  </svg>
-                  <span class="pct">90%</span>
-                </div>
-                <div class="sv-radial-text">
-                  <div class="sv-radial-name">Bounce rate</div>
-                  <div class="sv-radial-caption">avg engagement</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- MONTHLY STATS -->
-          <section class="col-6 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Performance</span>
-                <h2 class="card-title">Monthly stats</h2>
-              </div>
-              <span class="card-action">April 2026</span>
-            </div>
-
-            <div class="chart-canvas-wrap" style="height: 240px;">
-              <canvas data-chart-key="dashboard-monthly"></canvas>
-            </div>
-
-            <div class="monthly-footer">
-              <div class="stat-cell">
-                <div class="stat-cell-label">Sales growth</div>
-                <div class="stat-cell-value">54%
-                  <svg class="trend-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l10-10M7 7h10v10"/></svg>
-                </div>
-              </div>
-              <div class="stat-cell">
-                <div class="stat-cell-label">Dec sales</div>
-                <div class="stat-cell-value">$185K
-                  <svg class="trend-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l10-10M7 7h10v10"/></svg>
-                </div>
-              </div>
-              <div class="stat-cell">
-                <div class="stat-cell-label">Profit growth</div>
-                <div class="stat-cell-value">60%
-                  <svg class="trend-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l10-10M7 7h10v10"/></svg>
-                </div>
-              </div>
-              <div class="stat-cell">
-                <div class="stat-cell-label">Dec profit</div>
-                <div class="stat-cell-value">$72K
-                  <svg class="trend-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l10-10M7 7h10v10"/></svg>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- TODO LIST -->
-          <section class="col-6 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Personal</span>
-                <h2 class="card-title">Todo list</h2>
-              </div>
-              <a class="card-action" href="#">
-                Add task
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-              </a>
-            </div>
-            <ul class="todo-list">
-              <li class="todo-item">
-                <input type="checkbox" class="todo-check" id="td1">
-                <label for="td1" class="todo-text">Call John for dinner</label>
-                <span class="todo-badge low">ANYTIME</span>
-              </li>
-              <li class="todo-item">
-                <input type="checkbox" class="todo-check" id="td2">
-                <label for="td2" class="todo-text">Book boss flight</label>
-                <span class="todo-badge upcoming">2 DAYS</span>
-              </li>
-              <li class="todo-item">
-                <input type="checkbox" class="todo-check" id="td3">
-                <label for="td3" class="todo-text">Hit the gym</label>
-                <span class="todo-badge urgent">3 MIN</span>
-              </li>
-              <li class="todo-item">
-                <input type="checkbox" class="todo-check" id="td4">
-                <label for="td4" class="todo-text">Give purchase report</label>
-                <span class="todo-badge warn">LOW PRIORITY</span>
-              </li>
-              <li class="todo-item">
-                <input type="checkbox" class="todo-check" id="td5">
-                <label for="td5" class="todo-text">Watch Foundation S03E04</label>
-                <span class="todo-badge upcoming">TOMORROW</span>
-              </li>
-              <li class="todo-item is-done">
-                <input type="checkbox" class="todo-check" id="td6" checked>
-                <label for="td6" class="todo-text">Give purchase report</label>
-                <span class="todo-badge done">DONE</span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- SALES REPORT -->
-          <section class="col-6 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Commerce</span>
-                <h2 class="card-title">Sales report</h2>
-              </div>
-            </div>
-
-            <div class="sales-summary">
-              <div class="sales-summary-label">
-                <span class="eyebrow">Period</span>
-                <h4>April 2026</h4>
-              </div>
-              <div class="sales-summary-total"><sup>$</sup>6,000</div>
-            </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th style="text-align:right">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td class="cell-name">Item #1</td><td><span class="tag t-unavail">Unavailable</span></td><td class="cell-date">Apr 18</td><td class="cell-price pos">$12</td></tr>
-                <tr><td class="cell-name">Item #2</td><td><span class="tag t-new">New</span></td><td class="cell-date">Apr 19</td><td class="cell-price pos">$34</td></tr>
-                <tr><td class="cell-name">Item #3</td><td><span class="tag t-new">New</span></td><td class="cell-date">Apr 20</td><td class="cell-price neg">−$45</td></tr>
-                <tr><td class="cell-name">Item #4</td><td><span class="tag t-unavail">Unavailable</span></td><td class="cell-date">Apr 21</td><td class="cell-price pos">$65</td></tr>
-                <tr><td class="cell-name">Item #5</td><td><span class="tag t-used">Used</span></td><td class="cell-date">Apr 22</td><td class="cell-price pos">$78</td></tr>
-                <tr><td class="cell-name">Item #6</td><td><span class="tag t-used">Used</span></td><td class="cell-date">Apr 23</td><td class="cell-price neg">−$88</td></tr>
-                <tr><td class="cell-name">Item #7</td><td><span class="tag t-old">Old</span></td><td class="cell-date">Apr 22</td><td class="cell-price pos">$56</td></tr>
-              </tbody>
-            </table>
-
-            <div class="sales-all">
-              <a href="#">Check all sales <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-            </div>
-          </section>
-
-          <!-- WEATHER -->
-          <section class="col-6 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Today</span>
-                <h2 class="card-title">Weather</h2>
-              </div>
-              <span class="card-action">Rīga, LV</span>
-            </div>
-
-            <div class="wx-hero">
-              <div class="wx-temp-block">
-                <div class="wx-icon">
-                  <svg viewBox="0 0 64 64">
-                    <circle cx="22" cy="22" r="8"/>
-                    <path d="M22 6v4M22 34v4M6 22h4M34 22h4M10 10l3 3M31 31l3 3M34 10l-3 3M13 31l-3 3"/>
-                    <path d="M18 44a10 10 0 0 1 10-10 10 10 0 0 1 9.5 7 8 8 0 0 1-1.5 16H20a8 8 0 0 1-2-13z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="wx-temp">32<sup>°F</sup></div>
-                  <div class="wx-condition">Partly <strong>cloudy</strong> · light breeze</div>
-                </div>
-              </div>
-              <div class="wx-date">
-                <h5>Thursday</h5>
-                <p>APR 23, 2026</p>
-              </div>
-            </div>
-
-            <div class="wx-stats">
-              <div>
-                <div class="wx-stat-label">Wind</div>
-                <div class="wx-stat-value">10<span class="unit">km/h</span></div>
-              </div>
-              <div>
-                <div class="wx-stat-label">Sunrise</div>
-                <div class="wx-stat-value">05:32<span class="unit">am</span></div>
-              </div>
-              <div>
-                <div class="wx-stat-label">Pressure</div>
-                <div class="wx-stat-value">1013<span class="unit">hPa</span></div>
-              </div>
-            </div>
-
-            <div class="wx-forecast">
-              <div class="wx-day is-today">
-                <div class="wx-day-name">THU</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 20 11.5 4.5 4.5 0 0 1 19 20.5"/></svg></div>
-                <div class="wx-day-temp">32°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">FRI</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
-                <div class="wx-day-temp">30°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">SAT</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 20 11.5 4.5 4.5 0 0 1 19 20.5"/></svg></div>
-                <div class="wx-day-temp">28°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">SUN</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M18 10a6 6 0 0 0-12 0 5 5 0 0 0 0 10h12a5 5 0 0 0 0-10"/></svg></div>
-                <div class="wx-day-temp">32°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">MON</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M8 19v-9M8 14l3 3M8 14l-3 3M16 19v-9M16 14l3 3M16 14l-3 3M20 6a6 6 0 0 0-12 0 5 5 0 0 0 0 10"/></svg></div>
-                <div class="wx-day-temp">24°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">TUE</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M17.7 7.7a6 6 0 1 0-9.1 7.3M3 12h4M15 8h5M18 16h-6M9.5 20h7"/></svg></div>
-                <div class="wx-day-temp">28°</div>
-              </div>
-              <div class="wx-day">
-                <div class="wx-day-name">WED</div>
-                <div class="wx-day-icon"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 20 11.5 4.5 4.5 0 0 1 19 20.5"/></svg></div>
-                <div class="wx-day-temp">32°</div>
-              </div>
-            </div>
-          </section>
-
-          <!-- QUICK CHAT — full-width to avoid orphan half-column -->
-          <section class="col-12 card">
-            <div class="card-head">
-              <div class="card-title-wrap">
-                <span class="eyebrow">Conversations</span>
-                <h2 class="card-title">Quick chat</h2>
-              </div>
-              <a class="card-action" href="#">
-                Open chat
-                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-
-            <div class="chat-frame">
-              <div class="chat-messages">
-                <div class="chat-row">
-                  <div class="chat-avatar">LK</div>
-                  <div class="chat-stack">
-                    <div class="chat-bubble">Morning — just pushed the dependency bump to master.</div>
-                    <div class="chat-bubble">All 10 stale Dependabot PRs are closed 🎉</div>
-                    <div class="chat-ts">10:04 AM</div>
+        <!-- ### $App Screen Content ### -->
+        <main class='main-content bgc-grey-100'>
+          <div id='mainContent'>
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-sizer col-md-6"></div>
+              <div class="masonry-item  w-100">
+                <div class="row gap-20">
+                  <!-- #Toatl Visits ==================== -->
+                  <div class='col-md-3'>
+                    <div class="layers bd bgc-white p-20">
+                      <div class="layer w-100 mB-10">
+                        <h6 class="lh-1">Total Visits</h6>
+                      </div>
+                      <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                          <div class="peer peer-greed">
+                            <span id="sparklinedash"></span>
+                          </div>
+                          <div class="peer">
+                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">+10%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="chat-row me">
-                  <div class="chat-avatar me">JD</div>
-                  <div class="chat-stack">
-                    <div class="chat-bubble">Nice work. Any breaking changes?</div>
-                    <div class="chat-ts">10:06 AM</div>
+
+                  <!-- #Total Page Views ==================== -->
+                  <div class='col-md-3'>
+                    <div class="layers bd bgc-white p-20">
+                      <div class="layer w-100 mB-10">
+                        <h6 class="lh-1">Total Page Views</h6>
+                      </div>
+                      <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                          <div class="peer peer-greed">
+                            <span id="sparklinedash2"></span>
+                          </div>
+                          <div class="peer">
+                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">-7%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- #Unique Visitors ==================== -->
+                  <div class='col-md-3'>
+                    <div class="layers bd bgc-white p-20">
+                      <div class="layer w-100 mB-10">
+                        <h6 class="lh-1">Unique Visitor</h6>
+                      </div>
+                      <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                          <div class="peer peer-greed">
+                            <span id="sparklinedash3"></span>
+                          </div>
+                          <div class="peer">
+                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-purple-50 c-purple-500">~12%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- #Bounce Rate ==================== -->
+                  <div class='col-md-3'>
+                    <div class="layers bd bgc-white p-20">
+                      <div class="layer w-100 mB-10">
+                        <h6 class="lh-1">Bounce Rate</h6>
+                      </div>
+                      <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                          <div class="peer peer-greed">
+                            <span id="sparklinedash4"></span>
+                          </div>
+                          <div class="peer">
+                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-blue-50 c-blue-500">33%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="chat-input-row">
-                <input class="chat-input" type="text" placeholder="Reply to Leo…">
-                <button class="chat-send" aria-label="Send">
-                  <svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
-                </button>
+              <div class="masonry-item col-12">
+                <!-- #Site Visits ==================== -->
+                <div class="bd bgc-white">
+                  <div class="peers fxw-nw@lg+ ai-s">
+                    <div class="peer peer-greed w-70p@lg+ w-100@lg- p-20">
+                      <div class="layers">
+                        <div class="layer w-100 mB-10">
+                          <h6 class="lh-1">Site Visits</h6>
+                        </div>
+                        <div class="layer w-100">
+                          <div id="world-map-marker"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="peer bdL p-20 w-30p@lg+ w-100p@lg-">
+                      <div class="layers">
+                        <div class="layer w-100">
+                          <!-- Progress Bars -->
+                          <div class="layers">
+                            <div class="layer w-100">
+                              <h5 class="mB-5">100k</h5>
+                              <small class="fw-600 c-grey-700">Visitors From USA</small>
+                              <span class="pull-right c-grey-600 fsz-sm">50%</span>
+                              <div class="progress mT-10">
+                                <div class="progress-bar bgc-deep-purple-500" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;"> <span class="visually-hidden">50% Complete</span></div>
+                              </div>
+                            </div>
+                            <div class="layer w-100 mT-15">
+                              <h5 class="mB-5">1M</h5>
+                              <small class="fw-600 c-grey-700">Visitors From Europe</small>
+                              <span class="pull-right c-grey-600 fsz-sm">80%</span>
+                              <div class="progress mT-10">
+                                <div class="progress-bar bgc-green-500" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:80%;"> <span class="visually-hidden">80% Complete</span></div>
+                              </div>
+                            </div>
+                            <div class="layer w-100 mT-15">
+                              <h5 class="mB-5">450k</h5>
+                              <small class="fw-600 c-grey-700">Visitors From Australia</small>
+                              <span class="pull-right c-grey-600 fsz-sm">40%</span>
+                              <div class="progress mT-10">
+                                <div class="progress-bar bgc-light-blue-500" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:40%;"> <span class="visually-hidden">40% Complete</span></div>
+                              </div>
+                            </div>
+                            <div class="layer w-100 mT-15">
+                              <h5 class="mB-5">1B</h5>
+                              <small class="fw-600 c-grey-700">Visitors From India</small>
+                              <span class="pull-right c-grey-600 fsz-sm">90%</span>
+                              <div class="progress mT-10">
+                                <div class="progress-bar bgc-blue-grey-500" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:90%;"> <span class="visually-hidden">90% Complete</span></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Pie Charts -->
+                          <div class="peers pT-20 mT-20 bdT fxw-nw@lg+ jc-sb ta-c gap-10">
+                            <div class="peer">
+                              <div class="easy-pie-chart" data-size='80' data-percent="75" data-bar-color='#f44336'>
+                                <span></span>
+                              </div>
+                              <h6 class="fsz-sm">New Users</h6>
+                            </div>
+                            <div class="peer">
+                              <div class="easy-pie-chart" data-size='80' data-percent="50" data-bar-color='#2196f3'>
+                                <span></span>
+                              </div>
+                              <h6 class="fsz-sm">New Purchases</h6>
+                            </div>
+                            <div class="peer">
+                              <div class="easy-pie-chart" data-size='80' data-percent="90" data-bar-color='#ff9800'>
+                                <span></span>
+                              </div>
+                              <h6 class="fsz-sm">Bounce Rate</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="masonry-item col-md-6">
+                <!-- #Monthly Stats ==================== -->
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pT-20">
+                      <h6 class="lh-1">Monthly Stats</h6>
+                    </div>
+                    <div class="layer w-100 p-20">
+                      <canvas id="line-chart" height="220"></canvas>
+                    </div>
+                    <div class="layer bdT p-20 w-100">
+                      <div class="peers ai-c jc-c gapX-20">
+                        <div class="peer">
+                          <span class="fsz-def fw-600 mR-10 c-grey-800">10% <i class="fa fa-level-up c-green-500"></i></span>
+                          <small class="c-grey-500 fw-600">APPL</small>
+                        </div>
+                        <div class="peer fw-600">
+                          <span class="fsz-def fw-600 mR-10 c-grey-800">2% <i class="fa fa-level-down c-red-500"></i></span>
+                          <small class="c-grey-500 fw-600">Average</small>
+                        </div>
+                        <div class="peer fw-600">
+                          <span class="fsz-def fw-600 mR-10 c-grey-800">15% <i class="fa fa-level-up c-green-500"></i></span>
+                          <small class="c-grey-500 fw-600">Sales</small>
+                        </div>
+                        <div class="peer fw-600">
+                          <span class="fsz-def fw-600 mR-10 c-grey-800">8% <i class="fa fa-level-down c-red-500"></i></span>
+                          <small class="c-grey-500 fw-600">Profit</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="masonry-item col-md-6">
+                <!-- #Todo ==================== -->
+                <div class="bd bgc-white p-20">
+                  <div class="layers">
+                    <div class="layer w-100 mB-10">
+                      <h6 class="lh-1">Todo List</h6>
+                    </div>
+                    <div class="layer w-100">
+                      <ul class="list-task list-group" data-role="tasklist">
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall1" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall1" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Call John for Dinner</span>
+                            </label>
+                          </div>
+                        </li>
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall2" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall2" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Book Boss Flight</span>
+                              <span class="peer">
+                                <span class="badge rounded-pill fl-r bg-success lh-0 p-10">2 Days</span>
+                              </span>
+                            </label>
+                          </div>
+                        </li>
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall3" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall3" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Hit the Gym</span>
+                              <span class="peer">
+                                <span class="badge rounded-pill fl-r bg-danger lh-0 p-10">3 Minutes</span>
+                              </span>
+                            </label>
+                          </div>
+                        </li>
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall4" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall4" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Give Purchase Report</span>
+                              <span class="peer">
+                                <span class="badge rounded-pill fl-r bg-warning lh-0 p-10">not important</span>
+                              </span>
+                            </label>
+                          </div>
+                        </li>
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall5" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall5" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Watch Game of Thrones Episode</span>
+                              <span class="peer">
+                                <span class="badge rounded-pill fl-r bg-info lh-0 p-10">Tomorrow</span>
+                              </span>
+                            </label>
+                          </div>
+                        </li>
+                        <li class="list-group-item bdw-0" data-role="task">
+                          <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" id="inputCall6" name="inputCheckboxesCall" class="peer">
+                            <label for="inputCall6" class="form-label peers peer-greed js-sb ai-c">
+                              <span class="peer peer-greed">Give Purchase report</span>
+                              <span class="peer">
+                                <span class="badge rounded-pill fl-r bg-success lh-0 p-10">Done</span>
+                              </span>
+                            </label>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="masonry-item col-md-6">
+                <!-- #Sales Report ==================== -->
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 p-20">
+                      <h6 class="lh-1">Sales Report</h6>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="bgc-light-blue-500 c-white p-20">
+                        <div class="peers ai-c jc-sb gap-40">
+                          <div class="peer peer-greed">
+                            <h5>November 2017</h5>
+                            <p class="mB-0">Sales Report</p>
+                          </div>
+                          <div class="peer">
+                            <h3 class="text-end">$6,000</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="table-responsive p-20">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th class=" bdwT-0">Name</th>
+                              <th class=" bdwT-0">Status</th>
+                              <th class=" bdwT-0">Date</th>
+                              <th class=" bdwT-0">Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="fw-600">Item #1 Name</td>
+                              <td><span class="badge bgc-red-50 c-red-700 p-10 lh-0 tt-c rounded-pill">Unavailable</span> </td>
+                              <td>Nov 18</td>
+                              <td><span class="text-success">$12</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #2 Name</td>
+                              <td><span class="badge bgc-deep-purple-50 c-deep-purple-700 p-10 lh-0 tt-c rounded-pill">New</span></td>
+                              <td>Nov 19</td>
+                              <td><span class="text-info">$34</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #3 Name</td>
+                              <td><span class="badge bgc-pink-50 c-pink-700 p-10 lh-0 tt-c rounded-pill">New</span></td>
+                              <td>Nov 20</td>
+                              <td><span class="text-danger">-$45</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #4 Name</td>
+                              <td><span class="badge bgc-green-50 c-green-700 p-10 lh-0 tt-c rounded-pill">Unavailable</span></td>
+                              <td>Nov 21</td>
+                              <td><span class="text-success">$65</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #5 Name</td>
+                              <td><span class="badge bgc-red-50 c-red-700 p-10 lh-0 tt-c rounded-pill">Used</span></td>
+                              <td>Nov 22</td>
+                              <td><span class="text-success">$78</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #6 Name</td>
+                              <td><span class="badge bgc-orange-50 c-orange-700 p-10 lh-0 tt-c rounded-pill">Used</span> </td>
+                              <td>Nov 23</td>
+                              <td><span class="text-danger">-$88</span></td>
+                            </tr>
+                            <tr>
+                              <td class="fw-600">Item #7 Name</td>
+                              <td><span class="badge bgc-yellow-50 c-yellow-700 p-10 lh-0 tt-c rounded-pill">Old</span></td>
+                              <td>Nov 22</td>
+                              <td><span class="text-success">$56</span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                       </div>
+                    </div>
+                  </div>
+                  <div class="ta-c bdT w-100 p-20">
+                    <a href="#">Check all the sales</a>
+                  </div>
+                </div>
+              </div>
+              <div class="masonry-item col-md-6">
+                <!-- #Weather ==================== -->
+                <div class="bd bgc-white p-20">
+                  <div class="layers">
+                    <!-- Widget Title -->
+                    <div class="layer w-100 mB-20">
+                      <h6 class="lh-1">Weather</h6>
+                    </div>
+
+                    <!-- Today Weather -->
+                    <div class="layer w-100">
+                      <div class="peers ai-c jc-sb fxw-nw">
+                        <div class="peer peer-greed">
+                          <div class="layers">
+                            <!-- Temprature -->
+                            <div class="layer w-100">
+                              <div class="peers fxw-nw ai-c">
+                                <div class="peer mR-20">
+                                  <h3>32<sup>°F</sup></h3>
+                                </div>
+                                <div class="peer">
+                                  <canvas class="sleet" width="44" height="44"></canvas>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="layer w-100">
+                              <span class="fw-600 c-grey-600">Partly Clouds</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="peer">
+                          <div class="layers ai-fe">
+                            <div class="layer">
+                              <h5 class="mB-5">Monday</h5>
+                            </div>
+                            <div class="layer">
+                              <span class="fw-600 c-grey-600">Nov, 01 2017</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Today Weather Extended -->
+                    <div class="layer w-100 mY-30">
+                      <div class="layers bdB">
+                        <div class="layer w-100 bdT pY-5">
+                          <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                              <span>Wind</span>
+                            </div>
+                            <div class="peer ta-r">
+                              <span class="fw-600 c-grey-800">10km/h</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layer w-100 bdT pY-5">
+                          <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                              <span>Sunrise</span>
+                            </div>
+                            <div class="peer ta-r">
+                              <span class="fw-600 c-grey-800">05:00 AM</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layer w-100 bdT pY-5">
+                          <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                              <span>Pressure</span>
+                            </div>
+                            <div class="peer ta-r">
+                              <span class="fw-600 c-grey-800">1B</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Week Forecast -->
+                    <div class="layer w-100">
+                      <div class="peers peers-greed ai-fs ta-c">
+                        <div class="peer">
+                          <h6 class="mB-10">MON</h6>
+                          <canvas class="sleet" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">32<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">TUE</h6>
+                          <canvas class="clear-day" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">30<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">WED</h6>
+                          <canvas class="partly-cloudy-day" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">28<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">THR</h6>
+                          <canvas class="cloudy" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">32<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">FRI</h6>
+                          <canvas class="snow" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">24<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">SAT</h6>
+                          <canvas class="wind" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">28<sup>°F</sup></span>
+                        </div>
+                        <div class="peer">
+                          <h6 class="mB-10">SUN</h6>
+                          <canvas class="sleet" width="30" height="30"></canvas>
+                          <span class="d-b fw-600">32<sup>°F</sup></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="masonry-item col-md-6">
+                <!-- #Chat ==================== -->
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 p-20">
+                      <h6 class="lh-1">Quick Chat</h6>
+                    </div>
+                    <div class="layer w-100">
+                      <!-- Chat Box -->
+                      <div class="bgc-grey-200 p-20 gapY-15">
+                        <!-- Chat Conversation -->
+                        <div class="peers fxw-nw">
+                          <div class="peer mR-20">
+                            <img class="w-2r bdrs-50p" src="https://randomuser.me/api/portraits/men/11.jpg" alt="">
+                          </div>
+                          <div class="peer peer-greed">
+                            <div class="layers ai-fs gapY-5">
+                              <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2">
+                                  <div class="peer mR-10">
+                                    <small>10:00 AM</small>
+                                  </div>
+                                  <div class="peer-greed">
+                                    <span>Lorem Ipsum is simply dummy text of</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2">
+                                  <div class="peer mR-10">
+                                    <small>10:00 AM</small>
+                                  </div>
+                                  <div class="peer-greed">
+                                    <span>the printing and typesetting industry.</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2">
+                                  <div class="peer mR-10">
+                                    <small>10:00 AM</small>
+                                  </div>
+                                  <div class="peer-greed">
+                                    <span>Lorem Ipsum has been the industry's</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Chat Conversation -->
+                        <div class="peers fxw-nw ai-fe">
+                          <div class="peer ord-1 mL-20">
+                            <img class="w-2r bdrs-50p" src="https://randomuser.me/api/portraits/men/12.jpg" alt="">
+                          </div>
+                          <div class="peer peer-greed ord-0">
+                            <div class="layers ai-fe gapY-10">
+                              <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2">
+                                  <div class="peer mL-10 ord-1">
+                                    <small>10:00 AM</small>
+                                  </div>
+                                  <div class="peer-greed ord-0">
+                                    <span>Heloo</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2">
+                                  <div class="peer mL-10 ord-1">
+                                    <small>10:00 AM</small>
+                                  </div>
+                                  <div class="peer-greed ord-0">
+                                    <span>??</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Chat Send -->
+                      <div class="p-20 bdT bgc-white">
+                        <div class="pos-r">
+                          <input type="text" class="form-control bdrs-10em m-0" placeholder="Say something...">
+                          <button type="button" class="btn btn-primary bdrs-50p w-2r p-0 h-2r pos-a r-1 t-1">
+                            <i class="fa fa-paper-plane-o"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </section>
-
-        </div>
+          </div>
         </main>
-        <div data-shell-footer></div>
+
+        @@include('./_footer.html', {
+          "path": "."
+        })
+        
       </div>
     </div>
+     @@include('./_scripts.html', {
+        "path": "."
+    })
   </body>
 </html>
