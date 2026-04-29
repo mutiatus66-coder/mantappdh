@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--
 Author: Keenthemes
-Product Name: Metronic
+Product Name: Metronic 
 Product Version: 8.2.3
 Purchase: https://1.envato.market/EA4JP
 Website: http://www.keenthemes.com
@@ -55,7 +55,7 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Wrapper-->
 						<div class="w-lg-500px p-10">
 							<!--begin::Form-->
-							<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="admin" action="#">
+							<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="admin.blade.php" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-11">
 									<!--begin::Title-->
@@ -109,7 +109,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 									<div></div>
 									<!--begin::Link-->
-									<a href="authentication/layouts/corporate/reset-password.html" class="link-primary">Forgot Password ?</a>
+									<a href="template.demo6/demo6/authentication/layouts/corporate/reset-password.html" class="link-primary">Forgot Password ?</a>
 									<!--end::Link-->
 								</div>
 								<!--end::Wrapper-->
@@ -120,14 +120,14 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="indicator-label">Sign In</span>
 										<!--end::Indicator label-->
 										<!--begin::Indicator progress-->
-										<span class="indicator-progress">Please wait...
+										<span class="indicator-progress">Please wait... 
 										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 										<!--end::Indicator progress-->
 									</button>
 								</div>
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
-								<div class="text-gray-500 text-center fw-semibold fs-6">Not a Member yet?
+								<div class="text-gray-500 text-center fw-semibold fs-6">Not a Member yet? 
 								<a href="template.demo6/demo6/authentication/layouts/corporate/sign-up.html" class="link-primary">Sign up</a></div>
 								<!--end::Sign up-->
 							</form>
@@ -137,32 +137,7 @@ License: For each use you must have a valid license purchased only from above li
 					</div>
 					<!--end::Form-->
 				</div>
-				<!--end::Body-->
-				<!--begin::Aside-->
-				<div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(template.demo6/demo6/assets/media/misc/auth-bg.png)">
-					<!--begin::Content-->
-					<div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
-						<!--begin::Logo-->
-						<a href="admin" class="mb-0 mb-lg-12">
-							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/custom-1.png" class="h-60px h-lg-75px" />
-						<!--end::Logo-->
-						<!--begin::Image-->
-						<img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="template.demo6/demo6/assets/media/misc/auth-screens.png" alt="" />
-						<!--end::Image-->
-						<!--begin::Title-->
-						<h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">Fast, Efficient and Productive</h1>
-						<!--end::Title-->
-						<!--begin::Text-->
-						<div class="d-none d-lg-block text-white fs-base text-center">In this kind of post,
-						<a href="#" class="opacity-75-hover text-warning fw-bold me-1">the blogger</a>introduces a person they’ve interviewed
-						<br />and provides some background information about
-						<a href="#" class="opacity-75-hover text-warning fw-bold me-1">the interviewee</a>and their
-						<br />work following this is a transcript of the interview.</div>
-						<!--end::Text-->
-					</div>
-					<!--end::Content-->
-				</div>
-				<!--end::Aside-->
+				<!--end::Body--> 
 			</div>
 			<!--end::Authentication - Sign-in-->
 		</div>
