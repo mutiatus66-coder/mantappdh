@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  @@include('./_head.html', {
+        "path": ".",
+        "title": "Test"
+    })
+</head>
+<body class="app">
+  <div id='loader'>
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function load() {
+      const loader = document.getElementById('loader');
+      setTimeout(function() {
+          loader.classList.add('fadeOut');
+      }, 300);
+    });
+  </script>
+  <div class="page-container">
+    <!-- <div class="header navbar">
+      <div class="header-container">
+        
+      </div>
+      
+    </div> -->
+    <main class='main-content bgc-grey-100'>
+      <div id='mainContent'>
+        <div class="full-container">
+          <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+            Tooltip on top
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+            Tooltip on top
+          </button>
+
+        </div>
+      </div>
+    </main>
+
+    @@include('./_footer.html', {
+      "path": "."
+    })
+
+  </div>
+   @@include('./_scripts.html', {
+        "path": "."
+    })
+</body>
+</html>

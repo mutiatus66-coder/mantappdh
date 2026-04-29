@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    @@include('./_head.html', {
+        "path": ".",
+        "title": "Blank"
+    })
+  </head>
+  <body class="app">
+    <!-- @TOC -->
+    <!-- =================================================== -->
+    <!--
+      + @Page Loader
+      + @App Content
+          - #Left Sidebar
+              > $Sidebar Header
+              > $Sidebar Menu
+
+          - #Main
+              > $Topbar
+              > $App Screen Content
+    -->
+
+    <!-- @Page Loader -->
+    <!-- =================================================== -->
+    <div id='loader'>
+      <div class="spinner"></div>
+    </div>
+
+    <script>
+      window.addEventListener('load', function load() {
+        const loader = document.getElementById('loader');
+        setTimeout(function() {
+            loader.classList.add('fadeOut');
+        }, 300);
+      });
+    </script>
+
+    <!-- @App Content -->
+    <!-- =================================================== -->
+    <div>
+
+      @@include('./_sidebar.html', {
+        "path": "."
+      })
+
+      <!-- #Main ============================ -->
+      <div class="page-container">
+
+        @@include('./_navigation.html', {
+          "path": "."
+        })
+
+        <!-- ### $App Screen Content ### -->
+        <main class='main-content bgc-grey-100'>
+          <div id='mainContent'>
+            <div class="full-container">
+
+
+            </div>
+          </div>
+        </main>
+
+        @@include('./_footer.html', {
+          "path": "."
+        })
+
+      </div>
+    </div>
+     @@include('./_scripts.html', {
+        "path": "."
+    })
+  </body>
+</html>

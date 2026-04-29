@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    @@include('./_head.html', {
+        "path": ".",
+        "title": "Buttons"
+    })
+  </head>
+  <body class="app">
+    <!-- @TOC -->
+    <!-- =================================================== -->
+    <!--
+      + @Page Loader
+      + @App Content
+          - #Left Sidebar
+              > $Sidebar Header
+              > $Sidebar Menu
+
+          - #Main
+              > $Topbar
+              > $App Screen Content
+    -->
+
+    <!-- @Page Loader -->
+    <!-- =================================================== -->
+    <div id='loader' class="pos-f h-100vh w-100 bgc-deep-purple-50 z-9">
+      <div class="spinner"></div>
+    </div>
+
+    <script>
+      window.addEventListener('load', function load() {
+        const loader = document.getElementById('loader');
+        setTimeout(function() {
+          loader.classList.add('fadeOut');
+        }, 3000);
+      });
+    </script>
+
+    <!-- @App Content -->
+    <!-- =================================================== -->
+    <div>
+
+      @@include('./_sidebar.html', {
+        "path": "."
+      })
+
+      <!-- #Main ============================ -->
+      <div class="page-container">
+        
+        @@include('./_navigation.html', {
+          "path": "."
+        })
+
+        <!-- ### $App Screen Content ### -->
+        <main class='main-content bgc-grey-100'>
+          <div id='mainContent'></div>
+        </main>
+
+        @@include('./_footer.html', {
+          "path": "."
+        })
+
+      </div>
+    </div>
+     @@include('./_scripts.html', {
+        "path": "."
+    })
+  </body>
+</html>
