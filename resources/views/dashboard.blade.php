@@ -46,12 +46,7 @@ License: For each use you must have a valid license purchased only from above li
 		<!--begin::Root-->
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Header Section-->
-			<div class="mb-0" id="home">
-				<!--begin::Wrapper-->
-				// <div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-dark-bg" style="background-image: url(template.demo6/demo6/assets/media/svg/illustrations/landing.svg)">
-					<!--begin::Header-->
-					<div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
-						<!--begin::Container-->
+			<div class="mb-0" id="home">						<!--begin::Container-->
 						<div class="container">
 							<!--begin::Wrapper-->
 							<div class="d-flex align-items-center justify-content-between">
@@ -64,7 +59,6 @@ License: For each use you must have a valid license purchased only from above li
 									<!--end::Mobile menu toggle-->
 									<!--begin::Logo image-->
 									<a href="landing.html">
-										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/low.png" class="logo-default h-25px h-lg-30px" />
 										<img alt="Logo" src="template.demo6/demo6/assets/media/logos/low.png" class="logo-sticky h-20px h-lg-25px" />
 									</a>
 									<!--end::Logo image-->
@@ -124,7 +118,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Menu wrapper-->
 								<!--begin::Toolbar-->
 								<div class="flex-equal text-end ms-1">
-									<a href="/sign-in" class="btn btn-success">Sign In</a>
+									<a href="/sign-in" class="btn btn-success">Login</a>
 								</div>
 								<!--end::Toolbar-->
 							</div>
@@ -144,62 +138,10 @@ License: For each use you must have a valid license purchased only from above li
 							<a href="index.html" class="btn btn-primary">Pendaftaran -></a>
 							<!--end::Action-->
 						</div>
-						<!--end::Heading-->
-						<!--begin::Clients-->
-						<div class="d-flex flex-center flex-wrap position-relative px-5">
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Fujifilm">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/fujifilm.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Vodafone">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/vodafone.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="KPMG International">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/kpmg.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Nasa">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/nasa.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Aspnetzero">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/aspnetzero.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="AON - Empower Results">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/aon.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Hewlett-Packard">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/hp-3.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-							<!--begin::Client-->
-							<div class="d-flex flex-center m-3 m-md-6" data-bs-toggle="tooltip" title="Truman">
-								<img src="template.demo6/demo6/assets/media/svg/brand-logos/truman.svg" class="mh-30px mh-lg-40px" alt="" />
-							</div>
-							<!--end::Client-->
-						</div>
-						<!--end::Clients-->
-					</div>
+                        <br>
 					<!--end::Landing hero-->
 				</div>
-				<!--end::Wrapper-->
-				<!--begin::Curve bottom-->
-				<div class="landing-curve landing-dark-color mb-10 mb-lg-20">
-					<svg viewBox="15 12 1470 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M0 11C3.93573 11.3356 7.85984 11.6689 11.7725 12H1488.16C1492.1 11.6689 1496.04 11.3356 1500 11V12H1488.16C913.668 60.3476 586.282 60.6117 11.7725 12H0V11Z" fill="currentColor"></path>
-					</svg>
-				</div>
-				<!--end::Curve bottom-->
+                <br>
 			</div>
 			<!--end::Header Section-->
 			<!--begin::How It Works Section-->
