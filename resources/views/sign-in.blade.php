@@ -109,7 +109,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 									<div></div>
 									<!--begin::Link-->
-									<a href="authentication/layouts/corporate/reset-password.html" class="link-primary">Forgot Password ?</a>
+									<a href="template.demo6/demo6/authentication/layouts/corporate/reset-password.html" class="link-primary">Forgot Password ?</a>
 									<!--end::Link-->
 								</div>
 								<!--end::Wrapper-->
