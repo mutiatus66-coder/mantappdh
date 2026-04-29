@@ -52,12 +52,20 @@ License: For each use you must have a valid license purchased only from above li
 			<!--begin::Page-->
 			<div class="page d-flex flex-row flex-column-fluid">
 				<!--begin::Aside-->
-				<div id="kt_aside" class="aside overflow-visible pb-5 pt-5 pt-lg-0" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'80px', '300px': '100px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
-					<!--begin::Brand-->
+				<div id="kt_aside"
+            class="aside overflow-visible pb-5 pt-5 pt-lg-0"
+            style="background-color: #4154f1 !important; color: #ffffff;"
+            data-kt-drawer="true"
+            data-kt-drawer-name="aside"
+            data-kt-drawer-activate="{default: true, lg: false}"
+            data-kt-drawer-overlay="true"
+            data-kt-drawer-width="{default:'80px', '300px': '100px'}"
+            data-kt-drawer-direction="start"
+            data-kt-drawer-toggle="#kt_aside_mobile_toggle">				<!--begin::Brand-->
 					<div class="aside-logo py-8" id="kt_aside_logo">
 						<!--begin::Logo-->
 						<a href="index.html" class="d-flex align-items-center">
-							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/demo6.svg" class="h-45px logo" />
+							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-45px logo" />
 						</a>
 						<!--end::Logo-->
 					</div>
@@ -327,7 +335,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-notification-status fs-2x"></i>
 										</span>
-										<span class="menu-title">Pages</span>
+										<span class="menu-title" style="color: #4154f1 !important;">Pages</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -1840,7 +1848,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-abstract-26 fs-2x"></i>
 										</span>
-										<span class="menu-title">Apps</span>
+										<span class="menu-title" style="color: #4154f1 !important;">Apps</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -2988,7 +2996,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-briefcase fs-2x"></i>
 										</span>
-										<span class="menu-title">Help</span>
+										<span class="menu-title" style="color: #4154f1 !important;">Help</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -3171,7 +3179,7 @@ License: For each use you must have a valid license purchased only from above li
 											<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 												<!--begin:Menu link-->
 												<span class="menu-link py-3">
-													<span class="menu-title">Dashboards</span>
+													<span class="menu-title" style="color: #4154f1 !important;">Dashboards</span>
 													<span class="menu-arrow d-lg-none"></span>
 												</span>
 												<!--end:Menu link-->
