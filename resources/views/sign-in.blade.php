@@ -60,9 +60,6 @@ License: For each use you must have a valid license purchased only from above li
 									<!--begin::Title-->
 									<h1 class="text-gray-900 fw-bolder mb-3">Login</h1>
 									<!--end::Title-->
-									<!--begin::Subtitle-->
-									<div class="text-gray-500 fw-semibold fs-6">Your Social Campaigns</div>
-									<!--end::Subtitle=-->
 								</div>
 								<!--begin::Heading-->
 								<!--begin::Input group=-->
@@ -82,7 +79,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 									<div></div>
 									<!--begin::Link-->
-									<a href="reset-password" class="link-primary">Lupa Kata Sandi ?</a>
+									<a href="reset-password.blade.php" class="link-primary">Lupa Kata Sandi ?</a>
 									<!--end::Link-->
 								</div>
 								<!--end::Wrapper-->
