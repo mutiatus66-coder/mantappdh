@@ -118,7 +118,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
 								<div class="text-gray-500 text-center fw-semibold fs-6">Sudah punya akun?
-								<a href="sign-in" class="link-primary fw-semibold">Silahkan Login</a></div>
+								<a href="sign-in" class="link-primary fw-semibold text-decoration-underline">Silahkan Login</a></div>
 								<!--end::Sign up-->
 							</form>
 							<!--end::Form-->
