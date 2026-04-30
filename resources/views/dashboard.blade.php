@@ -13,7 +13,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/mgt.png" />
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" />
     <!-- Global Stylesheets Bundle -->
     <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -29,7 +29,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: #ffffff;
             overflow-x: hidden;
         }
@@ -289,7 +289,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                         <button class="btn btn-icon btn-active-light me-3 d-flex d-lg-none border-0 bg-transparent" id="kt_landing_menu_toggle">
                             <i class="ki-outline ki-abstract-14 fs-1"></i>
                         </button>
-                        <h1 style="font-size: 2rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin: 0;">
+                        <h1 style="font-size: 2rem; font-weight: 800; color: #2563eb; line-height: 1.2; margin: 0;">
                             RUMAHINOVASI
                         </h1>
                     </div>
