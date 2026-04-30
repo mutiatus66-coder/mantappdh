@@ -352,7 +352,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
         <!-- FOOTER dengan COPYRIGHT -->
         <div class="footer">
             <div class="container">
-                <p>&copy; <span id="currentYear"></span> <strong>Dinas Kominfo.</strong> All rights reserved.</p>
+                <p>&copy; Copyright <strong>Dinas Kominfo.</strong> All rights reserved.</p>
                 <p> Develop by Dinas Kominfo Magetan Development</p>
             </div>
         </div>
