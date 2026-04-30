@@ -54,7 +54,7 @@ License: For each use you must have a valid license purchased only from above li
 				<!--begin::Aside-->
 				<div id="kt_aside"
             class="aside overflow-visible pb-5 pt-5 pt-lg-0"
-            style="background-color: #4154f1 !important; color: #ffffff;"
+            style="background-color: #1b84ff !important; color: #ffffff;"
             data-kt-drawer="true"
             data-kt-drawer-name="aside"
             data-kt-drawer-activate="{default: true, lg: false}"
@@ -62,9 +62,9 @@ License: For each use you must have a valid license purchased only from above li
             data-kt-drawer-width="{default:'80px', '300px': '100px'}"
             data-kt-drawer-direction="start"
             data-kt-drawer-toggle="#kt_aside_mobile_toggle">				<!--begin::Brand-->
-					<div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #4154f1;">
+					<div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #1b84ff;">
     <!--begin::Logo-->
-    <a href="index.html" class="d-flex align-items-center">
+    <a href="/" class="d-flex align-items-center">
         <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-45px logo" />
     </a>
     <!--end::Logo-->
@@ -72,7 +72,7 @@ License: For each use you must have a valid license purchased only from above li
 	<!--end::Brand-->
 
 	<!--begin::Aside menu-->
-	<div class="aside-menu flex-column-fluid" id="kt_aside_menu" style="background-color: #4154f1;">
+	<div class="aside-menu flex-column-fluid" id="kt_aside_menu" style="background-color: #1b84ff;">
 		<!--begin::Aside Menu-->
 		<div class="hover-scroll-y my-2 my-lg-5 scroll-ms" id="kt_aside_menu_wrapper"
         data-kt-scroll="true"
@@ -80,13 +80,13 @@ License: For each use you must have a valid license purchased only from above li
         data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
         data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu"
         data-kt-scroll-offset="5px"
-        style="background-color: #4154f1;">
+        style="background-color: #1b84ff;">
 
         <!--begin::Menu-->
         <div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold"
             id="#kt_aside_menu"
             data-kt-menu="true"
-            style="background-color: #4154f1;">
+            style="background-color: #1b84ff;">
 
             <!--begin:Menu item-->
 						<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
@@ -94,11 +94,11 @@ License: For each use you must have a valid license purchased only from above li
 							class="menu-item here show py-2">
 
 							<!--begin:Menu link-->
-							<span class="menu-link menu-center">
+							<span class="menu-link menu-center" style="background-color: #1b84ff;">
 								<span class="menu-icon me-0">
 									<i class="ki-outline ki-home-2 fs-2x" style="color: white;"></i>
 								</span>
-								<span class="menu-title" style="color: white;">Home</span>
+								<span class="menu-title" style="color: white;">Beranda</span>
 							</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -107,7 +107,7 @@ License: For each use you must have a valid license purchased only from above li
 										<div class="menu-item">
 											<!--begin:Menu content-->
 											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Home</span>
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Dashboard</span>
 											</div>
 											<!--end:Menu content-->
 										</div>
@@ -115,229 +115,13 @@ License: For each use you must have a valid license purchased only from above li
 										<!--begin:Menu item-->
 										<div class="menu-item">
 											<!--begin:Menu link-->
-											<a class="menu-link active" href="index.html">
+											<a class="menu-link active" href="/">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
-												<span class="menu-title">Default</span>
+												<span class="menu-title">Utama</span>
 											</a>
 											<!--end:Menu link-->
-										</div>
-										<!--end:Menu item-->
-										<!--begin:Menu item-->
-										<div class="menu-item">
-											<!--begin:Menu link-->
-											<a class="menu-link" href="dashboards/ecommerce.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">eCommerce</span>
-											</a>
-											<!--end:Menu link-->
-										</div>
-										<!--end:Menu item-->
-										<!--begin:Menu item-->
-										<div class="menu-item">
-											<!--begin:Menu link-->
-											<a class="menu-link" href="dashboards/projects.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Proyek</span>
-											</a>
-											<!--end:Menu link-->
-										</div>
-										<!--end:Menu item-->
-										<!--begin:Menu item-->
-										<div class="menu-item">
-											<!--begin:Menu link-->
-											<a class="menu-link" href="dashboards/online-courses.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Online Courses</span>
-											</a>
-											<!--end:Menu link-->
-										</div>
-										<!--end:Menu item-->
-										<!--begin:Menu item-->
-										<div class="menu-item">
-											<!--begin:Menu link-->
-											<a class="menu-link" href="dashboards/marketing.html">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Marketing</span>
-											</a>
-											<!--end:Menu link-->
-										</div>
-										<!--end:Menu item-->
-										<div class="menu-inner flex-column collapse" id="kt_app_sidebar_menu_dashboards_collapse">
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/bidding.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Bidding</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/pos.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">POS System</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/call-center.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Pusat Layanan</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/logistics.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Logistik</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/website-analytics.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Analisis Laman</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/finance-performance.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Finance Performance</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/store-analytics.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Analisis Pasar</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/social.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Social</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/delivery.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Layanan Kirim</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/crypto.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Crypto</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/school.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Sekolah</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="dashboards/podcast.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Podcast</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-											<!--begin:Menu item-->
-											<div class="menu-item">
-												<!--begin:Menu link-->
-												<a class="menu-link" href="landing.html">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Landing</span>
-												</a>
-												<!--end:Menu link-->
-											</div>
-											<!--end:Menu item-->
-										</div>
-										<div class="menu-item">
-											<div class="menu-content">
-												<a class="btn btn-flex btn-color-primary d-flex flex-stack fs-base p-0 ms-2 mb-2 toggle collapsible collapsed" data-bs-toggle="collapse" href="#kt_app_sidebar_menu_dashboards_collapse" data-kt-toggle-text="Show Less">
-													<span data-kt-toggle-text-target="true">Show 12 More</span>
-													<i class="ki-outline ki-minus-square toggle-on fs-2 me-0"></i>
-													<i class="ki-outline ki-plus-square toggle-off fs-2 me-0"></i>
-												</a>
-											</div>
 										</div>
 									</div>
 									<!--end:Menu sub-->
@@ -350,7 +134,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-notification-status fs-2x"></i>
 										</span>
-										<span class="menu-title" style="color: #4154f1 !important;">Pages</span>
+										<span class="menu-title" style="color: white;">Master</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -359,7 +143,7 @@ License: For each use you must have a valid license purchased only from above li
 										<div class="menu-item">
 											<!--begin:Menu content-->
 											<div class="menu-content">
-												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Pages</span>
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Master</span>
 											</div>
 											<!--end:Menu content-->
 										</div>
@@ -371,7 +155,7 @@ License: For each use you must have a valid license purchased only from above li
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
-												<span class="menu-title">User Profile</span>
+												<span class="menu-title">Profil Pengguna</span>
 												<span class="menu-arrow"></span>
 											</span>
 											<!--end:Menu link-->
@@ -384,7 +168,7 @@ License: For each use you must have a valid license purchased only from above li
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">Overview</span>
+														<span class="menu-title">Keseluruhan</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
@@ -1335,7 +1119,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-abstract-35 fs-2x"></i>
 										</span>
-										<span class="menu-title">Utilities</span>
+										<span class="menu-title" style="color: white;">Utilitas</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -1863,7 +1647,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-abstract-26 fs-2x"></i>
 										</span>
-										<span class="menu-title" style="color: #4154f1 !important;">Apps</span>
+										<span class="menu-title" style="color: white;">Aplikasi</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -3011,7 +2795,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="menu-icon me-0">
 											<i class="ki-outline ki-briefcase fs-2x"></i>
 										</span>
-										<span class="menu-title" style="color: #4154f1 !important;">Help</span>
+										<span class="menu-title" style="color: white;">Bantuan</span>
 									</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
@@ -3194,7 +2978,7 @@ License: For each use you must have a valid license purchased only from above li
 											<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 												<!--begin:Menu link-->
 												<span class="menu-link py-3">
-													<span class="menu-title" style="color: #4154f1 !important;">Beranda</span>
+													<span class="menu-title" style="color: #1b84ff !important;">Beranda</span>
 													<span class="menu-arrow d-lg-none"></span>
 												</span>
 												<!--end:Menu link-->
@@ -4654,7 +4438,7 @@ License: For each use you must have a valid license purchased only from above li
 																		<div class="menu-item p-0 m-0">
 																			<!--begin:Menu link-->
 																			<a href="widgets/charts.html" class="menu-link">
-																				<span class="menu-title">Charts</span>
+																				<span class="menu-title">Grafik</span>
 																			</a>
 																			<!--end:Menu link-->
 																		</div>
@@ -4672,7 +4456,7 @@ License: For each use you must have a valid license purchased only from above li
 																		<div class="menu-item p-0 m-0">
 																			<!--begin:Menu link-->
 																			<a href="widgets/tables.html" class="menu-link">
-																				<span class="menu-title">Tables</span>
+																				<span class="menu-title">Tabel</span>
 																			</a>
 																			<!--end:Menu link-->
 																		</div>
@@ -4681,7 +4465,7 @@ License: For each use you must have a valid license purchased only from above li
 																		<div class="menu-item p-0 m-0">
 																			<!--begin:Menu link-->
 																			<a href="widgets/feeds.html" class="menu-link">
-																				<span class="menu-title">Feeds</span>
+																				<span class="menu-title">Masukan</span>
 																			</a>
 																			<!--end:Menu link-->
 																		</div>
@@ -4735,7 +4519,7 @@ License: For each use you must have a valid license purchased only from above li
 																	<span class="menu-bullet">
 																		<span class="bullet bullet-dot"></span>
 																	</span>
-																	<span class="menu-title">My Projects</span>
+																	<span class="menu-title">Proyekmu</span>
 																</a>
 																<!--end:Menu link-->
 															</div>
@@ -4747,7 +4531,7 @@ License: For each use you must have a valid license purchased only from above li
 																	<span class="menu-bullet">
 																		<span class="bullet bullet-dot"></span>
 																	</span>
-																	<span class="menu-title">View Project</span>
+																	<span class="menu-title">Lihat Proyek</span>
 																</a>
 																<!--end:Menu link-->
 															</div>
@@ -4759,7 +4543,7 @@ License: For each use you must have a valid license purchased only from above li
 																	<span class="menu-bullet">
 																		<span class="bullet bullet-dot"></span>
 																	</span>
-																	<span class="menu-title">Targets</span>
+																	<span class="menu-title">Target</span>
 																</a>
 																<!--end:Menu link-->
 															</div>
