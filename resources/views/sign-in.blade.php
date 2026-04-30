@@ -79,7 +79,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 									<div></div>
 									<!--begin::Link-->
-									<a href="reset_password.blade" class="link-primary">Lupa Kata Sandi ?</a>
+									<a href="/reset-password" class="link-primary">Lupa Kata Sandi ?</a>
 									<!--end::Link-->
 								</div>
 								<!--end::Wrapper-->
@@ -98,7 +98,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
 								<div class="text-gray-500 text-center fw-semibold fs-6">Belum Punya Akun? 
-								<a href="template.demo6/demo6/authentication/layouts/corporate/sign-up.html" class="link-primary">Daftar</a></div>
+								<a href="/sign-up" class="link-primary">Daftar</a></div>
 								<!--end::Sign up-->
 							</form>
 							<!--end::Form-->

@@ -54,15 +54,15 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Wrapper-->
 						<div class="w-lg-500px p-10">
 							<!--begin::Form-->
-							<form class="form w-100" novalidate="novalidate" id="kt_new_password_form" data-kt-redirect-url="authentication/layouts/corporate/sign-in.html" action="#">
+							<form class="form w-100" novalidate="novalidate" id="kt_new_password_form" data-kt-redirect-url="/sign-in" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-10">
 									<!--begin::Title-->
-									<h1 class="text-gray-900 fw-bolder mb-3">Setup New Password</h1>
+									<h1 class="text-gray-900 fw-bolder mb-3">Atur Ulang Kata Sandi</h1>
 									<!--end::Title-->
 									<!--begin::Link-->
-									<div class="text-gray-500 fw-semibold fs-6">Have you already reset the password ? 
-									<a href="authentication/layouts/corporate/sign-in.html" class="link-primary fw-bold">Sign in</a></div>
+									<div class="text-gray-500 fw-semibold fs-6">Sudah mengatur ulang kata sandi? 
+									<a href="/sign-in" class="link-primary fw-bold">Masuk</a></div>
 									<!--end::Link-->
 								</div>
 								<!--begin::Heading-->
@@ -90,34 +90,25 @@ License: For each use you must have a valid license purchased only from above li
 									</div>
 									<!--end::Wrapper-->
 									<!--begin::Hint-->
-									<div class="text-muted">Use 8 or more characters with a mix of letters, numbers & symbols.</div>
+									<div class="text-muted">Gunakan 8 karakter atau lebih dengan kombinasi huruf, angka, dan simbol.</div>
 									<!--end::Hint-->
 								</div>
 								<!--end::Input group=-->
 								<!--end::Input group=-->
 								<div class="fv-row mb-8">
 									<!--begin::Repeat Password-->
-									<input type="password" placeholder="Repeat Password" name="confirm-password" autocomplete="off" class="form-control bg-transparent" />
+									<input type="password" placeholder="Ulangi Password" name="confirm-password" autocomplete="off" class="form-control bg-transparent" />
 									<!--end::Repeat Password-->
-								</div>
-								<!--end::Input group=-->
-								<!--begin::Input group=-->
-								<div class="fv-row mb-8">
-									<label class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" name="toc" value="1" />
-										<span class="form-check-label fw-semibold text-gray-700 fs-6 ms-1">I Agree & 
-										<a href="#" class="ms-1 link-primary">Terms and conditions</a>.</span>
-									</label>
 								</div>
 								<!--end::Input group=-->
 								<!--begin::Action-->
 								<div class="d-grid mb-10">
 									<button type="button" id="kt_new_password_submit" class="btn btn-primary">
 										<!--begin::Indicator label-->
-										<span class="indicator-label">Submit</span>
+										<span class="indicator-label">Masuk</span>
 										<!--end::Indicator label-->
 										<!--begin::Indicator progress-->
-										<span class="indicator-progress">Please wait... 
+										<span class="indicator-progress">Tunggu... 
 										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 										<!--end::Indicator progress-->
 									</button>
