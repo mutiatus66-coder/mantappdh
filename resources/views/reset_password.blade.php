@@ -27,13 +27,13 @@ License: For each use you must have a valid license purchased only from above li
 		<meta property="og:url" content="https://keenthemes.com/metronic" />
 		<meta property="og:site_name" content="Metronic by Keenthemes" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/favicon.ico" />
+		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
 		<!--begin::Fonts(mandatory for all pages)-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 		<!--end::Fonts-->
 		<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-		<link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 		<!--end::Global Stylesheets Bundle-->
 		<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 	</head>
@@ -83,7 +83,7 @@ License: For each use you must have a valid license purchased only from above li
 										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 										<!--end::Indicator progress-->
 									</button>
-									<a href="authentication/layouts/corporate/sign-in.html" class="btn btn-light">Cancel</a>
+									<a href="authentication/layouts/corporate/sign-in.html" class="btn btn-light">Batal</a>
 								</div>
 								<!--end::Actions-->
 							</form>
@@ -94,6 +94,8 @@ License: For each use you must have a valid license purchased only from above li
 					<!--end::Form-->
 				</div>
 				<!--end::Body-->
+				</div>
+				<!--end::Aside-->
 			</div>
 			<!--end::Authentication - Password reset-->
 		</div>
@@ -102,11 +104,11 @@ License: For each use you must have a valid license purchased only from above li
 		<!--begin::Javascript-->
 		<script>var hostUrl = "assets/";</script>
 		<!--begin::Global Javascript Bundle(mandatory for all pages)-->
-		<script src="template.demo6/demo6/assets/plugins/global/plugins.bundle.js"></script>
-		<script src="template.demo6/demo6/assets/js/scripts.bundle.js"></script>
+		<script src="assets/plugins/global/plugins.bundle.js"></script>
+		<script src="assets/js/scripts.bundle.js"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="template.demo6/demo6/assets/js/custom/authentication/reset-password/reset-password.js"></script>
+		<script src="assets/js/custom/authentication/reset-password/reset-password.js"></script>
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
 	</body>

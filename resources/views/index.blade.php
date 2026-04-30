@@ -22,11 +22,11 @@ License: For each use you must have a valid license purchased only from above li
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:type" content="article" />
-		<meta property="og:title" content="Metronic - The World's #1 Selling Bootstrap Admin Template by KeenThemes" />
-		<meta property="og:url" content="https://keenthemes.com/metronic" />
-		<meta property="og:site_name" content="Metronic by Keenthemes" />
+		<meta property="og:title" content="Rumah Inovasi - Panel Admin" />
+		<meta property="og:url" content="https://rumahinovasi.com/admin" />
+		<meta property="og:site_name" content="Rumah Inovasi" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/favicon.ico" />
+		<link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/mgt.png" />
 		<!--begin::Fonts(mandatory for all pages)-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -62,29 +62,44 @@ License: For each use you must have a valid license purchased only from above li
             data-kt-drawer-width="{default:'80px', '300px': '100px'}"
             data-kt-drawer-direction="start"
             data-kt-drawer-toggle="#kt_aside_mobile_toggle">				<!--begin::Brand-->
-					<div class="aside-logo py-8" id="kt_aside_logo">
-						<!--begin::Logo-->
-						<a href="index.html" class="d-flex align-items-center">
-							<img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-45px logo" />
-						</a>
-						<!--end::Logo-->
-					</div>
-					<!--end::Brand-->
-					<!--begin::Aside menu-->
-					<div class="aside-menu flex-column-fluid" id="kt_aside_menu">
-						<!--begin::Aside Menu-->
-						<div class="hover-scroll-y my-2 my-lg-5 scroll-ms" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu" data-kt-scroll-offset="5px">
-							<!--begin::Menu-->
-							<div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold" id="#kt_aside_menu" data-kt-menu="true">
-								<!--begin:Menu item-->
-								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item here show py-2">
-									<!--begin:Menu link-->
-									<span class="menu-link menu-center">
-										<span class="menu-icon me-0">
-											<i class="ki-outline ki-home-2 fs-2x"></i>
-										</span>
-										<span class="menu-title">Home</span>
-									</span>
+					<div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #4154f1;">
+    <!--begin::Logo-->
+    <a href="index.html" class="d-flex align-items-center">
+        <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-45px logo" />
+    </a>
+    <!--end::Logo-->
+	</div>
+	<!--end::Brand-->
+
+	<!--begin::Aside menu-->
+	<div class="aside-menu flex-column-fluid" id="kt_aside_menu" style="background-color: #4154f1;">
+		<!--begin::Aside Menu-->
+		<div class="hover-scroll-y my-2 my-lg-5 scroll-ms" id="kt_aside_menu_wrapper"
+        data-kt-scroll="true"
+        data-kt-scroll-height="auto"
+        data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
+        data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu"
+        data-kt-scroll-offset="5px"
+        style="background-color: #4154f1;">
+
+        <!--begin::Menu-->
+        <div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold"
+            id="#kt_aside_menu"
+            data-kt-menu="true"
+            style="background-color: #4154f1;">
+
+            <!--begin:Menu item-->
+						<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+							data-kt-menu-placement="right-start"
+							class="menu-item here show py-2">
+
+							<!--begin:Menu link-->
+							<span class="menu-link menu-center">
+								<span class="menu-icon me-0">
+									<i class="ki-outline ki-home-2 fs-2x" style="color: white;"></i>
+								</span>
+								<span class="menu-title" style="color: white;">Home</span>
+							</span>
 									<!--end:Menu link-->
 									<!--begin:Menu sub-->
 									<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
@@ -128,7 +143,7 @@ License: For each use you must have a valid license purchased only from above li
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
-												<span class="menu-title">Projects</span>
+												<span class="menu-title">Proyek</span>
 											</a>
 											<!--end:Menu link-->
 										</div>
@@ -189,7 +204,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">Call Center</span>
+													<span class="menu-title">Pusat Layanan</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -201,7 +216,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">Logistics</span>
+													<span class="menu-title">Logistik</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -213,7 +228,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">Website Analytics</span>
+													<span class="menu-title">Analisis Laman</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -237,7 +252,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">Store Analytics</span>
+													<span class="menu-title">Analisis Pasar</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -261,7 +276,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">Delivery</span>
+													<span class="menu-title">Layanan Kirim</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -285,7 +300,7 @@ License: For each use you must have a valid license purchased only from above li
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
-													<span class="menu-title">School</span>
+													<span class="menu-title">Sekolah</span>
 												</a>
 												<!--end:Menu link-->
 											</div>
@@ -2980,7 +2995,7 @@ License: For each use you must have a valid license purchased only from above li
 												<span class="menu-icon">
 													<i class="ki-outline ki-calendar-8 fs-2"></i>
 												</span>
-												<span class="menu-title">Calendar</span>
+												<span class="menu-title">Kalender</span>
 											</a>
 											<!--end:Menu link-->
 										</div>
@@ -3179,7 +3194,7 @@ License: For each use you must have a valid license purchased only from above li
 											<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
 												<!--begin:Menu link-->
 												<span class="menu-link py-3">
-													<span class="menu-title" style="color: #4154f1 !important;">Dashboards</span>
+													<span class="menu-title" style="color: #4154f1 !important;">Beranda</span>
 													<span class="menu-arrow d-lg-none"></span>
 												</span>
 												<!--end:Menu link-->
@@ -3241,7 +3256,7 @@ License: For each use you must have a valid license purchased only from above li
 																					<i class="ki-outline ki-abstract-44 text-info fs-1"></i>
 																				</span>
 																				<span class="d-flex flex-column">
-																					<span class="fs-6 fw-bold text-gray-800">Projects</span>
+																					<span class="fs-6 fw-bold text-gray-800">Proyek</span>
 																					<span class="fs-7 fw-semibold text-muted">Tasts, graphs & charts</span>
 																				</span>
 																			</a>
@@ -3336,7 +3351,7 @@ License: For each use you must have a valid license purchased only from above li
 																					<i class="ki-outline ki-call text-primary fs-1"></i>
 																				</span>
 																				<span class="d-flex flex-column">
-																					<span class="fs-6 fw-bold text-gray-800">Call Center</span>
+																					<span class="fs-6 fw-bold text-gray-800">Pusat Pelayanan</span>
 																					<span class="fs-7 fw-semibold text-muted">Campaings & conversions</span>
 																				</span>
 																			</a>
@@ -3362,13 +3377,13 @@ License: For each use you must have a valid license purchased only from above li
 															<!--begin:Col-->
 															<div class="menu-more bg-light col-lg-4 py-3 px-3 py-lg-6 px-lg-6 rounded-end">
 																<!--begin:Heading-->
-																<h4 class="fs-6 fs-lg-4 text-gray-800 fw-bold mt-3 mb-3 ms-4">More Dashboards</h4>
+																<h4 class="fs-6 fs-lg-4 text-gray-800 fw-bold mt-3 mb-3 ms-4">Laman Lainnya</h4>
 																<!--end:Heading-->
 																<!--begin:Menu item-->
 																<div class="menu-item p-0 m-0">
 																	<!--begin:Menu link-->
 																	<a href="dashboards/logistics.html" class="menu-link py-2">
-																		<span class="menu-title">Logistics</span>
+																		<span class="menu-title">Logistik</span>
 																	</a>
 																	<!--end:Menu link-->
 																</div>
@@ -3377,7 +3392,7 @@ License: For each use you must have a valid license purchased only from above li
 																<div class="menu-item p-0 m-0">
 																	<!--begin:Menu link-->
 																	<a href="dashboards/website-analytics.html" class="menu-link py-2">
-																		<span class="menu-title">Website Analytics</span>
+																		<span class="menu-title">Analisis Laman</span>
 																	</a>
 																	<!--end:Menu link-->
 																</div>
@@ -7303,7 +7318,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-gray-900 fw-bold my-1 fs-3">Dashboard 
+									<h1 class="d-flex align-items-center text-gray-900 fw-bold my-1 fs-3">Beranda
 									<!--begin::Separator-->
 									<span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
 									<!--end::Separator-->
@@ -7336,8 +7351,8 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex align-items-center">
 									<!--begin::Daterangepicker-->
 									<a href="#" class="btn btn-sm btn-bg-light btn-color-gray-500 btn-active-color-primary me-2" id="kt_dashboard_daterangepicker" data-bs-toggle="tooltip" data-bs-dismiss="click" data-bs-trigger="hover" title="Select dashboard daterange">
-										<span class="fw-semibold me-1" id="kt_dashboard_daterangepicker_title">Range:</span>
-										<span class="fw-bold" id="kt_dashboard_daterangepicker_date">January 12</span>
+										<span class="fw-semibold me-1" id="kt_dashboard_daterangepicker_title">Jarak:</span>
+										<span class="fw-bold" id="kt_dashboard_daterangepicker_date">Januari 12</span>
 									</a>
 									<!--end::Daterangepicker-->
 									<!--begin::Actions-->
@@ -10238,11 +10253,11 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin::Content-->
 												<div class="mb-3 mb-md-0 fw-semibold">
 													<h4 class="text-gray-900 fw-bold">Database Backup Process Completed!</h4>
-													<div class="fs-6 text-gray-700 pe-7">Login into Admin Dashboard to make sure the data integrity is OK</div>
+													<div class="fs-6 text-gray-700 pe-7">Login sebagai Admin untuk keakuratan intergrasiS</div>
 												</div>
 												<!--end::Content-->
 												<!--begin::Action-->
-												<a href="#" class="btn btn-primary px-6 align-self-center text-nowrap">Proceed</a>
+												<a href="#" class="btn btn-primary px-6 align-self-center text-nowrap">Terproses</a>
 												<!--end::Action-->
 											</div>
 											<!--end::Wrapper-->
