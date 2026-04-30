@@ -1945,7 +1945,7 @@ License: For each use you must have a valid license purchased only from above li
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">Users</span>
+														<span class="menu-title">Pengguna</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
@@ -1957,7 +1957,7 @@ License: For each use you must have a valid license purchased only from above li
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">Files</span>
+														<span class="menu-title">Berkas</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
@@ -1969,7 +1969,7 @@ License: For each use you must have a valid license purchased only from above li
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">Activity</span>
+														<span class="menu-title">Aktivitas</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
@@ -1981,7 +1981,7 @@ License: For each use you must have a valid license purchased only from above li
 														<span class="menu-bullet">
 															<span class="bullet bullet-dot"></span>
 														</span>
-														<span class="menu-title">Settings</span>
+														<span class="menu-title">Pengaturan</span>
 													</a>
 													<!--end:Menu link-->
 												</div>
@@ -4709,8 +4709,8 @@ License: For each use you must have a valid license purchased only from above li
 											<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
 												<!--begin:Menu link-->
 												<span class="menu-link py-3">
-													<span class="menu-title">Apps</span>
-													<span class="menu-arrow d-lg-none"></span>
+												<span class="menu-title" style="color: #ffffff;">Aplikasi</span>
+												<span class="menu-arrow d-lg-none" style="color: #ffffff;"></span>
 												</span>
 												<!--end:Menu link-->
 												<!--begin:Menu sub-->
@@ -4722,7 +4722,7 @@ License: For each use you must have a valid license purchased only from above li
 															<span class="menu-icon">
 																<i class="ki-outline ki-rocket fs-2"></i>
 															</span>
-															<span class="menu-title">Projects</span>
+															<span class="menu-title">Proyek</span>
 															<span class="menu-arrow"></span>
 														</span>
 														<!--end:Menu link-->
@@ -7318,13 +7318,15 @@ License: For each use you must have a valid license purchased only from above li
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-gray-900 fw-bold my-1 fs-3">Beranda
-									<!--begin::Separator-->
-									<span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-									<!--end::Separator-->
-									<!--begin::Description-->
-									<small class="text-muted fs-7 fw-semibold my-1 ms-1">#XRS-45670</small>
-									<!--end::Description--></h1>
+									<h1 class="d-flex align-items-center fw-bold my-1 fs-3" style="color: #ffffff;">
+										Beranda
+										<!--begin::Separator-->
+										<span class="h-20px border-start ms-3 mx-2" style="border-color: #ffffff;"></span>
+										<!--end::Separator-->
+										<!--begin::Description-->
+										<small class="fs-7 fw-semibold my-1 ms-1" style="color: #ffffff;">#XRS-45670</small>
+										<!--end::Description-->
+									</h1>
 									<!--end::Title-->
 								</div>
 								<!--end::Page title-->
@@ -7388,7 +7390,7 @@ License: For each use you must have a valid license purchased only from above li
 												<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">69</span>
 												<!--end::Amount-->
 												<!--begin::Subtitle-->
-												<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Active Projects</span>
+												<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Antrean Proyek</span>
 												<!--end::Subtitle-->
 											</div>
 											<!--end::Title-->
@@ -7421,7 +7423,7 @@ License: For each use you must have a valid license purchased only from above li
 												<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">357</span>
 												<!--end::Amount-->
 												<!--begin::Subtitle-->
-												<span class="text-gray-500 pt-1 fw-semibold fs-6">Professionals</span>
+												<span class="text-gray-500 pt-1 fw-semibold fs-6">Profesional</span>
 												<!--end::Subtitle-->
 											</div>
 											<!--end::Title-->
@@ -7430,7 +7432,7 @@ License: For each use you must have a valid license purchased only from above li
 										<!--begin::Card body-->
 										<div class="card-body d-flex flex-column justify-content-end pe-0">
 											<!--begin::Title-->
-											<span class="fs-6 fw-bolder text-gray-800 d-block mb-2">Today’s Heroes</span>
+											<span class="fs-6 fw-bolder text-gray-800 d-block mb-2">Pekerja Terbaik Hari Ini</span>
 											<!--end::Title-->
 											<!--begin::Users group-->
 											<div class="symbol-group symbol-hover flex-nowrap">
@@ -7474,7 +7476,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin::Info-->
 												<div class="d-flex align-items-center">
 													<!--begin::Currency-->
-													<span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">$</span>
+													<span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">RP.</span>
 													<!--end::Currency-->
 													<!--begin::Amount-->
 													<span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">69,700</span>
@@ -7486,7 +7488,7 @@ License: For each use you must have a valid license purchased only from above li
 												</div>
 												<!--end::Info-->
 												<!--begin::Subtitle-->
-												<span class="text-gray-500 pt-1 fw-semibold fs-6">Projects Earnings in April</span>
+												<span class="text-gray-500 pt-1 fw-semibold fs-6">Penghasilan Proyek Pada Bulan April</span>
 												<!--end::Subtitle-->
 											</div>
 											<!--end::Title-->
@@ -7510,7 +7512,7 @@ License: For each use you must have a valid license purchased only from above li
 													<div class="text-gray-500 flex-grow-1 me-4">Leaf CRM</div>
 													<!--end::Label-->
 													<!--begin::Stats-->
-													<div class="fw-bolder text-gray-700 text-xxl-end">$7,660</div>
+													<div class="fw-bolder text-gray-700 text-xxl-end">RP.707,660</div>
 													<!--end::Stats-->
 												</div>
 												<!--end::Label-->
@@ -7523,7 +7525,7 @@ License: For each use you must have a valid license purchased only from above li
 													<div class="text-gray-500 flex-grow-1 me-4">Mivy App</div>
 													<!--end::Label-->
 													<!--begin::Stats-->
-													<div class="fw-bolder text-gray-700 text-xxl-end">$2,820</div>
+													<div class="fw-bolder text-gray-700 text-xxl-end">RP.200,820</div>
 													<!--end::Stats-->
 												</div>
 												<!--end::Label-->
@@ -7533,10 +7535,10 @@ License: For each use you must have a valid license purchased only from above li
 													<div class="bullet w-8px h-3px rounded-2 me-3" style="background-color: #E4E6EF"></div>
 													<!--end::Bullet-->
 													<!--begin::Label-->
-													<div class="text-gray-500 flex-grow-1 me-4">Others</div>
+													<div class="text-gray-500 flex-grow-1 me-4">Lainnya</div>
 													<!--end::Label-->
 													<!--begin::Stats-->
-													<div class="fw-bolder text-gray-700 text-xxl-end">$45,257</div>
+													<div class="fw-bolder text-gray-700 text-xxl-end">RP.4,000,257</div>
 													<!--end::Stats-->
 												</div>
 												<!--end::Label-->
@@ -7571,12 +7573,12 @@ License: For each use you must have a valid license purchased only from above li
 													<!--end::Menu separator-->
 													<!--begin::Menu item-->
 													<div class="menu-item px-3">
-														<a href="#" class="menu-link px-3">New Ticket</a>
+														<a href="#" class="menu-link px-3">Tiket Baru</a>
 													</div>
 													<!--end::Menu item-->
 													<!--begin::Menu item-->
 													<div class="menu-item px-3">
-														<a href="#" class="menu-link px-3">New Customer</a>
+														<a href="#" class="menu-link px-3">Client Terbaru</a>
 													</div>
 													<!--end::Menu item-->
 													<!--begin::Menu item-->
@@ -7591,17 +7593,17 @@ License: For each use you must have a valid license purchased only from above li
 														<div class="menu-sub menu-sub-dropdown w-175px py-4">
 															<!--begin::Menu item-->
 															<div class="menu-item px-3">
-																<a href="#" class="menu-link px-3">Admin Group</a>
+																<a href="#" class="menu-link px-3">Grub Admin</a>
 															</div>
 															<!--end::Menu item-->
 															<!--begin::Menu item-->
 															<div class="menu-item px-3">
-																<a href="#" class="menu-link px-3">Staff Group</a>
+																<a href="#" class="menu-link px-3">Grub Staff</a>
 															</div>
 															<!--end::Menu item-->
 															<!--begin::Menu item-->
 															<div class="menu-item px-3">
-																<a href="#" class="menu-link px-3">Member Group</a>
+																<a href="#" class="menu-link px-3">Grub Member</a>
 															</div>
 															<!--end::Menu item-->
 														</div>
@@ -7610,7 +7612,7 @@ License: For each use you must have a valid license purchased only from above li
 													<!--end::Menu item-->
 													<!--begin::Menu item-->
 													<div class="menu-item px-3">
-														<a href="#" class="menu-link px-3">New Contact</a>
+														<a href="#" class="menu-link px-3">Kontak Baru</a>
 													</div>
 													<!--end::Menu item-->
 													<!--begin::Menu separator-->
