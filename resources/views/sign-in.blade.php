@@ -52,9 +52,12 @@ License: For each use you must have a valid license purchased only from above li
 					<!--begin::Form-->
 					<div class="d-flex flex-center flex-column flex-lg-row-fluid">
 						<!--begin::Wrapper-->
-						<div class="w-lg-500px p-10">
-							<!--begin::Form-->
-							<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="index" action="#">
+							<div class="w-lg-500px p-10">
+					 			<!--begin::Form-->
+								<table style="box-shadow: 0 4px 24px rgba(0,0,0,0.12); border-radius: 16px; border-collapse: separate; background: #fff; width: 100%;">
+									<tr>
+									<td style="padding: 32px;">
+									<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="index" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-11">
 									<!--begin::Title-->
@@ -79,7 +82,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 									<div></div>
 									<!--begin::Link-->
-									<a href="/reset-password" class="link-primary">Lupa Kata Sandi ?</a>
+									<a href="/reset-password" class="link-primary text-decoration-underline">Lupa Kata Sandi ?</a>
 									<!--end::Link-->
 								</div>
 								<!--end::Wrapper-->
@@ -98,9 +101,12 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
 								<div class="text-gray-500 text-center fw-semibold fs-6">Belum Punya Akun? 
-								<a href="/sign-up" class="link-primary">Daftar</a></div>
-								<!--end::Sign up-->
-							</form>
+									<a href="/sign-up" class="link-primary text-decoration-underline">Daftar</a></div>
+									<!--end::Sign up-->
+									</form>
+									</td>
+								</tr>
+							</table>
 							<!--end::Form-->
 						</div>
 						<!--end::Wrapper-->

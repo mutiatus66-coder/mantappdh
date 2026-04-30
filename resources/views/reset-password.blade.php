@@ -52,9 +52,12 @@ License: For each use you must have a valid license purchased only from above li
 					<!--begin::Form-->
 					<div class="d-flex flex-center flex-column flex-lg-row-fluid">
 						<!--begin::Wrapper-->
-						<div class="w-lg-500px p-10">
-							<!--begin::Form-->
-							<form class="form w-100" novalidate="novalidate" id="kt_password_reset_form" data-kt-redirect-url="/new-password" action="#">
+												<div class="w-lg-500px p-10">
+														<!--begin::Form-->
+														<table style="box-shadow: 0 4px 24px rgba(0,0,0,0.12); border-radius: 16px; border-collapse: separate; background: #fff; width: 100%;">
+															<tr>
+																<td style="padding: 32px;">
+																	<form class="form w-100" novalidate="novalidate" id="kt_password_reset_form" data-kt-redirect-url="/new-password" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-10">
 									<!--begin::Title-->
@@ -85,9 +88,12 @@ License: For each use you must have a valid license purchased only from above li
 									<a href="/sign-in" class="btn btn-light">Batal</a>
 								</div>
 								<!--end::Actions-->
-							</form>
-							<!--end::Form-->
-						</div>
+														</form>
+														<!--end::Form-->
+																</td>
+															</tr>
+														</table>
+												</div>
 						<!--end::Wrapper-->
 					</div>
 					<!--end::Form-->
