@@ -229,6 +229,12 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             text-decoration: underline;
         }
 
+        .footer strong {
+            font-weight: 800;
+            color: #000000;
+            letter-spacing: 0.3px; 
+        }
+
         /* Responsive */
         @media (max-width: 991.98px) {
             .hero-logo {
