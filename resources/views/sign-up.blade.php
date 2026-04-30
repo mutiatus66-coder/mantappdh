@@ -54,43 +54,14 @@ License: For each use you must have a valid license purchased only from above li
 						<!--begin::Wrapper-->
 						<div class="w-lg-500px p-10">
 							<!--begin::Form-->
-							<form class="form w-100" novalidate="novalidate" id="kt_sign_up_form" data-kt-redirect-url="authentication/layouts/corporate/sign-in.html" action="#">
+							<form class="form w-100" novalidate="novalidate" id="kt_sign_up_form" data-kt-redirect-url="/sign-in" action="#">
 								<!--begin::Heading-->
 								<div class="text-center mb-11">
 									<!--begin::Title-->
-									<h1 class="text-gray-900 fw-bolder mb-3">Sign Up</h1>
+									<h1 class="text-gray-900 fw-bolder mb-3">Pendaftaran</h1>
 									<!--end::Title-->
-									<!--begin::Subtitle-->
-									<div class="text-gray-500 fw-semibold fs-6">Your Social Campaigns</div>
-									<!--end::Subtitle=-->
 								</div>
 								<!--begin::Heading-->
-								<!--begin::Login options-->
-								<div class="row g-3 mb-9">
-									<!--begin::Col-->
-									<div class="col-md-6">
-										<!--begin::Google link=-->
-										<a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-										<img alt="Logo" src="template.demo6/demo6/assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />Sign in with Google</a>
-										<!--end::Google link=-->
-									</div>
-									<!--end::Col-->
-									<!--begin::Col-->
-									<div class="col-md-6">
-										<!--begin::Google link=-->
-										<a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-										<img alt="Logo" src="template.demo6/demo6/assets/media/svg/brand-logos/apple-black.svg" class="theme-light-show h-15px me-3" />
-										<img alt="Logo" src="template.demo6/demo6/assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3" />Sign in with Apple</a>
-										<!--end::Google link=-->
-									</div>
-									<!--end::Col-->
-								</div>
-								<!--end::Login options-->
-								<!--begin::Separator-->
-								<div class="separator separator-content my-14">
-									<span class="w-125px text-gray-500 fw-semibold fs-7">Or with email</span>
-								</div>
-								<!--end::Separator-->
 								<!--begin::Input group=-->
 								<div class="fv-row mb-8">
 									<!--begin::Email-->
@@ -121,42 +92,33 @@ License: For each use you must have a valid license purchased only from above li
 									</div>
 									<!--end::Wrapper-->
 									<!--begin::Hint-->
-									<div class="text-muted">Use 8 or more characters with a mix of letters, numbers & symbols.</div>
+									<div class="text-muted">Gunakan 8 karakter atau lebih dengan campuran huruf, angka, dan simbol.</div>
 									<!--end::Hint-->
 								</div>
 								<!--end::Input group=-->
 								<!--end::Input group=-->
 								<div class="fv-row mb-8">
 									<!--begin::Repeat Password-->
-									<input placeholder="Repeat Password" name="confirm-password" type="password" autocomplete="off" class="form-control bg-transparent" />
+									<input placeholder="Ulangi Password" name="confirm-password" type="password" autocomplete="off" class="form-control bg-transparent" />
 									<!--end::Repeat Password-->
 								</div>
 								<!--end::Input group=-->
-								<!--begin::Accept-->
-								<div class="fv-row mb-8">
-									<label class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" name="toc" value="1" />
-										<span class="form-check-label fw-semibold text-gray-700 fs-base ms-1">I Accept the 
-										<a href="#" class="ms-1 link-primary">Terms</a></span>
-									</label>
-								</div>
-								<!--end::Accept-->
 								<!--begin::Submit button-->
 								<div class="d-grid mb-10">
 									<button type="submit" id="kt_sign_up_submit" class="btn btn-primary">
 										<!--begin::Indicator label-->
-										<span class="indicator-label">Sign up</span>
+										<span class="indicator-label">Daftar</span>
 										<!--end::Indicator label-->
 										<!--begin::Indicator progress-->
-										<span class="indicator-progress">Please wait... 
+										<span class="indicator-progress">Tunggu... 
 										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 										<!--end::Indicator progress-->
 									</button>
 								</div>
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
-								<div class="text-gray-500 text-center fw-semibold fs-6">Already have an Account? 
-								<a href="sign-in" class="link-primary fw-semibold">Sign in</a></div>
+								<div class="text-gray-500 text-center fw-semibold fs-6">Sudah punya akun?
+								<a href="sign-in" class="link-primary fw-semibold">Silahkan Login</a></div>
 								<!--end::Sign up-->
 							</form>
 							<!--end::Form-->

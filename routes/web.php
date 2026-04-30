@@ -12,6 +12,15 @@ Route::get('/login', function () {
 Route::get('/sign-in', function () {
     return view('sign-in');
 });
+Route::get('/sign-up', function () {
+    return view('sign-up');
+});
+Route::get('/reset-password', function () {
+    return view('reset-password');
+});
+Route::get('/new-password', function () {
+    return view('new-password');
+});
 Route::get('/admin', function () {
     return view('admin');
 });
