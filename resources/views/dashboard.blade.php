@@ -18,11 +18,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
     <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <style>
-        /* ============================================
-           GAYA MODERN & MENARIK
-           Latar putih bersih, tombol kotak, animasi halus
-        ============================================ */
-        * {
+        {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -34,7 +30,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             overflow-x: hidden;
         }
 
-        /* Header dengan efek shadow halus dan glassmorphism ringan */
         .modern-header {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
@@ -45,7 +40,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             z-index: 1000;
         }
 
-        /* Menu navigasi - efek modern */
         .menu-link.nav-link {
             position: relative;
             font-weight: 600;
@@ -62,7 +56,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             transform: translateY(-2px);
         }
 
-        /* Underline animasi pada menu */
         .menu-link.nav-link::after {
             content: '';
             position: absolute;
@@ -114,7 +107,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(37,99,235,0.3);
         }
-        /* Hero Section */
         .hero-section {
             background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
             padding: 4rem 0 5rem 0;
@@ -122,7 +114,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             overflow: hidden;
         }
 
-        /* Background pattern halus */
         .hero-section::before {
             content: '';
             position: absolute;
@@ -136,7 +127,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             pointer-events: none;
         }
 
-        /* Animasi floating untuk logo */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
@@ -160,13 +150,11 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             transform: scale(1.02);
         }
 
-        /* Efek card untuk menu drawer mobile */
         [data-kt-drawer="true"] {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
             box-shadow: -5px 0 30px rgba(0,0,0,0.05);
         }
 
-        /* Animasi fade in untuk konten */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -184,7 +172,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             z-index: 2;
         }
 
-        /* Decorative floating elements */
         .floating-dot {
             position: absolute;
             background: linear-gradient(135deg, #cbd5e1, #e2e8f0);
@@ -194,12 +181,10 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             animation: float 8s ease-in-out infinite;
         }
 
-        /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Logo header hover effect */
         .logo-sticky {
             transition: all 0.3s ease;
         }
@@ -208,7 +193,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
         }
 
-        /* Footer */
         .footer {
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
@@ -232,10 +216,9 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
         .footer strong {
             font-weight: 800;
             color: #000000;
-            letter-spacing: 0.3px; 
+            letter-spacing: 0.3px;
         }
 
-        /* Responsive */
         @media (max-width: 991.98px) {
             .hero-logo {
                 max-width: 240px;
@@ -282,15 +265,12 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
     <script>if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 </head>
 <body id="kt_body" style="background: #ffffff;">
-    <!-- Theme mode light -->
     <script>var defaultThemeMode = "light"; var themeMode = "light"; document.documentElement.setAttribute("data-bs-theme", "light");</script>
 
     <div class="d-flex flex-column flex-root">
-        <!-- Header Modern -->
         <div class="modern-header" id="home">
             <div class="container">
                 <div class="d-flex align-items-center justify-content-between py-2 py-lg-3">
-                    <!-- Logo dan toggle mobile -->
                     <div class="d-flex align-items-center">
                         <button class="btn btn-icon btn-active-light me-3 d-flex d-lg-none border-0 bg-transparent" id="kt_landing_menu_toggle">
                             <i class="ki-outline ki-abstract-14 fs-1"></i>
@@ -300,7 +280,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                         </h1>
                     </div>
 
-                    <!-- Menu desktop -->
                     <div class="d-none d-lg-block" id="kt_header_nav_wrapper">
                         <div class="menu menu-lg-row fw-semibold fs-6" id="kt_landing_menu">
                             <div class="menu-item"><a class="menu-link nav-link" href="#achievements">Kekayaan Intelektual</a></div>
@@ -311,11 +290,9 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                         </div>
                     </div>
 
-                    <!-- Login dan mobile drawer -->
                     <div class="d-flex align-items-center gap-3">
                         <a href="/sign-in" class="btn btn-login">Login</a>
 
-                        <!-- Mobile drawer -->
                         <div class="d-lg-none">
                             <div data-kt-drawer="true" data-kt-drawer-name="landing-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="280px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_landing_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav_wrapper'}">
                                 <div class="menu menu-column p-4">
@@ -332,7 +309,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             </div>
         </div>
 
-        <!-- Hero Section - Menarik dengan animasi -->
         <div class="hero-section">
             <!-- Floating decorative dots -->
             <div class="floating-dot" style="width: 80px; height: 80px; top: 10%; left: -30px; animation-delay: 0s;"></div>
@@ -342,10 +318,8 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
 
             <div class="container">
                 <div class="hero-content text-center py-4 py-md-6">
-                    <!-- Logo dengan animasi float -->
                     <img src="template.demo6/demo6/assets/media/logos/rmh.png" alt="Rumah Inovasi Magetan" class="hero-logo" />
 
-                    <!-- Tombol Pendaftaran KOTAK dengan efek hover modern -->
                     <div class="mt-4">
                         <a href="index" class="btn btn-register px-5 py-3 fs-5 fw-bold">
                             PENDAFTARAN →
@@ -354,8 +328,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                 </div>
             </div>
         </div>
-
-        <!-- FOOTER dengan COPYRIGHT -->
         <div class="footer">
             <div class="container">
                 <p>&copy; Copyright <strong>Dinas Kominfo.</strong> All rights reserved.</p>
@@ -364,7 +336,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>var hostUrl = "assets/";</script>
     <script src="template.demo6/demo6/assets/plugins/global/plugins.bundle.js"></script>
     <script src="template.demo6/demo6/assets/js/scripts.bundle.js"></script>
@@ -372,10 +343,8 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
     <script src="template.demo6/demo6/assets/js/custom/landing.js"></script>
 
     <script>
-        // Set current year untuk copyright
         document.getElementById('currentYear').innerText = new Date().getFullYear();
 
-        // Inisialisasi drawer untuk mobile
         if (typeof KTComponents !== 'undefined') {
             KTComponents.init();
         }
