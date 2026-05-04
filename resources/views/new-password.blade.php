@@ -12,7 +12,7 @@ Dribbble: www.dribbble.com/keenthemes
 Like: www.facebook.com/keenthemes
 License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
 -->
-<html lang="en">
+<html lang="id">
 	<!--begin::Head-->
 	<head>
 		<title>Rumah Inovasi Magetan</title>
@@ -108,7 +108,7 @@ License: For each use you must have a valid license purchased only from above li
 								<div class="d-grid mb-10">
 									<button type="button" id="kt_new_password_submit" class="btn btn-primary">
 										<!--begin::Indicator label-->
-										<span class="indicator-label">Masuk</span>
+										<span class="indicator-label">Ubah Kata Sandi</span>
 										<!--end::Indicator label-->
 										<!--begin::Indicator progress-->
 										<span class="indicator-progress">Tunggu... 
