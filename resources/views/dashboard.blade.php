@@ -329,7 +329,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                 </div>
             </div>
         </div>
-
         <div class="footer">
             <div class="container">
                 <p>&copy; Copyright <strong>Dinas Kominfo.</strong> All rights reserved.</p>

@@ -65,8 +65,26 @@
   padding: 0;
   margin: 0;
 }
+.menu .menu-item:hover .menu-title,
+.menu .menu-item.active .menu-title {
+  color: #ffffff !important;
+}
+
+.menu .menu-item:hover .menu-icon i,
+.menu .menu-item.active .menu-icon i {
+  color: #ffffff !important;
+}.menu {
+  --bs-primary: #ffffff;
+}
 html {
   scroll-behavior: smooth;
+}
+.menu .menu-title {
+  color: #ffffff !important;
+}
+
+.menu .menu-icon i {
+  color: #ffffff !important;
 }
 body {
   margin: var(--header-height) 0 0 0;
