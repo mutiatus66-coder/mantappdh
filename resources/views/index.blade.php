@@ -686,7 +686,6 @@ License: For each use you must have a valid license purchased only from above li
 						<!--end::Container-->
 					</div>
 					<!--end::Toolbar-->
-					
 					</div>
 					<!--end::Content-->
 					<!--begin::Footer-->
