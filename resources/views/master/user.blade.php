@@ -577,7 +577,7 @@
 
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
-          <div id="kt_content_container" class="container-fluid"></div>
+          <div id="kt_content_container" class="container-fluid"></div>isi di sini
         </div>
         <!-- /CONTENT AREA -->
 

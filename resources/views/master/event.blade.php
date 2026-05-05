@@ -31,6 +31,7 @@
 
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     /* ============================================================
@@ -577,6 +578,78 @@
 
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
+          <div class="p-6">
+
+    <!-- TOP ACTION -->
+     <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-2 transition duration-200">
+            <span class="text-lg">+</span>
+            Tambah Event
+        </button>
+    
+
+    <!-- CARD TABLE -->
+    <div class="items-center mb-4 mt-4 bg-white rounded-lg shadow border border-gray-200">
+        <div class="p-4 overflow-x-auto">
+          <div class="items-center mb-6 mt-4">
+        <h2 class="text-lg font-semibold text-blue-600">DATA EVENT</h2>       
+    </div>
+            <table class="w-full border border-gray-300">
+                
+                <thead class="bg-gray-200 text-gray-600">
+                    <tr>
+                        <th class="px-4 py-3 w-16 text-center">No</th>
+                        <th class="px-4 py-3 text-left">Event</th>
+                        <th class="px-4 py-3 w-40 text-center">Aksi</th>
+                    </tr>
+                </thead>
+
+                <!-- isi data -->
+                <tbody class="text-gray-700">
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 text-center">1</td>
+                                <td class="px-4 py-3">INOVASI DAERAH KAB. MAGETAN</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center justify-center gap-1 mx-auto">
+                                        ✏️ Edit
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 text-center">2</td>
+                                <td class="px-4 py-3">LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center justify-center gap-1 mx-auto">
+                                        ✏️ Edit
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 text-center">3</td>
+                                <td class="px-4 py-3">pameran</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center justify-center gap-1 mx-auto">
+                                        ✏️ Edit
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 text-center">4</td>
+                                <td class="px-4 py-3">INOTEK AWARD</td>
+                                <td class="px-4 py-3 text-center">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center justify-center gap-1 mx-auto">
+                                        ✏️ Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
           <div id="kt_content_container" class="container-fluid"></div>
         </div>
         <!-- /CONTENT AREA -->

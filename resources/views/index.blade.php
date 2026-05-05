@@ -323,7 +323,7 @@
               <span class="ri-menu-label">Bidang</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/user">
+            <a class="ri-menu-item" href="user">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
