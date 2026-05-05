@@ -737,6 +737,20 @@
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/create-campaign.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var currentPath = location.pathname.replace(/\/+$|^\s+|\s+$/g, '') || '/';
+      document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function(link) {
+        var href = link.getAttribute('href');
+        var linkPath = href.startsWith('/') ? href.replace(/\/+$/,'') || '/' : new URL(link.href, location.origin).pathname.replace(/\/+$/,'') || '/';
+        if (linkPath === '/' ? currentPath === '/' : currentPath === linkPath || currentPath.startsWith(linkPath + '/')) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
