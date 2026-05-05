@@ -27,3 +27,21 @@ Route::get('/admin', function () {
 Route::get('/index', function () {
     return view('index');
 });
+Route::get('/event', function () {
+    return view('master.event');
+});
+Route::get('/sub-event', function () {
+    return view('master.sub-event');
+});
+Route::get('/bidang', function () {
+    return view('master.bidang');
+});
+Route::get('/user', function () {
+    return view('master.user');
+});
+Route::get('/penilaian', function () {
+    return view('master.penilaian');
+});
+Route::get('/pengumuman', function () {
+    return view('master.pengumuman');
+});

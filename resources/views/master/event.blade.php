@@ -268,7 +268,7 @@
           <nav id="ri-sidebar-nav">
 
             <!-- Dashboard -->
-            <a class="ri-menu-item active" href="/">
+            <a class="ri-menu-item active" href="/dashboard">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -285,7 +285,7 @@
             <!-- MASTER -->
             <span class="ri-section-label">Master</span>
 
-            <a class="ri-menu-item" href="event">
+            <a class="ri-menu-item" href="/event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="4" width="18" height="18" rx="2"/>
