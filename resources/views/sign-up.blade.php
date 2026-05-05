@@ -12,7 +12,7 @@ Dribbble: www.dribbble.com/keenthemes
 Like: www.facebook.com/keenthemes
 License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
 -->
-<html lang="en">
+<html lang="id">
 	<!--begin::Head-->
 	<head>
 		<title>Rumah Inovasi Magetan</title>
@@ -120,15 +120,15 @@ License: For each use you must have a valid license purchased only from above li
 								</div>
 								<!--end::Submit button-->
 								<!--begin::Sign up-->
-																<div class="text-gray-500 text-center fw-semibold fs-6">Sudah punya akun?
-																<a href="sign-in" class="link-primary fw-semibold text-decoration-underline">Silahkan Login</a></div>
-																<!--end::Sign up-->
-																	</form>
-																</td>
-															</tr>
-														</table>
-														<!--end::Form-->
-												</div>
+								<div class="text-gray-500 text-center fw-semibold fs-6">Sudah punya akun?
+									<a href="sign-in" class="link-primary fw-semibold text-decoration-underline">Silahkan Login</a></div>
+										<!--end::Sign up-->
+											</form>
+											</td>
+										</tr>
+									</table>
+						<!--end::Form-->
+						</div>
 						<!--end::Wrapper-->
 					</div>
 					<!--end::Form-->
