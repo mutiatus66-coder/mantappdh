@@ -53,351 +53,367 @@ License: For each use you must have a valid license purchased only from above li
 			<div class="page d-flex flex-row flex-column-fluid">
 				<!--begin::Aside-->
 				<div id="kt_aside"
-    class="aside pb-5 pt-5 pt-lg-0"
-    data-kt-drawer="true"
-    data-kt-drawer-name="aside"
-    data-kt-drawer-activate="{default: true, lg: false}"
-    data-kt-drawer-overlay="true"
-    data-kt-drawer-width="{default:'260px', '300px': '260px'}"
-    data-kt-drawer-direction="start"
-    data-kt-drawer-toggle="#kt_aside_mobile_toggle"
-    style="
-        width: 260px !important;
-        min-width: 260px !important;
-        max-width: 260px !important;
-        background-color: #1b84ff !important;
-        overflow: visible;
-        flex-shrink: 0;
-    ">
- 
-    <!-- Logo -->
-    <div class="aside-logo d-flex align-items-center px-6" id="kt_aside_logo"
-        style="
-            background-color: #1565d8;
-            border-bottom: 1px solid rgba(255,255,255,0.12);
-            min-height: 80px;
-            padding-top: 16px;
-            padding-bottom: 16px;
-        ">
-        <a href="/" class="text-decoration-none" style="display: flex; align-items: center; gap: 12px;">
-            <div style="
-                width: 40px;
-                height: 40px;
-                background: rgba(255,255,255,0.20);
-                border: 2px solid rgba(255,255,255,0.35);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="3"/>
-                    <line x1="12" y1="21" x2="12" y2="23"/>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                    <line x1="1" y1="12" x2="3" y2="12"/>
-                    <line x1="21" y1="12" x2="23" y2="12"/>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                </svg>
-            </div>
-            <div style="line-height: 1.3;">
-                <div style="
-                    color: #ffffff;
-                    font-size: 14px;
-                    font-weight: 700;
-                    letter-spacing: 0.8px;
-                    text-transform: uppercase;">
-                    Rumah Inovasi
-                </div>
-                <div style="
-                    color: rgba(255,255,255,0.70);
-                    font-size: 11px;
-                    font-weight: 400;
-                    text-transform: none;
-                    letter-spacing: 0.3px;">
-                    Magetan
-                </div>
-            </div>
-        </a>
-    </div>
-    <!-- /Logo -->
- 
-    <!-- Aside Menu -->
-    <div class="aside-menu flex-column-fluid" id="kt_aside_menu"
-        style="
-            background-color: #1b84ff;
-            overflow-y: auto;
-            overflow-x: hidden;
-        ">
- 
-        <style>
-            /* ===== Sidebar Nav Styles ===== */
-            #ri-sidebar-nav {
-                padding: 10px 0 30px;
-            }
-            #ri-sidebar-nav a.ri-menu-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 10px 22px;
-                color: rgba(255,255,255,0.88);
-                font-size: 13.5px;
-                font-family: inherit;
-                font-weight: 400;
-                text-decoration: none;
-                cursor: pointer;
-                transition: background 0.15s ease, color 0.15s ease;
-                white-space: nowrap;
-                overflow: hidden;
-                min-width: 0;
-            }
-            #ri-sidebar-nav a.ri-menu-item:hover {
-                background: rgba(255,255,255,0.15);
-                color: #ffffff;
-            }
-            #ri-sidebar-nav a.ri-menu-item.active {
-                background: rgba(255,255,255,0.20);
-                color: #ffffff;
-                font-weight: 500;
-                border-left: 3px solid #ffffff;
-                padding-left: 19px;
-            }
-            #ri-sidebar-nav .ri-menu-label {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                flex: 1;
-                min-width: 0;
-            }
-            #ri-sidebar-nav .ri-section-label {
-                font-size: 10px;
-                font-weight: 700;
-                color: rgba(255,255,255,0.50);
-                letter-spacing: 1.5px;
-                text-transform: uppercase;
-                padding: 16px 22px 6px;
-                display: block;
-                white-space: nowrap;
-            }
-            #ri-sidebar-nav .ri-divider {
-                height: 1px;
-                background: rgba(255,255,255,0.12);
-                margin: 8px 16px;
-            }
-            #ri-sidebar-nav .ri-icon {
-                width: 20px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                opacity: 0.90;
-            }
-            #ri-sidebar-nav .ri-icon svg {
-                width: 16px;
-                height: 16px;
-                fill: none;
-                stroke: currentColor;
-                stroke-width: 1.8;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-            }
- 
-            /* Override Metronic aside width */
-            #kt_aside,
-            .aside {
-                width: 260px !important;
-                min-width: 260px !important;
-            }
-            #kt_wrapper {
-                padding-left: 260px !important;
-            }
-            @media (max-width: 991.98px) {
-                #kt_wrapper {
-                    padding-left: 0 !important;
-                }
-            }
-        </style>
- 
-        <nav id="ri-sidebar-nav">
- 
-            <!-- Dashboard -->
-            <a class="ri-menu-item active" href="/">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Dashboard</span>
-            </a>
- 
-            <div class="ri-divider"></div>
- 
-            <!-- MASTER -->
-            <span class="ri-section-label">Master</span>
- 
-            <a class="ri-menu-item" href="/master/event">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Event</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/master/sub-event">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <line x1="8" y1="6" x2="21" y2="6"/>
-                        <line x1="8" y1="12" x2="21" y2="12"/>
-                        <line x1="8" y1="18" x2="21" y2="18"/>
-                        <line x1="3" y1="6" x2="3.01" y2="6"/>
-                        <line x1="3" y1="12" x2="3.01" y2="12"/>
-                        <line x1="3" y1="18" x2="3.01" y2="18"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Sub Event</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/master/bidang">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <line x1="3" y1="9" x2="21" y2="9"/>
-                        <line x1="3" y1="15" x2="21" y2="15"/>
-                        <line x1="9" y1="3" x2="9" y2="21"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Bidang</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/master/user">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">User</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/master/penilai">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Penilai</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/master/pengumuman">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Pengumuman</span>
-            </a>
- 
-            <div class="ri-divider"></div>
- 
-            <!-- INDIKATOR -->
-            <span class="ri-section-label">Indikator</span>
- 
-            <a class="ri-menu-item" href="/indikator/tahap-1">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Indikator Tahap 1</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/indikator/tahap-2">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <line x1="8" y1="6" x2="21" y2="6"/>
-                        <line x1="8" y1="12" x2="21" y2="12"/>
-                        <line x1="8" y1="18" x2="21" y2="18"/>
-                        <line x1="3" y1="6" x2="3.01" y2="6"/>
-                        <line x1="3" y1="12" x2="3.01" y2="12"/>
-                        <line x1="3" y1="18" x2="3.01" y2="18"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Indikator Tahap 2</span>
-            </a>
- 
-            <div class="ri-divider"></div>
- 
-            <!-- INOVASI -->
-            <span class="ri-section-label">Inovasi</span>
- 
-            <a class="ri-menu-item" href="/inovasi/riwayat">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <polyline points="1 4 1 10 7 10"/>
-                        <path d="M3.51 15a9 9 0 1 0 .49-4.44"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Riwayat</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/inovasi/rekap-nilai">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Rekap Nilai</span>
-            </a>
- 
-            <div class="ri-divider"></div>
- 
-            <!-- PENILAIAN -->
-            <span class="ri-section-label">Penilaian</span>
- 
-            <a class="ri-menu-item" href="/penilaian/tahap-1">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Penilaian Tahap 1</span>
-            </a>
- 
-            <a class="ri-menu-item" href="/penilaian/tahap-2">
-                <span class="ri-icon">
-                    <svg viewBox="0 0 24 24">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                </span>
-                <span class="ri-menu-label">Penilaian Tahap 2</span>
-            </a>
- 
-        </nav>
-    </div>
-    <!-- /Aside Menu -->
- 
-</div>
+            class="aside overflow-visible pb-5 pt-5 pt-lg-0"
+            style="background-color: #333c45 !important; color: #ffffff;"
+            data-kt-drawer="true"
+            data-kt-drawer-name="aside"
+            data-kt-drawer-activate="{default: true, lg: false}"
+            data-kt-drawer-overlay="true"
+            data-kt-drawer-width="{default:'80px', '300px': '100px'}"
+            data-kt-drawer-direction="start"
+            data-kt-drawer-toggle="#kt_aside_mobile_toggle">			
+			<!--begin::Brand-->
+					<div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #1b84ff;">
+			<!--begin::Logo-->
+			<a href="/" class="d-flex align-items-center">
+				<img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-100px logo" />
+			</a>
+			<!--end::Logo-->
+			</div>
+			<!--end::Brand-->
 
+			<!--begin::Aside menu-->
+			<div class="aside-menu flex-column-fluid" id="kt_aside_menu" style="background-color: #1b84ff;">
+				<!--begin::Aside Menu-->
+				<div class="hover-scroll-y my-2 my-lg-5 scroll-ms" id="kt_aside_menu_wrapper"
+				data-kt-scroll="true"
+				data-kt-scroll-height="auto"
+				data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
+				data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu"
+				data-kt-scroll-offset="5px"
+				style="background-color: #1b84ff;">
+
+				<!--begin::Menu-->
+				<div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-semibold"
+					id="#kt_aside_menu"
+					data-kt-menu="true"
+					style="background-color: #1b84ff;">
+
+					<!--begin:Menu item-->
+								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+			data-kt-menu-placement="right-start"
+			class="menu-item here show py-2">
+
+			<!-- Menu link -->
+			<span class="menu-link menu-center"
+			style="
+				background-color: #1b84ff;
+				border: none;
+				box-shadow: none;
+				outline: none;
+				border-radius: 12px;
+				padding: 15px 10px;
+			">
+
+				<span class="menu-icon me-0">
+					<i class="ki-outline ki-home-2 fs-2x" style="color: white;"></i>
+				</span>
+
+				<span class="menu-title" style="color: inherit !important;">
+    Beranda
+</span>
+
+			</span>
+
+			<!-- Sub menu -->
+			<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+
+				<div class="menu-item">
+					<div class="menu-content">
+						<span class="menu-section fs-5 fw-bolder ps-1 py-1">
+							Beranda
+						</span>
+					</div>
+				</div>
+
+				<div class="menu-item">
+					<a class="menu-link active" href="/">
+						<span class="menu-bullet">
+							<span class="bullet bullet-dot"></span>
+						</span>
+						<span class="menu-title">Dashboard</span>
+					</a>
+				</div>
+
+			</div>
+
+		</div>
+								<!--end:Menu item-->
+								<!--begin:Menu item-->
+								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+									<!--begin:Menu link-->
+									<span class="menu-link menu-center">
+										<span class="menu-icon me-0">
+											<i class="ki-outline ki-notification-status fs-2x"></i>
+										</span>
+										<span class="menu-title" style="color: white;">Master</span>
+									</span>
+									<!--end:Menu link-->
+									<!--begin:Menu sub-->
+									<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu content-->
+											<div class="menu-content">
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Master</span>
+											</div>
+											<!--end:Menu content-->
+										</div>
+										<!--end:Menu item-->
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu link-->
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Event</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Sub Event</span>
+											</a><a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Bidang</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">User</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Penilai</span>
+											</a>
+											<a class="menu-link active" href="/">							
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Pengumuman</span>
+											</a>
+											<!--end:Menu link-->
+										</div>
+									</div>
+									<!--end:Menu sub-->
+								</div>
+								<!--end:Menu item-->
+								<!--begin:Menu item-->
+								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+									<!--begin:Menu link-->
+									<span class="menu-link menu-center">
+										<span class="menu-icon me-0">
+											<i class="ki-outline ki-abstract-35 fs-2x"></i>
+										</span>
+										<span class="menu-title" style="color: white;">Indikator</span>
+									</span>
+									<!--end:Menu link-->
+									<!--begin:Menu sub-->
+									<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu content-->
+											<div class="menu-content">
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Indikator</span>
+											</div>
+											<!--end:Menu content-->
+										</div>
+										<!--end:Menu item-->
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu link-->
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Indikator Tahap 1</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Indikator Tahap 2</span>
+											</a>
+											<!--end:Menu link-->
+										</div>
+									</div>
+									<!--end:Menu sub-->
+								</div>
+								<!--end:Menu item-->
+								<!--begin:Menu item-->
+								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+									<!--begin:Menu link-->
+									<span class="menu-link menu-center">
+										<span class="menu-icon me-0">
+											<i class="ki-outline ki-abstract-26 fs-2x"></i>
+										</span>
+										<span class="menu-title" style="color: white;">Inovasi</span>
+									</span>
+									<!--end:Menu link-->
+									<!--begin:Menu sub-->
+									<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu content-->
+											<div class="menu-content">
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Inovasi</span>
+											</div>
+											<!--end:Menu content-->
+										</div>
+										<!--end:Menu item-->
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu link-->
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Riwayat</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Rekap Nilai</span>
+											</a>
+											<!--end:Menu link-->
+										</div>
+									</div>
+									<!--end:Menu sub-->
+								</div>
+								<!--end:Menu item-->
+								<!--begin:Menu item-->
+								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item py-2">
+									<!--begin:Menu link-->
+									<span class="menu-link menu-center">
+										<span class="menu-icon me-0">
+											<i class="ki-outline ki-briefcase fs-2x"></i>
+										</span>
+										<span class="menu-title" style="color: white;">Penilaian</span>
+									</span>
+									<!--end:Menu link-->
+									<!--begin:Menu sub-->
+									<div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu content-->
+											<div class="menu-content">
+												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Penilaian</span>
+											</div>
+											<!--end:Menu content-->
+										</div>
+										<!--end:Menu item-->
+										<!--begin:Menu item-->
+										<div class="menu-item">
+											<!--begin:Menu link-->
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Penilaian Tahap 1</span>
+											</a>
+											<a class="menu-link active" href="/">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Penilaian Tahap 2</span>
+											</a>
+											<!--end:Menu link-->
+										</div>
+									</div>
+									<!--end:Menu sub-->
+								</div>
+								<!--end:Menu item-->
+							</div>
+							<!--end::Menu-->
+						</div>
+						<!--end::Aside Menu-->
+					</div>
+					<!--end::Aside menu-->
+					<!--begin::Footer-->
+					<div class="aside-footer flex-column-auto" id="kt_aside_footer">
+						<!--begin::Menu-->
+						<div class="d-flex justify-content-center">
+							<button type="button" class="btn btm-sm btn-icon btn-custom btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-overflow="true" data-kt-menu-placement="top-start" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" title="Quick actions">
+								<i class="ki-outline ki-notification-status fs-1"></i>
+							</button>
+							<!--begin::Menu 2-->
+							<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px" data-kt-menu="true">
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<div class="menu-content fs-6 text-gray-900 fw-bold px-3 py-4">Quick Actions</div>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu separator-->
+								<div class="separator mb-3 opacity-75"></div>
+								<!--end::Menu separator-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<a href="#" class="menu-link px-3">New Ticket</a>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<a href="#" class="menu-link px-3">New Customer</a>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
+									<!--begin::Menu item-->
+									<a href="#" class="menu-link px-3">
+										<span class="menu-title">New Group</span>
+										<span class="menu-arrow"></span>
+									</a>
+									<!--end::Menu item-->
+									<!--begin::Menu sub-->
+									<div class="menu-sub menu-sub-dropdown w-175px py-4">
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3">Admin Group</a>
+										</div>
+										<!--end::Menu item-->
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3">Staff Group</a>
+										</div>
+										<!--end::Menu item-->
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3">Member Group</a>
+										</div>
+										<!--end::Menu item-->
+									</div>
+									<!--end::Menu sub-->
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<a href="#" class="menu-link px-3">New Contact</a>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu separator-->
+								<div class="separator mt-3 opacity-75"></div>
+								<!--end::Menu separator-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<div class="menu-content px-3 py-3">
+										<a class="btn btn-primary btn-sm px-4" href="#">Generate Reports</a>
+									</div>
+								</div>
+								<!--end::Menu item-->
+							</div>
+							<!--end::Menu 2-->
+						</div>
+						<!--end::Menu-->
+					</div>
+					<!--end::Footer-->
+				</div>
 				<!--end::Aside-->
 				<!--begin::Wrapper-->
 				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
