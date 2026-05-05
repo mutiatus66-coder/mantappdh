@@ -297,7 +297,7 @@
               <span class="ri-menu-label">Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/sub-event">
+            <a class="ri-menu-item" href="/master/sub-event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <line x1="8" y1="6" x2="21" y2="6"/>
@@ -311,7 +311,7 @@
               <span class="ri-menu-label">Sub Event</span>
             </a>
 
-            <a class="ri-menu-item" href="bidang">
+            <a class="ri-menu-item" href="/master/bidang">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
