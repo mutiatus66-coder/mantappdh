@@ -4,9 +4,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Bidang;
 
-Route::prefix('master')->name('admin.')->group(function () {
-Route::resource('bidang', Bidang::class)->except(['create', 'show']);
-});
+Route::get('/master/bidang', [Admin::class, 'bidang'])
+    ->name('admin.bidang.index');
+
+Route::post('/master/bidang/store', [Admin::class, 'storeBidang'])
+    ->name('admin.bidang.store');
+
+Route::get('/master/bidang/{id}/edit', [Admin::class, 'editBidang'])
+    ->name('admin.bidang.edit');
+
+Route::put('/master/bidang/{id}', [Admin::class, 'updateBidang'])
+    ->name('admin.bidang.update');
+
+Route::delete('/master/bidang/{id}', [Admin::class, 'destroyBidang'])
+    ->name('admin.bidang.destroy');
 Route::get('/sub-event', [Admin::class, 'index'])
     ->name('admin.sub-event.index');
 

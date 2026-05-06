@@ -26,9 +26,9 @@
   <link href="template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
 
   <!-- Global Stylesheets -->
-  <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
-  <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" />
-  ```html id="cm7r3f"
+  <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
+  <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
+  ```html id="1nb98y"
 <link rel="stylesheet"
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 ```
@@ -225,7 +225,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
 
   <!-- Theme mode init -->
-  @stack('scripts')
   <script>
     var defaultThemeMode = "light";
     var themeMode;
@@ -261,7 +260,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
         <!-- Logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
-            <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-90px logo" />
+            <img alt="Logo" src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}" class="h-90px logo" />
             <div class="aside-logo-text">
               <div class="aside-logo-title">Rumah Inovasi</div>
               <div class="aside-logo-subtitle">Magetan</div>
@@ -721,8 +720,8 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
   <!-- Core -->
   <script>var hostUrl = "assets/";</script>
-  <script src="template.demo6/demo6/assets/plugins/global/plugins.bundle.js"></script>
-  <script src="template.demo6/demo6/assets/js/scripts.bundle.js"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
 
   <!-- Vendor (page-specific) -->
   <script src="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
@@ -760,6 +759,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       });
     });
   </script>
-
+  @stack('scripts')
 </body>
 </html>
