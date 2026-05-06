@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BidangController extends Controller
+class Bidang extends Controller
 {
     /**
      * Static seed data — keyed by sub_event_id.

@@ -28,10 +28,15 @@
   <!-- Global Stylesheets -->
   <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
   <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" />
+  ```html id="cm7r3f"
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+```
+
 
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
-
+  @stack('styles')
   <style>
     /* ============================================================
        SIDEBAR (Aside) — Layout & Scrollable Menu
@@ -220,6 +225,7 @@
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
 
   <!-- Theme mode init -->
+  @stack('scripts')
   <script>
     var defaultThemeMode = "light";
     var themeMode;
@@ -580,7 +586,6 @@
           <div id="kt_content_container" class="container-fluid">
             <!-- Page content goes here -->
                 @yield('content')
-                @yield('bidang')
             </div>
         </div>
         <!-- /CONTENT AREA -->
