@@ -1,6 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin;
+
+Route::get('/sub-event', [Admin::class, 'index'])
+    ->name('admin.sub-event.index');
+
+Route::post('/master/sub-event/store', [Admin::class, 'store'])
+    ->name('admin.sub-event.store');
+
+Route::get('/master/sub-event/{id}/edit', [Admin::class, 'edit'])
+    ->name('admin.sub-event.edit');
+
+Route::put('/master/sub-event/{id}', [Admin::class, 'update'])
+    ->name('admin.sub-event.update');
+
+Route::delete('/master/sub-event/{id}', [Admin::class, 'destroy'])
+    ->name('admin.sub-event.destroy');
 
 Route::get('/', function () {
     return view('dashboard');
@@ -21,17 +37,11 @@ Route::get('/reset-password', function () {
 Route::get('/new-password', function () {
     return view('new-password');
 });
-Route::get('/admin', function () {
-    return view('admin');
-});
 Route::get('/index', function () {
     return view('index');
 });
 Route::get('/event', function () {
     return view('master.event');
-});
-Route::get('/sub-event', function () {
-    return view('master.sub-event');
 });
 Route::get('/bidang', function () {
     return view('master.bidang');

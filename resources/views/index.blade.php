@@ -297,7 +297,7 @@
               <span class="ri-menu-label">Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/sub-event">
+            <a class="ri-menu-item" href="/sub-event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <line x1="8" y1="6" x2="21" y2="6"/>
@@ -577,7 +577,10 @@
 
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
-          <div id="kt_content_container" class="container-fluid"></div>
+          <div id="kt_content_container" class="container-fluid">
+            <!-- Page content goes here -->
+                @yield('content')
+            </div>
         </div>
         <!-- /CONTENT AREA -->
 
