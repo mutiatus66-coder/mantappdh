@@ -4,33 +4,33 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Bidang;
 
-Route::get('/master/bidang', [Admin::class, 'bidang'])
+Route::get('/bidang', [Admin::class, 'bidang'])
     ->name('admin.bidang.index');
 
-Route::post('/master/bidang/store', [Admin::class, 'storeBidang'])
+Route::post('/bidang/store', [Admin::class, 'storeBidang'])
     ->name('admin.bidang.store');
 
-Route::get('/master/bidang/{id}/edit', [Admin::class, 'editBidang'])
+Route::get('/bidang/{id}/edit', [Admin::class, 'editBidang'])
     ->name('admin.bidang.edit');
 
-Route::put('/master/bidang/{id}', [Admin::class, 'updateBidang'])
+Route::put('/bidang/{id}', [Admin::class, 'updateBidang'])
     ->name('admin.bidang.update');
 
-Route::delete('/master/bidang/{id}', [Admin::class, 'destroyBidang'])
+Route::delete('/bidang/{id}', [Admin::class, 'destroyBidang'])
     ->name('admin.bidang.destroy');
 Route::get('/sub-event', [Admin::class, 'index'])
     ->name('admin.sub-event.index');
 
-Route::post('/master/sub-event/store', [Admin::class, 'store'])
+Route::post('/sub-event/store', [Admin::class, 'store'])
     ->name('admin.sub-event.store');
 
-Route::get('/master/sub-event/{id}/edit', [Admin::class, 'edit'])
+Route::get('/sub-event/{id}/edit', [Admin::class, 'edit'])
     ->name('admin.sub-event.edit');
 
-Route::put('/master/sub-event/{id}', [Admin::class, 'update'])
+Route::put('/sub-event/{id}', [Admin::class, 'update'])
     ->name('admin.sub-event.update');
 
-Route::delete('/master/sub-event/{id}', [Admin::class, 'destroy'])
+Route::delete('/sub-event/{id}', [Admin::class, 'destroy'])
     ->name('admin.sub-event.destroy');
 
 

@@ -316,7 +316,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
               <span class="ri-menu-label">Sub Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/bidang">
+            <a class="ri-menu-item" href="/bidang">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
