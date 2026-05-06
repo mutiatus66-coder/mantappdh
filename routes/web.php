@@ -39,8 +39,8 @@ Route::get('/bidang', function () {
 Route::get('/user', function () {
     return view('master.user');
 });
-Route::get('/penilaian', function () {
-    return view('master.penilaian');
+Route::get('/penilai', function () {
+    return view('master.penilai');
 });
 Route::get('/pengumuman', function () {
     return view('master.pengumuman');

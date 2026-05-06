@@ -335,7 +335,7 @@
               <span class="ri-menu-label">User</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/penilai">
+            <a class="ri-menu-item" href="/penilai">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -345,7 +345,7 @@
               <span class="ri-menu-label">Penilai</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/pengumuman">
+            <a class="ri-menu-item" href="/pengumuman">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
