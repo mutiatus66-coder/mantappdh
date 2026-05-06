@@ -21,7 +21,39 @@ class Admin extends Controller
     {
         session(['sub_events' => array_values($data)]);
     }
+    private static array $bidang = [
+    1 => [
+        [
+            'id' => 1,
+            'nama' => 'Teknologi Informasi',
+            'status' => 'aktif'
+        ],
+        [
+            'id' => 2,
+            'nama' => 'Pertanian',
+            'status' => 'tidak_aktif'
+        ],
+    ],
 
+    2 => [
+        [
+            'id' => 3,
+            'nama' => 'Kesehatan',
+            'status' => 'aktif'
+        ],
+    ],
+];
+    public function bidang()
+{
+    $subEvents = $this->getData();
+
+    $bidangData = self::$bidang;
+
+    return view('master.bidang', compact(
+        'subEvents',
+        'bidangData'
+    ));
+}
     public function index()
     {
         $subEvents = $this->getData();
@@ -66,7 +98,7 @@ class Admin extends Controller
         abort_unless($item, 404);
         return response()->json($item);
     }
-
+    
     public function update(Request $request, int $id)
     {
         $request->validate([

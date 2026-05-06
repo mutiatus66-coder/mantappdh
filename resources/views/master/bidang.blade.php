@@ -1,8 +1,6 @@
-{{-- resources/views/master/bidang.blade.php --}}
+@extends('index', ['dummy' => true])
 
-@extends('index')
-
-@section('bidang')
+@section('content')
 
 {{-- ══════════════════════════════════════════════════
      Flash messages
@@ -58,7 +56,7 @@
         {{-- ─── Accordion body ─── --}}
         <div
             id="collapse-{{ $seId }}"
-            class="accordion-collapse collapse {{ $isOpen ? 'show' : '' }}"
+          class="accordion-collapse show"
             aria-labelledby="heading-{{ $seId }}"
             data-bs-parent="#accordionBidang"
         >
@@ -394,14 +392,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.getElementById('edit-sub-event-nama').value = subEventNama;
 
-            fetch(`/admin/bidang/${id}/edit`, {
+           fetch(`/master/bidang/${id}/edit`, {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(r => r.json())
             .then(function (data) {
                 document.getElementById('edit-nama').value   = data.nama;
                 document.getElementById('edit-status').value = data.status;
-                document.getElementById('formEditBidang').action = `/admin/bidang/${id}`;
+                document.getElementById('formEditBidang').action = `/master/bidang/${id}`;
             })
             .catch(function () {
                 alert('Gagal memuat data bidang. Silakan coba lagi.');
@@ -415,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const id   = this.dataset.id;
             const nama = this.dataset.nama;
             document.getElementById('hapus-nama-preview').textContent = `"${nama}"`;
-            document.getElementById('formHapusBidang').action = `/admin/bidang/${id}`;
+            document.getElementById('formHapusBidang').action = `/master/bidang/${id}`;
         });
     });
 
