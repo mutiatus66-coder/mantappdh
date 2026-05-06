@@ -31,7 +31,7 @@
 
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
-
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* ============================================================
        SIDEBAR (Aside) — Layout & Scrollable Menu
@@ -297,7 +297,7 @@
               <span class="ri-menu-label">Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/sub-event">
+            <a class="ri-menu-item" href="/sub-event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <line x1="8" y1="6" x2="21" y2="6"/>
@@ -311,7 +311,7 @@
               <span class="ri-menu-label">Sub Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/bidang">
+            <a class="ri-menu-item" href="/bidang">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -335,7 +335,7 @@
               <span class="ri-menu-label">User</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/penilai">
+            <a class="ri-menu-item" href="/penilai">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -345,7 +345,7 @@
               <span class="ri-menu-label">Penilai</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/pengumuman">
+            <a class="ri-menu-item" href="/pengumuman">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
@@ -577,7 +577,104 @@
 
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
-          <div id="kt_content_container" class="container-fluid"></div>isi di sini
+        <div class="p-6">
+          
+          <!-- TOP ACTION -->
+    <a href="/event/create">
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-2 transition duration-200">
+        <span class="text-lg">+</span>
+        Tambah Event
+        </button>
+        </a>
+    
+
+    <!-- CARD TABLE -->
+    <div class="items-center mb-4 mt-4 bg-white rounded-lg shadow border border-gray-200">
+        <div class="p-4 overflow-x-auto">
+          <div class="items-center mb-6 mt-4">
+        <h2 class="text-lg font-semibold text-blue-600">DATA EVENT</h2>       
+    </div>
+            <table class="w-full border border-gray-300">
+                
+                <thead class="bg-gray-200 text-gray-600">
+                    <tr>
+                        <th class="px-4 py-3 w-16 text-center border-r border-gray-300">No</th>
+                        <th class="px-4 py-3 text-center border-r border-gray-300">Nama</th>
+                        <th class="px-4 py-3 text-center border-r border-gray-300">Email</th>
+                        <th class="px-4 py-3 text-center border-r border-gray-300">Hak Akses</th>
+                        <th class="px-4 py-3 text-right border-r border-gray-300">Status</th>
+                        <th class="px-4 py-3 w-40 text-center border-r border-gray-300">Aksi</th>
+                    </tr>
+                </thead>
+
+                <!-- isi data -->
+                <tbody class="text-gray-700">
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">1</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">akwardblublu</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">akwardblublu@gmail.com</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">admin</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-right">aktif</td> <!-- Ganti td aksi menjadi: -->
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px;">
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">✏️ Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1">🗑️ Hapus</button>
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"> Login As</button>
+                                </div>
+                                </td>                           
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">2</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">lomba@example.com</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">user</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-right">aktif</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                 <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px;">
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">✏️ Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1">🗑️ Hapus</button>
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"> Login As</button>
+                                </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">3</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">PAMERAN</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">pameran@example.com</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">user</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-right">aktif</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                 <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px;">
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">✏️ Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1">🗑️ Hapus</button>
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"> Login As</button>
+                                </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">4</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">INOTEK AWARD</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-left">inotek@example.com</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">user</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-right">aktif</td>
+                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                 <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px;">
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">✏️ Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1">🗑️ Hapus</button>
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"> Login As</button>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+          <div id="kt_content_container" class="container-fluid"></div>          
         </div>
         <!-- /CONTENT AREA -->
 
