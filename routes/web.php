@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\BidangController;
+
 
 Route::get('/sub-event', [Admin::class, 'index'])
     ->name('admin.sub-event.index');
@@ -17,6 +19,10 @@ Route::put('/master/sub-event/{id}', [Admin::class, 'update'])
 
 Route::delete('/master/sub-event/{id}', [Admin::class, 'destroy'])
     ->name('admin.sub-event.destroy');
+
+    Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::resource('bidang', BidangController::class)->except(['create', 'show']);
+});
 
 Route::get('/', function () {
     return view('dashboard');

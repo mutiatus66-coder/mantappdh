@@ -580,6 +580,7 @@
           <div id="kt_content_container" class="container-fluid">
             <!-- Page content goes here -->
                 @yield('content')
+                @yield('bidang')
             </div>
         </div>
         <!-- /CONTENT AREA -->
