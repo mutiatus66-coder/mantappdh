@@ -26,12 +26,17 @@
   <link href="template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
 
   <!-- Global Stylesheets -->
-  <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
-  <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" />
+  <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
+  <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
+  ```html id="1nb98y"
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+```
+
 
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
-
+  @stack('styles')
   <style>
     /* ============================================================
        SIDEBAR (Aside) — Layout & Scrollable Menu
@@ -255,7 +260,7 @@
         <!-- Logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
-            <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-90px logo" />
+            <img alt="Logo" src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}" class="h-90px logo" />
             <div class="aside-logo-text">
               <div class="aside-logo-title">Rumah Inovasi</div>
               <div class="aside-logo-subtitle">Magetan</div>
@@ -297,7 +302,7 @@
               <span class="ri-menu-label">Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/sub-event">
+            <a class="ri-menu-item" href="/sub-event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <line x1="8" y1="6" x2="21" y2="6"/>
@@ -577,7 +582,10 @@
 
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
-          <div id="kt_content_container" class="container-fluid"></div>
+          <div id="kt_content_container" class="container-fluid">
+            <!-- Page content goes here -->
+                @yield('content')
+            </div>
         </div>
         <!-- /CONTENT AREA -->
 
@@ -712,8 +720,8 @@
 
   <!-- Core -->
   <script>var hostUrl = "assets/";</script>
-  <script src="template.demo6/demo6/assets/plugins/global/plugins.bundle.js"></script>
-  <script src="template.demo6/demo6/assets/js/scripts.bundle.js"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
 
   <!-- Vendor (page-specific) -->
   <script src="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
@@ -751,6 +759,6 @@
       });
     });
   </script>
-
+  @stack('scripts')
 </body>
 </html>
