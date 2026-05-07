@@ -53,7 +53,7 @@
 
     /* Logo area — gold gradient background, never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #B8962E 0%, #C9A84C 50%, #A0782A 100%) !important;
+      background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%) !important;
       border-bottom: 1px solid rgba(201, 168, 76, 0.40);
       min-height: 80px;
       padding: 16px 24px;
