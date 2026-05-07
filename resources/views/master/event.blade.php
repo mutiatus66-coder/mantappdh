@@ -312,7 +312,7 @@
               <span class="ri-menu-label">Sub Event</span>
             </a>
 
-            <a class="ri-menu-item" href="bidang">
+            <a class="ri-menu-item" href="/bidang">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -336,7 +336,7 @@
               <span class="ri-menu-label">User</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/penilai">
+            <a class="ri-menu-item" href="/penilai">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -346,7 +346,7 @@
               <span class="ri-menu-label">Penilai</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/pengumuman">
+            <a class="ri-menu-item" href="/pengumuman">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
@@ -576,15 +576,21 @@
         </div>
         <!-- /TOOLBAR -->
 
+       <!-- ============================================================
+       ISI HALAMAN
+       ============================================================ -->
+
         <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div class="p-6">
 
     <!-- TOP ACTION -->
-     <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-2 transition duration-200">
-            <span class="text-lg">+</span>
-            Tambah Event
+    <a href="/event/create">
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center gap-2 transition duration-200">
+        <span class="text-lg">+</span>
+        Tambah Event
         </button>
+        </a>
     
 
     <!-- CARD TABLE -->

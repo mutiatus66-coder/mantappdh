@@ -316,7 +316,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
               <span class="ri-menu-label">Sub Event</span>
             </a>
 
-            <a class="ri-menu-item" href="/master/bidang">
+            <a class="ri-menu-item" href="/bidang">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -473,7 +473,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
             <!-- Header right: theme mode + user menu -->
             <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
               <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
-                <p class="mb-0 flex-grow-1">123456789101  Selamat Datang, John Doe</p>
+                <p class="mb-0 flex-grow-1">1234543789101  Selamat Datang, John Doe</p>
               <div class="d-flex align-items-stretch flex-shrink-0">
 
                 <!-- Theme Mode Toggle -->

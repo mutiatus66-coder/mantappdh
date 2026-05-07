@@ -27,15 +27,16 @@
             </div>
         @endif
 
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSubEvent">
+                    + Tambah Sub Event
+                </button>
         <div class="card sub-card">
             <div class="card-header d-flex justify-content-between align-items-center py-5">
                 <h3 class="card-title fw-bold text-primary m-0">
                     Data Sub Event
                 </h3>
 
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSubEvent">
-                    Tambah Sub Event
-                </button>
+                
             </div>
 
             <div class="card-body">
@@ -86,7 +87,7 @@
 
                                             <button
                                                 onclick="return confirm('Hapus data ini?')"
-                                                class="btn btn-sm btn-light-danger">
+                                                class="btn btn-danger btn-sm btn-hapus-bidang">
                                                 Hapus
                                             </button>
                                         </form>
