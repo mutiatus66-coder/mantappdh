@@ -28,11 +28,7 @@
   <!-- Global Stylesheets -->
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
-  ```html id="1nb98y"
-<link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-```
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
@@ -47,17 +43,17 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background-color: #1b84ff !important;
+      background: linear-gradient(180deg, #0F1F45 0%, #1A2E5A 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       flex-shrink: 0;
     }
 
-    /* Logo area — fixed, never scrolls */
+    /* Logo area — gold gradient background, never scrolls */
     #kt_aside_logo {
-      background-color: #1b84ff; !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, #B8962E 0%, #C9A84C 50%, #A0782A 100%) !important;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.40);
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -85,7 +81,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     }
 
     .aside-logo-subtitle {
-      color: rgba(255, 255, 255, 0.70);
+      color: rgba(255, 255, 255, 0.75);
       font-size: 11px;
       font-weight: 400;
       letter-spacing: 0.3px;
@@ -93,13 +89,12 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     /* Menu container — scrollable */
     #kt_aside_menu {
-      background-color: #1b84ff;
+      background: transparent !important;
       flex: 1 1 auto;
       overflow-y: auto;
       overflow-x: hidden;
-      /* Custom scrollbar */
       scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+      scrollbar-color: rgba(201, 168, 76, 0.30) transparent;
     }
 
     #kt_aside_menu::-webkit-scrollbar {
@@ -111,12 +106,12 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(201, 168, 76, 0.30);
       border-radius: 4px;
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(255, 255, 255, 0.45);
+      background-color: rgba(201, 168, 76, 0.55);
     }
 
     /* Wrapper offset for sidebar width */
@@ -125,11 +120,13 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background-color: #0A1530 !important;
     }
 
     /* Content area pushes footer to bottom */
     #kt_content {
       flex: 1 1 auto;
+      background-color: #0A1530 !important;
     }
 
     @media (max-width: 991.98px) {
@@ -151,7 +148,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       align-items: center;
       gap: 12px;
       padding: 10px 22px;
-      color: rgba(255, 255, 255, 0.88);
+      color: #ffffff;
       font-size: 13.5px;
       font-family: inherit;
       font-weight: 400;
@@ -163,15 +160,15 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     }
 
     #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
     }
 
     #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(255, 255, 255, 0.20);
+      background: rgba(201, 168, 76, 0.20);
       color: #ffffff;
-      font-weight: 500;
-      border-left: 3px solid #ffffff;
+      font-weight: 600;
+      border-left: 3px solid #C9A84C;
       padding-left: 19px;
     }
 
@@ -186,7 +183,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.50);
+      color: rgba(255, 255, 255, 0.45);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
@@ -196,7 +193,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     #ri-sidebar-nav .ri-divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.10);
       margin: 8px 16px;
     }
 
@@ -207,7 +204,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      opacity: 0.90;
+      opacity: 0.85;
     }
 
     #ri-sidebar-nav .ri-icon svg {
@@ -218,6 +215,62 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
       stroke-width: 1.8;
       stroke-linecap: round;
       stroke-linejoin: round;
+    }
+
+    /* ============================================================
+       HEADER — Navy + Gold
+       ============================================================ */
+
+    #kt_header {
+      background: linear-gradient(90deg, #0F1F45 0%, #1A2E5A 100%) !important;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.35) !important;
+    }
+
+    /* Welcome text — bigger, left-aligned, gold */
+    #kt_header .header-welcome-text {
+      font-size: 20px !important;
+      font-weight: 600 !important;
+      color: #E8C96B !important;
+      text-align: left !important;
+      flex: 1;
+      letter-spacing: 0.2px;
+    }
+
+    /* Theme toggle & user menu icons on dark header */
+    #kt_header .btn-active-light-primary {
+      color: #C9A84C !important;
+    }
+    #kt_header .btn-active-light-primary:hover {
+      background: rgba(201, 168, 76, 0.12) !important;
+    }
+
+    /* ============================================================
+       TOOLBAR — dark navy
+       ============================================================ */
+
+    #kt_toolbar {
+      background: rgba(10, 21, 48, 0.95) !important;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.15) !important;
+    }
+
+    /* ============================================================
+       FOOTER — dark navy
+       ============================================================ */
+
+    #kt_footer {
+      background: #0F1F45 !important;
+      border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
+    }
+
+    #kt_footer .text-gray-900,
+    #kt_footer a.text-gray-800,
+    #kt_footer .menu-link {
+      color: rgba(201, 168, 76, 0.6) !important;
+    }
+
+    #kt_footer a.text-hover-primary:hover,
+    #kt_footer .menu-link:hover {
+      color: #E8C96B !important;
     }
   </style>
 </head>
@@ -471,10 +524,10 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
             </div>
 
             <!-- Header right: theme mode + user menu -->
-            <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
-              <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
-                <p class="mb-0 flex-grow-1">1234543789101  Selamat Datang, John Doe</p>
-              <div class="d-flex align-items-stretch flex-shrink-0">
+            // <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+            //   <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
+            //     <p class="mb-0 flex-grow-1 header-welcome-text">.....    &nbsp;</p>
+            //   <div class="d-flex align-items-stretch flex-shrink-0">
 
                 <!-- Theme Mode Toggle -->
                 <div class="d-flex align-items-center ms-1 ms-lg-3">
@@ -580,12 +633,11 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
         </div>
         <!-- /TOOLBAR -->
 
-        <!-- CONTENT AREA (flex spacer — isi halaman masuk di sini) -->
+        <!-- CONTENT AREA -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div id="kt_content_container" class="container-fluid">
-            <!-- Page content goes here -->
-                @yield('content')
-            </div>
+            @yield('content')
+          </div>
         </div>
         <!-- /CONTENT AREA -->
 
@@ -640,7 +692,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
           data-kt-scroll-wrappers="#kt_activities_body"
           data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer"
           data-kt-scroll-offset="5px">
-          <!-- Timeline items omitted for brevity — keep original content here -->
         </div>
       </div>
       <div class="card-footer py-5 text-center" id="kt_activities_footer">
@@ -687,7 +738,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
           data-kt-scroll-dependencies="#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer"
           data-kt-scroll-wrappers="#kt_drawer_chat_messenger_body"
           data-kt-scroll-offset="0px">
-          <!-- Chat messages omitted for brevity — keep original content here -->
         </div>
       </div>
       <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
@@ -718,12 +768,10 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
        JAVASCRIPT BUNDLES
        ============================================================ -->
 
-  <!-- Core -->
   <script>var hostUrl = "assets/";</script>
   <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
 
-  <!-- Vendor (page-specific) -->
   <script src="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -738,7 +786,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
   <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 
-  <!-- Custom (page-specific) -->
   <script src="template.demo6/demo6/assets/js/widgets.bundle.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/widgets.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/apps/chat/chat.js"></script>
