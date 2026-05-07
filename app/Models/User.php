@@ -33,4 +33,12 @@ class User extends Authenticatable
     {
     return $this->role === 'admin';
     }
+    // Event
+    protected $fillable = [
+    'nama',
+    'email',
+    'hak_akses',
+    'status',
+    'password',
+];
 }

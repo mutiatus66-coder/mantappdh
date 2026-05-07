@@ -33,6 +33,7 @@
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
   @stack('styles')
+  
   <style>
     /* ============================================================
        SIDEBAR (Aside) — Layout & Scrollable Menu
@@ -343,7 +344,7 @@
             <!-- MASTER -->
             <span class="ri-section-label">Master</span>
 
-            <a class="ri-menu-item" href="event">
+            <a class="ri-menu-item" href="/event">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -381,7 +382,7 @@
               <span class="ri-menu-label">Bidang</span>
             </a>
 
-            <a class="ri-menu-item" href="user">
+            <a class="ri-menu-item" href="/user">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>

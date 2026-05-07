@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Bidang;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EventController;
 
 Route::get('/bidang', [Admin::class, 'bidang'])
     ->name('admin.bidang.index');
@@ -33,6 +35,15 @@ Route::put('/sub-event/{id}', [Admin::class, 'update'])
 Route::delete('/sub-event/{id}', [Admin::class, 'destroy'])
     ->name('admin.sub-event.destroy');
 
+Route::get('/event', [EventController::class, 'index'])
+    ->name('event.index');
+Route::post('/event', [EventController::class, 'store'])
+    ->name('event.store');
+
+Route::get('/user', [UserController::class, 'index'])
+    ->name('user.index');
+Route::post('/user', [UserController::class, 'store'])
+    ->name('user.store');
 
 Route::get('/', function () {
     return view('dashboard');
