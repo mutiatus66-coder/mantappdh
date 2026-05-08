@@ -219,7 +219,7 @@
                         <td style="text-align: center">
                             <button class="btn-gold btn-sm btn-edit me-2"
                                     data-id="{{ $item['id'] }}">
-                                Ubah
+                                ✏️ Edit
                             </button>
 
                             <form action="{{ route('admin.sub-event.destroy', $item['id']) }}"
@@ -228,7 +228,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn-hapus"
                                         onclick="return confirm('Hapus data ini?')">
-                                    Hapus
+                                    🗑️ Hapus
                                 </button>
                             </form>
                         </td>
