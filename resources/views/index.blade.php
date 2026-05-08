@@ -33,7 +33,7 @@
   <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
   @stack('styles')
-  
+
   <style>
     /* ============================================================
        SIDEBAR (Aside) — Layout & Scrollable Menu
@@ -345,7 +345,7 @@
           <nav id="ri-sidebar-nav">
 
             <!-- Dashboard -->
-            <a class="ri-menu-item active" href="/">
+            <a class="ri-menu-item" href="/">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -412,7 +412,8 @@
               <span class="ri-menu-label">User</span>
             </a>
 
-            <a class="ri-menu-item" href="/penilai">
+            <!-- Menu Penilai dijadikan active -->
+            <a class="ri-menu-item active" href="/penilai">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
