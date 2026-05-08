@@ -44,7 +44,7 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #21487F 100%) !important;
+      background: linear-gradient(180deg, #001C3D 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -53,7 +53,7 @@
 
     /* Logo area — gold gradient background, never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg,#21487F 100%) !important;
+      background: linear-gradient(135deg,#001C3D 100%) !important;
       border-bottom: 1px solid #E3E3E3;
       min-height: 80px;
       padding: 16px 24px;
@@ -238,7 +238,7 @@
 
     /* Theme toggle & user menu icons on dark header */
     #kt_header .btn-active-light-primary {
-      color: #2B5987 !important;
+      color: #001C3D !important;
     }
     #kt_header .btn-active-light-primary:hover {
       background: rgba(201, 168, 76, 0.12) !important;
@@ -313,7 +313,7 @@
         <!-- Logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
-            <img alt="Logo" src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}" class="h-90px logo" />
+            <img alt="Logo" src="{{ asset('/img/bulb.png') }}" class="h-60px logo" />
             <div class="aside-logo-text">
               <div class="aside-logo-title">Rumah Inovasi</div>
               <div class="aside-logo-subtitle">Magetan</div>

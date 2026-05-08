@@ -17,45 +17,45 @@
 
 /* ── Card header: follows [data-bs-theme] ── */
 [data-bs-theme="light"] .sub-card .card-header {
-    background: #FDFAF3;                          /* warm white-bone */
+    background: #E5DFC5;                          /* warm white-bone */
     border-bottom: 1px solid rgba(201,168,76,.25);
 }
 [data-bs-theme="dark"] .sub-card .card-header {
-    background: #132146;
+    background: #2A2C2B;
     border-bottom: 1px solid rgba(201,168,76,.20);
 }
 
 /* ── Card body ── */
 [data-bs-theme="light"] .sub-card .card-body {
-    background: #FDFAF3;
+    background: #E3E3E3;
 }
 [data-bs-theme="dark"] .sub-card .card-body {
-    background: #0F1F45;
+    background: #374140;
 }
 
 /* ── Card title ── */
 [data-bs-theme="light"] .sub-card .card-title {
-    color: #7A5A1E !important;   /* rich gold-brown */
+    color: #2A2C2B !important;   /* rich gold-brown */
 }
 [data-bs-theme="dark"] .sub-card .card-title {
-    color: #E8C96B !important;
+    color: #E3E3E3 !important;
 }
 
 /* ── Table head ── */
 [data-bs-theme="light"] .se-table thead th {
     background: rgba(201,168,76,.10);
-    color: #8A6A20;
+    color: #2A2C2B;
     border-bottom: 2px solid rgba(201,168,76,.30);
 }
 [data-bs-theme="dark"] .se-table thead th {
     background: rgba(201,168,76,.08);
-    color: rgba(201,168,76,.75);
+    color: #E3E3E3;
     border-bottom: 1px solid rgba(201,168,76,.22);
 }
 
 /* ── Table body rows ── */
 [data-bs-theme="light"] .se-table tbody td {
-    color: #2C2C2C;
+    color: #374140;
     border-bottom: 1px solid rgba(201,168,76,.12);
     background: transparent;
 }
@@ -83,7 +83,7 @@
 /* ── Kategori badge ── */
 [data-bs-theme="light"] .badge-kategori {
     background: rgba(201,168,76,.15);
-    color: #7A5A1E;
+    color: #374140;
     border: 1px solid rgba(201,168,76,.35);
     font-weight: 600;
     font-size: .75rem;
@@ -93,7 +93,7 @@
 }
 [data-bs-theme="dark"] .badge-kategori {
     background: rgba(201,168,76,.14);
-    color: #E8C96B;
+    color: #E3E3E3;
     border: 1px solid rgba(201,168,76,.30);
     font-weight: 600;
     font-size: .75rem;
@@ -104,8 +104,8 @@
 
 /* ── Gold gradient button (Edit) ── */
 .btn-gold {
-    background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%);
-    color: #0D1B3E !important;
+    background: linear-gradient(135deg, #2B5987 100%);
+    color: #E3E3E3 !important;
     font-weight: 700;
     border: none;
     border-radius: .375rem;
@@ -131,8 +131,8 @@
 
 /* ── Tambah Sub Event button ── */
 .btn-tambah-se {
-    background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%);
-    color: #0D1B3E !important;
+    background: linear-gradient(135deg, #2B5987 100%);
+    color: #E3E3E3 !important;
     font-weight: 700;
     border: none;
     border-radius: .5rem;
@@ -144,7 +144,7 @@
 .btn-tambah-se:hover {
     opacity: .88;
     box-shadow: 0 5px 18px rgba(201,168,76,.42);
-    color: #0D1B3E !important;
+    color: #2B5987 !important;
 }
 
 /* ── Modal backdrop ── */
@@ -155,7 +155,7 @@
     background: #FDFAF3;
 }
 [data-bs-theme="dark"] .modal-content {
-    background: #132146;
+    background: #E3E3E3;
     border: 1px solid rgba(201,168,76,.25);
 }
 [data-bs-theme="dark"] .modal-header,
