@@ -35,4 +35,12 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Data berhasil ditambahkan!');
     }
+
+    public function destroy($id)
+{
+    User::findOrFail($id)->delete();
+
+    return redirect()->back()->with('success', 'User berhasil dihapus.');
+}
+
 }
