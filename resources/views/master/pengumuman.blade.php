@@ -3,11 +3,12 @@
 @section('content')
 <style>
     .pengumuman-container {
-        background: white;
+        background: var(--ri-card-bg);
         border-radius: 12px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         padding: 20px;
         margin: 20px;
+        transition: background 0.2s, color 0.2s;
     }
     .pengumuman-header {
         display: flex;
@@ -21,11 +22,11 @@
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
-        color: #1f2937;
+        color: var(--ri-text-primary);
     }
     .pengumuman-title p {
         margin: 0;
-        color: #6b7280;
+        color: var(--ri-text-muted);
         font-size: 0.875rem;
     }
     .btn-tambah {
@@ -57,36 +58,46 @@
     }
     .search-box input {
         padding: 6px 12px 6px 32px;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--ri-border);
         border-radius: 8px;
         font-size: 0.875rem;
         width: 240px;
+        background: var(--ri-input-bg);
+        color: var(--ri-text-primary);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .pengumuman-table {
         width: 100%;
         border-collapse: collapse;
-        border: 1px solid #e5e7eb;
+        border: 2px solid var(--ri-table-border-outer);
         border-radius: 8px;
         overflow: hidden;
     }
     .pengumuman-table th {
-        background: #f9fafb;
+        background: var(--ri-table-head-bg);
         padding: 12px;
         text-align: left;
         font-weight: 600;
         font-size: 0.75rem;
         text-transform: uppercase;
-        color: #4b5563;
-        border-bottom: 1px solid #e5e7eb;
+        letter-spacing: 0.05em;
+        color: var(--ri-text-muted);
+        border-bottom: 2px solid var(--ri-table-border-header);
+        transition: background 0.2s, color 0.2s;
     }
     .pengumuman-table td {
         padding: 12px;
-        border-bottom: 1px solid #f0f0f0;
-        color: #1f2937;
+        border-bottom: 1.5px solid var(--ri-table-border-row);
+        color: var(--ri-text-primary);
         font-size: 0.875rem;
+        background: var(--ri-table-row-bg);
+        transition: background 0.2s, color 0.2s;
     }
-    .pengumuman-table tr:hover {
-        background: #fefce8;
+    .pengumuman-table tr:hover td {
+        background: var(--ri-table-row-hover);
+    }
+    .pengumuman-table tr:last-child td {
+        border-bottom: none;
     }
     .status-badge {
         display: inline-block;
@@ -108,20 +119,38 @@
         justify-content: center;
         gap: 8px;
     }
-    .btn-icon {
-        background: none;
+    .btn-edit-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white !important;
         border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        font-weight: 600;
         cursor: pointer;
-        font-size: 1.1rem;
-        padding: 4px;
+        transition: opacity 0.15s;
     }
-    .btn-edit { color: #f59e0b; }
-    .btn-hapus { color: #ef4444; }
-    .btn-hapus:hover, .btn-edit:hover { opacity: 0.7; }
+    .btn-edit-icon:hover { opacity: 0.88; }
+    .btn-hapus {
+        background: #A32D2D;
+        color: #ffffff !important;
+        border: none;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: background 0.15s;
+    }
+    .btn-hapus:hover {
+        background: #8b2424;
+        color: #ffffff !important;
+    }
     .empty-row {
         text-align: center;
         padding: 30px;
-        color: #9ca3af;
+        color: var(--ri-text-muted);
+        background: var(--ri-table-row-bg);
     }
     @media (max-width: 640px) {
         .pengumuman-container { margin: 10px; padding: 12px; }
@@ -170,8 +199,8 @@
                     </td>
                     <td style="text-align: center">
                         <div class="action-buttons">
-                            <button class="btn-icon btn-edit" data-id="{{ $p['id'] }}" title="Edit">✏️</button>
-                            <button class="btn-icon btn-hapus" data-id="{{ $p['id'] }}" data-judul="{{ $p['judul'] }}" title="Hapus">🗑️</button>
+                            <button class="btn-edit-icon" data-id="{{ $p['id'] }}" title="Edit">Ubah</button>
+                            <button class="btn-hapus" data-id="{{ $p['id'] }}" data-judul="{{ $p['judul'] }}" title="Hapus">Hapus</button>
                         </div>
                     </td>
                 </tr>
@@ -182,7 +211,7 @@
                 @endforelse
             </tbody>
         </table>
-        <div id="emptySearchMessage" style="display: none; text-align: center; padding: 20px; color: #9ca3af;">
+        <div id="emptySearchMessage" style="display: none; text-align: center; padding: 20px; color: var(--ri-text-muted);">
             Tidak ada pengumuman yang cocok
         </div>
     </div>
@@ -190,7 +219,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Search
         const searchInput = document.getElementById('searchPengumuman');
         const rows = document.querySelectorAll('#pengumumanBody tr');
         const emptyMsg = document.getElementById('emptySearchMessage');
@@ -215,7 +243,6 @@
             });
         }
 
-        // Tambah (sementara alert)
         const btnTambah = document.getElementById('btnTambahPengumuman');
         if (btnTambah) {
             btnTambah.addEventListener('click', () => {
@@ -223,12 +250,12 @@
             });
         }
 
-        // Edit & Hapus (sementara alert)
-        document.querySelectorAll('.btn-edit').forEach(btn => {
+        document.querySelectorAll('.btn-edit-icon').forEach(btn => {
             btn.addEventListener('click', () => {
                 alert(`Edit pengumuman ID ${btn.dataset.id} (implementasikan modal edit).`);
             });
         });
+
         document.querySelectorAll('.btn-hapus').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (confirm(`Yakin hapus pengumuman "${btn.dataset.judul}"?`)) {
