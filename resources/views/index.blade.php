@@ -105,7 +105,7 @@
 
     [data-bs-theme="light"] #kt_wrapper,
     [data-bs-theme="light"] #kt_content,
-    [data-bs-theme="light"] #kt_content_container { background-color: #CAC8CC !important; }
+    [data-bs-theme="light"] #kt_content_container { background-color: #F9FBFF !important; }
 
     [data-bs-theme="dark"] #kt_wrapper,
     [data-bs-theme="dark"] #kt_content,
@@ -117,8 +117,8 @@
        TOOLBAR — theme-aware, no border
        ============================================================ */
 
-    [data-bs-theme="light"] #kt_toolbar { background: #CAC8CC !important; border-bottom: none !important; }
-    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2B3E !important; border-bottom: none !important; }
+    [data-bs-theme="light"] #kt_toolbar { background: #F9FBFF !important; border-bottom: none !important; }
+    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2333 !important; border-bottom: none !important; }
 
     /* ============================================================
        SIDEBAR NAV — Menu Items
@@ -193,56 +193,6 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-    [data-bs-theme="light"] {
-    --ri-card-bg:                  #ffffff;
-    --ri-text-primary:             #1f2937;
-    --ri-text-muted:               #6b7280;
-    --ri-border:                   #d1d5db;
-    --ri-input-bg:                 #ffffff;
- 
-    /* Table */
-    --ri-table-head-bg:            #f3f4f6;
-    --ri-table-border-outer:       #d1d5db;
-    --ri-table-border-header:      #9ca3af;
-    --ri-table-border-row:         #e5e7eb;
-    --ri-table-row-bg:             #ffffff;
-    --ri-table-row-hover:          #fefce8;
- 
-    /* Accordion */
-    --ri-accordion-head-bg:              #f8fafc;
-    --ri-accordion-head-active-bg:       #fefce8;
-    --ri-accordion-head-active-color:    #92400e;
- 
-    /* Badge nonaktif */
-    --ri-badge-inactive-bg:        #f3f4f6;
-    --ri-badge-inactive-color:     #4b5563;
-}
- 
-/* ── Dark Mode ── */
-[data-bs-theme="dark"] {
-    --ri-card-bg:                  #1e2a3a;
-    --ri-text-primary:             #e2e8f0;
-    --ri-text-muted:               #94a3b8;
-    --ri-border:                   #334155;
-    --ri-input-bg:                 #1e2a3a;
- 
-    /* Table */
-    --ri-table-head-bg:            #162032;
-    --ri-table-border-outer:       #334155;
-    --ri-table-border-header:      #475569;
-    --ri-table-border-row:         #2d3f54;
-    --ri-table-row-bg:             #1e2a3a;
-    --ri-table-row-hover:          #253345;
- 
-    /* Accordion */
-    --ri-accordion-head-bg:              #162032;
-    --ri-accordion-head-active-bg:       #1a2e44;
-    --ri-accordion-head-active-color:    #6DADD8;
- 
-    /* Badge nonaktif */
-    --ri-badge-inactive-bg:        #2d3f54;
-    --ri-badge-inactive-color:     #94a3b8;
-}
 
     /* ============================================================
        HEADER — Steel-to-sky blue gradient
@@ -334,13 +284,8 @@
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
-<<<<<<< HEAD
-            <!-- Dashboard -->
-            <a class="ri-menu-item" href="/index">
-=======
             <!-- Dashboard — NO hardcoded active, JS handles it -->
             <a class="ri-menu-item" href="/">
->>>>>>> e985a58e4741518d09921e0b20c8bc20ebaff51f
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="1"/>
