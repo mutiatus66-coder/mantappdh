@@ -4,7 +4,7 @@
 <!-- ============================================================
      Rumah Inovasi Magetan - Panel Admin
      Template: Metronic 8.2.3 (Keenthemes)
-     Modified: Sidebar scrollable, code cleaned up
+     Modified: Sidebar scrollable, active link fixed
      ============================================================ -->
 
 <head>
@@ -51,9 +51,9 @@
       flex-shrink: 0;
     }
 
-    /* Logo area — gold gradient background, never scrolls */
+    /* Logo area — never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg,#001C3D 100%) !important;
+      background: linear-gradient(135deg, #001C3D 100%) !important;
       border-bottom: 1px solid #E3E3E3;
       min-height: 80px;
       padding: 16px 24px;
@@ -69,24 +69,9 @@
       background: transparent !important;
     }
 
-    .aside-logo-text {
-      line-height: 1.3;
-    }
-
-    .aside-logo-title {
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-
-    .aside-logo-subtitle {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.3px;
-    }
+    .aside-logo-text   { line-height: 1.3; }
+    .aside-logo-title  { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+    .aside-logo-subtitle { color: rgba(255,255,255,0.75); font-size: 11px; font-weight: 400; letter-spacing: 0.3px; }
 
     /* Menu container — scrollable */
     #kt_aside_menu {
@@ -97,36 +82,20 @@
       scrollbar-width: thin;
       scrollbar-color: #2A2C2B transparent;
     }
+    #kt_aside_menu::-webkit-scrollbar        { width: 4px; }
+    #kt_aside_menu::-webkit-scrollbar-track  { background: transparent; }
+    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: #2A2C2B; border-radius: 4px; }
+    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: #374140; }
 
-    #kt_aside_menu::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    #kt_aside_menu::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    #kt_aside_menu::-webkit-scrollbar-thumb {
-      background-color: #2A2C2B;
-      border-radius: 4px;
-    }
-
-    #kt_aside_menu::-webkit-scrollbar-thumb:hover {
-      background-color: #374140;
-    }
-
-    /* Wrapper offset for sidebar width */
+    /* Wrapper offset */
     #kt_wrapper {
       padding-left: 260px !important;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     @media (max-width: 991.98px) {
-      #kt_wrapper {
-        padding-left: 0 !important;
-      }
+      #kt_wrapper { padding-left: 0 !important; }
     }
 
     /* ============================================================
@@ -135,42 +104,26 @@
 
     [data-bs-theme="light"] #kt_wrapper,
     [data-bs-theme="light"] #kt_content,
-    [data-bs-theme="light"] #kt_content_container {
-      background-color: #F9FBFF !important;
-    }
+    [data-bs-theme="light"] #kt_content_container { background-color: #F9FBFF !important; }
 
     [data-bs-theme="dark"] #kt_wrapper,
     [data-bs-theme="dark"] #kt_content,
-    [data-bs-theme="dark"] #kt_content_container {
-      background-color: #1C2333 !important;
-    }
+    [data-bs-theme="dark"] #kt_content_container  { background-color: #1C2333 !important; }
 
-    /* Content area pushes footer to bottom */
-    #kt_content {
-      flex: 1 1 auto;
-    }
+    #kt_content { flex: 1 1 auto; }
 
     /* ============================================================
-       TOOLBAR — remove border, theme-aware background
+       TOOLBAR — theme-aware, no border
        ============================================================ */
 
-    [data-bs-theme="light"] #kt_toolbar {
-      background: #F9FBFF !important;
-      border-bottom: none !important;
-    }
-
-    [data-bs-theme="dark"] #kt_toolbar {
-      background: #1C2333 !important;
-      border-bottom: none !important;
-    }
+    [data-bs-theme="light"] #kt_toolbar { background: #F9FBFF !important; border-bottom: none !important; }
+    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2333 !important; border-bottom: none !important; }
 
     /* ============================================================
        SIDEBAR NAV — Menu Items
        ============================================================ */
 
-    #ri-sidebar-nav {
-      padding: 10px 0 30px;
-    }
+    #ri-sidebar-nav { padding: 10px 0 30px; }
 
     #ri-sidebar-nav a.ri-menu-item {
       display: flex;
@@ -187,14 +140,12 @@
       white-space: nowrap;
       overflow: hidden;
     }
-
     #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255,255,255,0.08);
       color: #ffffff;
     }
-
     #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(201, 168, 76, 0.20);
+      background: rgba(201,168,76,0.20);
       color: #ffffff;
       font-weight: 600;
       border-left: 3px solid #E3E3E3;
@@ -208,24 +159,21 @@
       flex: 1;
       min-width: 0;
     }
-
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.45);
+      color: rgba(255,255,255,0.45);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
       display: block;
       white-space: nowrap;
     }
-
     #ri-sidebar-nav .ri-divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.10);
+      background: rgba(255,255,255,0.10);
       margin: 8px 16px;
     }
-
     #ri-sidebar-nav .ri-icon {
       width: 20px;
       height: 20px;
@@ -235,7 +183,6 @@
       flex-shrink: 0;
       opacity: 0.85;
     }
-
     #ri-sidebar-nav .ri-icon svg {
       width: 16px;
       height: 16px;
@@ -247,14 +194,11 @@
     }
 
     /* ============================================================
-       HEADER — Navy + Gold
+       HEADER — Navy
        ============================================================ */
 
-    #kt_header {
-      background: linear-gradient(90deg, #001C3D 100%) !important;
-    }
+    #kt_header { background: linear-gradient(90deg, #001C3D 100%) !important; }
 
-    /* Welcome text — bigger, left-aligned, gold */
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
@@ -263,14 +207,8 @@
       flex: 1;
       letter-spacing: 0.2px;
     }
-
-    /* Theme toggle & user menu icons on dark header */
-    #kt_header .btn-active-light-primary {
-      color: #001C3D !important;
-    }
-    #kt_header .btn-active-light-primary:hover {
-      background: rgba(201, 168, 76, 0.12) !important;
-    }
+    #kt_header .btn-active-light-primary       { color: #001C3D !important; }
+    #kt_header .btn-active-light-primary:hover { background: rgba(201,168,76,0.12) !important; }
 
     /* ============================================================
        FOOTER — dark navy
@@ -278,19 +216,13 @@
 
     #kt_footer {
       background: #001C3D !important;
-      border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
+      border-top: 1px solid rgba(201,168,76,0.15) !important;
     }
-
     #kt_footer .text-gray-900,
     #kt_footer a.text-gray-800,
-    #kt_footer .menu-link {
-      color: rgba(201, 168, 76, 0.6) !important;
-    }
-
+    #kt_footer .menu-link              { color: rgba(201,168,76,0.6) !important; }
     #kt_footer a.text-hover-primary:hover,
-    #kt_footer .menu-link:hover {
-      color: #2A2C2B !important;
-    }
+    #kt_footer .menu-link:hover        { color: #2A2C2B !important; }
   </style>
 </head>
 
@@ -344,7 +276,7 @@
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
-            <!-- Dashboard -->
+            <!-- Dashboard — NO hardcoded active, JS handles it -->
             <a class="ri-menu-item" href="/">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
@@ -412,8 +344,7 @@
               <span class="ri-menu-label">User</span>
             </a>
 
-            <!-- Menu Penilai dijadikan active -->
-            <a class="ri-menu-item active" href="/penilai">
+            <a class="ri-menu-item" href="/penilai">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -546,8 +477,8 @@
             <!-- Header right: theme mode + user menu -->
             <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
               <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
-                <p class="mb-0 flex-grow-1 header-welcome-text">.....    &nbsp;</p>
-                <div class="d-flex align-items-stretch flex-shrink-0">
+              <p class="mb-0 flex-grow-1 header-welcome-text">..... &nbsp;</p>
+              <div class="d-flex align-items-stretch flex-shrink-0">
 
                 <!-- Theme Mode Toggle -->
                 <div class="d-flex align-items-center ms-1 ms-lg-3">
@@ -559,7 +490,8 @@
                     <i class="ki-outline ki-night-day theme-light-show fs-1"></i>
                     <i class="ki-outline ki-moon theme-dark-show fs-1"></i>
                   </a>
-                  <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px" data-kt-menu="true" data-kt-element="theme-mode-menu">
+                  <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
+                       data-kt-menu="true" data-kt-element="theme-mode-menu">
                     <div class="menu-item px-3 my-0">
                       <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
                         <span class="menu-icon" data-kt-element="icon"><i class="ki-outline ki-night-day fs-2"></i></span>
@@ -590,7 +522,6 @@
                     <img src="template.demo6/demo6/assets/media/avatars/blank.png" alt="User Avatar" />
                   </div>
                   <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
-                    <!-- User info -->
                     <div class="menu-item px-3">
                       <div class="menu-content d-flex align-items-center px-3">
                         <div class="symbol symbol-50px me-5">
@@ -777,9 +708,7 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       SCROLL TO TOP
-       ============================================================ -->
+  <!-- Scroll to top -->
   <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
     <i class="ki-outline ki-arrow-up"></i>
   </div>
@@ -805,7 +734,6 @@
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
   <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-
   <script src="template.demo6/demo6/assets/js/widgets.bundle.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/widgets.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/apps/chat/chat.js"></script>
@@ -814,17 +742,24 @@
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
 
   <script>
-    /* ── Active sidebar link ── */
-    document.addEventListener('DOMContentLoaded', function() {
-      var currentPath = location.pathname.replace(/\/+$|^\s+|\s+$/g, '') || '/';
-      document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function(link) {
+    /* ── Active sidebar link ──
+       Runs after page load. Reads the current URL and adds .active
+       to whichever menu item matches — no hardcoding needed in HTML.
+    ── */
+    document.addEventListener('DOMContentLoaded', function () {
+      var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+
+      document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function (link) {
         var href = link.getAttribute('href');
-        var linkPath = href.startsWith('/') ? href.replace(/\/+$/,'') || '/' : new URL(link.href, location.origin).pathname.replace(/\/+$/,'') || '/';
-        if (linkPath === '/' ? currentPath === '/' : currentPath === linkPath || currentPath.startsWith(linkPath + '/')) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
+        if (!href || href === '#') return;
+
+        var linkPath = href.replace(/\/+$/, '') || '/';
+
+        var isActive = linkPath === '/'
+          ? currentPath === '/'
+          : currentPath === linkPath || currentPath.startsWith(linkPath + '/');
+
+        link.classList.toggle('active', isActive);
       });
     });
 
@@ -834,20 +769,20 @@
       var darkBg  = '#1C2333';
 
       function applyBg() {
-        var theme   = document.documentElement.getAttribute('data-bs-theme') || 'light';
-        var bg      = theme === 'dark' ? darkBg : lightBg;
+        var theme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        var bg    = theme === 'dark' ? darkBg : lightBg;
         ['kt_wrapper', 'kt_content', 'kt_toolbar'].forEach(function (id) {
           var el = document.getElementById(id);
           if (el) el.style.backgroundColor = bg;
         });
       }
 
-      /* Run immediately (theme already set on <html> by inline script) */
       applyBg();
 
-      /* Watch for Metronic's theme-mode toggle changing data-bs-theme */
-      var observer = new MutationObserver(applyBg);
-      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+      new MutationObserver(applyBg).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-bs-theme']
+      });
     })();
   </script>
 
