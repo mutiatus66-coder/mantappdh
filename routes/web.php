@@ -46,6 +46,8 @@ Route::get('/user', [UserController::class, 'index'])
     ->name('user.index');
 Route::post('/user', [UserController::class, 'store'])
     ->name('user.store');
+Route::delete('/user/{id}', [UserController::class, 'destroy'])
+    ->name('user.destroy');
 
 Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
 Route::post('/penilai', [PenilaiController::class, 'store'])->name('penilai.store');
