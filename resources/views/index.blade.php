@@ -5,6 +5,7 @@
      Rumah Inovasi Magetan - Panel Admin
      Template: Metronic 8.2.3 (Keenthemes)
      Modified: Sidebar scrollable, active link fixed
+     Color: #3C678E / #6DADD8 blue scheme
      ============================================================ -->
 
 <head>
@@ -44,7 +45,7 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #001C3D 100%) !important;
+      background: linear-gradient(180deg, #3C678E 0%, #4a7ea8 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -53,8 +54,8 @@
 
     /* Logo area — never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #001C3D 100%) !important;
-      border-bottom: 1px solid #E3E3E3;
+      background: linear-gradient(135deg, #3C678E 0%, #2f5478 100%) !important;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -80,12 +81,12 @@
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: #2A2C2B transparent;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
     }
     #kt_aside_menu::-webkit-scrollbar        { width: 4px; }
     #kt_aside_menu::-webkit-scrollbar-track  { background: transparent; }
-    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: #2A2C2B; border-radius: 4px; }
-    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: #374140; }
+    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: rgba(255,255,255,0.2); border-radius: 4px; }
+    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.35); }
 
     /* Wrapper offset */
     #kt_wrapper {
@@ -104,7 +105,7 @@
 
     [data-bs-theme="light"] #kt_wrapper,
     [data-bs-theme="light"] #kt_content,
-    [data-bs-theme="light"] #kt_content_container { background-color: #F9FBFF !important; }
+    [data-bs-theme="light"] #kt_content_container { background-color: #CAC8CC !important; }
 
     [data-bs-theme="dark"] #kt_wrapper,
     [data-bs-theme="dark"] #kt_content,
@@ -116,8 +117,8 @@
        TOOLBAR — theme-aware, no border
        ============================================================ */
 
-    [data-bs-theme="light"] #kt_toolbar { background: #F9FBFF !important; border-bottom: none !important; }
-    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2333 !important; border-bottom: none !important; }
+    [data-bs-theme="light"] #kt_toolbar { background: #CAC8CC !important; border-bottom: none !important; }
+    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2B3E !important; border-bottom: none !important; }
 
     /* ============================================================
        SIDEBAR NAV — Menu Items
@@ -141,14 +142,14 @@
       overflow: hidden;
     }
     #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.12);
       color: #ffffff;
     }
     #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(201,168,76,0.20);
+      background: rgba(109,173,216,0.30);
       color: #ffffff;
       font-weight: 600;
-      border-left: 3px solid #E3E3E3;
+      border-left: 3px solid #6DADD8;
       padding-left: 19px;
     }
 
@@ -162,7 +163,7 @@
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: rgba(255,255,255,0.45);
+      color: rgba(109,173,216,0.75);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
@@ -171,7 +172,7 @@
     }
     #ri-sidebar-nav .ri-divider {
       height: 1px;
-      background: rgba(255,255,255,0.10);
+      background: rgba(109,173,216,0.25);
       margin: 8px 16px;
     }
     #ri-sidebar-nav .ri-icon {
@@ -192,37 +193,94 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+    [data-bs-theme="light"] {
+    --ri-card-bg:                  #ffffff;
+    --ri-text-primary:             #1f2937;
+    --ri-text-muted:               #6b7280;
+    --ri-border:                   #d1d5db;
+    --ri-input-bg:                 #ffffff;
+ 
+    /* Table */
+    --ri-table-head-bg:            #f3f4f6;
+    --ri-table-border-outer:       #d1d5db;
+    --ri-table-border-header:      #9ca3af;
+    --ri-table-border-row:         #e5e7eb;
+    --ri-table-row-bg:             #ffffff;
+    --ri-table-row-hover:          #fefce8;
+ 
+    /* Accordion */
+    --ri-accordion-head-bg:              #f8fafc;
+    --ri-accordion-head-active-bg:       #fefce8;
+    --ri-accordion-head-active-color:    #92400e;
+ 
+    /* Badge nonaktif */
+    --ri-badge-inactive-bg:        #f3f4f6;
+    --ri-badge-inactive-color:     #4b5563;
+}
+ 
+/* ── Dark Mode ── */
+[data-bs-theme="dark"] {
+    --ri-card-bg:                  #1e2a3a;
+    --ri-text-primary:             #e2e8f0;
+    --ri-text-muted:               #94a3b8;
+    --ri-border:                   #334155;
+    --ri-input-bg:                 #1e2a3a;
+ 
+    /* Table */
+    --ri-table-head-bg:            #162032;
+    --ri-table-border-outer:       #334155;
+    --ri-table-border-header:      #475569;
+    --ri-table-border-row:         #2d3f54;
+    --ri-table-row-bg:             #1e2a3a;
+    --ri-table-row-hover:          #253345;
+ 
+    /* Accordion */
+    --ri-accordion-head-bg:              #162032;
+    --ri-accordion-head-active-bg:       #1a2e44;
+    --ri-accordion-head-active-color:    #6DADD8;
+ 
+    /* Badge nonaktif */
+    --ri-badge-inactive-bg:        #2d3f54;
+    --ri-badge-inactive-color:     #94a3b8;
+}
 
     /* ============================================================
-       HEADER — Navy
+       HEADER — Steel-to-sky blue gradient
        ============================================================ */
 
-    #kt_header { background: linear-gradient(90deg, #001C3D 100%) !important; }
+    #kt_header { background: linear-gradient(90deg, #3C678E 0%, #6DADD8 100%) !important; }
 
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
-      color: #2A2C2B !important;
+      color: #ffffff !important;
       text-align: left !important;
       flex: 1;
       letter-spacing: 0.2px;
     }
-    #kt_header .btn-active-light-primary       { color: #001C3D !important; }
-    #kt_header .btn-active-light-primary:hover { background: rgba(201,168,76,0.12) !important; }
+    #kt_header .btn-active-light-primary       { color: #ffffff !important; }
+    #kt_header .btn-active-light-primary:hover { background: rgba(255,255,255,0.15) !important; }
+
+    /* Header icons override to white */
+    #kt_header .ki-outline,
+    #kt_header i[class*="ki-"] {
+      color: #ffffff !important;
+    }
 
     /* ============================================================
-       FOOTER — dark navy
+       FOOTER — deep steel blue
        ============================================================ */
 
     #kt_footer {
-      background: #001C3D !important;
-      border-top: 1px solid rgba(201,168,76,0.15) !important;
+      background: #3C678E !important;
+      border-top: 1px solid rgba(109,173,216,0.30) !important;
     }
     #kt_footer .text-gray-900,
     #kt_footer a.text-gray-800,
-    #kt_footer .menu-link              { color: rgba(201,168,76,0.6) !important; }
+    #kt_footer .menu-link              { color: rgba(255,255,255,0.65) !important; }
     #kt_footer a.text-hover-primary:hover,
-    #kt_footer .menu-link:hover        { color: #2A2C2B !important; }
+    #kt_footer .menu-link:hover        { color: #6DADD8 !important; }
+    #kt_footer .text-muted             { color: rgba(255,255,255,0.45) !important; }
   </style>
 </head>
 

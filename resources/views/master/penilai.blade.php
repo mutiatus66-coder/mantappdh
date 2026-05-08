@@ -2,13 +2,13 @@
 
 @section('content')
 <style>
-    /* Style lokal untuk tabel penilai - tidak tergantung Tailwind */
     .penilai-container {
-        background: white;
+        background: var(--ri-card-bg);
         border-radius: 12px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         padding: 20px;
         margin: 20px;
+        transition: background 0.2s, color 0.2s;
     }
     .penilai-header {
         display: flex;
@@ -22,11 +22,11 @@
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
-        color: #1f2937;
+        color: var(--ri-text-primary);
     }
     .penilai-title p {
         margin: 0;
-        color: #6b7280;
+        color: var(--ri-text-muted);
         font-size: 0.875rem;
     }
     .btn-tambah {
@@ -61,57 +61,70 @@
     }
     .search-box input {
         padding: 6px 12px 6px 32px;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--ri-border);
         border-radius: 8px;
         font-size: 0.875rem;
         width: 240px;
+        background: var(--ri-input-bg);
+        color: var(--ri-text-primary);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .penilai-table {
         width: 100%;
         border-collapse: collapse;
-        border: 1px solid #e5e7eb;
+        border: 2px solid var(--ri-table-border-outer);
         border-radius: 8px;
         overflow: hidden;
     }
     .penilai-table th {
-        background: #f9fafb;
+        background: var(--ri-table-head-bg);
         padding: 12px;
         text-align: left;
         font-weight: 600;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #4b5563;
-        border-bottom: 1px solid #e5e7eb;
+        color: var(--ri-text-muted);
+        border-bottom: 2px solid var(--ri-table-border-header);
+        transition: background 0.2s, color 0.2s;
     }
     .penilai-table td {
         padding: 12px;
-        border-bottom: 1px solid #f0f0f0;
-        color: #1f2937;
+        border-bottom: 1.5px solid var(--ri-table-border-row);
+        color: var(--ri-text-primary);
         font-size: 0.875rem;
+        background: var(--ri-table-row-bg);
+        transition: background 0.2s, color 0.2s;
     }
-    .penilai-table tr:hover {
-        background: #fefce8;
+    .penilai-table tr:hover td {
+        background: var(--ri-table-row-hover);
+    }
+    .penilai-table tr:last-child td {
+        border-bottom: none;
     }
     .btn-hapus {
-        background: none;
+        background: #A32D2D;
+        color: #ffffff !important;
         border: none;
-        color: #ef4444;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 6px;
         cursor: pointer;
-        font-weight: 500;
+        font-size: 0.8rem;
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: 0.875rem;
+        transition: background 0.15s;
     }
     .btn-hapus:hover {
-        color: #b91c1c;
-        text-decoration: underline;
+        background: #8b2424;
+        color: #ffffff !important;
     }
     .empty-row {
         text-align: center;
         padding: 30px;
-        color: #9ca3af;
+        color: var(--ri-text-muted);
+        background: var(--ri-table-row-bg);
     }
     @media (max-width: 640px) {
         .penilai-container { margin: 10px; padding: 12px; }
@@ -130,7 +143,7 @@
     </div>
 
     <div class="penilai-stats">
-        <div class="total-badge">📋 Total Penilai: <span id="totalPenilai">{{ count($penilai) }}</span></div>
+        <div class="total-badge">Total Penilai: <span id="totalPenilai">{{ count($penilai) }}</span></div>
         <div class="search-box">
             <input type="text" id="searchPenilai" placeholder="Cari nama atau email...">
         </div>
@@ -154,14 +167,14 @@
                     <td>{{ $p['email'] }}</td>
                     <td style="text-align: center">
                         <button class="btn-hapus" data-id="{{ $p['id'] }}" data-nama="{{ $p['nama'] }}">
-                            🗑️ Hapus
+                            Hapus
                         </button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        <div id="emptySearchMessage" style="display: none; text-align: center; padding: 20px; color: #9ca3af;">
+        <div id="emptySearchMessage" style="display: none; text-align: center; padding: 20px; color: var(--ri-text-muted);">
             Tidak ada data yang cocok
         </div>
     </div>
@@ -169,7 +182,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Fitur search
         const searchInput = document.getElementById('searchPenilai');
         const rows = document.querySelectorAll('#tabelPenilaiBody tr');
         const emptyMsg = document.getElementById('emptySearchMessage');
@@ -192,13 +204,11 @@
             totalSpan.innerText = visibleCount;
         });
 
-        // Modal tambah (sederhana, pakai confirm dulu)
         const btnTambah = document.getElementById('btnTambahPenilai');
         btnTambah.addEventListener('click', function() {
             alert('Fitur tambah belum dihubungkan ke backend.\nSilakan implementasikan form modal.');
         });
 
-        // Hapus (konfirmasi sederhana)
         const hapusBtns = document.querySelectorAll('.btn-hapus');
         hapusBtns.forEach(btn => {
             btn.addEventListener('click', function() {
