@@ -44,7 +44,7 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #0F1F45 0%, #1A2E5A 100%) !important;
+      background: linear-gradient(180deg, #001C3D 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -53,8 +53,8 @@
 
     /* Logo area — gold gradient background, never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%) !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.40);
+      background: linear-gradient(135deg,#001C3D 100%) !important;
+      border-bottom: 1px solid #E3E3E3;
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -95,7 +95,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: rgba(201, 168, 76, 0.30) transparent;
+      scrollbar-color: #2A2C2B transparent;
     }
 
     #kt_aside_menu::-webkit-scrollbar {
@@ -107,12 +107,12 @@
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb {
-      background-color: rgba(201, 168, 76, 0.30);
+      background-color: #2A2C2B;
       border-radius: 4px;
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(201, 168, 76, 0.55);
+      background-color: #374140;
     }
 
     /* Wrapper offset for sidebar width */
@@ -121,19 +121,47 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #0A1530 !important;
-    }
-
-    /* Content area pushes footer to bottom */
-    #kt_content {
-      flex: 1 1 auto;
-      background-color: #0A1530 !important;
     }
 
     @media (max-width: 991.98px) {
       #kt_wrapper {
         padding-left: 0 !important;
       }
+    }
+
+    /* ============================================================
+       CONTENT AREA — Theme-aware background
+       ============================================================ */
+
+    [data-bs-theme="light"] #kt_wrapper,
+    [data-bs-theme="light"] #kt_content,
+    [data-bs-theme="light"] #kt_content_container {
+      background-color: #F9FBFF !important;
+    }
+
+    [data-bs-theme="dark"] #kt_wrapper,
+    [data-bs-theme="dark"] #kt_content,
+    [data-bs-theme="dark"] #kt_content_container {
+      background-color: #1C2333 !important;
+    }
+
+    /* Content area pushes footer to bottom */
+    #kt_content {
+      flex: 1 1 auto;
+    }
+
+    /* ============================================================
+       TOOLBAR — remove border, theme-aware background
+       ============================================================ */
+
+    [data-bs-theme="light"] #kt_toolbar {
+      background: #F9FBFF !important;
+      border-bottom: none !important;
+    }
+
+    [data-bs-theme="dark"] #kt_toolbar {
+      background: #1C2333 !important;
+      border-bottom: none !important;
     }
 
     /* ============================================================
@@ -169,7 +197,7 @@
       background: rgba(201, 168, 76, 0.20);
       color: #ffffff;
       font-weight: 600;
-      border-left: 3px solid #C9A84C;
+      border-left: 3px solid #E3E3E3;
       padding-left: 19px;
     }
 
@@ -223,15 +251,14 @@
        ============================================================ */
 
     #kt_header {
-      background: linear-gradient(90deg, #0F1F45 0%, #1A2E5A 100%) !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.35) !important;
+      background: linear-gradient(90deg, #001C3D 100%) !important;
     }
 
     /* Welcome text — bigger, left-aligned, gold */
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
-      color: #E8C96B !important;
+      color: #2A2C2B !important;
       text-align: left !important;
       flex: 1;
       letter-spacing: 0.2px;
@@ -239,19 +266,10 @@
 
     /* Theme toggle & user menu icons on dark header */
     #kt_header .btn-active-light-primary {
-      color: #C9A84C !important;
+      color: #001C3D !important;
     }
     #kt_header .btn-active-light-primary:hover {
       background: rgba(201, 168, 76, 0.12) !important;
-    }
-
-    /* ============================================================
-       TOOLBAR — dark navy
-       ============================================================ */
-
-    #kt_toolbar {
-      background: rgba(10, 21, 48, 0.95) !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.15) !important;
     }
 
     /* ============================================================
@@ -259,7 +277,7 @@
        ============================================================ */
 
     #kt_footer {
-      background: #0F1F45 !important;
+      background: #001C3D !important;
       border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
     }
 
@@ -271,7 +289,7 @@
 
     #kt_footer a.text-hover-primary:hover,
     #kt_footer .menu-link:hover {
-      color: #E8C96B !important;
+      color: #2A2C2B !important;
     }
   </style>
 </head>
@@ -314,7 +332,7 @@
         <!-- Logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
-            <img alt="Logo" src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}" class="h-90px logo" />
+            <img alt="Logo" src="{{ asset('/img/bulb.png') }}" class="h-60px logo" />
             <div class="aside-logo-text">
               <div class="aside-logo-title">Rumah Inovasi</div>
               <div class="aside-logo-subtitle">Magetan</div>
@@ -794,7 +812,9 @@
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/create-campaign.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
+
   <script>
+    /* ── Active sidebar link ── */
     document.addEventListener('DOMContentLoaded', function() {
       var currentPath = location.pathname.replace(/\/+$|^\s+|\s+$/g, '') || '/';
       document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function(link) {
@@ -807,7 +827,30 @@
         }
       });
     });
+
+    /* ── Sync content background when theme changes ── */
+    (function () {
+      var lightBg = '#F9FBFF';
+      var darkBg  = '#1C2333';
+
+      function applyBg() {
+        var theme   = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        var bg      = theme === 'dark' ? darkBg : lightBg;
+        ['kt_wrapper', 'kt_content', 'kt_toolbar'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.backgroundColor = bg;
+        });
+      }
+
+      /* Run immediately (theme already set on <html> by inline script) */
+      applyBg();
+
+      /* Watch for Metronic's theme-mode toggle changing data-bs-theme */
+      var observer = new MutationObserver(applyBg);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    })();
   </script>
+
   @stack('scripts')
 </body>
 </html>

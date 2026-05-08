@@ -294,67 +294,78 @@
 @push('styles')
 <style>
 /* ══════════════════════════════════════════════════
-   BIDANG PAGE — Full theme-aware styles
+   BIDANG PAGE — Aligned with Sub Event color scheme
 ══════════════════════════════════════════════════ */
 
-/* ── Page title — always visible regardless of theme ── */
-.bidang-page-title {
-    color: #F5F0E8 !important;   /* always warm white, readable on dark page bg */
-    text-shadow: 0 1px 4px rgba(0,0,0,.35);
+/* ── Page title ── */
+[data-bs-theme="light"] .bidang-page-title {
+    color: #2A2C2B !important;
+    text-shadow: none;
+    font-size: 1.75rem !important;
 }
-.bidang-page-subtitle {
-    color: rgba(201,168,76,.75) !important;   /* always gold-tinted */
+[data-bs-theme="dark"] .bidang-page-title {
+    color: #F5F0E8 !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,.35);
+    font-size: 1.75rem !important;
+}
+[data-bs-theme="light"] .bidang-page-subtitle {
+    color: rgba(42,44,43,.55) !important;
+    font-size: 1rem !important;
+}
+[data-bs-theme="dark"] .bidang-page-subtitle {
+    color: rgba(201,168,76,.75) !important;
+    font-size: 1rem !important;
 }
 
 /* ── Accordion shell ── */
 [data-bs-theme="light"] .ri-accordion-item {
-    background: #FDFAF3;
-    border: 1px solid rgba(201,168,76,.28) !important;
-    border-radius: .75rem !important;
+    background: #E3E3E3;
+    border: none !important;
+    border-radius: 14px !important;
     overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.10);
 }
 [data-bs-theme="dark"] .ri-accordion-item {
-    background: #132146;
-    border: 1px solid rgba(201,168,76,.20) !important;
-    border-radius: .75rem !important;
+    background: #374140;
+    border: none !important;
+    border-radius: 14px !important;
     overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.18);
 }
 
-/* ── Accordion button ── */
+/* ── Accordion button (mirrors .card-header) ── */
 [data-bs-theme="light"] .ri-accordion-btn {
-    background: #FDFAF3 !important;
-    color: #2C2C2C !important;
+    background: #E5DFC5 !important;
+    color: #2A2C2B !important;
+    border-bottom: 1px solid rgba(201,168,76,.25) !important;
     box-shadow: none !important;
 }
-[data-bs-theme="light"] .ri-accordion-btn:not(.collapsed) {
-    background: rgba(201,168,76,.10) !important;
-    border-bottom: 1px solid rgba(201,168,76,.28);
+[data-bs-theme="light"] .ri-accordion-btn.collapsed {
+    border-bottom: none !important;
 }
 [data-bs-theme="dark"] .ri-accordion-btn {
-    background: #132146 !important;
-    color: #F5F0E8 !important;
+    background: #2A2C2B !important;
+    color: #E3E3E3 !important;
+    border-bottom: 1px solid rgba(201,168,76,.20) !important;
     box-shadow: none !important;
 }
-[data-bs-theme="dark"] .ri-accordion-btn:not(.collapsed) {
-    background: rgba(201,168,76,.08) !important;
-    border-bottom: 1px solid rgba(201,168,76,.20);
+[data-bs-theme="dark"] .ri-accordion-btn.collapsed {
+    border-bottom: none !important;
 }
-.ri-accordion-btn::after {
-    filter: invert(0);
-}
-[data-bs-theme="dark"] .ri-accordion-btn::after {
-    filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg);
-}
+
+/* chevron icon tint */
+[data-bs-theme="light"] .ri-accordion-btn::after { filter: none; }
+[data-bs-theme="dark"]  .ri-accordion-btn::after { filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg); }
 
 /* ── Sub Event label inside button ── */
-[data-bs-theme="light"] .ri-acc-label { color: rgba(122,90,30,.60); font-weight: 400; }
-[data-bs-theme="dark"]  .ri-acc-label { color: rgba(201,168,76,.60); font-weight: 400; }
-[data-bs-theme="light"] .ri-acc-value { color: #7A5A1E; font-weight: 600; }
-[data-bs-theme="dark"]  .ri-acc-value { color: #E8C96B; font-weight: 600; }
+[data-bs-theme="light"] .ri-acc-label { color: rgba(42,44,43,.50); font-weight: 400; }
+[data-bs-theme="dark"]  .ri-acc-label { color: rgba(201,168,76,.55); font-weight: 400; }
+[data-bs-theme="light"] .ri-acc-value { color: #2A2C2B; font-weight: 600; }
+[data-bs-theme="dark"]  .ri-acc-value { color: #E3E3E3; font-weight: 600; }
 
-/* ── Accordion body ── */
-[data-bs-theme="light"] .accordion-body { background: #FDFAF3; }
-[data-bs-theme="dark"]  .accordion-body { background: #0F1F45; }
+/* ── Accordion body (mirrors .card-body) ── */
+[data-bs-theme="light"] .accordion-body { background: #E3E3E3; }
+[data-bs-theme="dark"]  .accordion-body { background: #374140; }
 
 /* ── Status badges ── */
 .badge-aktif {
@@ -388,57 +399,57 @@
     border: 1px solid rgba(255,255,255,.15);
 }
 
-/* ── Tambah Bidang button ── */
+/* ── Tambah Bidang button — matches .btn-tambah-se ── */
 .btn-tambah-bidang {
-    background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%);
-    color: #0D1B3E !important;
+    background: linear-gradient(135deg, #2B5987 100%);
+    color: #E3E3E3 !important;
     font-weight: 700;
     border: none;
-    border-radius: .4rem;
+    border-radius: .5rem;
     padding: .45rem 1.1rem;
     font-size: .875rem;
-    box-shadow: 0 2px 8px rgba(201,168,76,.28);
+    box-shadow: 0 3px 12px rgba(43,89,135,.28);
     transition: opacity .18s, box-shadow .18s;
 }
 .btn-tambah-bidang:hover {
     opacity: .88;
-    box-shadow: 0 4px 14px rgba(201,168,76,.40);
-    color: #0D1B3E !important;
+    box-shadow: 0 5px 18px rgba(43,89,135,.40);
+    color: #2B5987 !important;
 }
 
-/* ── Gold gradient Edit button ── */
+/* ── Edit button — matches .btn-gold from sub-event ── */
 .btn-gold {
-    background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%);
-    color: #0D1B3E !important;
+    background: linear-gradient(135deg, #2B5987 100%);
+    color: #E3E3E3 !important;
     font-weight: 700;
     border: none;
-    border-radius: .35rem;
-    padding: .32rem .75rem;
+    border-radius: .375rem;
+    padding: .35rem .85rem;
     font-size: .8rem;
     letter-spacing: .02em;
-    box-shadow: 0 2px 8px rgba(201,168,76,.28);
+    box-shadow: 0 2px 8px rgba(43,89,135,.28);
     transition: opacity .18s, box-shadow .18s;
 }
 .btn-gold:hover {
     opacity: .88;
-    box-shadow: 0 4px 14px rgba(201,168,76,.40);
+    box-shadow: 0 4px 14px rgba(43,89,135,.40);
     color: #0D1B3E !important;
 }
 
 /* ── Hapus button ── */
 .btn-hapus {
-    border-radius: .35rem;
-    padding: .32rem .75rem;
+    border-radius: .375rem;
+    padding: .35rem .85rem;
     font-size: .8rem;
     font-weight: 600;
 }
 
-/* ── Table ── */
+/* ── Table — mirrors .se-table ── */
 .ri-table { border-collapse: separate; border-spacing: 0; }
 
 [data-bs-theme="light"] .ri-table thead th {
     background: rgba(201,168,76,.10);
-    color: #8A6A20;
+    color: #2A2C2B;
     font-size: .78rem;
     text-transform: uppercase;
     letter-spacing: .06em;
@@ -447,7 +458,7 @@
 }
 [data-bs-theme="dark"] .ri-table thead th {
     background: rgba(201,168,76,.08);
-    color: rgba(201,168,76,.75);
+    color: #E3E3E3;
     font-size: .78rem;
     text-transform: uppercase;
     letter-spacing: .06em;
@@ -456,7 +467,7 @@
 }
 
 [data-bs-theme="light"] .ri-table tbody td {
-    color: #2C2C2C;
+    color: #374140;
     border-bottom: 1px solid rgba(201,168,76,.12);
     background: transparent;
     padding: 10px 12px;
@@ -481,10 +492,10 @@
 /* ── Modal content ── */
 [data-bs-theme="light"] .modal-content {
     background: #FDFAF3;
-    border: 1px solid rgba(201,168,76,.20);
+    border: none;
 }
 [data-bs-theme="dark"] .modal-content {
-    background: #132146;
+    background: #E3E3E3;
     border: 1px solid rgba(201,168,76,.25);
 }
 
@@ -499,30 +510,30 @@
 }
 
 /* modal title */
-[data-bs-theme="light"] .bidang-modal-title { color: #7A5A1E; }
+[data-bs-theme="light"] .bidang-modal-title { color: #2A2C2B; }
 [data-bs-theme="dark"]  .bidang-modal-title { color: #E8C96B; }
 
 /* modal close icon */
 [data-bs-theme="light"] .btn-active-light-primary       { color: #666; }
-[data-bs-theme="light"] .btn-active-light-primary:hover { background: rgba(201,168,76,.12); color: #7A5A1E; }
+[data-bs-theme="light"] .btn-active-light-primary:hover { background: rgba(201,168,76,.12); color: #2A2C2B; }
 [data-bs-theme="dark"]  .btn-active-light-primary       { color: rgba(245,240,232,.70); }
 [data-bs-theme="dark"]  .btn-active-light-primary:hover { background: rgba(201,168,76,.12); color: #E8C96B; }
 
 /* form labels */
-[data-bs-theme="light"] .ri-label { color: #4A4A4A; }
+[data-bs-theme="light"] .ri-label { color: #374140; }
 [data-bs-theme="dark"]  .ri-label { color: rgba(245,240,232,.70); }
 
 /* form inputs */
 [data-bs-theme="light"] .ri-input {
     background: #fff !important;
     border: 1px solid rgba(201,168,76,.35) !important;
-    color: #2C2C2C !important;
+    color: #2A2C2B !important;
     border-radius: .375rem;
 }
 [data-bs-theme="light"] .ri-input:focus {
     border-color: rgba(201,168,76,.65) !important;
     box-shadow: 0 0 0 3px rgba(201,168,76,.12) !important;
-    color: #2C2C2C !important;
+    color: #2A2C2B !important;
 }
 [data-bs-theme="dark"] .ri-input {
     background: rgba(10,21,48,.80) !important;
@@ -536,9 +547,9 @@
     box-shadow: 0 0 0 3px rgba(201,168,76,.12) !important;
     color: #F5F0E8 !important;
 }
-[data-bs-theme="dark"] .ri-input option   { background: #132146; color: #F5F0E8; }
-[data-bs-theme="dark"] .ri-input::placeholder { color: rgba(245,240,232,.30) !important; }
-[data-bs-theme="light"] .ri-input::placeholder { color: rgba(0,0,0,.30) !important; }
+[data-bs-theme="dark"] .ri-input option         { background: #132146; color: #F5F0E8; }
+[data-bs-theme="dark"] .ri-input::placeholder    { color: rgba(245,240,232,.30) !important; }
+[data-bs-theme="light"] .ri-input::placeholder   { color: rgba(0,0,0,.30) !important; }
 
 /* readonly input */
 [data-bs-theme="light"] .ri-input-readonly {
@@ -554,17 +565,21 @@
     border-radius: .375rem;
 }
 
-/* modal buttons */
+/* modal save button */
 .btn-modal-save {
-    background: linear-gradient(135deg,#C9A84C,#A0782A);
-    color: #0D1B3E !important;
+    background: linear-gradient(135deg, #2B5987 100%);
+    color: #E3E3E3 !important;
     font-weight: 700;
     border: none;
     border-radius: .375rem;
     transition: opacity .18s;
 }
-.btn-modal-save:hover { opacity: .88; color: #0D1B3E !important; }
+.btn-modal-save:hover {
+    opacity: .88;
+    color: #E3E3E3 !important;
+}
 
+/* modal cancel button */
 [data-bs-theme="light"] .btn-modal-cancel {
     background: rgba(0,0,0,.05);
     color: #555;
@@ -583,7 +598,7 @@
 [data-bs-theme="dark"]  .btn-modal-cancel:hover { background: rgba(255,255,255,.12); color: #F5F0E8; }
 
 /* delete confirm body text */
-[data-bs-theme="light"] .hapus-body-text { color: #3A3A3A; }
+[data-bs-theme="light"] .hapus-body-text { color: #374140; }
 [data-bs-theme="dark"]  .hapus-body-text { color: rgba(245,240,232,.80); }
 </style>
 @endpush
