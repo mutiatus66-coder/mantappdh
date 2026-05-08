@@ -121,19 +121,47 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color:  #F9FBFF !important;
-    }
-
-    /* Content area pushes footer to bottom */
-    #kt_content {
-      flex: 1 1 auto;
-      background-color: #F9FBFF !important;
     }
 
     @media (max-width: 991.98px) {
       #kt_wrapper {
         padding-left: 0 !important;
       }
+    }
+
+    /* ============================================================
+       CONTENT AREA — Theme-aware background
+       ============================================================ */
+
+    [data-bs-theme="light"] #kt_wrapper,
+    [data-bs-theme="light"] #kt_content,
+    [data-bs-theme="light"] #kt_content_container {
+      background-color: #F9FBFF !important;
+    }
+
+    [data-bs-theme="dark"] #kt_wrapper,
+    [data-bs-theme="dark"] #kt_content,
+    [data-bs-theme="dark"] #kt_content_container {
+      background-color: #1C2333 !important;
+    }
+
+    /* Content area pushes footer to bottom */
+    #kt_content {
+      flex: 1 1 auto;
+    }
+
+    /* ============================================================
+       TOOLBAR — remove border, theme-aware background
+       ============================================================ */
+
+    [data-bs-theme="light"] #kt_toolbar {
+      background: #F9FBFF !important;
+      border-bottom: none !important;
+    }
+
+    [data-bs-theme="dark"] #kt_toolbar {
+      background: #1C2333 !important;
+      border-bottom: none !important;
     }
 
     /* ============================================================
@@ -242,15 +270,6 @@
     }
     #kt_header .btn-active-light-primary:hover {
       background: rgba(201, 168, 76, 0.12) !important;
-    }
-
-    /* ============================================================
-       TOOLBAR — dark navy
-       ============================================================ */
-
-    #kt_toolbar {
-      background: #F9FBFF !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.15) !important;
     }
 
     /* ============================================================
@@ -792,7 +811,9 @@
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/create-campaign.js"></script>
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
+
   <script>
+    /* ── Active sidebar link ── */
     document.addEventListener('DOMContentLoaded', function() {
       var currentPath = location.pathname.replace(/\/+$|^\s+|\s+$/g, '') || '/';
       document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function(link) {
@@ -805,7 +826,30 @@
         }
       });
     });
+
+    /* ── Sync content background when theme changes ── */
+    (function () {
+      var lightBg = '#F9FBFF';
+      var darkBg  = '#1C2333';
+
+      function applyBg() {
+        var theme   = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        var bg      = theme === 'dark' ? darkBg : lightBg;
+        ['kt_wrapper', 'kt_content', 'kt_toolbar'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.backgroundColor = bg;
+        });
+      }
+
+      /* Run immediately (theme already set on <html> by inline script) */
+      applyBg();
+
+      /* Watch for Metronic's theme-mode toggle changing data-bs-theme */
+      var observer = new MutationObserver(applyBg);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    })();
   </script>
+
   @stack('scripts')
 </body>
 </html>
