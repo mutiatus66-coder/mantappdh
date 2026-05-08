@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Bidang;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\PenilaiController;
 
 Route::get('/bidang', [Admin::class, 'bidang'])
     ->name('admin.bidang.index');
@@ -47,6 +49,12 @@ Route::post('/user', [UserController::class, 'store'])
 Route::delete('/user/{id}', [UserController::class, 'destroy'])
     ->name('user.destroy');
 
+Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
+Route::post('/penilai', [PenilaiController::class, 'store'])->name('penilai.store');
+Route::delete('/penilai/{id}', [PenilaiController::class, 'destroy'])->name('penilai.destroy');
+Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+
+
 Route::get('/', function () {
     return view('dashboard');
 });
@@ -76,9 +84,7 @@ Route::get('/event', function () {
 Route::get('/user', function () {
     return view('master.user');
 });
-Route::get('/penilai', function () {
-    return view('master.penilai');
-});
-Route::get('/pengumuman', function () {
-    return view('master.pengumuman');
-});
+Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
+
+Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+
