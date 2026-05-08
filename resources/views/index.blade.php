@@ -5,7 +5,6 @@
      Rumah Inovasi Magetan - Panel Admin
      Template: Metronic 8.2.3 (Keenthemes)
      Modified: Sidebar scrollable, active link fixed
-     Color: #3C678E / #6DADD8 blue scheme
      ============================================================ -->
 
 <head>
@@ -45,7 +44,7 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #3C678E 0%, #4a7ea8 100%) !important;
+      background: linear-gradient(180deg, #001C3D 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -54,8 +53,8 @@
 
     /* Logo area — never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #3C678E 0%, #2f5478 100%) !important;
-      border-bottom: 1px solid rgba(255,255,255,0.15);
+      background: linear-gradient(135deg, #001C3D 100%) !important;
+      border-bottom: 1px solid #E3E3E3;
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -81,12 +80,12 @@
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.2) transparent;
+      scrollbar-color: #2A2C2B transparent;
     }
     #kt_aside_menu::-webkit-scrollbar        { width: 4px; }
     #kt_aside_menu::-webkit-scrollbar-track  { background: transparent; }
-    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: rgba(255,255,255,0.2); border-radius: 4px; }
-    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.35); }
+    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: #2A2C2B; border-radius: 4px; }
+    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: #374140; }
 
     /* Wrapper offset */
     #kt_wrapper {
@@ -142,14 +141,14 @@
       overflow: hidden;
     }
     #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
       color: #ffffff;
     }
     #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(109,173,216,0.30);
+      background: rgba(201,168,76,0.20);
       color: #ffffff;
       font-weight: 600;
-      border-left: 3px solid #6DADD8;
+      border-left: 3px solid #E3E3E3;
       padding-left: 19px;
     }
 
@@ -163,7 +162,7 @@
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: rgba(109,173,216,0.75);
+      color: rgba(255,255,255,0.45);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
@@ -172,7 +171,7 @@
     }
     #ri-sidebar-nav .ri-divider {
       height: 1px;
-      background: rgba(109,173,216,0.25);
+      background: rgba(255,255,255,0.10);
       margin: 8px 16px;
     }
     #ri-sidebar-nav .ri-icon {
@@ -195,93 +194,35 @@
     }
 
     /* ============================================================
-       HEADER — Steel-to-sky blue gradient
+       HEADER — Navy
        ============================================================ */
 
-    #kt_header { background: linear-gradient(90deg, #3C678E 0%, #6DADD8 100%) !important; }
+    #kt_header { background: linear-gradient(90deg, #001C3D 100%) !important; }
 
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
-      color: #ffffff !important;
+      color: #2A2C2B !important;
       text-align: left !important;
       flex: 1;
       letter-spacing: 0.2px;
     }
-    #kt_header .btn-active-light-primary       { color: #ffffff !important; }
-    #kt_header .btn-active-light-primary:hover { background: rgba(255,255,255,0.15) !important; }
-
-    /* Header icons override to white */
-    #kt_header .ki-outline,
-    #kt_header i[class*="ki-"] {
-      color: #ffffff !important;
-    }
+    #kt_header .btn-active-light-primary       { color: #001C3D !important; }
+    #kt_header .btn-active-light-primary:hover { background: rgba(201,168,76,0.12) !important; }
 
     /* ============================================================
-       FOOTER — deep steel blue
+       FOOTER — dark navy
        ============================================================ */
 
     #kt_footer {
-      background: #3C678E !important;
-      border-top: 1px solid rgba(109,173,216,0.30) !important;
+      background: #001C3D !important;
+      border-top: 1px solid rgba(201,168,76,0.15) !important;
     }
     #kt_footer .text-gray-900,
     #kt_footer a.text-gray-800,
-    #kt_footer .menu-link              { color: rgba(255,255,255,0.65) !important; }
+    #kt_footer .menu-link              { color: rgba(201,168,76,0.6) !important; }
     #kt_footer a.text-hover-primary:hover,
-    #kt_footer .menu-link:hover        { color: #6DADD8 !important; }
-    #kt_footer .text-muted             { color: rgba(255,255,255,0.45) !important; }
-    [data-bs-theme="light"] {
-    --ri-card-bg:                  #ffffff;
-    --ri-text-primary:             #1f2937;
-    --ri-text-muted:               #6b7280;
-    --ri-border:                   #d1d5db;
-    --ri-input-bg:                 #ffffff;
- 
-    /* Table */
-    --ri-table-head-bg:            #f3f4f6;
-    --ri-table-border-outer:       #d1d5db;
-    --ri-table-border-header:      #9ca3af;
-    --ri-table-border-row:         #e5e7eb;
-    --ri-table-row-bg:             #ffffff;
-    --ri-table-row-hover:          #fefce8;
- 
-    /* Accordion */
-    --ri-accordion-head-bg:              #f8fafc;
-    --ri-accordion-head-active-bg:       #fefce8;
-    --ri-accordion-head-active-color:    #92400e;
- 
-    /* Badge nonaktif */
-    --ri-badge-inactive-bg:        #f3f4f6;
-    --ri-badge-inactive-color:     #4b5563;
-}
- 
-/* ── Dark Mode ── */
-[data-bs-theme="dark"] {
-    --ri-card-bg:                  #1e2a3a;
-    --ri-text-primary:             #e2e8f0;
-    --ri-text-muted:               #94a3b8;
-    --ri-border:                   #334155;
-    --ri-input-bg:                 #1e2a3a;
- 
-    /* Table */
-    --ri-table-head-bg:            #162032;
-    --ri-table-border-outer:       #334155;
-    --ri-table-border-header:      #475569;
-    --ri-table-border-row:         #2d3f54;
-    --ri-table-row-bg:             #1e2a3a;
-    --ri-table-row-hover:          #253345;
- 
-    /* Accordion */
-    --ri-accordion-head-bg:              #162032;
-    --ri-accordion-head-active-bg:       #1a2e44;
-    --ri-accordion-head-active-color:    #6DADD8;
- 
-    /* Badge nonaktif */
-    --ri-badge-inactive-bg:        #2d3f54;
-    --ri-badge-inactive-color:     #94a3b8;
-}
-
+    #kt_footer .menu-link:hover        { color: #2A2C2B !important; }
   </style>
 </head>
 
@@ -335,6 +276,8 @@
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
+            <!-- Dashboard -->
+            <a class="ri-menu-item" href="/index">
             <!-- Dashboard — NO hardcoded active, JS handles it -->
             <a class="ri-menu-item" href="/">
               <span class="ri-icon">
