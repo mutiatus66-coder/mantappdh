@@ -345,7 +345,7 @@
           <nav id="ri-sidebar-nav">
 
             <!-- Dashboard -->
-            <a class="ri-menu-item" href="/">
+            <a class="ri-menu-item" href="/index">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="1"/>
