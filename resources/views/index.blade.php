@@ -276,13 +276,10 @@
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
-<<<<<<< HEAD
             <!-- Dashboard -->
             <a class="ri-menu-item" href="/index">
-=======
             <!-- Dashboard — NO hardcoded active, JS handles it -->
             <a class="ri-menu-item" href="/">
->>>>>>> e985a58e4741518d09921e0b20c8bc20ebaff51f
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="1"/>
