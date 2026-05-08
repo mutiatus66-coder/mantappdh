@@ -44,7 +44,7 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #0F1F45 0%, #1A2E5A 100%) !important;
+      background: linear-gradient(180deg, #21487F 100%) !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -53,8 +53,8 @@
 
     /* Logo area — gold gradient background, never scrolls */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #C9A84C 0%, #E8C96B 50%, #A0782A 100%) !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.40);
+      background: linear-gradient(135deg,#21487F 100%) !important;
+      border-bottom: 1px solid #E3E3E3;
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -95,7 +95,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: rgba(201, 168, 76, 0.30) transparent;
+      scrollbar-color: #2A2C2B transparent;
     }
 
     #kt_aside_menu::-webkit-scrollbar {
@@ -107,12 +107,12 @@
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb {
-      background-color: rgba(201, 168, 76, 0.30);
+      background-color: #2A2C2B;
       border-radius: 4px;
     }
 
     #kt_aside_menu::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(201, 168, 76, 0.55);
+      background-color: #374140;
     }
 
     /* Wrapper offset for sidebar width */
@@ -121,13 +121,13 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #0A1530 !important;
+      background-color:  #F9FBFF !important;
     }
 
     /* Content area pushes footer to bottom */
     #kt_content {
       flex: 1 1 auto;
-      background-color: #0A1530 !important;
+      background-color: #F9FBFF !important;
     }
 
     @media (max-width: 991.98px) {
@@ -169,7 +169,7 @@
       background: rgba(201, 168, 76, 0.20);
       color: #ffffff;
       font-weight: 600;
-      border-left: 3px solid #C9A84C;
+      border-left: 3px solid #E3E3E3;
       padding-left: 19px;
     }
 
@@ -223,15 +223,14 @@
        ============================================================ */
 
     #kt_header {
-      background: linear-gradient(90deg, #0F1F45 0%, #1A2E5A 100%) !important;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.35) !important;
+      background: linear-gradient(90deg, #001C3D 100%) !important;
     }
 
     /* Welcome text — bigger, left-aligned, gold */
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
-      color: #E8C96B !important;
+      color: #2A2C2B !important;
       text-align: left !important;
       flex: 1;
       letter-spacing: 0.2px;
@@ -239,7 +238,7 @@
 
     /* Theme toggle & user menu icons on dark header */
     #kt_header .btn-active-light-primary {
-      color: #C9A84C !important;
+      color: #2B5987 !important;
     }
     #kt_header .btn-active-light-primary:hover {
       background: rgba(201, 168, 76, 0.12) !important;
@@ -250,7 +249,7 @@
        ============================================================ */
 
     #kt_toolbar {
-      background: rgba(10, 21, 48, 0.95) !important;
+      background: #F9FBFF !important;
       border-bottom: 1px solid rgba(201, 168, 76, 0.15) !important;
     }
 
@@ -259,7 +258,7 @@
        ============================================================ */
 
     #kt_footer {
-      background: #0F1F45 !important;
+      background: #001C3D !important;
       border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
     }
 
@@ -271,7 +270,7 @@
 
     #kt_footer a.text-hover-primary:hover,
     #kt_footer .menu-link:hover {
-      color: #E8C96B !important;
+      color: #2A2C2B !important;
     }
   </style>
 </head>
