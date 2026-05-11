@@ -139,7 +139,7 @@
             <p>Kelola data penilai</p>
         </div>
         <button class="btn-tambah" id="btnTambahPenilai">
-            <i class="bi bi-plus-lg me-1"></i> Tambah Penilai
+            <i></i> Tambah Penilai
         </button>
     </div>
 

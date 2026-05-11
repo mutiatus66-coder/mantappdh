@@ -60,7 +60,7 @@
                         <button class="btn btn-tambah-bidang"
                                 data-sub-event-id="{{ $seId }}"
                                 data-sub-event-nama="{{ $se['sub_event'] }}">
-                            <i class="bi bi-plus-lg me-1"></i> Tambah Bidang
+                            <i></i> Tambah Bidang
                         </button>
                     </div>
 

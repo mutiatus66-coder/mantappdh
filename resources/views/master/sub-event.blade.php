@@ -160,7 +160,7 @@
             <p>Kelola semua sub event yang tersedia</p>
         </div>
         <button class="btn-tambah-se" id="btnTambahSubEvent">
-            <i class="bi bi-plus-lg"></i> Tambah Sub Event
+            <i></i> Tambah Sub Event
         </button>
     </div>
 
