@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- ============================================================
-     Rumah Inovasi Magetan - Panel Admin
-     Template: Metronic 8.2.3 (Keenthemes)
-     Modified: Sidebar scrollable, active link fixed
-     ============================================================ -->
-
 <head>
   <title>Rumah Inovasi Magetan - Panel Admin</title>
   <meta charset="utf-8" />
@@ -18,25 +12,19 @@
   <meta property="og:site_name" content="Rumah Inovasi Magetan" />
   <link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/mgt.png" />
 
-  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-
-  <!-- Vendor Stylesheets -->
   <link href="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" />
   <link href="template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
-
-  <!-- Global Stylesheets -->
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Frame-busting: prevent clickjacking -->
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
   @stack('styles')
 
   <style>
     /* ============================================================
-       SIDEBAR (Aside) — Layout & Scrollable Menu
+       SIDEBAR (Aside)
        ============================================================ */
 
     #kt_aside,
@@ -44,17 +32,17 @@
       width: 260px !important;
       min-width: 260px !important;
       max-width: 260px !important;
-      background: linear-gradient(180deg, #001C3D 100%) !important;
+      background: #3C678E !important;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       flex-shrink: 0;
     }
 
-    /* Logo area — never scrolls */
+    /* Logo area */
     #kt_aside_logo {
-      background: linear-gradient(135deg, #001C3D 100%) !important;
-      border-bottom: 1px solid #E3E3E3;
+      background: #2f5478 !important;
+      border-bottom: 1px solid rgba(109,173,216,0.30);
       min-height: 80px;
       padding: 16px 24px;
       display: flex;
@@ -69,25 +57,25 @@
       background: transparent !important;
     }
 
-    .aside-logo-text   { line-height: 1.3; }
-    .aside-logo-title  { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
-    .aside-logo-subtitle { color: rgba(255,255,255,0.75); font-size: 11px; font-weight: 400; letter-spacing: 0.3px; }
+    .aside-logo-text     { line-height: 1.3; }
+    .aside-logo-title    { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+    .aside-logo-subtitle { color: rgba(109,173,216,0.85); font-size: 11px; font-weight: 400; letter-spacing: 0.3px; }
 
-    /* Menu container — scrollable */
+    /* Scrollable menu */
     #kt_aside_menu {
       background: transparent !important;
       flex: 1 1 auto;
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: #2A2C2B transparent;
+      scrollbar-color: rgba(109,173,216,0.30) transparent;
     }
     #kt_aside_menu::-webkit-scrollbar        { width: 4px; }
     #kt_aside_menu::-webkit-scrollbar-track  { background: transparent; }
-    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: #2A2C2B; border-radius: 4px; }
-    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: #374140; }
+    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: rgba(109,173,216,0.30); border-radius: 4px; }
+    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: rgba(109,173,216,0.55); }
 
-    /* Wrapper offset */
+    /* Wrapper */
     #kt_wrapper {
       padding-left: 260px !important;
       min-height: 100vh;
@@ -97,9 +85,52 @@
     @media (max-width: 991.98px) {
       #kt_wrapper { padding-left: 0 !important; }
     }
+     :root,
+    [data-bs-theme="light"] {
+      --ri-card-bg:                  #ffffff;
+      --ri-text-primary:             #1a1a2e;
+      --ri-text-muted:               #6b7280;
+      --ri-border:                   #e5e7eb;
+      --ri-input-bg:                 #ffffff;
 
+      --ri-table-border-outer:       #d1d5db;
+      --ri-table-border-header:      #9ca3af;
+      --ri-table-border-row:         #e5e7eb;
+      --ri-table-head-bg:            #f3f4f6;
+      --ri-table-row-bg:             #ffffff;
+      --ri-table-row-hover:          #f9fafb;
+
+      --ri-accordion-head-bg:              #f3f4f6;
+      --ri-accordion-head-active-bg:       rgba(60,103,142,0.12);
+      --ri-accordion-head-active-color:    #3C678E;
+
+      --ri-badge-inactive-bg:        #f3f4f6;
+      --ri-badge-inactive-color:     #6b7280;
+    }
+
+    [data-bs-theme="dark"] {
+      --ri-card-bg:                  #1e2736;
+      --ri-text-primary:             #e2e8f0;
+      --ri-text-muted:               #94a3b8;
+      --ri-border:                   #2d3748;
+      --ri-input-bg:                 #2d3748;
+
+      --ri-table-border-outer:       #4a5568;
+      --ri-table-border-header:      #6DADD8;
+      --ri-table-border-row:         #2d3748;
+      --ri-table-head-bg:            #253044;
+      --ri-table-row-bg:             #1e2736;
+      --ri-table-row-hover:          #253044;
+
+      --ri-accordion-head-bg:              #253044;
+      --ri-accordion-head-active-bg:       rgba(109,173,216,0.18);
+      --ri-accordion-head-active-color:    #6DADD8;
+
+      --ri-badge-inactive-bg:        #2d3748;
+      --ri-badge-inactive-color:     #94a3b8;
+    }
     /* ============================================================
-       CONTENT AREA — Theme-aware background
+       CONTENT AREA
        ============================================================ */
 
     [data-bs-theme="light"] #kt_wrapper,
@@ -113,7 +144,7 @@
     #kt_content { flex: 1 1 auto; }
 
     /* ============================================================
-       TOOLBAR — theme-aware, no border
+       TOOLBAR
        ============================================================ */
 
     [data-bs-theme="light"] #kt_toolbar { background: #F9FBFF !important; border-bottom: none !important; }
@@ -130,7 +161,7 @@
       align-items: center;
       gap: 12px;
       padding: 10px 22px;
-      color: #ffffff;
+      color: rgba(255,255,255,0.85);
       font-size: 13.5px;
       font-family: inherit;
       font-weight: 400;
@@ -141,14 +172,14 @@
       overflow: hidden;
     }
     #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(109,173,216,0.18);
       color: #ffffff;
     }
     #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(201,168,76,0.20);
+      background: rgba(109,173,216,0.28);
       color: #ffffff;
       font-weight: 600;
-      border-left: 3px solid #E3E3E3;
+      border-left: 3px solid #6DADD8;
       padding-left: 19px;
     }
 
@@ -162,16 +193,17 @@
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: rgba(255,255,255,0.45);
+      color: #ffffff;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
       display: block;
       white-space: nowrap;
+      opacity: 0.80;
     }
     #ri-sidebar-nav .ri-divider {
       height: 1px;
-      background: rgba(255,255,255,0.10);
+      background: rgba(109,173,216,0.20);
       margin: 8px 16px;
     }
     #ri-sidebar-nav .ri-icon {
@@ -194,41 +226,48 @@
     }
 
     /* ============================================================
-       HEADER — Navy
+       HEADER — #3C678E → #6DADD8 gradient
        ============================================================ */
 
-    #kt_header { background: linear-gradient(90deg, #001C3D 100%) !important; }
+    #kt_header {
+      background: linear-gradient(90deg, #3C678E 0%, #6DADD8 100%) !important;
+    }
 
     #kt_header .header-welcome-text {
       font-size: 20px !important;
       font-weight: 600 !important;
-      color: #2A2C2B !important;
+      color: #ffffff !important;
       text-align: left !important;
       flex: 1;
       letter-spacing: 0.2px;
     }
-    #kt_header .btn-active-light-primary       { color: #001C3D !important; }
-    #kt_header .btn-active-light-primary:hover { background: rgba(201,168,76,0.12) !important; }
+    #kt_header .btn-active-light-primary       { color: #ffffff !important; }
+    #kt_header .btn-active-light-primary:hover { background: rgba(255,255,255,0.15) !important; }
+
+    #kt_header .ki-outline,
+    #kt_header i[class*="ki-"] { color: #ffffff !important; }
 
     /* ============================================================
-       FOOTER — dark navy
+       FOOTER — #3C678E base, #6DADD8 accents
        ============================================================ */
 
     #kt_footer {
-      background: #001C3D !important;
-      border-top: 1px solid rgba(201,168,76,0.15) !important;
+      background: #3C678E !important;
+      border-top: 1px solid rgba(109,173,216,0.25) !important;
     }
     #kt_footer .text-gray-900,
     #kt_footer a.text-gray-800,
-    #kt_footer .menu-link              { color: rgba(201,168,76,0.6) !important; }
+    #kt_footer .menu-link              { color: rgba(255,255,255,0.65) !important; }
     #kt_footer a.text-hover-primary:hover,
-    #kt_footer .menu-link:hover        { color: #2A2C2B !important; }
+    #kt_footer .menu-link:hover        { color: #6DADD8 !important; }
+    #kt_footer .text-muted             { color: rgba(109,173,216,0.60) !important; }
+    #kt_footer a.text-gray-800         { color: rgba(255,255,255,0.65) !important; }
+    #kt_footer a.text-gray-800:hover   { color: #6DADD8 !important; }
   </style>
 </head>
 
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
 
-  <!-- Theme mode init -->
   <script>
     var defaultThemeMode = "light";
     var themeMode;
@@ -249,7 +288,7 @@
     <div class="page d-flex flex-row flex-column-fluid">
 
       <!-- ============================================================
-           SIDEBAR (ASIDE)
+           SIDEBAR
            ============================================================ -->
       <div id="kt_aside"
         class="aside pb-5 pt-5 pt-lg-0"
@@ -276,7 +315,6 @@
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
-            <!-- Dashboard — NO hardcoded active, JS handles it -->
             <a class="ri-menu-item" href="/">
               <span class="ri-icon">
                 <svg viewBox="0 0 24 24">
@@ -291,7 +329,6 @@
 
             <div class="ri-divider"></div>
 
-            <!-- MASTER -->
             <span class="ri-section-label">Master</span>
 
             <a class="ri-menu-item" href="/event">
@@ -366,7 +403,6 @@
 
             <div class="ri-divider"></div>
 
-            <!-- INDIKATOR -->
             <span class="ri-section-label">Indikator</span>
 
             <a class="ri-menu-item" href="/indikator/tahap-1">
@@ -395,7 +431,6 @@
 
             <div class="ri-divider"></div>
 
-            <!-- INOVASI -->
             <span class="ri-section-label">Inovasi</span>
 
             <a class="ri-menu-item" href="/inovasi/riwayat">
@@ -421,7 +456,6 @@
 
             <div class="ri-divider"></div>
 
-            <!-- PENILAIAN -->
             <span class="ri-section-label">Penilaian</span>
 
             <a class="ri-menu-item" href="/penilaian/tahap-1">
@@ -446,7 +480,6 @@
 
           </nav>
         </div>
-        <!-- /Scrollable Menu -->
 
       </div>
       <!-- /SIDEBAR -->
@@ -460,21 +493,18 @@
         <div id="kt_header" class="header align-items-stretch">
           <div class="container-fluid d-flex align-items-stretch justify-content-between">
 
-            <!-- Mobile: toggle aside -->
             <div class="d-flex align-items-center d-lg-none ms-n1 me-2" title="Show aside menu">
               <div class="btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" id="kt_aside_mobile_toggle">
                 <i class="ki-outline ki-abstract-14 fs-1"></i>
               </div>
             </div>
 
-            <!-- Mobile logo -->
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
               <a href="index.html" class="d-lg-none">
                 <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-25px" />
               </a>
             </div>
 
-            <!-- Header right: theme mode + user menu -->
             <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
               <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
               <p class="mb-0 flex-grow-1 header-welcome-text">..... &nbsp;</p>
@@ -542,9 +572,6 @@
                     <div class="menu-item px-5">
                       <a href="apps/projects/list.html" class="menu-link px-5">
                         <span class="menu-text">My Projects</span>
-                        <span class="menu-badge">
-                          <span class="badge badge-light-danger badge-circle fw-bold fs-7">3</span>
-                        </span>
                       </a>
                     </div>
                     <div class="separator my-2"></div>
@@ -552,12 +579,11 @@
                       <a href="account/settings.html" class="menu-link px-5">Account Settings</a>
                     </div>
                     <div class="menu-item px-5">
-                      <a href="authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                      <a href="/" class="menu-link px-5">Sign Out</a>
                     </div>
                   </div>
                 </div>
 
-                <!-- Mobile header menu toggle -->
                 <div class="d-flex align-items-center d-lg-none ms-2 me-n2" title="Show header menu">
                   <div class="btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" id="kt_header_menu_mobile_toggle">
                     <i class="ki-outline ki-burger-menu-2 fs-1"></i>
@@ -584,13 +610,13 @@
         </div>
         <!-- /TOOLBAR -->
 
-        <!-- CONTENT AREA -->
+        <!-- CONTENT -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div id="kt_content_container" class="container-fluid">
             @yield('content')
           </div>
         </div>
-        <!-- /CONTENT AREA -->
+        <!-- /CONTENT -->
 
         <!-- FOOTER -->
         <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
@@ -613,19 +639,11 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       DRAWERS
-       ============================================================ -->
-
-  <!-- Activity Logs Drawer -->
+  <!-- Drawers (unchanged) -->
   <div id="kt_activities" class="bg-body"
-    data-kt-drawer="true"
-    data-kt-drawer-name="activities"
-    data-kt-drawer-activate="true"
-    data-kt-drawer-overlay="true"
-    data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
-    data-kt-drawer-direction="end"
-    data-kt-drawer-toggle="#kt_activities_toggle"
+    data-kt-drawer="true" data-kt-drawer-name="activities" data-kt-drawer-activate="true"
+    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
+    data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_activities_toggle"
     data-kt-drawer-close="#kt_activities_close">
     <div class="card shadow-none border-0 rounded-0">
       <div class="card-header" id="kt_activities_header">
@@ -638,12 +656,10 @@
       </div>
       <div class="card-body position-relative" id="kt_activities_body">
         <div id="kt_activities_scroll" class="position-relative scroll-y me-n5 pe-5"
-          data-kt-scroll="true"
-          data-kt-scroll-height="auto"
+          data-kt-scroll="true" data-kt-scroll-height="auto"
           data-kt-scroll-wrappers="#kt_activities_body"
           data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer"
-          data-kt-scroll-offset="5px">
-        </div>
+          data-kt-scroll-offset="5px"></div>
       </div>
       <div class="card-footer py-5 text-center" id="kt_activities_footer">
         <a href="pages/user-profile/activity.html" class="btn btn-bg-body text-primary">
@@ -653,74 +669,14 @@
     </div>
   </div>
 
-  <!-- Chat Drawer -->
-  <div id="kt_drawer_chat" class="bg-body"
-    data-kt-drawer="true"
-    data-kt-drawer-name="chat"
-    data-kt-drawer-activate="true"
-    data-kt-drawer-overlay="true"
-    data-kt-drawer-width="{default:'300px', 'md': '500px'}"
-    data-kt-drawer-direction="end"
-    data-kt-drawer-toggle="#kt_drawer_chat_toggle"
-    data-kt-drawer-close="#kt_drawer_chat_close">
-    <div class="card w-100 border-0 rounded-0" id="kt_drawer_chat_messenger">
-      <div class="card-header pe-5" id="kt_drawer_chat_messenger_header">
-        <div class="card-title">
-          <div class="d-flex justify-content-center flex-column me-3">
-            <a href="#" class="fs-4 fw-bold text-gray-900 text-hover-primary me-1 mb-2 lh-1">Brian Cox</a>
-            <div class="mb-0 lh-1">
-              <span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
-              <span class="fs-7 fw-semibold text-muted">Active</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-toolbar">
-          <div class="btn btn-sm btn-icon btn-active-color-primary" id="kt_drawer_chat_close">
-            <i class="ki-outline ki-cross-square fs-2"></i>
-          </div>
-        </div>
-      </div>
-      <div class="card-body" id="kt_drawer_chat_messenger_body">
-        <div class="scroll-y me-n5 pe-5"
-          data-kt-element="messages"
-          data-kt-scroll="true"
-          data-kt-scroll-activate="true"
-          data-kt-scroll-height="auto"
-          data-kt-scroll-dependencies="#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer"
-          data-kt-scroll-wrappers="#kt_drawer_chat_messenger_body"
-          data-kt-scroll-offset="0px">
-        </div>
-      </div>
-      <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
-        <textarea class="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message"></textarea>
-        <div class="d-flex flex-stack">
-          <div class="d-flex align-items-center me-2">
-            <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
-              <i class="ki-outline ki-paper-clip fs-3"></i>
-            </button>
-            <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
-              <i class="ki-outline ki-cloud-add fs-3"></i>
-            </button>
-          </div>
-          <button class="btn btn-primary" type="button" data-kt-element="send">Send</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scroll to top -->
   <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
     <i class="ki-outline ki-arrow-up"></i>
   </div>
 
-  <!-- ============================================================
-       JAVASCRIPT BUNDLES
-       ============================================================ -->
-
+  <!-- JS Bundles -->
   <script>var hostUrl = "assets/";</script>
   <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
-
   <script src="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -742,32 +698,22 @@
   <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
 
   <script>
-    /* ── Active sidebar link ──
-       Runs after page load. Reads the current URL and adds .active
-       to whichever menu item matches — no hardcoding needed in HTML.
-    ── */
     document.addEventListener('DOMContentLoaded', function () {
       var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
-
       document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function (link) {
         var href = link.getAttribute('href');
         if (!href || href === '#') return;
-
         var linkPath = href.replace(/\/+$/, '') || '/';
-
         var isActive = linkPath === '/'
           ? currentPath === '/'
           : currentPath === linkPath || currentPath.startsWith(linkPath + '/');
-
         link.classList.toggle('active', isActive);
       });
     });
 
-    /* ── Sync content background when theme changes ── */
     (function () {
       var lightBg = '#F9FBFF';
       var darkBg  = '#1C2333';
-
       function applyBg() {
         var theme = document.documentElement.getAttribute('data-bs-theme') || 'light';
         var bg    = theme === 'dark' ? darkBg : lightBg;
@@ -776,12 +722,10 @@
           if (el) el.style.backgroundColor = bg;
         });
       }
-
       applyBg();
-
       new MutationObserver(applyBg).observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['data-bs-theme']
+        attribut
       });
     })();
   </script>
