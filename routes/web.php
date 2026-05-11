@@ -12,6 +12,10 @@ use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
 >>>>>>> Stashed changes
 
+// ── Penilaian 1 ──────────────────────────────────────────
+Route::get('/penilaian/tahap-1',      [Admin::class, 'penilaianTahap1'])     ->name('admin.penilaian.tahap1.index');
+Route::get('/penilaian/tahap-1/{id}', [Admin::class, 'penilaianTahap1Show'])->name('admin.penilaian.tahap1.show');
+
 // ── Auth pages ──────────────────────────────────────────
 Route::get('/login',          fn() => view('login'));
 Route::get('/sign-in',        fn() => view('sign-in'));
