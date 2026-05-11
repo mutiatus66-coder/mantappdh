@@ -27,6 +27,7 @@ class UserController extends Controller
 
         User::create([
             'nama'      => $request->nama,
+            'name'      => $request->nama,
             'email'     => $request->email,
             'hak_akses' => $request->hak_akses,
             'status'    => $request->status,
