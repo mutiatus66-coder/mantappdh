@@ -193,7 +193,7 @@
     #ri-sidebar-nav .ri-section-label {
       font-size: 10px;
       font-weight: 700;
-      color: #6DADD8;
+      color: #ffffff;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       padding: 16px 22px 6px;
@@ -572,9 +572,6 @@
                     <div class="menu-item px-5">
                       <a href="apps/projects/list.html" class="menu-link px-5">
                         <span class="menu-text">My Projects</span>
-                        <span class="menu-badge">
-                          <span class="badge badge-light-danger badge-circle fw-bold fs-7">3</span>
-                        </span>
                       </a>
                     </div>
                     <div class="separator my-2"></div>
@@ -582,7 +579,7 @@
                       <a href="account/settings.html" class="menu-link px-5">Account Settings</a>
                     </div>
                     <div class="menu-item px-5">
-                      <a href="authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                      <a href="/" class="menu-link px-5">Sign Out</a>
                     </div>
                   </div>
                 </div>
