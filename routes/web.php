@@ -6,7 +6,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
+<<<<<<< Updated upstream
 use App\Http\Controllers\InovasiController;
+=======
+use App\Http\Controllers\IndikatorController;
+>>>>>>> Stashed changes
 
 // ── Auth pages ──────────────────────────────────────────
 Route::get('/login',          fn() => view('login'));
@@ -58,6 +62,11 @@ Route::post  ('/pengumuman',      [PengumumanController::class, 'store'])   ->na
 Route::put   ('/pengumuman/{id}', [PengumumanController::class, 'update'])  ->name('admin.pengumuman.update');
 Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy']) ->name('admin.pengumuman.destroy');
 
+<<<<<<< Updated upstream
 // ── Inovasi (Riwayat & Rekap Nilai) ─────────────────────
 Route::get('/inovasi/riwayat',      [InovasiController::class, 'riwayat'])->name('admin.inovasi.riwayat');
 Route::get('/inovasi/rekap-nilai',  [InovasiController::class, 'rekapNilai'])->name('admin.inovasi.rekapnilai');
+=======
+// ── Indikator ─────────────────────────────────────────────
+Route::get   ('/indikator/tahap-1',      [IndikatorController::class, 'index'])   ->name('admin.tahap-1.index');
+>>>>>>> Stashed changes
