@@ -152,7 +152,7 @@
     </div>
 
     <div class="stats-search">
-        <div class="total-badge">📋 Total Pengumuman: <span id="totalPengumuman">{{ count($pengumuman ?? []) }}</span></div>
+        <div class="total-badge">Total Pengumuman: <span id="totalPengumuman">{{ count($pengumuman ?? []) }}</span></div>
         <div class="search-box">
             <input type="text" id="searchPengumuman" placeholder="Cari judul atau deskripsi...">
         </div>
