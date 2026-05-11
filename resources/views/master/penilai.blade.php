@@ -2,6 +2,15 @@
 
 @section('content')
 <style>
+.btn-warning {
+    background: #65A605 !important;
+    border-color: #65A605 !important;
+    color: #fff !important;
+}
+.btn-warning:hover {
+    background: #538a04 !important;
+    border-color: #538a04 !important;
+}
 .penilai-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
