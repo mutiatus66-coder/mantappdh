@@ -156,7 +156,7 @@
             <p>Kelola pengumuman yang ditampilkan ke publik</p>
         </div>
         <button class="btn-tambah" id="btnTambahPengumuman">
-            <i class="bi bi-plus-lg me-1"></i> Tambah Pengumuman
+            <i></i> Tambah Pengumuman
         </button>
     </div>
 

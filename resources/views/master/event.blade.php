@@ -114,7 +114,7 @@
               <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua event yang terdaftar</p>
             </div>
             <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalEvent">
-              <i class="bi bi-plus-lg"></i> Tambah Event
+              <i></i> Tambah Event
             </button>
           </div>
 
@@ -141,14 +141,14 @@
                                 data-id="{{ $item->id }}"
                                 data-nama-event="{{ $item->nama_event }}"
                                 data-jenis="{{ $item->jenis }}">
-                          <i class="bi bi-pencil-square me-1"></i>Ubah
+                          <i></i>Ubah
                         </button>
 
                         <button class="btn-hapus btn-sm btn-hapus-event"
                                 data-id="{{ $item->id }}"
                                 data-nama="{{ $item->nama_event }}"
                                 data-url="{{ route('event.destroy', $item->id) }}">
-                          <i class="bi bi-trash3 me-1"></i>Hapus
+                          <i></i>Hapus
                         </button>
 
                       </div>
