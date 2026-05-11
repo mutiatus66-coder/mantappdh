@@ -3,6 +3,18 @@
 @section('content')
 
 <style>
+<<<<<<< Updated upstream
+=======
+/* ══════════════════════════════════════════════════
+   EVENT PAGE — Theme-aware card + gold buttons
+══════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════
+   EVENT PAGE — Light clean style (sesuai gambar)
+══════════════════════════════════════════════════ */
+
+/* ── Card shell ── */
+>>>>>>> Stashed changes
 .sub-card {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -12,6 +24,7 @@
     transition: background 0.2s, color 0.2s;
     border: none;
     overflow: hidden;
+<<<<<<< Updated upstream
 }
 
 .btn-tambah-se {
@@ -19,6 +32,90 @@
     color: white !important;
     padding: 10px 20px;
     border-radius: 8px;
+=======
+    box-shadow: 0 1px 8px rgba(0,0,0,.08);
+}
+
+/* ── Card header ── */
+[data-bs-theme="light"] .sub-card .card-header,
+[data-bs-theme="dark"] .sub-card .card-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── Card body ── */
+[data-bs-theme="light"] .sub-card .card-body,
+[data-bs-theme="dark"] .sub-card .card-body {
+    background: #ffffff;
+}
+
+/* ── Card title ── */
+[data-bs-theme="light"] .sub-card .card-title,
+[data-bs-theme="dark"] .sub-card .card-title {
+    color: #1a1a1a !important;
+    font-weight: 700;
+}
+
+/* ── Table head ── */
+[data-bs-theme="light"] .se-table thead th,
+[data-bs-theme="dark"] .se-table thead th {
+    background: transparent;
+    color: #aaaaaa;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+/* ── Table body rows ── */
+[data-bs-theme="light"] .se-table tbody td,
+[data-bs-theme="dark"] .se-table tbody td {
+    color: #333333;
+    border-bottom: 1px solid #f0f0f0;
+    background: transparent;
+}
+
+[data-bs-theme="light"] .se-table tbody tr:hover td,
+[data-bs-theme="dark"] .se-table tbody tr:hover td {
+    background: #fafafa;
+}
+
+/* empty row */
+[data-bs-theme="light"] .se-table .se-empty,
+[data-bs-theme="dark"] .se-table .se-empty {
+    color: #aaaaaa;
+}
+
+/* ── Gold gradient button (Edit) ── */
+.btn-gold {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+    border: none;
+    border-radius: .375rem;
+    padding: .35rem .85rem;
+    font-size: .8rem;
+    letter-spacing: .02em;
+    box-shadow: 0 2px 8px rgba(245,158,11,.30);
+    transition: .18s ease-in-out;
+    cursor: pointer;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, #e69009 0%, #c96d05 100%);
+    box-shadow: 0 4px 14px rgba(245,158,11,.45);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+
+/* ── Tambah Event button ── */
+.btn-tambah-se {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+>>>>>>> Stashed changes
     border: none;
     font-weight: 600;
     cursor: pointer;
@@ -27,9 +124,17 @@
     align-items: center;
     gap: 6px;
     font-size: .9rem;
+<<<<<<< Updated upstream
     box-shadow: 0 3px 12px rgba(245,158,11,.30);
+=======
+    box-shadow: 0 2px 8px rgba(245,158,11,.30);
+    transition: .18s ease-in-out;
+    cursor: pointer;
+>>>>>>> Stashed changes
 }
+
 .btn-tambah-se:hover {
+<<<<<<< Updated upstream
     opacity: 0.9;
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
@@ -38,6 +143,105 @@
 .btn-gold {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
+=======
+    background: linear-gradient(135deg, #e69009 0%, #c96d05 100%);
+    box-shadow: 0 4px 14px rgba(245,158,11,.45);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* ── Modal backdrop ── */
+.modal-backdrop.show { opacity: .35; }
+
+/* ── Modal content ── */
+[data-bs-theme="light"] .modal-content,
+[data-bs-theme="dark"] .modal-content {
+    background: #ffffff;
+    border: none;
+}
+[data-bs-theme="light"] .modal-header,
+[data-bs-theme="dark"] .modal-header,
+[data-bs-theme="light"] .modal-footer,
+[data-bs-theme="dark"] .modal-footer {
+    border-color: #f0f0f0 !important;
+}
+[data-bs-theme="light"] .modal-title,
+[data-bs-theme="dark"] .modal-title {
+    color: #1a1a1a;
+    font-weight: 700;
+}
+[data-bs-theme="light"] .form-label,
+[data-bs-theme="dark"] .form-label {
+    color: #555555;
+}
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="light"] .form-select,
+[data-bs-theme="dark"] .form-select {
+    background: #ffffff !important;
+    border: 1px solid #dddddd !important;
+    color: #333333 !important;
+}
+[data-bs-theme="light"] .form-control:focus,
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="light"] .form-select:focus,
+[data-bs-theme="dark"] .form-select:focus {
+    border-color: #F5A623 !important;
+    box-shadow: 0 0 0 3px rgba(245,166,35,.12) !important;
+    color: #333333 !important;
+}
+[data-bs-theme="light"] .form-control::placeholder,
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: #aaaaaa !important;
+}
+[data-bs-theme="light"] .btn-active-light-primary,
+[data-bs-theme="dark"] .btn-active-light-primary {
+    color: #555555;
+}
+[data-bs-theme="light"] .btn-active-light-primary:hover,
+[data-bs-theme="dark"] .btn-active-light-primary:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+}
+
+
+/* ── Batal button ── */
+[data-bs-theme="light"] .btn-modal-cancel,
+[data-bs-theme="dark"] .btn-modal-cancel {
+    background: #f5f5f5;
+    color: #555555;
+    border: 1px solid #e0e0e0;
+}
+[data-bs-theme="light"] .btn-modal-cancel:hover,
+[data-bs-theme="dark"] .btn-modal-cancel:hover {
+    background: #eeeeee;
+    color: #333333;
+}
+
+.edit-text {
+    color: red;
+    cursor: pointer;
+}
+
+.edit-text:hover {
+    text-decoration: underline;
+}
+
+.edit-text {
+    color: red;
+    cursor: pointer;
+}
+
+.edit-text:hover {
+    text-decoration: underline;
+}
+
+/* Modal save button */
+.btn-modal-save {
+    background: #F5A623;
+    color: #ffffff !important;
+    font-weight: 700;
+>>>>>>> Stashed changes
     border: none;
     border-radius: 6px;
     padding: 6px 14px;
@@ -46,6 +250,7 @@
     cursor: pointer;
     transition: opacity .18s;
 }
+<<<<<<< Updated upstream
 .btn-gold:hover { opacity: .88; color: white !important; }
 
 .btn-hapus {
@@ -116,6 +321,10 @@
 [data-bs-theme="dark"] .hapus-nama-strong {
     color: #F5F0E8 !important;
 }
+=======
+
+.btn-modal-save:hover { opacity: .88; color: #ffffff !important; }
+>>>>>>> Stashed changes
 </style>
 
 <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
@@ -156,6 +365,7 @@
               <tbody id="tabelEventBody">
                 @forelse($events ?? [] as $item)
                   <tr>
+<<<<<<< Updated upstream
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item['nama_event'] }}</td>
                     <td>{{ $item['jenis'] }}</td>
@@ -184,6 +394,54 @@
                 @endforelse
               </tbody>
             </table>
+=======
+                    <th class="px-4 py-3 w-16 text-center border border-gray-300">No</th>
+                    <th class="px-4 py-3 text-left border border-gray-300">Event</th>
+                    <th class="px-4 py-3 w-40 text-center border border-gray-300">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                  <tr class="border-t">
+                    <td class="px-4 py-3 text-center border border-gray-300">1</td>
+                    <td class="px-4 py-3 border border-gray-300">INOVASI DAERAH KAB. MAGETAN</td>
+                    <td class="px-4 py-3 text-center border border-gray-300">
+                      <a href="#">
+                        <span class="edit-text">✏️ Edit</span>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="px-4 py-3 text-center border border-gray-300">2</td>
+                    <td class="px-4 py-3 border border-gray-300">LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)</td>
+                    <td class="px-4 py-3 text-center border border-gray-300">
+                      <a href="#" style="text-red-500 hover:underline"> 
+                      <span class="edit-text">✏️ Edit</span>                   
+                      </a>
+                    </td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="px-4 py-3 text-center border border-gray-300">3</td>
+                    <td class="px-4 py-3 border border-gray-300">PAMERAN</td>
+                    <td class="px-4 py-3 text-center border border-gray-300">
+                      <a href="#">
+                        <span class="edit-text">✏️ Edit</span>
+                        </button>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="px-4 py-3 text-center border border-gray-300">4</td>
+                    <td class="px-4 py-3 border border-gray-300">INOTEK AWARD</td>
+                    <td class="px-4 py-3 text-center border border-gray-300">
+                      <a href="#">                        
+                          <span class="edit-text">✏️ Edit</span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+>>>>>>> Stashed changes
           </div>
 
         </div>
