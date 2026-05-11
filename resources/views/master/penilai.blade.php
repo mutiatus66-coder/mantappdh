@@ -105,7 +105,7 @@
 .penilai-table tr:hover td { background: var(--ri-table-row-hover); }
 .penilai-table tr:last-child td { border-bottom: none; }
 .btn-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg,  #142D54, #0C4C8A);
     color: white !important;
     border: none; border-radius: 6px;
     padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
@@ -148,7 +148,7 @@
             <p>Kelola data penilai</p>
         </div>
         <button class="btn-tambah" id="btnTambahPenilai">
-            <i></i> Tambah Penilai
+            Tambah Penilai
         </button>
     </div>
 

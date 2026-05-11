@@ -35,7 +35,7 @@
 }
 .pengumuman-title p {
     margin: 0;
-    color: var(--ri-text-muted);
+    color: var(--ri-text-muted);b
     font-size: 0.875rem;
 }
 .btn-tambah {
@@ -115,7 +115,7 @@
 .status-draft     { background: #fef9c3; color: #854d0e; }
 .action-buttons   { display: flex; justify-content: center; gap: 8px; }
 .btn-edit-icon {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #142D54, #0C4C8A);
     color: white !important;
     border: none; border-radius: 6px;
     padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
@@ -156,7 +156,7 @@
             <p>Kelola pengumuman yang ditampilkan ke publik</p>
         </div>
         <button class="btn-tambah" id="btnTambahPengumuman">
-            <i></i> Tambah Pengumuman
+            Tambah Pengumuman
         </button>
     </div>
 
