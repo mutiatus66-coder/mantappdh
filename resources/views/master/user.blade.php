@@ -45,7 +45,7 @@
 }
 
 .btn-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+   background: linear-gradient(135deg, #0C4C8A, #142D54);
     color: white !important;
     border: none;
     border-radius: 6px;
