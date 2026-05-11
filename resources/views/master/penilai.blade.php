@@ -2,6 +2,15 @@
 
 @section('content')
 <style>
+.btn-warning {
+    background: #65A605 !important;
+    border-color: #65A605 !important;
+    color: #fff !important;
+}
+.btn-warning:hover {
+    background: #538a04 !important;
+    border-color: #538a04 !important;
+}
 .penilai-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -96,7 +105,7 @@
 .penilai-table tr:hover td { background: var(--ri-table-row-hover); }
 .penilai-table tr:last-child td { border-bottom: none; }
 .btn-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg,  #142D54, #0C4C8A);
     color: white !important;
     border: none; border-radius: 6px;
     padding: 6px 14px; font-size: 0.8rem; font-weight: 600;

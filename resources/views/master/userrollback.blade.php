@@ -3,15 +3,6 @@
 @section('content')
 
 <style>
-  .btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
-    color: #fff !important;
-}
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
-}
 .sub-card {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -118,7 +109,13 @@
     background: var(--ri-table-row-bg);
 }
 
-
+/* ── Hapus modal icon ── */
+.hapus-icon-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #FCEBEB;
+    display: flex; align-items: center; justify-content: center;
+}
 [data-bs-theme="dark"] .hapus-icon-circle { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245,240,232,.55) !important; }
 [data-bs-theme="dark"] .hapus-nama-strong { color: #F5F0E8 !important; }
@@ -145,7 +142,7 @@
               <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua user yang terdaftar</p>
             </div>
             <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalUser">
-              <i></i> Tambah User
+              <i class="bi bi-plus-lg"></i> Tambah User
             </button>
           </div>
 
@@ -178,19 +175,19 @@
                                 data-email="{{ $item['email'] }}"
                                 data-hak-akses="{{ $item['hak_akses'] }}"
                                 data-status="{{ $item['status'] }}">
-                          <i></i>Ubah
+                          <i class="bi bi-pencil-square me-1"></i>Ubah
                         </button>
 
                         <button class="btn-hapus btn-sm btn-hapus-user"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['nama'] }}"
                                 data-url="{{ route('user.destroy', $item['id']) }}">
-                          <i></i>Hapus
+                          <i class="bi bi-trash3 me-1"></i>Hapus
                         </button>
 
                         <a href="{{ route('user.login-as', $item['id']) }}">
                           <button class="btn-login-as btn-sm">
-                            <i></i>Login As
+                            <i class="bi bi-key me-1"></i>Login As
                           </button>
                         </a>
 

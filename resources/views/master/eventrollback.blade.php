@@ -3,15 +3,6 @@
 @section('content')
 
 <style>
-  .btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
-    color: #fff !important;
-}
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
-}
 .sub-card {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -20,8 +11,9 @@
     margin: 20px;
     transition: background 0.2s, color 0.2s;
     border: none;
-     overflow: hidden;
+    overflow: hidden;
 }
+
 .btn-tambah-se {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
@@ -42,6 +34,7 @@
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
 }
+
 .btn-gold {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
@@ -54,6 +47,7 @@
     transition: opacity .18s;
 }
 .btn-gold:hover { opacity: .88; color: white !important; }
+
 .btn-hapus {
     background: #A32D2D;
     color: #ffffff !important;
@@ -66,12 +60,33 @@
     transition: background 0.15s;
 }
 .btn-hapus:hover { background: #8b2424; color: #ffffff !important; }
+
 .se-table {
     width: 100%;
     border-collapse: collapse;
     border: 2px solid var(--ri-table-border-outer);
     border-radius: 8px;
     overflow: hidden;
+}
+.se-table th {
+    background: var(--ri-table-head-bg);
+    padding: 14px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ri-text-muted);
+    border-bottom: 2px solid var(--ri-table-border-header);
+    transition: background 0.2s, color 0.2s;
+}
+.se-table td {
+    padding: 14px 12px;
+    border-bottom: 1.5px solid var(--ri-table-border-row);
+    color: var(--ri-text-primary);
+    font-size: 0.875rem;
+    background: var(--ri-table-row-bg);
+    transition: background 0.2s, color 0.2s;
 }
 .se-table tr:hover td { background: var(--ri-table-row-hover); }
 .se-table tr:last-child td { border-bottom: none; }
@@ -82,16 +97,25 @@
     background: var(--ri-table-row-bg);
 }
 
-/* ── Hapus modal icon ── */
+/* ── Modal ── */
+.modal-backdrop.show { opacity: .35; }
+
+/* Hapus modal icon circle */
 .hapus-icon-circle {
     width: 56px; height: 56px;
     border-radius: 50%;
-    background: #FCEBEB;
+    background: var(--ri-hapus-icon-bg, #FCEBEB);
     display: flex; align-items: center; justify-content: center;
 }
-[data-bs-theme="dark"] .hapus-icon-circle { background: rgba(163,45,45,0.20); }
-[data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245,240,232,.55) !important; }
-[data-bs-theme="dark"] .hapus-nama-strong { color: #F5F0E8 !important; }
+[data-bs-theme="dark"] .hapus-icon-circle {
+    background: rgba(163,45,45,0.20);
+}
+[data-bs-theme="dark"] .hapus-teks-muted {
+    color: rgba(245,240,232,.55) !important;
+}
+[data-bs-theme="dark"] .hapus-nama-strong {
+    color: #F5F0E8 !important;
+}
 </style>
 
 <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
@@ -108,13 +132,14 @@
         @endif
 
         <div class="sub-card">
+
           <div class="mb-4 d-flex justify-content-between align-items-center">
             <div>
               <h3 class="fw-bold m-0" style="font-size:1.5rem; color:var(--ri-text-primary);">Data Event</h3>
-              <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua event yang terdaftar</p>
+              <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua event yang tersedia</p>
             </div>
             <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalEvent">
-              <i></i> Tambah Event
+              <i class="bi bi-plus-lg"></i> Tambah Event
             </button>
           </div>
 
@@ -123,35 +148,30 @@
               <thead>
                 <tr>
                   <th width="50">No</th>
-                  <th>Nama Event</th>
-                  <th style="text-align:center;">Jenis</th>
+                  <th>Event</th>
+                  <th>Jenis</th>
                   <th width="180" style="text-align:center;">Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="tabelEventBody">
                 @forelse($events ?? [] as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama_event }}</td>
-                    <td style="text-align:center;">{{ $item->jenis }}</td>
+                    <td>{{ $item['nama_event'] }}</td>
+                    <td>{{ $item['jenis'] }}</td>
                     <td style="text-align:center;">
-                      <div class="d-flex align-items-center justify-content-center gap-1">
-
-                        <button class="btn-gold btn-sm btn-edit-event"
-                                data-id="{{ $item->id }}"
-                                data-nama-event="{{ $item->nama_event }}"
-                                data-jenis="{{ $item->jenis }}">
-                          <i></i>Ubah
-                        </button>
-
-                        <button class="btn-hapus btn-sm btn-hapus-event"
-                                data-id="{{ $item->id }}"
-                                data-nama="{{ $item->nama_event }}"
-                                data-url="{{ route('event.destroy', $item->id) }}">
-                          <i></i>Hapus
-                        </button>
-
-                      </div>
+                      <button class="btn-gold btn-sm btn-edit-event me-2"
+                              data-id="{{ $item['id'] }}"
+                              data-nama="{{ $item['nama_event'] }}"
+                              data-jenis="{{ $item['jenis'] }}">
+                        Ubah
+                      </button>
+                      <button class="btn-hapus btn-sm btn-hapus-event"
+                              data-id="{{ $item['id'] }}"
+                              data-nama="{{ $item['nama_event'] }}"
+                              data-url="{{ route('event.destroy', $item['id']) }}">
+                        Hapus
+                      </button>
                     </td>
                   </tr>
                 @empty
@@ -174,11 +194,12 @@
 
 
 {{-- ══════════════════════════════════════════════════
-     MODAL — Tambah / Edit Event
+     MODAL — Tambah / Edit Event (reuse satu modal)
 ══════════════════════════════════════════════════ --}}
 <div class="modal fade" id="modalEvent" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3 shadow-lg">
+
       <form id="formEvent" method="POST" action="{{ route('event.store') }}">
         @csrf
         <input type="hidden" name="_method" id="formEventMethod" value="POST">
@@ -200,13 +221,16 @@
                      class="form-control" placeholder="Masukkan nama event..." required>
             </div>
 
-            <div class="col-md-12 mb-4">
-              <label class="form-label fw-semibold required">Jenis</label>
-              <select name="jenis" id="inputJenis" class="form-select" required>
-                <option value="" disabled selected>-- Pilih Jenis --</option>
-                <option value="INOTEK">INOTEK</option>
-                <option value="INODA">INODA</option>
-              </select>
+            <div class="col-md-12 mb-2">
+              <label class="form-label fw-semibold">Jenis</label>
+              <div class="d-flex gap-4 mt-1">
+                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                  <input type="radio" name="jenis" id="jenisInotek" value="INOTEK" checked> INOTEK
+                </label>
+                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                  <input type="radio" name="jenis" id="jenisInoda" value="INODA"> INODA
+                </label>
+              </div>
             </div>
 
           </div>
@@ -238,7 +262,7 @@
 
       <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
       <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:#6b7280;">
-        Tindakan ini tidak dapat dibatalkan. Data event
+        Tindakan ini tidak dapat dibatalkan. Event
         <strong id="namaEventHapus" class="hapus-nama-strong"></strong>
         akan dihapus secara permanen.
       </p>
@@ -258,6 +282,7 @@
   </div>
 </div>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -269,22 +294,26 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('formEventMethod').value = 'POST';
         document.getElementById('modalEventTitle').textContent = 'Tambah Event';
         document.getElementById('inputNamaEvent').value = '';
-        document.getElementById('inputJenis').value = '';
+        document.getElementById('jenisInotek').checked = true;
     });
 
     // ── Tombol Ubah ──
     document.querySelectorAll('.btn-edit-event').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id        = this.dataset.id;
-            const namaEvent = this.dataset.namaEvent;
-            const jenis     = this.dataset.jenis;
+            const id    = this.dataset.id;
+            const nama  = this.dataset.nama;
+            const jenis = this.dataset.jenis;
 
             document.getElementById('modalEventTitle').textContent = 'Ubah Event';
             document.getElementById('formEvent').action = `/event/${id}`;
             document.getElementById('formEventMethod').value = 'PUT';
+            document.getElementById('inputNamaEvent').value = nama;
 
-            document.getElementById('inputNamaEvent').value = namaEvent;
-            document.getElementById('inputJenis').value = jenis;
+            if (jenis === 'INODA') {
+                document.getElementById('jenisInoda').checked = true;
+            } else {
+                document.getElementById('jenisInotek').checked = true;
+            }
 
             new bootstrap.Modal(document.getElementById('modalEvent')).show();
         });

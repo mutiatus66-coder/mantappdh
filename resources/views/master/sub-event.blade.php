@@ -112,7 +112,7 @@
     color: #92400e;
 }
 .btn-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #0C4C8A, #142D54);
     color: white !important;
     border: none;
     border-radius: 6px;
@@ -148,6 +148,15 @@
     background: #FCEBEB;
     display: flex; align-items: center; justify-content: center;
 }
+.btn-warning {
+    background: #65A605 !important;
+    border-color: #65A605 !important;
+    color: #fff !important;
+}
+.btn-warning:hover {
+    background: #538a04 !important;
+    border-color: #538a04 !important;
+}
 [data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
 [data-bs-theme="dark"] .hapus-nama-strong  { color: #F5F0E8 !important; }
@@ -160,7 +169,7 @@
             <p>Kelola semua sub event yang tersedia</p>
         </div>
         <button class="btn-tambah-se" id="btnTambahSubEvent">
-            <i class="bi bi-plus-lg"></i> Tambah Sub Event
+            Tambah Sub Event
         </button>
     </div>
 
@@ -281,7 +290,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
                     <button type="submit" class="btn btn-warning px-4">Simpan</button>
                 </div>
             </form>
@@ -309,7 +319,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
                 <form id="formHapusSE" method="POST">
                     @csrf
                     @method('DELETE')

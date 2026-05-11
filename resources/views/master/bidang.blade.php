@@ -60,7 +60,7 @@
                         <button class="btn btn-tambah-bidang"
                                 data-sub-event-id="{{ $seId }}"
                                 data-sub-event-nama="{{ $se['sub_event'] }}">
-                            <i class="bi bi-plus-lg me-1"></i> Tambah Bidang
+                            Tambah Bidang
                         </button>
                     </div>
 
@@ -168,7 +168,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
                     <button type="submit" class="btn btn-warning px-4">Simpan</button>
                 </div>
             </form>
@@ -196,7 +197,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal"
+                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
@@ -297,7 +299,7 @@
 }
 .btn-tambah-bidang:hover { opacity: .88; }
 .btn-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
     color: white !important; border: none; font-weight: 600;
     border-radius: 6px; padding: 6px 14px; cursor: pointer; transition: opacity .18s;
 }
@@ -314,6 +316,15 @@
     width: 56px; height: 56px; border-radius: 50%;
     background: #FCEBEB;
     display: flex; align-items: center; justify-content: center;
+}
+.btn-warning {
+    background: #65A605 !important;
+    border-color: #65A605 !important;
+    color: #fff !important;
+}
+.btn-warning:hover {
+    background: #538a04 !important;
+    border-color: #538a04 !important;
 }
 [data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
