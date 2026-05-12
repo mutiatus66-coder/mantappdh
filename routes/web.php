@@ -7,6 +7,15 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
+use App\Http\Controllers\IndikatorController;
+
+// ── Penilaian 1 ──────────────────────────────────────────
+Route::get('/penilaian/tahap-1',      [Admin::class, 'penilaianTahap1'])     ->name('penilaian.tahap.1.index');
+Route::get('/penilaian/tahap-1/{id}', [Admin::class, 'penilaianTahap1Show'])->name('penilaian.tahap.1.show');
+
+// ── Penilaian 2 ──────────────────────────────────────────
+Route::get('/penilaian/tahap-2',      [Admin::class, 'penilaianTahap2'])     ->name('penilaian.tahap.2.index');
+Route::get('/penilaian/tahap-2/{id}', [Admin::class, 'penilaianTahap2Show'])->name('penilaian.tahap.2.show');
 
 // ── Auth pages ──────────────────────────────────────────
 Route::get('/login',          fn() => view('login'));
@@ -61,3 +70,6 @@ Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy']) ->na
 // ── Inovasi (Riwayat & Rekap Nilai) ─────────────────────
 Route::get('/inovasi/riwayat',      [InovasiController::class, 'riwayat'])->name('admin.inovasi.riwayat');
 Route::get('/inovasi/rekap-nilai',  [InovasiController::class, 'rekapNilai'])->name('admin.inovasi.rekapnilai');
+// ── Indikator ─────────────────────────────────────────────
+Route::get   ('/indikator/tahap-1',      [IndikatorController::class, 'index'])   ->name('admin.tahap-1.index');
+

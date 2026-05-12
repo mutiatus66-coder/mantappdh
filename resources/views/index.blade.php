@@ -10,11 +10,11 @@
   <meta property="og:title" content="Rumah Inovasi Magetan - Panel Admin" />
   <meta property="og:url" content="https://rumahinovasi.com/admin" />
   <meta property="og:site_name" content="Rumah Inovasi Magetan" />
-  <link rel="shortcut icon" href="template.demo6/demo6/assets/media/logos/mgt.png" />
+  <link rel="shortcut icon" href="{{ asset('template.demo6/demo6/assets/media/logos/mgt.png') }}" />
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-  <link href="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" />
-  <link href="template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+  <link href="{{ asset('template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" />
+  <link href="{{ asset('template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -85,7 +85,8 @@
     @media (max-width: 991.98px) {
       #kt_wrapper { padding-left: 0 !important; }
     }
-     :root,
+
+    :root,
     [data-bs-theme="light"] {
       --ri-card-bg:                  #ffffff;
       --ri-text-primary:             #1a1a2e;
@@ -129,6 +130,7 @@
       --ri-badge-inactive-bg:        #2d3748;
       --ri-badge-inactive-color:     #94a3b8;
     }
+
     /* ============================================================
        CONTENT AREA
        ============================================================ */
@@ -226,7 +228,7 @@
     }
 
     /* ============================================================
-       HEADER — #3C678E → #6DADD8 gradient
+       HEADER
        ============================================================ */
 
     #kt_header {
@@ -248,7 +250,7 @@
     #kt_header i[class*="ki-"] { color: #ffffff !important; }
 
     /* ============================================================
-       FOOTER — #3C678E base, #6DADD8 accents
+       FOOTER
        ============================================================ */
 
     #kt_footer {
@@ -303,7 +305,7 @@
         <!-- Logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
-            <img alt="Logo" src="{{ asset('/img/bulb.png') }}" class="h-60px logo" />
+            <img alt="Logo" src="{{ asset('img/bulb.png') }}" class="h-60px logo" />
             <div class="aside-logo-text">
               <div class="aside-logo-title">Rumah Inovasi</div>
               <div class="aside-logo-subtitle">Magetan</div>
@@ -500,8 +502,8 @@
             </div>
 
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-              <a href="index.html" class="d-lg-none">
-                <img alt="Logo" src="template.demo6/demo6/assets/media/logos/rmh.png" class="h-25px" />
+              <a href="/" class="d-lg-none">
+                <img alt="Logo" src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}" class="h-25px" />
               </a>
             </div>
 
@@ -549,13 +551,13 @@
                     data-kt-menu-trigger="click"
                     data-kt-menu-attach="parent"
                     data-kt-menu-placement="bottom-end">
-                    <img src="template.demo6/demo6/assets/media/avatars/blank.png" alt="User Avatar" />
+                    <img alt="Avatar" src="{{ asset('template.demo6/demo6/assets/media/avatars/blank.png') }}" />
                   </div>
                   <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
                     <div class="menu-item px-3">
                       <div class="menu-content d-flex align-items-center px-3">
                         <div class="symbol symbol-50px me-5">
-                          <img alt="Avatar" src="template.demo6/demo6/assets/media/avatars/blank.png" />
+                          <img alt="Avatar" src="{{ asset('template.demo6/demo6/assets/media/avatars/blank.png') }}" />
                         </div>
                         <div class="d-flex flex-column">
                           <div class="fw-bold d-flex align-items-center fs-5">Max Smith
@@ -567,16 +569,16 @@
                     </div>
                     <div class="separator my-2"></div>
                     <div class="menu-item px-5">
-                      <a href="account/overview.html" class="menu-link px-5">My Profile</a>
+                      <a href="#" class="menu-link px-5">My Profile</a>
                     </div>
                     <div class="menu-item px-5">
-                      <a href="apps/projects/list.html" class="menu-link px-5">
+                      <a href="#" class="menu-link px-5">
                         <span class="menu-text">My Projects</span>
                       </a>
                     </div>
                     <div class="separator my-2"></div>
                     <div class="menu-item px-5 my-1">
-                      <a href="account/settings.html" class="menu-link px-5">Account Settings</a>
+                      <a href="#" class="menu-link px-5">Account Settings</a>
                     </div>
                     <div class="menu-item px-5">
                       <a href="/" class="menu-link px-5">Sign Out</a>
@@ -639,7 +641,7 @@
     </div>
   </div>
 
-  <!-- Drawers (unchanged) -->
+  <!-- Drawers -->
   <div id="kt_activities" class="bg-body"
     data-kt-drawer="true" data-kt-drawer-name="activities" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
@@ -662,7 +664,7 @@
           data-kt-scroll-offset="5px"></div>
       </div>
       <div class="card-footer py-5 text-center" id="kt_activities_footer">
-        <a href="pages/user-profile/activity.html" class="btn btn-bg-body text-primary">
+        <a href="#" class="btn btn-bg-body text-primary">
           View All Activities <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
         </a>
       </div>
@@ -673,11 +675,11 @@
     <i class="ki-outline ki-arrow-up"></i>
   </div>
 
-  <!-- JS Bundles -->
-  <script>var hostUrl = "assets/";</script>
+  <!-- JS Bundles — semua pakai asset() -->
+  <script>var hostUrl = "{{ asset('template.demo6/demo6/assets/') }}";</script>
   <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
-  <script src="template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
@@ -689,13 +691,13 @@
   <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
-  <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-  <script src="template.demo6/demo6/assets/js/widgets.bundle.js"></script>
-  <script src="template.demo6/demo6/assets/js/custom/widgets.js"></script>
-  <script src="template.demo6/demo6/assets/js/custom/apps/chat/chat.js"></script>
-  <script src="template.demo6/demo6/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
-  <script src="template.demo6/demo6/assets/js/custom/utilities/modals/create-campaign.js"></script>
-  <script src="template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/widgets.bundle.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/custom/widgets.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/custom/apps/chat/chat.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/custom/utilities/modals/create-campaign.js') }}"></script>
+  <script src="{{ asset('template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js') }}"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -725,7 +727,7 @@
       applyBg();
       new MutationObserver(applyBg).observe(document.documentElement, {
         attributes: true,
-        attribut
+        attributeFilter: ['data-bs-theme']
       });
     })();
   </script>

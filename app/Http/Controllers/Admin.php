@@ -43,6 +43,85 @@ class Admin extends Controller
         ],
     ],
 ];
+private static array $penilai = [
+    ['id' => 1, 'nama' => 'Muhammad Fauzi',  'nama_singkat' => 'muhammad'],
+    ['id' => 2, 'nama' => 'Mujiono',          'nama_singkat' => 'Mujiono'],
+    ['id' => 3, 'nama' => 'Moch. Hasan',      'nama_singkat' => 'Moch.'],
+    ['id' => 4, 'nama' => 'Jatmiko Wibowo',   'nama_singkat' => 'Jatmiko'],
+    ['id' => 5, 'nama' => 'Andi Prasetyo',    'nama_singkat' => 'Andi'],
+    ['id' => 6, 'nama' => 'Joko Susanto',     'nama_singkat' => 'Joko'],
+    ['id' => 7, 'nama' => 'Heru Prasetyo',    'nama_singkat' => 'Heru'],
+];
+
+private static array $nominasi = [
+    4 => [
+        [
+            'id'           => 1,
+            'inovator'     => 'RSUD dr. Sayidiman Magetan',
+            'nama_inovasi' => 'JERIGEN BEKAS JADI SAFETY BOX "RIKA D\'BOX"',
+            'kategori'     => 'umum',
+            'rangking'     => null,
+            'total_nilai'  => 430.8,
+            'nilai'        => [1 => null, 2 => 72.4, 3 => 65.8, 4 => 69.8, 5 => 70.0, 6 => 72.4, 7 => 80.4],
+        ],
+        [
+            'id'           => 2,
+            'inovator'     => 'Puskesmas Karangrejo',
+            'nama_inovasi' => 'INOVASI DETEKSI DINI STUNTING BERBASIS DIGITAL',
+            'kategori'     => 'umum',
+            'rangking'     => null,
+            'total_nilai'  => 0,
+            'nilai'        => [1 => null, 2 => null, 3 => null, 4 => null, 5 => null, 6 => null, 7 => null],
+        ],
+        [
+            'id'           => 3,
+            'inovator'     => 'Widhi Rahman Hardani',
+            'nama_inovasi' => 'Inovasi Apartemen Lele Vertikal dengan Sistem Pemberian Pakan Otomatis',
+            'kategori'     => 'pelajar',
+            'rangking'     => null,
+            'total_nilai'  => 406.8,
+            'nilai'        => [1 => null, 2 => 69.0, 3 => 72.8, 4 => 59.0, 5 => 73.6, 6 => 64.0, 7 => 68.4],
+        ],
+        [
+            'id'           => 4,
+            'inovator'     => 'SMA Negeri 1 Magetan',
+            'nama_inovasi' => 'Robot Pemilah Sampah Otomatis Berbasis AI',
+            'kategori'     => 'pelajar',
+            'rangking'     => null,
+            'total_nilai'  => 0,
+            'nilai'        => [1 => null, 2 => null, 3 => null, 4 => null, 5 => null, 6 => null, 7 => null],
+        ],
+    ],
+];
+
+public function penilaianTahap2()
+{
+    $subEvents    = $this->getData();
+
+    $nominasiData = [];
+    foreach ($subEvents as $se) {
+        $nominasiData[$se['id']] = self::$nominasi[$se['id']] ?? [];
+    }
+    return view('master.penilaian.tahap2.index', compact('subEvents', 'nominasiData'));
+}
+public function penilaianTahap2Show(int $id)
+{
+    $subEvent = collect($this->getData())->firstWhere('id', $id);
+    abort_unless($subEvent, 404);
+
+    $allNominasi    = self::$nominasi[$id] ?? [];
+    $nominasiUmum   = array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'umum'));
+    $nominasiPelajar= array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'pelajar'));
+    $penilai        = self::$penilai;
+
+    return view('master.penilaian.tahap2.show', compact(
+        'subEvent',
+        'nominasiUmum',
+        'nominasiPelajar',
+        'penilai'
+    ));
+}
+
     public function bidang()
 {
     $subEvents = $this->getData();
@@ -98,7 +177,6 @@ class Admin extends Controller
         abort_unless($item, 404);
         return response()->json($item);
     }
-    
     public function update(Request $request, int $id)
     {
         $request->validate([
@@ -134,4 +212,33 @@ class Admin extends Controller
         $this->saveData($data);
         return redirect()->route('admin.sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
     }
+    public function penilaianTahap1()
+{
+    $subEvents    = $this->getData();
+
+    $nominasiData = [];
+    foreach ($subEvents as $se) {
+        $nominasiData[$se['id']] = self::$nominasi[$se['id']] ?? [];
+    }
+
+    return view('master.penilaian.tahap1.index', compact('subEvents', 'nominasiData'));
+}
+
+public function penilaianTahap1Show(int $id)
+{
+    $subEvent = collect($this->getData())->firstWhere('id', $id);
+    abort_unless($subEvent, 404);
+
+    $allNominasi     = self::$nominasi[$id] ?? [];
+    $nominasiUmum    = array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'umum'));
+    $nominasiPelajar = array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'pelajar'));
+    $penilai         = self::$penilai;
+
+    return view('master.penilaian.tahap1.show', compact(
+        'subEvent',
+        'nominasiUmum',
+        'nominasiPelajar',
+        'penilai'
+    ));
+}
 }
