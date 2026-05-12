@@ -134,8 +134,8 @@
             <p>Sub Event: <strong>{{ $subEventNama }}</strong></p>
         </div>
         <div>
-            <a href="{{ route('admin.inovasi.riwayat') }}" class="btn-kembali">
-                <i class="bi bi-arrow-left"></i> Kembali
+            <a href="/inovasi/riwayat" class="btn-kembali">
+               <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
             </a>
             <button class="btn-download-excel" id="downloadExcelUsulan">
                 <i class="bi bi-file-earmark-excel"></i> Download Excel

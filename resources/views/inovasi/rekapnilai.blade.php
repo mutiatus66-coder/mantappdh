@@ -8,7 +8,6 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     padding: 20px;
     margin: 20px;
-    transition: background 0.2s, color 0.2s;
 }
 .rekap-header {
     display: flex;
@@ -38,26 +37,20 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-}
-.btn-download {
-    background: #0d6efd;
     border: none;
-    color: white;
-    padding: 6px 14px;
-    border-radius: 8px;
-    margin-left: 8px;
 }
-.btn-download-pdf {
-    background: #dc3545;
-}
-.filter-section {
+.filter-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 15px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
-.filter-section select {
+.filter-label {
+    font-weight: 500;
+    color: var(--ri-text-primary);
+}
+.filter-select {
     padding: 6px 12px;
     border-radius: 8px;
     border: 1px solid var(--ri-border);
@@ -78,15 +71,13 @@
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--ri-text-muted);
     border-bottom: 2px solid var(--ri-table-border-header);
 }
 .rekap-table td {
     padding: 12px;
-    border-bottom: 1.5px solid var(--ri-table-border-row);
+    border-bottom: 1px solid var(--ri-table-border-row);
     color: var(--ri-text-primary);
-    font-size: 0.875rem;
     background: var(--ri-table-row-bg);
 }
 .rekap-table tr:hover td {
@@ -101,6 +92,11 @@
     font-size: 0.875rem;
     color: var(--ri-text-muted);
 }
+.empty-row {
+    text-align: center;
+    padding: 30px;
+    color: var(--ri-text-muted);
+}
 @media (max-width: 640px) {
     .rekap-container { margin: 10px; padding: 12px; }
     .rekap-table th, .rekap-table td { padding: 8px; }
@@ -113,22 +109,14 @@
             <h3>Rekap Nilai Inovasi</h3>
             <p>Nilai tahap 1, tahap 2, dan total</p>
         </div>
-        <div>
-            <a href="{{ url()->previous() }}" class="btn-kembali">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
-            <button class="btn-download" id="downloadExcel">
-                <i class="bi bi-file-earmark-excel"></i> download excel
-            </button>
-            <button class="btn-download btn-download-pdf" id="downloadPDF">
-                <i class="bi bi-file-earmark-pdf"></i> download pdf
-            </button>
-        </div>
+        <a href="{{ url()->previous() }}" class="btn-kembali">
+            <i class="bi bi-arrow-left"></i> Kembali
+        </a>
     </div>
 
-    <div class="filter-section">
-        <span>Pilih Kategori :</span>
-        <select id="kategoriFilter">
+    <div class="filter-wrapper">
+        <span class="filter-label">Pilih Kategori :</span>
+        <select id="kategoriFilter" class="filter-select">
             <option value="semua">Semua</option>
             <option value="umum">Umum</option>
             <option value="pelajar">Pelajar</option>
@@ -136,11 +124,11 @@
     </div>
 
     <div style="overflow-x: auto;">
-        <table class="rekap-table">
+        <table class="rekap-table" id="rekapTable">
             <thead>
                 <tr>
-                    <th>Judul Inovasi</th>
-                    <th>Nama Instansi/Organisasi</th>
+                    <th>Inovasi</th>
+                    <th>Instansi/Organisasi</th>
                     <th>Link Youtube</th>
                     <th>No Handphone</th>
                     <th>Kategori</th>
@@ -163,7 +151,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="empty-row">Belum ada data penilaian</td>
+                    <td colspan="8" class="empty-row">No data available in table</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -176,15 +164,15 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const filterSelect = document.getElementById('kategoriFilter');
+    const filter = document.getElementById('kategoriFilter');
     const tbody = document.getElementById('rekapBody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
     const infoDiv = document.getElementById('paginationInfo');
+    let allRows = Array.from(tbody.querySelectorAll('tr'));
 
-    function updateTable() {
-        const selected = filterSelect.value;
+    function updateDisplay() {
+        const selected = filter.value;
         let visibleCount = 0;
-        rows.forEach(row => {
+        allRows.forEach(row => {
             const kategori = row.getAttribute('data-kategori');
             if (selected === 'semua' || kategori === selected) {
                 row.style.display = '';
@@ -194,13 +182,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         infoDiv.innerText = `Showing ${visibleCount} to ${visibleCount} of ${visibleCount} entries`;
+        if (visibleCount === 0 && allRows.length === 0) {
+            infoDiv.innerText = 'Showing 0 to 0 of 0 entries';
+        }
     }
 
-    filterSelect.addEventListener('change', updateTable);
-    updateTable();
-
-    document.getElementById('downloadExcel').onclick = () => alert('Generate Excel...');
-    document.getElementById('downloadPDF').onclick = () => alert('Generate PDF...');
+    filter.addEventListener('change', updateDisplay);
+    updateDisplay();
 });
 </script>
 @endsection

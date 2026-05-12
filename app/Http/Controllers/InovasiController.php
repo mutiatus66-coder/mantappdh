@@ -27,23 +27,22 @@ class InovasiController extends Controller
 
     // Halaman rekap nilai (tabel dengan filter kategori)
     public function rekapNilai()
-    {
-        $rekap = [
-            [
-                'id' => 1,
-                'inovasi' => 'SI-DICO',
-                'instansi' => 'DINAS DUKCAPIL',
-                'link_youtube' => 'https://youtube.com/watch?v=example',
-                'no_hp' => '08123456789',
-                'kategori' => 'Umum',
-                'nilai_t1' => 85,
-                'nilai_t2' => 90,
-                'nilai_total' => 87.5,
-            ],
-            // tambah dummy lain jika perlu
-        ];
-        return view('inovasi.rekapnilai', compact('rekap'));
-    }
+{
+    $rekap = [
+        [
+            'inovasi' => 'SI-DICO',
+            'instansi' => 'DINAS DUKCAPIL',
+            'link_youtube' => 'https://youtu.be/xxxx',
+            'no_hp' => '08123456789',
+            'kategori' => 'Umum',
+            'nilai_t1' => 85,
+            'nilai_t2' => 90,
+            'nilai_total' => 87.5,
+        ],
+        // tambah data lain untuk testing
+    ];
+    return view('inovasi.rekapnilai', compact('rekap'));
+}
 
 
     // Sementara untuk detail usulan (bisa diisi nanti)
