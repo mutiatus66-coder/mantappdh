@@ -70,6 +70,9 @@ Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy']) ->na
 // ── Inovasi (Riwayat & Rekap Nilai) ─────────────────────
 Route::get('/inovasi/riwayat',      [InovasiController::class, 'riwayat'])->name('admin.inovasi.riwayat');
 Route::get('/inovasi/rekap-nilai',  [InovasiController::class, 'rekapNilai'])->name('admin.inovasi.rekapnilai');
+Route::get('/inovasi/usulan/{subEventId}', [InovasiController::class, 'usulan'])->name('admin.inovasi.usulan');
+
+Route::get('/inovasi/rekap-nilai',  [InovasiController::class, 'rekapNilai'])->name('admin.inovasi.rekapnilai');
 // ── Indikator ─────────────────────────────────────────────
 Route::get   ('/indikator/tahap-1',      [IndikatorController::class, 'index'])   ->name('admin.tahap-1.index');
 

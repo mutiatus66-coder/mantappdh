@@ -3,28 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin;
 
 class InovasiController extends Controller
 {
+    // Halaman riwayat (card grid sesuai screenshot)
     public function riwayat()
     {
-        $inovasi = [
-            [
-                'id' => 1,
-                'status' => 'Melengkapi Data',
-                'inovator' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
-                'nama_inovasi' => 'SI-DICO',
-                'nama_tim' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
-                'ketua_nama' => 'DEWI SRI HANDAYANI, S.Sos',
-                'ketua_email' => 'dewi.sri@magetan.go.id',
-                'ketua_wa' => '08155618417',
-            ],
-            // Tambahkan data lain sesuai screenshot jika perlu
+        $subEvents = [
+            ['id' => 1, 'nama' => 'LOMBA INOTEK 2022'],
+            ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
+            ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
+            ['id' => 4, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025'],
+            ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2026'],
+            ['id' => 6, 'nama' => 'PELAPORAN INOVASI DAERAH 2023'],
+            ['id' => 7, 'nama' => 'PAMERAN INOTEK'],
+            ['id' => 8, 'nama' => 'PELAPORAN INOVASI TEKNOLOGI (INOTEK AWARD) 2025'],
+            ['id' => 9, 'nama' => 'PALEMBANG INOVASI DAERAH 2023'],
+            ['id' => 10, 'nama' => 'PALEMBANG INOVASI DAERAH (INOTEK AWARD) 2025'],
         ];
-
-        return view('inovasi.riwayat', compact('inovasi'));
+        return view('inovasi.riwayat', compact('subEvents'));
     }
 
+    // Halaman rekap nilai (tabel dengan filter kategori)
     public function rekapNilai()
     {
         $rekap = [
@@ -39,9 +40,45 @@ class InovasiController extends Controller
                 'nilai_t2' => 90,
                 'nilai_total' => 87.5,
             ],
-            // Tambahkan data lain sesuai kebutuhan
+            // tambah dummy lain jika perlu
         ];
-
         return view('inovasi.rekapnilai', compact('rekap'));
     }
+
+
+    // Sementara untuk detail usulan (bisa diisi nanti)
+public function usulan($subEventId)
+{
+    // Data nama sub event (sesuai dengan id yang diklik dari halaman riwayat)
+    $subEvents = [
+        1 => 'LOMBA INOTEK 2022',
+        2 => 'LOMBA INOTEK (INOTEK AWARD) 2023',
+        3 => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025',
+        4 => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025',
+        5 => 'PELAPORAN INOVASI DAERAH 2026',
+        6 => 'PELAPORAN INOVASI DAERAH 2023',
+        7 => 'PAMERAN INOTEK',
+        8 => 'PELAPORAN INOVASI TEKNOLOGI (INOTEK AWARD) 2025',
+        9 => 'PALEMBANG INOVASI DAERAH 2023',
+        10 => 'PALEMBANG INOVASI DAERAH (INOTEK AWARD) 2025',
+    ];
+    $subEventNama = $subEvents[$subEventId] ?? 'Sub Event tidak dikenal';
+
+    // Data dummy usulan (biar tampil seperti screenshot)
+    $usulan = [
+        [
+            'status' => 'Melengkapi Data',
+            'inovator' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+            'nama_inovasi' => 'SI-DICO',
+            'nama_tim' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+            'ketua_nama' => 'DEWI SRI HANDAYANI, S.Sos',
+            'ketua_email' => 'dewi.sri@magetan.go.id',
+            'ketua_wa' => '08155618417',
+        ],
+        // Bisa tambah data lain jika diperlukan
+    ];
+
+    return view('inovasi.usulan', compact('usulan', 'subEventNama', 'subEventId'));
+}
+
 }
