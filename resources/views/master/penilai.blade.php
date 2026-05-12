@@ -200,7 +200,7 @@
                             <button class="btn-hapus btn-hapus-penilai"
                                     data-id="{{ $p['id'] }}"
                                     data-nama="{{ $p['nama'] }}"
-                                    data-url="{{ route('rgn.penilai.destroy', $p['id']) }}">
+                                    data-url="{{ route('penilai.destroy', $p['id']) }}">
                                 Hapus
                             </button>
                         </div>
@@ -227,7 +227,7 @@
 <div class="modal fade" id="modalPenilai" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formPenilai" method="POST" action="{{ route('rgn.penilai.store') }}">
+            <form id="formPenilai" method="POST" action="{{ route('penilai.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formPenilaiMethod" value="POST">
 
@@ -301,7 +301,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('rgn.penilai.store') }}";
+    const storeUrl = "{{ route('penilai.store') }}";
 
     const searchInput = document.getElementById('searchPenilai');
     const rows        = document.querySelectorAll('#tabelPenilaiBody tr');
