@@ -9,12 +9,6 @@ use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
 // ── Auth Pages ─────────────────────────────────────────────
 Route::get('/login',          fn() => view('login'))->name('login');
 Route::get('/sign-in',        fn() => view('sign-in'));
