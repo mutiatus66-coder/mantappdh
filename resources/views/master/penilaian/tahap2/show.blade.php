@@ -10,7 +10,7 @@
             <p class="penilaian-sub-label mb-1">Sub Event :</p>
             <h4 class="penilaian-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
-        <a href="{{ route('penilaian.tahap.1.index') }}" class="btn btn-kembali">
+        <a href="{{ route('penilaian.tahap.2.index') }}" class="btn btn-kembali">
             <i class="bi bi-arrow-left me-2"></i>Kembali
         </a>
     </div>

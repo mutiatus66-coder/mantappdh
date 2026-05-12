@@ -16,7 +16,7 @@
     {{-- ── HEADER ── --}}
     <div class="penilaian-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <h3 class="penilaian-title">Penilaian Tahap 1</h3>
+            <h3 class="penilaian-title">Penilaian Tahap 2</h3>
             <p class="penilaian-subtitle">Rekap nominasi dan nilai penilai per sub event</p>
         </div>
     </div>
@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('penilaian.tahap.1.show', $seId) }}"
+                    <a href="{{ route('penilaian.tahap.2.show', $seId) }}"
                        class="btn btn-lihat-nilai w-100 mt-3">
                         <i class="bi bi-search me-2"></i>Lihat Nilai Nominasi
                     </a>

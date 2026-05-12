@@ -94,7 +94,7 @@ private static array $nominasi = [
     ],
 ];
 
-public function penilaianTahap1()
+public function penilaianTahap2()
 {
     $subEvents    = $this->getData();
 
@@ -102,9 +102,9 @@ public function penilaianTahap1()
     foreach ($subEvents as $se) {
         $nominasiData[$se['id']] = self::$nominasi[$se['id']] ?? [];
     }
-    return view('master.penilaian.tahap1.index', compact('subEvents', 'nominasiData'));
+    return view('master.penilaian.tahap2.index', compact('subEvents', 'nominasiData'));
 }
-public function penilaianTahap1Show(int $id)
+public function penilaianTahap2Show(int $id)
 {
     $subEvent = collect($this->getData())->firstWhere('id', $id);
     abort_unless($subEvent, 404);
@@ -114,7 +114,7 @@ public function penilaianTahap1Show(int $id)
     $nominasiPelajar= array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'pelajar'));
     $penilai        = self::$penilai;
 
-    return view('master.penilaian.tahap1.show', compact(
+    return view('master.penilaian.tahap2.show', compact(
         'subEvent',
         'nominasiUmum',
         'nominasiPelajar',
@@ -212,4 +212,33 @@ public function penilaianTahap1Show(int $id)
         $this->saveData($data);
         return redirect()->route('admin.sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
     }
+    public function penilaianTahap1()
+{
+    $subEvents    = $this->getData();
+
+    $nominasiData = [];
+    foreach ($subEvents as $se) {
+        $nominasiData[$se['id']] = self::$nominasi[$se['id']] ?? [];
+    }
+
+    return view('master.penilaian.tahap1.index', compact('subEvents', 'nominasiData'));
+}
+
+public function penilaianTahap1Show(int $id)
+{
+    $subEvent = collect($this->getData())->firstWhere('id', $id);
+    abort_unless($subEvent, 404);
+
+    $allNominasi     = self::$nominasi[$id] ?? [];
+    $nominasiUmum    = array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'umum'));
+    $nominasiPelajar = array_values(array_filter($allNominasi, fn($n) => $n['kategori'] === 'pelajar'));
+    $penilai         = self::$penilai;
+
+    return view('master.penilaian.tahap1.show', compact(
+        'subEvent',
+        'nominasiUmum',
+        'nominasiPelajar',
+        'penilai'
+    ));
+}
 }
