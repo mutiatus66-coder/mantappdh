@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RGNController as RGN;
+use App\Http\Controllers\SubEventController;
+use App\Http\Controllers\BidangController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PengumumanController;
@@ -9,99 +11,91 @@ use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
 
-// ── Auth Pages ─────────────────────────────────────────────
+// ── Auth ──────────────────────────────────────────────────────────────────────
 Route::get('/login',          fn() => view('login'))->name('login');
 Route::get('/sign-in',        fn() => view('sign-in'));
 Route::get('/sign-up',        fn() => view('sign-up'));
 Route::get('/reset-password', fn() => view('reset-password'));
 Route::get('/new-password',   fn() => view('new-password'));
 
-// ── Dashboard ──────────────────────────────────────────────
+// ── Dashboard ─────────────────────────────────────────────────────────────────
 Route::get('/',      fn() => view('dashboard'))->name('dashboard');
 Route::get('/index', fn() => view('index'))->name('index');
 
-// ── RGN Main Routes (Sub Event & Bidang) ───────────────────
-Route::prefix('')->name('rgn.')->group(function () {
-
-    // Sub Event
-    Route::resource('sub-event', RGN::class)
-        ->only(['index', 'store', 'edit', 'update', 'destroy'])
-        ->names([
-            'index'   => 'sub-event.index',
-            'store'   => 'sub-event.store',
-            'edit'    => 'sub-event.edit',
-            'update'  => 'sub-event.update',
-            'destroy' => 'sub-event.destroy',
-        ]);
-
-    // Bidang
-    Route::controller(RGN::class)->prefix('bidang')->name('bidang.')->group(function () {
-        Route::get('/',          'bidang')->name('index');
-        Route::post('/store',    'storeBidang')->name('store');
-        Route::get('/{id}/edit', 'editBidang')->name('edit');
-        Route::put('/{id}',      'updateBidang')->name('update');
-        Route::delete('/{id}',   'destroyBidang')->name('destroy');
-    });
-
+// ── Sub Event ─────────────────────────────────────────────────────────────────
+Route::prefix('sub-event')->name('sub-event.')->group(function () {
+    Route::get('/',          [SubEventController::class, 'index'])   ->name('index');
+    Route::post('/',         [SubEventController::class, 'store'])   ->name('store');
+    Route::get('/{id}/edit', [SubEventController::class, 'edit'])    ->name('edit');
+    Route::put('/{id}',      [SubEventController::class, 'update'])  ->name('update');
+    Route::delete('/{id}',   [SubEventController::class, 'destroy']) ->name('destroy');
 });
 
-// ── Event ──────────────────────────────────────────────────
-Route::resource('event', EventController::class)
-    ->only(['index', 'store', 'update', 'destroy']);
+// ── Bidang ────────────────────────────────────────────────────────────────────
+Route::prefix('bidang')->name('bidang.')->group(function () {
+    Route::get('/',          [BidangController::class, 'index'])   ->name('index');
+    Route::post('/',         [BidangController::class, 'store'])   ->name('store');
+    Route::get('/{id}/edit', [BidangController::class, 'edit'])    ->name('edit');
+    Route::put('/{id}',      [BidangController::class, 'update'])  ->name('update');
+    Route::delete('/{id}',   [BidangController::class, 'destroy']) ->name('destroy');
+});
 
-// ── User Management ────────────────────────────────────────
-Route::resource('user', UserController::class)
-    ->only(['index', 'store', 'update', 'destroy']);
-
-Route::get('user/{id}/login-as', [UserController::class, 'loginAs'])
-    ->name('user.login-as');
-
-// ── Penilai ────────────────────────────────────────────────
-Route::resource('penilai', PenilaiController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
-    ->names([
-        'index'   => 'rgn.penilai.index',
-        'store'   => 'rgn.penilai.store',
-        'update'  => 'rgn.penilai.update',
-        'destroy' => 'rgn.penilai.destroy',
-    ]);
-
-// ── Pengumuman ─────────────────────────────────────────────
-Route::resource('pengumuman', PengumumanController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
-    ->names([
-        'index'   => 'admin.pengumuman.index',
-        'store'   => 'admin.pengumuman.store',
-        'update'  => 'admin.pengumuman.update',
-        'destroy' => 'admin.pengumuman.destroy',
-    ]);
-
-// ── Penilaian ──────────────────────────────────────────────
+// ── Penilaian ─────────────────────────────────────────────────────────────────
 Route::prefix('penilaian')->name('penilaian.')->group(function () {
+    Route::get('/tahap-1',              [PenilaianController::class, 'tahap1Index'])  ->name('tahap.1.index');
+    Route::get('/tahap-1/{id}',         [PenilaianController::class, 'tahap1Show'])   ->name('tahap.1.show');
+    Route::post('/tahap-1/{id}/simpan', [PenilaianController::class, 'tahap1Simpan']) ->name('tahap.1.simpan');
 
-    // Tahap 1
-    Route::get('/tahap-1',                  [RGN::class, 'penilaianTahap1'])->name('tahap.1.index');
-    Route::get('/tahap-1/{id}',             [RGN::class, 'penilaianTahap1Show'])->name('tahap.1.show');
-    Route::post('/tahap-1/{id}/simpan',     [RGN::class, 'penilaianTahap1Simpan'])->name('tahap.1.simpan');
-
-    // Tahap 2
-    Route::get('/tahap-2',                  [RGN::class, 'penilaianTahap2'])->name('tahap.2.index');
-    Route::get('/tahap-2/{id}',             [RGN::class, 'penilaianTahap2Show'])->name('tahap.2.show');
-
+    Route::get('/tahap-2',      [PenilaianController::class, 'tahap2Index']) ->name('tahap.2.index');
+    Route::get('/tahap-2/{id}', [PenilaianController::class, 'tahap2Show'])  ->name('tahap.2.show');
 });
 
-// ── Inovasi & Rekap ────────────────────────────────────────
-Route::prefix('inovasi')->name('rgn.inovasi.')->group(function () {
-    Route::get('/riwayat',     [InovasiController::class, 'riwayat'])->name('riwayat');
-    Route::get('/rekap-nilai', [InovasiController::class, 'rekapNilai'])->name('rekapnilai');
+// ── Penilai ───────────────────────────────────────────────────────────────────
+Route::prefix('penilai')->name('penilai.')->group(function () {
+    Route::get('/',        [PenilaiController::class, 'index'])   ->name('index');
+    Route::post('/',       [PenilaiController::class, 'store'])   ->name('store');
+    Route::put('/{id}',    [PenilaiController::class, 'update'])  ->name('update');
+    Route::delete('/{id}', [PenilaiController::class, 'destroy']) ->name('destroy');
 });
 
-// Indikator Tahap 1
-Route::get('/indikator/tahap-1', [IndikatorController::class, 'tahap1'])->name('indikator.tahap1');
-Route::get('/indikator/tahap-1/{id}/indikator', [IndikatorController::class, 'detailIndikator1'])->name('indikator.tahap1.indikator');
-Route::get('/indikator/tahap-1/{id}/formulasi', [IndikatorController::class, 'detailFormulasi1'])->name('indikator.tahap1.formulasi');
+// ── Event ─────────────────────────────────────────────────────────────────────
+Route::prefix('event')->name('event.')->group(function () {
+    Route::get('/',        [EventController::class, 'index'])   ->name('index');
+    Route::post('/',       [EventController::class, 'store'])   ->name('store');
+    Route::put('/{id}',    [EventController::class, 'update'])  ->name('update');
+    Route::delete('/{id}', [EventController::class, 'destroy']) ->name('destroy');
+});
 
-// Indikator Tahap 2
-Route::get('/indikator/tahap-2', [IndikatorController::class, 'tahap2'])->name('indikator.tahap2');
-Route::get('/indikator/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('indikator.tahap2.indikator');
-Route::get('/indikator/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('indikator.tahap2.formulasi');
+// ── User ──────────────────────────────────────────────────────────────────────
+Route::prefix('user')->name('user.')->group(function () {
+    Route::get('/',              [UserController::class, 'index'])   ->name('index');
+    Route::post('/',             [UserController::class, 'store'])   ->name('store');
+    Route::put('/{id}',          [UserController::class, 'update'])  ->name('update');
+    Route::delete('/{id}',       [UserController::class, 'destroy']) ->name('destroy');
+    Route::get('/{id}/login-as', [UserController::class, 'loginAs']) ->name('login-as');
+});
+
+// ── Pengumuman ────────────────────────────────────────────────────────────────
+Route::prefix('pengumuman')->name('admin.pengumuman.')->group(function () {
+    Route::get('/',        [PengumumanController::class, 'index'])   ->name('index');
+    Route::post('/',       [PengumumanController::class, 'store'])   ->name('store');
+    Route::put('/{id}',    [PengumumanController::class, 'update'])  ->name('update');
+    Route::delete('/{id}', [PengumumanController::class, 'destroy']) ->name('destroy');
+});
+
+// ── Inovasi ───────────────────────────────────────────────────────────────────
+Route::prefix('inovasi')->name('inovasi.')->group(function () {
+    Route::get('/riwayat',     [InovasiController::class, 'riwayat'])    ->name('riwayat');
+    Route::get('/rekap-nilai', [InovasiController::class, 'rekapNilai']) ->name('rekapnilai');
+});
+
+// ── Indikator ─────────────────────────────────────────────────────────────────
+Route::prefix('indikator')->name('indikator.')->group(function () {
+    Route::get('/tahap-1',                [IndikatorController::class, 'tahap1'])          ->name('tahap1');
+    Route::get('/tahap-1/{id}/indikator', [IndikatorController::class, 'detailIndikator1'])->name('tahap1.indikator');
+    Route::get('/tahap-1/{id}/formulasi', [IndikatorController::class, 'detailFormulasi1'])->name('tahap1.formulasi');
+
+    Route::get('/tahap-2',                [IndikatorController::class, 'tahap2'])          ->name('tahap2');
+    Route::get('/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('tahap2.indikator');
+    Route::get('/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('tahap2.formulasi');
+});
