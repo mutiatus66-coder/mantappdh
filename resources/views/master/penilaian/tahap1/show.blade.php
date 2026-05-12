@@ -19,8 +19,8 @@
             <p class="t1-sub-label mb-1">Sub Event :</p>
             <h4 class="t1-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
-        <a href="{{ route('penilaian.tahap.1.index') }}" class="btn btn-kembali">
-        </i>Kembali
+        <a href="{{ route('penilaian.tahap1.index') }}" class="btn btn-kembali">
+            <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
 
@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             .map(c => c.dataset.id);
 
             // Kirim ke server via fetch (sesuaikan URL / CSRF)
-            fetch('{{ route("penilaian.tahap.1.simpan", $subEvent["id"]) }}', {
+            fetch('{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}', {
                 method : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

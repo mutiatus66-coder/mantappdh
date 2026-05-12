@@ -84,9 +84,10 @@ Route::prefix('pengumuman')->name('admin.pengumuman.')->group(function () {
 });
 
 // ── Inovasi ───────────────────────────────────────────────────────────────────
-Route::prefix('inovasi')->name('inovasi.')->group(function () {
-    Route::get('/riwayat',     [InovasiController::class, 'riwayat'])    ->name('riwayat');
-    Route::get('/rekap-nilai', [InovasiController::class, 'rekapNilai']) ->name('rekapnilai');
+Route::prefix('inovasi')->name('rgn.inovasi.')->group(function () {
+    Route::get('/riwayat',          [InovasiController::class, 'riwayat'])    ->name('riwayat');
+    Route::get('/rekap-nilai',      [InovasiController::class, 'rekapNilai']) ->name('rekapnilai');
+    Route::get('/usulan/{subEventId}', [InovasiController::class, 'usulan'])  ->name('usulan');
 });
 
 // ── Indikator ─────────────────────────────────────────────────────────────────

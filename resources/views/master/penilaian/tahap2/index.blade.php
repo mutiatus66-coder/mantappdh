@@ -41,7 +41,7 @@
                     </div>
 
                     <h5 class="penilaian-card-title">{{ $se['sub_event'] }}</h5>
-                    <p class="penilaian-card-event text-truncate" title="{{ $se['event'] }}">{{ $se['event'] }}</p>
+                    <p class="penilaian-card-sub-event text-truncate" title="{{ $se['sub_event'] }}">{{ $se['sub_event'] }}</p>
 
                     <div class="penilaian-progress-wrap mt-3 mb-1">
                         <div class="d-flex justify-content-between mb-1">
@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('penilaian.tahap.2.show', $seId) }}"
+                    <a href="{{ route('penilaian.tahap2.show', $seId) }}"
                        class="btn btn-lihat-nilai w-100 mt-3">
                         <i class="bi bi-search me-2"></i>Lihat Nilai Nominasi
                     </a>
