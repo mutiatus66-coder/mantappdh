@@ -45,7 +45,7 @@ class PenilaiController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('rgn.penilai.index')
+        return redirect()->route('penilai.index')
                          ->with('success', 'Penilai berhasil ditambahkan');
     }
 
@@ -64,7 +64,7 @@ class PenilaiController extends Controller
                 'updated_at' => now(),
             ]);
 
-        return redirect()->route('rgn.penilai.index')
+        return redirect()->route('penilai.index')
                          ->with('success', 'Penilai berhasil diperbarui');
     }
 
@@ -72,7 +72,7 @@ class PenilaiController extends Controller
     {
         DB::table('penilais')->where('id', $id)->delete();
 
-        return redirect()->route('rgn.penilai.index')
+        return redirect()->route('penilai.index')
                          ->with('success', 'Penilai berhasil dihapus');
     }
 }
