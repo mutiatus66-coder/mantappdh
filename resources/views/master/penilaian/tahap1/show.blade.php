@@ -2,28 +2,37 @@
 
 @section('content')
 
-<div class="penilaian-detail-container">
+{{-- Flash Message --}}
+@if(session('success'))
+<div class="alert alert-dismissible fade show mb-4" role="alert"
+     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
+    <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
+<div class="t1-detail-container">
 
     {{-- ── BREADCRUMB HEADER ── --}}
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <p class="penilaian-sub-label mb-1">Sub Event :</p>
-            <h4 class="penilaian-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
+            <p class="t1-sub-label mb-1">Sub Event :</p>
+            <h4 class="t1-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
         <a href="{{ route('penilaian.tahap.1.index') }}" class="btn btn-kembali">
-            <i class="bi bi-arrow-left me-2"></i>Kembali
+        </i>Kembali
         </a>
     </div>
 
-    {{-- ── TABS — Umum | Pelajar ── --}}
-    <ul class="nav penilaian-tabs mb-4" id="tabNominator" role="tablist">
+    {{-- ── TABS ── --}}
+    <ul class="nav t1-tabs mb-4" id="tabNominator" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="penilaian-tab-btn active"
+            <button class="t1-tab-btn active"
                     id="tab-umum" data-bs-toggle="tab" data-bs-target="#panel-umum"
                     type="button" role="tab">Umum</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="penilaian-tab-btn"
+            <button class="t1-tab-btn"
                     id="tab-pelajar" data-bs-toggle="tab" data-bs-target="#panel-pelajar"
                     type="button" role="tab">Pelajar</button>
         </li>
@@ -33,59 +42,71 @@
 
         {{-- ─────────── TAB UMUM ─────────── --}}
         <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
+            <div class="t1-table-card">
 
-            <div class="penilaian-table-card">
-                <div class="penilaian-table-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                    <h6 class="penilaian-table-title mb-0">Nominator Umum</h6>
+                <div class="t1-table-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <h6 class="t1-table-title mb-0">Verifikasi Umum</h6>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-rangking" id="btnRangkingUmum">
-                            <i class="bi bi-arrow-up me-1"></i>Rangking
+                        <button class="btn btn-t1-rangking" id="btnRangkingUmum">
+                            </i>Rangking
                         </button>
-                        <button class="btn btn-excel" id="btnExcelUmum">
+                        <button class="btn btn-t1-excel" id="btnExcelUmum">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
                         </button>
                     </div>
                 </div>
 
+                {{-- Simpan bar --}}
+                <div class="t1-simpan-bar mb-3" id="simpanBarUmum" style="display:none !important;">
+                    <span class="t1-simpan-info">
+                        <i class="bi bi-check2-circle me-1"></i>
+                        <span id="simpanCountUmum">0</span> inovasi dipilih untuk lolos ke Tahap 2
+                    </span>
+                    <button class="btn btn-t1-simpan" id="btnSimpanUmum">
+                        Simpan
+                    </button>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table penilaian-table align-middle mb-0" id="tableUmum">
+                    <table class="table t1-table align-middle mb-0" id="tableUmum">
                         <thead>
                             <tr>
+                                <th class="text-center" width="50">
+                                    <input type="checkbox" class="t1-checkbox" id="checkAllUmum">
+                                </th>
                                 <th class="text-center" width="50">No</th>
                                 <th>Inovator</th>
                                 <th>Nama Inovasi</th>
-                                <th class="text-center" width="90">Rangking</th>
-                                <th class="text-center" width="90">Total Nilai</th>
+                                <th class="text-center" width="100">Total Nilai</th>
                                 @foreach($penilai as $p)
-                                <th class="text-center" width="80">{{ $p['nama_singkat'] }}</th>
+                                <th class="text-center" width="85">{{ $p['nama_singkat'] }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($nominasiUmum as $i => $nom)
-                            <tr>
+                            <tr data-id="{{ $nom['id'] }}" class="{{ ($nom['lolos'] ?? false) ? 'row-lolos' : '' }}">
+                                <td class="text-center">
+                                    <input type="checkbox"
+                                           class="t1-checkbox chk-umum"
+                                           data-id="{{ $nom['id'] }}"
+                                           {{ ($nom['lolos'] ?? false) ? 'checked' : '' }}>
+                                </td>
                                 <td class="text-center">{{ $i + 1 }}</td>
                                 <td>{{ $nom['inovator'] }}</td>
                                 <td>{{ $nom['nama_inovasi'] }}</td>
-                                <td class="text-center">
-                                    @if($nom['rangking'])
-                                        <span class="badge-rangking">{{ $nom['rangking'] }}</span>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td class="text-center fw-bold" style="color:#3C678E;">
-                                    {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '-' }}
+                                <td class="text-center fw-bold t1-nilai">
+                                    {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '0.00' }}
                                 </td>
                                 @foreach($penilai as $p)
                                 <td class="text-center">
-                                    {{ $nom['nilai'][$p['id']] ?? '-' }}
+                                    {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '' }}
                                 </td>
                                 @endforeach
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="{{ 5 + count($penilai) }}" class="text-center py-5 empty-row">
+                                <td colspan="{{ 5 + count($penilai) }}" class="text-center py-5 t1-empty-row">
                                     <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                                     Belum ada data nominasi umum.
                                 </td>
@@ -95,64 +116,75 @@
                     </table>
                 </div>
             </div>
-
         </div>
 
         {{-- ─────────── TAB PELAJAR ─────────── --}}
         <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
+            <div class="t1-table-card">
 
-            <div class="penilaian-table-card">
-                <div class="penilaian-table-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                    <h6 class="penilaian-table-title mb-0">Nominator Pelajar</h6>
+                <div class="t1-table-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <h6 class="t1-table-title mb-0">Verifikasi Pelajar</h6>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-rangking" id="btnRangkingPelajar">
-                            <i class="bi bi-arrow-up me-1"></i>Rangking
+                        <button class="btn btn-t1-rangking" id="btnRangkingPelajar">
+                            Rangking
                         </button>
-                        <button class="btn btn-excel" id="btnExcelPelajar">
+                        <button class="btn btn-t1-excel" id="btnExcelPelajar">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
                         </button>
                     </div>
                 </div>
 
+                {{-- Simpan bar --}}
+                <div class="t1-simpan-bar mb-3" id="simpanBarPelajar" style="display:none !important;">
+                    <span class="t1-simpan-info">
+                        <i class="bi bi-check2-circle me-1"></i>
+                        <span id="simpanCountPelajar">0</span> inovasi dipilih untuk lolos ke Tahap 2
+                    </span>
+                    <button class="btn btn-t1-simpan" id="btnSimpanPelajar">
+                        Simpan
+                    </button>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table penilaian-table align-middle mb-0" id="tablePelajar">
+                    <table class="table t1-table align-middle mb-0" id="tablePelajar">
                         <thead>
                             <tr>
+                                <th class="text-center" width="50">
+                                    <input type="checkbox" class="t1-checkbox" id="checkAllPelajar">
+                                </th>
                                 <th class="text-center" width="50">No</th>
                                 <th>Inovator</th>
                                 <th>Nama Inovasi</th>
-                                <th class="text-center" width="90">Rangking</th>
-                                <th class="text-center" width="90">Total Nilai</th>
+                                <th class="text-center" width="100">Total Nilai</th>
                                 @foreach($penilai as $p)
-                                <th class="text-center" width="80">{{ $p['nama_singkat'] }}</th>
+                                <th class="text-center" width="85">{{ $p['nama_singkat'] }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($nominasiPelajar as $i => $nom)
-                            <tr>
+                            <tr data-id="{{ $nom['id'] }}" class="{{ ($nom['lolos'] ?? false) ? 'row-lolos' : '' }}">
+                                <td class="text-center">
+                                    <input type="checkbox"
+                                           class="t1-checkbox chk-pelajar"
+                                           data-id="{{ $nom['id'] }}"
+                                           {{ ($nom['lolos'] ?? false) ? 'checked' : '' }}>
+                                </td>
                                 <td class="text-center">{{ $i + 1 }}</td>
                                 <td>{{ $nom['inovator'] }}</td>
                                 <td>{{ $nom['nama_inovasi'] }}</td>
-                                <td class="text-center">
-                                    @if($nom['rangking'])
-                                        <span class="badge-rangking">{{ $nom['rangking'] }}</span>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td class="text-center fw-bold" style="color:#3C678E;">
-                                    {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '-' }}
+                                <td class="text-center fw-bold t1-nilai">
+                                    {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '0.00' }}
                                 </td>
                                 @foreach($penilai as $p)
                                 <td class="text-center">
-                                    {{ $nom['nilai'][$p['id']] ?? '-' }}
+                                    {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '' }}
                                 </td>
                                 @endforeach
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="{{ 5 + count($penilai) }}" class="text-center py-5 empty-row">
+                                <td colspan="{{ 5 + count($penilai) }}" class="text-center py-5 t1-empty-row">
                                     <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                                     Belum ada data nominasi pelajar.
                                 </td>
@@ -162,10 +194,9 @@
                     </table>
                 </div>
             </div>
-
         </div>
-    </div>
 
+    </div>
 </div>
 @endsection
 
@@ -173,7 +204,7 @@
 @push('styles')
 <style>
 /* ── Container ── */
-.penilaian-detail-container {
+.t1-detail-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.10);
@@ -182,20 +213,20 @@
     transition: background 0.2s, color 0.2s;
 }
 
-/* ── Breadcrumb header ── */
-.penilaian-sub-label {
+/* ── Header ── */
+.t1-sub-label {
     font-size: 0.80rem;
     color: var(--ri-text-muted);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.6px;
 }
-.penilaian-sub-title {
+.t1-sub-title {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #00838F;
 }
-[data-bs-theme="dark"] .penilaian-sub-title { color: #6DADD8; }
+[data-bs-theme="dark"] .t1-sub-title { color: #00E5FF; }
 
 .btn-kembali {
     background: linear-gradient(135deg, #f59e0b, #d97706) !important;
@@ -213,11 +244,11 @@
 .btn-kembali:hover { opacity: 0.88; color: #fff !important; }
 
 /* ── Tabs ── */
-.penilaian-tabs {
+.t1-tabs {
     border-bottom: 2px solid var(--ri-border);
     gap: 4px;
 }
-.penilaian-tab-btn {
+.t1-tab-btn {
     background: transparent;
     border: none;
     border-bottom: 3px solid transparent;
@@ -230,40 +261,83 @@
     transition: color 0.15s, border-color 0.15s;
     border-radius: 0;
 }
-.penilaian-tab-btn.active,
-.penilaian-tab-btn:focus {
-    color: #3C678E;
-    border-bottom-color: #3C678E;
+.t1-tab-btn.active,
+.t1-tab-btn:focus {
+    color: #00838F;
+    border-bottom-color: #00838F;
     outline: none;
     background: transparent;
 }
-[data-bs-theme="dark"] .penilaian-tab-btn.active {
-    color: #6DADD8;
-    border-bottom-color: #6DADD8;
+[data-bs-theme="dark"] .t1-tab-btn.active {
+    color: #00E5FF;
+    border-bottom-color: #00E5FF;
 }
 
 /* ── Table card ── */
-.penilaian-table-card {
+.t1-table-card {
     background: var(--ri-card-bg);
     border: 1px solid var(--ri-border);
     border-radius: 10px;
     padding: 20px 22px;
     transition: background 0.2s;
 }
-.penilaian-table-title {
+.t1-table-title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #00838F;
 }
-[data-bs-theme="dark"] .penilaian-table-title { color: #6DADD8; }
+[data-bs-theme="dark"] .t1-table-title { color: #00E5FF; }
+
+/* ── Simpan bar ── */
+.t1-simpan-bar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,172,193,0.08);
+    border: 1px solid rgba(0,172,193,0.25);
+    border-radius: 8px;
+    padding: 10px 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+[data-bs-theme="dark"] .t1-simpan-bar {
+    background: rgba(0,229,255,0.06);
+    border-color: rgba(0,229,255,0.20);
+}
+.t1-simpan-info {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #00838F;
+}
+[data-bs-theme="dark"] .t1-simpan-info { color: #00E5FF; }
+
+.btn-t1-simpan {
+    background: #00838F !important;
+    color: #fff !important;
+    border: none;
+    font-weight: 600;
+    font-size: 0.82rem;
+    border-radius: 7px;
+    padding: 7px 16px;
+    transition: opacity 0.15s;
+}
+.btn-t1-simpan:hover { opacity: 0.85; }
+
+/* ── Checkbox ── */
+.t1-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #00838F;
+}
 
 /* ── Table ── */
-.penilaian-table {
+.t1-table {
     border: 2px solid var(--ri-table-border-outer) !important;
     border-radius: 8px;
     overflow: hidden;
 }
-.penilaian-table th {
+.t1-table th {
     background: var(--ri-table-head-bg) !important;
     padding: 13px 12px;
     border-bottom: 2px solid var(--ri-table-border-header) !important;
@@ -273,32 +347,31 @@
     letter-spacing: 0.05em;
     color: var(--ri-text-muted) !important;
 }
-.penilaian-table td {
-    padding: 13px 12px;
+.t1-table td {
+    padding: 12px 12px;
     border-bottom: 1px solid var(--ri-table-border-row) !important;
     color: var(--ri-text-primary) !important;
     background: var(--ri-table-row-bg) !important;
     font-size: 0.875rem;
     transition: background 0.2s;
 }
-.penilaian-table tr:hover td { background: var(--ri-table-row-hover) !important; }
+.t1-table tr:hover td { background: var(--ri-table-row-hover) !important; }
 
-/* ── Rangking badge ── */
-.badge-rangking {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #3C678E, #6DADD8);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    width: 28px; height: 28px;
-    border-radius: 50%;
+/* ── Row lolos highlight ── */
+.row-lolos td {
+    background: rgba(0,172,193,0.06) !important;
+}
+[data-bs-theme="dark"] .row-lolos td {
+    background: rgba(0,229,255,0.05) !important;
 }
 
+/* ── Nilai ── */
+.t1-nilai { color: #00838F !important; }
+[data-bs-theme="dark"] .t1-nilai { color: #00E5FF !important; }
+
 /* ── Buttons ── */
-.btn-rangking {
-    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
+.btn-t1-rangking {
+    background: linear-gradient(135deg, #006064, #00838F) !important;
     color: #fff !important;
     border: none;
     font-weight: 600;
@@ -307,9 +380,9 @@
     padding: 7px 14px;
     transition: opacity 0.15s;
 }
-.btn-rangking:hover { opacity: 0.85; }
+.btn-t1-rangking:hover { opacity: 0.85; }
 
-.btn-excel {
+.btn-t1-excel {
     background: var(--ri-table-head-bg) !important;
     color: var(--ri-text-primary) !important;
     border: 1px solid var(--ri-border) !important;
@@ -319,13 +392,13 @@
     padding: 7px 14px;
     transition: background 0.15s, color 0.15s;
 }
-.btn-excel:hover {
+.btn-t1-excel:hover {
     background: #65A605 !important;
     color: #fff !important;
     border-color: #65A605 !important;
 }
 
-.empty-row {
+.t1-empty-row {
     color: var(--ri-text-muted) !important;
     background: var(--ri-table-row-bg) !important;
 }
@@ -337,7 +410,90 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Sort by Rangking ──
+    // ── Checkbox logic ──────────────────────────────────────────
+    function setupCheckbox(groupClass, checkAllId, simpanBarId, countId) {
+        const checkAll  = document.getElementById(checkAllId);
+        const bar       = document.getElementById(simpanBarId);
+        const countEl   = document.getElementById(countId);
+
+        function updateBar() {
+            const checked = document.querySelectorAll('.' + groupClass + ':checked');
+            const n = checked.length;
+            countEl.textContent = n;
+            if (n > 0) {
+                bar.style.removeProperty('display');
+                bar.style.display = 'flex';
+            } else {
+                bar.style.display = 'none';
+            }
+            const all = document.querySelectorAll('.' + groupClass);
+            checkAll.indeterminate = n > 0 && n < all.length;
+            checkAll.checked = n > 0 && n === all.length;
+        }
+
+        // Highlight row on check
+        document.querySelectorAll('.' + groupClass).forEach(chk => {
+            chk.addEventListener('change', function () {
+                this.closest('tr').classList.toggle('row-lolos', this.checked);
+                updateBar();
+            });
+        });
+
+        checkAll?.addEventListener('change', function () {
+            document.querySelectorAll('.' + groupClass).forEach(chk => {
+                chk.checked = this.checked;
+                chk.closest('tr').classList.toggle('row-lolos', this.checked);
+            });
+            updateBar();
+        });
+
+        updateBar(); // init count for pre-checked rows
+    }
+
+    setupCheckbox('chk-umum',    'checkAllUmum',    'simpanBarUmum',    'simpanCountUmum');
+    setupCheckbox('chk-pelajar', 'checkAllPelajar', 'simpanBarPelajar', 'simpanCountPelajar');
+
+    // ── Simpan — kirim ID yang lolos ke server ──────────────────
+    function setupSimpan(btnId, groupClass, kategori) {
+        document.getElementById(btnId)?.addEventListener('click', function () {
+            const ids = Array.from(document.querySelectorAll('.' + groupClass + ':checked'))
+                            .map(c => c.dataset.id);
+
+            // Kirim ke server via fetch (sesuaikan URL / CSRF)
+            fetch('{{ route("penilaian.tahap.1.simpan", $subEvent["id"]) }}', {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]')?.content ?? ''
+                },
+                body: JSON.stringify({ kategori, ids })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Data berhasil disimpan!', 'success');
+                } else {
+                    showToast('Gagal menyimpan data.', 'error');
+                }
+            })
+            .catch(() => showToast('Terjadi kesalahan.', 'error'));
+        });
+    }
+
+    setupSimpan('btnSimpanUmum',    'chk-umum',    'umum');
+    setupSimpan('btnSimpanPelajar', 'chk-pelajar', 'pelajar');
+
+    // ── Toast notif ringan ──────────────────────────────────────
+    function showToast(msg, type) {
+        const t = document.createElement('div');
+        t.className = 't1-toast t1-toast-' + type;
+        t.innerHTML = '<i class="bi bi-' + (type === 'success' ? 'check-circle-fill' : 'x-circle-fill') + ' me-2"></i>' + msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.classList.add('t1-toast-show'), 10);
+        setTimeout(() => { t.classList.remove('t1-toast-show'); setTimeout(() => t.remove(), 300); }, 2800);
+    }
+
+    // ── Sort by Total Nilai ─────────────────────────────────────
     function sortTableByTotal(tableId) {
         const tbody = document.querySelector('#' + tableId + ' tbody');
         if (!tbody) return;
@@ -347,32 +503,57 @@ document.addEventListener('DOMContentLoaded', function () {
             const vb = parseFloat(b.cells[4]?.textContent.trim()) || 0;
             return vb - va;
         });
-        rows.forEach((r, i) => {
-            r.cells[0].textContent = i + 1;
-            tbody.appendChild(r);
-        });
+        rows.forEach((r, i) => { r.cells[1].textContent = i + 1; tbody.appendChild(r); });
     }
 
     document.getElementById('btnRangkingUmum')?.addEventListener('click',    () => sortTableByTotal('tableUmum'));
     document.getElementById('btnRangkingPelajar')?.addEventListener('click', () => sortTableByTotal('tablePelajar'));
 
-    // ── Export Excel (simple CSV download) ──
+    // ── Export CSV ──────────────────────────────────────────────
     function exportTableToCSV(tableId, filename) {
         const table = document.getElementById(tableId);
         if (!table) return;
         let csv = [];
         table.querySelectorAll('tr').forEach(row => {
-            const cols = Array.from(row.querySelectorAll('th, td')).map(c => '"' + c.innerText.replace(/"/g, '""') + '"');
+            // skip checkbox column
+            const cols = Array.from(row.querySelectorAll('th, td'))
+                .slice(1)
+                .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"');
             csv.push(cols.join(','));
         });
         const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-        a.download = filename + '.csv'; a.click();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename + '.csv';
+        a.click();
     }
 
-    document.getElementById('btnExcelUmum')?.addEventListener('click',    () => exportTableToCSV('tableUmum',    'nominasi-umum'));
-    document.getElementById('btnExcelPelajar')?.addEventListener('click', () => exportTableToCSV('tablePelajar', 'nominasi-pelajar'));
+    document.getElementById('btnExcelUmum')?.addEventListener('click',    () => exportTableToCSV('tableUmum',    'verifikasi-umum'));
+    document.getElementById('btnExcelPelajar')?.addEventListener('click', () => exportTableToCSV('tablePelajar', 'verifikasi-pelajar'));
 
 });
 </script>
+
+<style>
+/* ── Toast ── */
+.t1-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    padding: 12px 20px;
+    border-radius: 9px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s, transform 0.25s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+}
+.t1-toast-show { opacity: 1; transform: translateY(0); }
+.t1-toast-success { background: #00838F; color: #fff; }
+.t1-toast-error   { background: #e53935; color: #fff; }
+</style>
 @endpush

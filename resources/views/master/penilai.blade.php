@@ -2,14 +2,29 @@
 
 @section('content')
 <style>
-.btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
+.btn-simpan {
+    background: #00838F !important;
+    border-color: #00838F !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-simpan:hover {
+    background: #006064 !important;
+    border-color: #006064 !important;
     color: #fff !important;
 }
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
+.btn-batal {
+    background: #546E7A !important;
+    border-color: #546E7A !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-batal:hover {
+    background: #455A64 !important;
+    border-color: #455A64 !important;
+    color: #fff !important;
 }
 .penilai-container {
     background: var(--ri-card-bg);
@@ -105,7 +120,7 @@
 .penilai-table tr:hover td { background: var(--ri-table-row-hover); }
 .penilai-table tr:last-child td { border-bottom: none; }
 .btn-gold {
-    background: linear-gradient(135deg,  #142D54, #0C4C8A);
+    background: linear-gradient(135deg, #142D54, #0C4C8A);
     color: white !important;
     border: none; border-radius: 6px;
     padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
@@ -125,7 +140,6 @@
     text-align: center; padding: 30px;
     color: var(--ri-text-muted); background: var(--ri-table-row-bg);
 }
-/* Hapus modal */
 .hapus-icon-circle {
     width: 56px; height: 56px; border-radius: 50%;
     background: #FCEBEB;
@@ -186,7 +200,7 @@
                             <button class="btn-hapus btn-hapus-penilai"
                                     data-id="{{ $p['id'] }}"
                                     data-nama="{{ $p['nama'] }}"
-                                    data-url="{{ route('admin.penilai.destroy', $p['id']) }}">
+                                    data-url="{{ route('rgn.penilai.destroy', $p['id']) }}">
                                 Hapus
                             </button>
                         </div>
@@ -213,7 +227,7 @@
 <div class="modal fade" id="modalPenilai" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formPenilai" method="POST" action="{{ route('admin.penilai.store') }}">
+            <form id="formPenilai" method="POST" action="{{ route('rgn.penilai.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formPenilaiMethod" value="POST">
 
@@ -227,25 +241,22 @@
 
                 <div class="modal-body px-5 py-4">
                     <div class="row">
-
                         <div class="col-md-12 mb-4">
                             <label class="form-label fw-semibold required">Nama Penilai</label>
                             <input type="text" name="nama" id="penilaiNama"
                                    class="form-control" placeholder="Masukkan nama penilai..." required>
                         </div>
-
                         <div class="col-md-12 mb-2">
                             <label class="form-label fw-semibold required">Email</label>
                             <input type="email" name="email" id="penilaiEmail"
                                    class="form-control" placeholder="Masukkan email..." required>
                         </div>
-
                     </div>
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning px-4">Simpan</button>
+                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -272,7 +283,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-batal btn-sm px-4" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusPenilai" method="POST">
                     @csrf
                     @method('DELETE')
@@ -290,9 +301,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('admin.penilai.store') }}";
+    const storeUrl = "{{ route('rgn.penilai.store') }}";
 
-    // Search
     const searchInput = document.getElementById('searchPenilai');
     const rows        = document.querySelectorAll('#tabelPenilaiBody tr');
     const emptyMsg    = document.getElementById('emptySearchMessage');
@@ -312,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalSpan.innerText = n;
     });
 
-    // ── Reset modal ──
     document.getElementById('modalPenilai').addEventListener('hidden.bs.modal', function () {
         document.getElementById('formPenilai').action      = storeUrl;
         document.getElementById('formPenilaiMethod').value = 'POST';
@@ -321,27 +330,21 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('penilaiEmail').value = '';
     });
 
-    // ── Tambah ──
     document.getElementById('btnTambahPenilai').addEventListener('click', function () {
         new bootstrap.Modal(document.getElementById('modalPenilai')).show();
     });
 
-    // ── Ubah ──
     document.querySelectorAll('.btn-edit-penilai').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-
             document.getElementById('modalPenilaiTitle').textContent = 'Ubah Penilai';
-            document.getElementById('formPenilai').action            = `/admin/penilai/${id}`;
+            document.getElementById('formPenilai').action            = `/admin/penilai/${this.dataset.id}`;
             document.getElementById('formPenilaiMethod').value       = 'PUT';
             document.getElementById('penilaiNama').value             = this.dataset.nama;
             document.getElementById('penilaiEmail').value            = this.dataset.email;
-
             new bootstrap.Modal(document.getElementById('modalPenilai')).show();
         });
     });
 
-    // ── Hapus ──
     document.querySelectorAll('.btn-hapus-penilai').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaPenilaiHapus').textContent = this.dataset.nama;

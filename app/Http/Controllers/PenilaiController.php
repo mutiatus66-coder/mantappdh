@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PenilaiController extends Controller
 {
     public function index()
     {
-        // Data dummy (nanti ganti dengan query dari database)
+        // Gunakan salah satu dari dua pilihan di bawah:
+
+        // Pilihan 1: Dummy Data (untuk testing)
         $penilai = [
             ['id' => 1, 'nama' => 'muhammad noor majid', 'email' => 'm.noormajid12@gmail.com'],
             ['id' => 2, 'nama' => 'Moch Nurrudin', 'email' => 'moch.nurrudin72@gmail.com'],
@@ -18,19 +21,58 @@ class PenilaiController extends Controller
             ['id' => 6, 'nama' => 'Jatmiko', 'email' => 'okimfh99@gmail.com'],
         ];
 
+        // Pilihan 2: Query Database Langsung (aktifkan jika tabel sudah ada)
+        // $penilai = DB::table('penilais')
+        //             ->select('id', 'nama', 'email')
+        //             ->latest()
+        //             ->paginate(15);
+
         return view('master.penilai', compact('penilai'));
     }
 
     public function store(Request $request)
     {
-        // validasi & simpan
-        // redirect back with success
-        return redirect()->route('penilai.index')->with('success', 'Penilai berhasil ditambahkan');
+        $request->validate([
+            'nama'  => 'required|string|max:255',
+            'email' => 'required|email|unique:penilais,email',
+        ]);
+
+        // Simpan menggunakan Query Builder
+        DB::table('penilais')->insert([
+            'nama'       => $request->nama,
+            'email'      => $request->email,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('rgn.penilai.index')
+                         ->with('success', 'Penilai berhasil ditambahkan');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama'  => 'required|string|max:255',
+            'email' => 'required|email|unique:penilais,email,' . $id,
+        ]);
+
+        DB::table('penilais')
+            ->where('id', $id)
+            ->update([
+                'nama'       => $request->nama,
+                'email'      => $request->email,
+                'updated_at' => now(),
+            ]);
+
+        return redirect()->route('rgn.penilai.index')
+                         ->with('success', 'Penilai berhasil diperbarui');
     }
 
     public function destroy($id)
     {
-        // hapus berdasarkan id
-        return redirect()->route('penilai.index')->with('success', 'Penilai dihapus');
+        DB::table('penilais')->where('id', $id)->delete();
+
+        return redirect()->route('rgn.penilai.index')
+                         ->with('success', 'Penilai berhasil dihapus');
     }
 }
