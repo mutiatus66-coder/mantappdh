@@ -234,7 +234,7 @@
                             <button class="btn-hapus btn-sm btn-hapus-se"
                                     data-id="{{ $item['id'] }}"
                                     data-nama="{{ $item['sub_event'] }}"
-                                    data-url="{{ route('rgn.sub-event.destroy', $item['id']) }}">
+                                    data-url="{{ route('sub-event.destroy', $item['id']) }}">
                                 Hapus
                             </button>
                         </td>
@@ -257,7 +257,7 @@
 <div class="modal fade" id="modalSubEvent" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formSubEvent" method="POST" action="{{ route('rgn.sub-event.store') }}">
+            <form id="formSubEvent" method="POST" action="{{ route('sub-event.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formSEMethod" value="POST">
 
@@ -350,7 +350,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('rgn.sub-event.store') }}";
+    const storeUrl = "{{ route('sub-event.store') }}";
 
     const searchInput = document.getElementById('searchSubEvent');
     const rows        = document.querySelectorAll('#tabelSubEventBody tr');
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-edit-se').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('modalSETitle').textContent    = 'Ubah Sub Event';
-            document.getElementById('formSubEvent').action         = `/rgn/sub-event/${this.dataset.id}`;
+            document.getElementById('formSubEvent').action         = `/sub-event/${this.dataset.id}`;
             document.getElementById('formSEMethod').value          = 'PUT';
             document.getElementById('seTahun').value               = this.dataset.tahun;
             document.getElementById('seSubEvent').value            = this.dataset.subEvent;

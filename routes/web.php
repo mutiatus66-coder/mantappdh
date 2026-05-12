@@ -42,12 +42,12 @@ Route::prefix('bidang')->name('bidang.')->group(function () {
 
 // ── Penilaian ─────────────────────────────────────────────────────────────────
 Route::prefix('penilaian')->name('penilaian.')->group(function () {
-    Route::get('/tahap-1',              [PenilaianController::class, 'tahap1Index'])  ->name('tahap.1.index');
-    Route::get('/tahap-1/{id}',         [PenilaianController::class, 'tahap1Show'])   ->name('tahap.1.show');
-    Route::post('/tahap-1/{id}/simpan', [PenilaianController::class, 'tahap1Simpan']) ->name('tahap.1.simpan');
+    Route::get('/tahap-1',              [PenilaianController::class, 'tahap1'])       ->name('tahap1.index');
+    Route::get('/tahap-1/{id}',         [PenilaianController::class, 'tahap1Show'])   ->name('tahap1.show');
+    Route::post('/tahap-1/{id}/simpan', [PenilaianController::class, 'tahap1Simpan']) ->name('tahap1.simpan');
 
-    Route::get('/tahap-2',      [PenilaianController::class, 'tahap2Index']) ->name('tahap.2.index');
-    Route::get('/tahap-2/{id}', [PenilaianController::class, 'tahap2Show'])  ->name('tahap.2.show');
+    Route::get('/tahap-2',      [PenilaianController::class, 'tahap2'])     ->name('tahap2.index');
+    Route::get('/tahap-2/{id}', [PenilaianController::class, 'tahap2Show']) ->name('tahap2.show');
 });
 
 // ── Penilai ───────────────────────────────────────────────────────────────────

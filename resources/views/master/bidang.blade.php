@@ -98,7 +98,7 @@
                                         <button class="btn btn-hapus btn-sm btn-hapus-bidang"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
-                                                data-url="{{ route('rgn.bidang.destroy', $bidang['id']) }}">
+                                                data-url="{{ route('bidang.destroy', $bidang['id']) }}">
                                             Hapus
                                         </button>
                                     </td>
@@ -128,7 +128,7 @@
 <div class="modal fade" id="modalBidang" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formBidang" method="POST" action="{{ route('rgn.bidang.store') }}">
+            <form id="formBidang" method="POST" action="{{ route('bidang.store') }}">
                 @csrf
                 <input type="hidden" name="_method"      id="formBidangMethod"   value="POST">
                 <input type="hidden" name="sub_event_id" id="bidangSubEventId">
@@ -352,7 +352,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('rgn.bidang.store') }}";
+    const storeUrl = "{{ route('bidang.store') }}";
 
     // Paksa accordion tertutup
     setTimeout(() => {
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const id = this.dataset.id;
 
             document.getElementById('modalBidangTitle').textContent     = 'Ubah Bidang';
-            document.getElementById('formBidang').action                = `/rgn/bidang/${id}`;
+            document.getElementById('formBidang').action                = `/bidang/${id}`;
             document.getElementById('formBidangMethod').value           = 'PUT';
             document.getElementById('bidangSubEventId').value           = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent   = this.dataset.subEventNama;
