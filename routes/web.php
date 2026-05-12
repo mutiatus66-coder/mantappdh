@@ -66,5 +66,13 @@ Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy']) ->na
 // ── Inovasi (Riwayat & Rekap Nilai) ─────────────────────
 Route::get('/inovasi/riwayat',      [InovasiController::class, 'riwayat'])->name('admin.inovasi.riwayat');
 Route::get('/inovasi/rekap-nilai',  [InovasiController::class, 'rekapNilai'])->name('admin.inovasi.rekapnilai');
-// ── Indikator ─────────────────────────────────────────────
-Route::get   ('/indikator/tahap-1',      [IndikatorController::class, 'index'])   ->name('admin.tahap-1.index');
+
+// Indikator Tahap 1
+Route::get('/indikator/tahap-1', [IndikatorController::class, 'tahap1'])->name('indikator.tahap1');
+Route::get('/indikator/tahap-1/{id}/indikator', [IndikatorController::class, 'detailIndikator1'])->name('indikator.tahap1.indikator');
+Route::get('/indikator/tahap-1/{id}/formulasi', [IndikatorController::class, 'detailFormulasi1'])->name('indikator.tahap1.formulasi');
+
+// Indikator Tahap 2
+Route::get('/indikator/tahap-2', [IndikatorController::class, 'tahap2'])->name('indikator.tahap2');
+Route::get('/indikator/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('indikator.tahap2.indikator');
+Route::get('/indikator/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('indikator.tahap2.formulasi');
