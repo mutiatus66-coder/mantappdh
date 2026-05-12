@@ -11,7 +11,7 @@
             <h4 class="penilaian-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
         <a href="{{ route('penilaian.tahap.2.index') }}" class="btn btn-kembali">
-            <i class="bi bi-arrow-left me-2"></i>Kembali
+            </i>Kembali
         </a>
     </div>
 
@@ -39,7 +39,7 @@
                     <h6 class="penilaian-table-title mb-0">Nominator Umum</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-rangking" id="btnRangkingUmum">
-                            <i class="bi bi-arrow-up me-1"></i>Rangking
+                            </i>Rangking
                         </button>
                         <button class="btn btn-excel" id="btnExcelUmum">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
@@ -106,7 +106,7 @@
                     <h6 class="penilaian-table-title mb-0">Nominator Pelajar</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-rangking" id="btnRangkingPelajar">
-                            <i class="bi bi-arrow-up me-1"></i>Rangking
+                            </i>Rangking
                         </button>
                         <button class="btn btn-excel" id="btnExcelPelajar">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel

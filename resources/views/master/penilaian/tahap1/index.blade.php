@@ -5,23 +5,23 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(101,166,5,0.1); border:1px solid rgba(101,166,5,0.3); color:#3a5a02; margin: 0 20px;">
+     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 @endif
 
-<div class="penilaian-container">
+<div class="t1-container">
 
     {{-- ── HEADER ── --}}
-    <div class="penilaian-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+    <div class="t1-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <h3 class="penilaian-title">Penilaian Tahap 1</h3>
-            <p class="penilaian-subtitle">Rekap nominasi dan nilai penilai per sub event</p>
+            <h3 class="t1-title">Penilaian Tahap 1</h3>
+            <p class="t1-subtitle">Rekap verifikasi dan nilai penilai per sub event</p>
         </div>
     </div>
 
-    {{-- ── CARD GRID — satu card per sub event ── --}}
+    {{-- ── CARD GRID ── --}}
     <div class="row g-4">
         @foreach($subEvents as $se)
         @php
@@ -33,32 +33,32 @@
         @endphp
 
         <div class="col-12 col-sm-6 col-xl-4">
-            <div class="penilaian-card h-100">
-                <div class="penilaian-card-body">
-                    <div class="penilaian-card-top d-flex justify-content-between align-items-start mb-3">
-                        <span class="penilaian-badge-tahun">{{ $se['tahun'] }}</span>
-                        <i class="bi bi-clipboard2-check penilaian-card-icon"></i>
+            <div class="t1-card h-100">
+                <div class="t1-card-body">
+                    <div class="t1-card-top d-flex justify-content-between align-items-start mb-3">
+                        <span class="t1-badge-tahun">{{ $se['tahun'] }}</span>
+                        <i class="bi bi-clipboard2-check t1-card-icon"></i>
                     </div>
 
-                    <h5 class="penilaian-card-title">{{ $se['sub_event'] }}</h5>
-                    <p class="penilaian-card-event text-truncate" title="{{ $se['event'] }}">{{ $se['event'] }}</p>
+                    <h5 class="t1-card-title">{{ $se['sub_event'] }}</h5>
+                    <p class="t1-card-event text-truncate" title="{{ $se['event'] }}">{{ $se['event'] }}</p>
 
-                    <div class="penilaian-progress-wrap mt-3 mb-1">
+                    <div class="t1-progress-wrap mt-3 mb-1">
                         <div class="d-flex justify-content-between mb-1">
-                            <span class="penilaian-progress-label">Progress Penilaian</span>
-                            <span class="penilaian-progress-pct">{{ $pct }}%</span>
+                            <span class="t1-progress-label">Progress Verifikasi</span>
+                            <span class="t1-progress-pct">{{ $pct }}%</span>
                         </div>
-                        <div class="penilaian-progress-bar-bg">
-                            <div class="penilaian-progress-bar-fill" style="width: {{ $pct }}%"></div>
+                        <div class="t1-progress-bar-bg">
+                            <div class="t1-progress-bar-fill" style="width: {{ $pct }}%"></div>
                         </div>
                         <div class="d-flex justify-content-between mt-1">
-                            <span class="penilaian-progress-label">{{ $dinilai }} / {{ $total }} dinilai</span>
+                            <span class="t1-progress-label">{{ $dinilai }} / {{ $total }} dinilai</span>
                         </div>
                     </div>
 
                     <a href="{{ route('penilaian.tahap.1.show', $seId) }}"
-                       class="btn btn-lihat-nilai w-100 mt-3">
-                        <i class="bi bi-search me-2"></i>Lihat Nilai Nominasi
+                       class="btn btn-lihat-verifikasi w-100 mt-3">
+                        <i class="bi bi-search me-2"></i>Lihat Nilai Verifikasi
                     </a>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 @push('styles')
 <style>
 /* ── Container ── */
-.penilaian-container {
+.t1-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.10);
@@ -83,98 +83,96 @@
 }
 
 /* ── Header ── */
-.penilaian-title {
+.t1-title {
     font-size: 1.6rem;
     font-weight: 700;
     margin: 0;
     color: var(--ri-text-primary);
 }
-.penilaian-subtitle {
+.t1-subtitle {
     margin: 4px 0 0;
     color: var(--ri-text-muted);
     font-size: 0.875rem;
 }
 
 /* ── Card ── */
-.penilaian-card {
+.t1-card {
     background: var(--ri-card-bg);
     border: 1px solid var(--ri-border);
     border-radius: 10px;
     overflow: hidden;
     transition: box-shadow 0.18s, transform 0.18s, background 0.2s;
 }
-.penilaian-card:hover {
-    box-shadow: 0 6px 20px rgba(60,103,142,0.13);
+.t1-card:hover {
+    box-shadow: 0 6px 20px rgba(0,172,193,0.15);
     transform: translateY(-2px);
 }
-.penilaian-card-body { padding: 20px 22px 22px; }
+.t1-card-body { padding: 20px 22px 22px; }
 
-.penilaian-card-top { }
-.penilaian-badge-tahun {
-    background: rgba(60,103,142,0.10);
-    color: #3C678E;
+.t1-badge-tahun {
+    background: rgba(0,172,193,0.10);
+    color: #00838F;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
     padding: 4px 10px;
     border-radius: 20px;
-    border: 1px solid rgba(60,103,142,0.20);
+    border: 1px solid rgba(0,172,193,0.25);
     transition: background 0.2s, color 0.2s;
 }
-[data-bs-theme="dark"] .penilaian-badge-tahun {
-    background: rgba(109,173,216,0.15);
-    color: #6DADD8;
-    border-color: rgba(109,173,216,0.25);
+[data-bs-theme="dark"] .t1-badge-tahun {
+    background: rgba(0,229,255,0.12);
+    color: #00E5FF;
+    border-color: rgba(0,229,255,0.25);
 }
-.penilaian-card-icon {
+.t1-card-icon {
     font-size: 1.6rem;
     color: var(--ri-text-muted);
-    opacity: 0.45;
+    opacity: 0.4;
 }
 
-.penilaian-card-title {
+.t1-card-title {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--ri-text-primary);
     margin: 0 0 4px;
     line-height: 1.4;
 }
-.penilaian-card-event {
+.t1-card-event {
     font-size: 0.78rem;
     color: var(--ri-text-muted);
     margin: 0;
 }
 
 /* ── Progress ── */
-.penilaian-progress-wrap { }
-.penilaian-progress-label {
+.t1-progress-label {
     font-size: 0.75rem;
     color: var(--ri-text-muted);
 }
-.penilaian-progress-pct {
+.t1-progress-pct {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #00838F;
 }
-[data-bs-theme="dark"] .penilaian-progress-pct { color: #6DADD8; }
+[data-bs-theme="dark"] .t1-progress-pct { color: #00E5FF; }
 
-.penilaian-progress-bar-bg {
+.t1-progress-bar-bg {
     width: 100%;
     height: 7px;
     background: var(--ri-border);
     border-radius: 99px;
     overflow: hidden;
 }
-.penilaian-progress-bar-fill {
+.t1-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #3C678E, #6DADD8);
+    background: linear-gradient(90deg, #00838F, #00E5FF);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
 
-/* ── Button Lihat Nilai ── */
-.btn-lihat-nilai {
+/* ── Button ── */
+.btn-lihat-verifikasi {
     background: var(--ri-table-head-bg);
     color: var(--ri-text-primary);
     border: 1px solid var(--ri-border);
@@ -188,15 +186,15 @@
     align-items: center;
     justify-content: center;
 }
-.btn-lihat-nilai:hover {
-    background: #3C678E;
+.btn-lihat-verifikasi:hover {
+    background: #00838F;
     color: #fff !important;
-    border-color: #3C678E;
+    border-color: #00838F;
 }
-[data-bs-theme="dark"] .btn-lihat-nilai:hover {
-    background: #6DADD8;
-    border-color: #6DADD8;
-    color: #1C2333 !important;
+[data-bs-theme="dark"] .btn-lihat-verifikasi:hover {
+    background: #00BCD4;
+    border-color: #00BCD4;
+    color: #0D1117 !important;
 }
 </style>
 @endpush
