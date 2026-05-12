@@ -102,6 +102,12 @@ Route::prefix('inovasi')->name('rgn.inovasi.')->group(function () {
     Route::get('/rekap-nilai', [InovasiController::class, 'rekapNilai'])->name('rekapnilai');
 });
 
-// ── Indikator ──────────────────────────────────────────────
-Route::get('/indikator/tahap-1', [IndikatorController::class, 'index'])
-    ->name('rgn.tahap-1.index');
+// Indikator Tahap 1
+Route::get('/indikator/tahap-1', [IndikatorController::class, 'tahap1'])->name('indikator.tahap1');
+Route::get('/indikator/tahap-1/{id}/indikator', [IndikatorController::class, 'detailIndikator1'])->name('indikator.tahap1.indikator');
+Route::get('/indikator/tahap-1/{id}/formulasi', [IndikatorController::class, 'detailFormulasi1'])->name('indikator.tahap1.formulasi');
+
+// Indikator Tahap 2
+Route::get('/indikator/tahap-2', [IndikatorController::class, 'tahap2'])->name('indikator.tahap2');
+Route::get('/indikator/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('indikator.tahap2.indikator');
+Route::get('/indikator/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('indikator.tahap2.formulasi');
