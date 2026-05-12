@@ -2,14 +2,29 @@
 
 @section('content')
 <style>
-    .btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
+.btn-simpan {
+    background: #00838F !important;
+    border-color: #00838F !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-simpan:hover {
+    background: #006064 !important;
+    border-color: #006064 !important;
     color: #fff !important;
 }
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
+.btn-batal {
+    background: #546E7A !important;
+    border-color: #546E7A !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-batal:hover {
+    background: #455A64 !important;
+    border-color: #455A64 !important;
+    color: #fff !important;
 }
 .pengumuman-container {
     background: var(--ri-card-bg);
@@ -35,7 +50,7 @@
 }
 .pengumuman-title p {
     margin: 0;
-    color: var(--ri-text-muted);b
+    color: var(--ri-text-muted);
     font-size: 0.875rem;
 }
 .btn-tambah {
@@ -133,7 +148,6 @@
     text-align: center; padding: 30px;
     color: var(--ri-text-muted); background: var(--ri-table-row-bg);
 }
-/* Hapus modal */
 .hapus-icon-circle {
     width: 56px; height: 56px; border-radius: 50%;
     background: #FCEBEB;
@@ -239,20 +253,17 @@
 
                 <div class="modal-body px-5 py-4">
                     <div class="row">
-
                         <div class="col-md-12 mb-4">
                             <label class="form-label fw-semibold required">Judul</label>
                             <input type="text" name="judul" id="pengumumanJudul"
                                    class="form-control" placeholder="Masukkan judul pengumuman..." required>
                         </div>
-
                         <div class="col-md-12 mb-4">
                             <label class="form-label fw-semibold required">Deskripsi</label>
                             <textarea name="deskripsi" id="pengumumanDeskripsi"
                                       class="form-control" rows="4"
                                       placeholder="Masukkan isi pengumuman..." required></textarea>
                         </div>
-
                         <div class="col-md-12 mb-2">
                             <label class="form-label fw-semibold">Status</label>
                             <div class="d-flex gap-4 mt-1">
@@ -264,13 +275,12 @@
                                 </label>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning px-4">Simpan</button>
+                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -297,7 +307,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-batal btn-sm px-4" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusPengumuman" method="POST">
                     @csrf
                     @method('DELETE')
@@ -317,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const storeUrl = "{{ route('admin.pengumuman.store') }}";
 
-    // Search
     const searchInput = document.getElementById('searchPengumuman');
     const rows        = document.querySelectorAll('#pengumumanBody tr');
     const emptyMsg    = document.getElementById('emptySearchMessage');
@@ -337,7 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalSpan.innerText = n;
     });
 
-    // ── Reset modal ──
     document.getElementById('modalPengumuman').addEventListener('hidden.bs.modal', function () {
         document.getElementById('formPengumuman').action      = storeUrl;
         document.getElementById('formPengumumanMethod').value = 'POST';
@@ -347,33 +355,26 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('statusPublished').checked    = true;
     });
 
-    // ── Tambah ──
     document.getElementById('btnTambahPengumuman').addEventListener('click', function () {
         new bootstrap.Modal(document.getElementById('modalPengumuman')).show();
     });
 
-    // ── Ubah ──
     document.querySelectorAll('.btn-edit-pengumuman').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-
             document.getElementById('modalPengumumanTitle').textContent    = 'Ubah Pengumuman';
-            document.getElementById('formPengumuman').action               = `/admin/pengumuman/${id}`;
+            document.getElementById('formPengumuman').action               = `/admin/pengumuman/${this.dataset.id}`;
             document.getElementById('formPengumumanMethod').value          = 'PUT';
             document.getElementById('pengumumanJudul').value               = this.dataset.judul;
             document.getElementById('pengumumanDeskripsi').value           = this.dataset.deskripsi;
-
             if (this.dataset.status === 'Draft') {
                 document.getElementById('statusDraft').checked = true;
             } else {
                 document.getElementById('statusPublished').checked = true;
             }
-
             new bootstrap.Modal(document.getElementById('modalPengumuman')).show();
         });
     });
 
-    // ── Hapus ──
     document.querySelectorAll('.btn-hapus-pengumuman').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('judulPengumumanHapus').textContent  = this.dataset.judul;

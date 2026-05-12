@@ -3,6 +3,30 @@
 @section('content')
 
 <style>
+.btn-simpan {
+    background: #00838F !important;
+    border-color: #00838F !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-simpan:hover {
+    background: #006064 !important;
+    border-color: #006064 !important;
+    color: #fff !important;
+}
+.btn-batal {
+    background: #546E7A !important;
+    border-color: #546E7A !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-batal:hover {
+    background: #455A64 !important;
+    border-color: #455A64 !important;
+    color: #fff !important;
+}
 .sub-event-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -141,21 +165,11 @@
     color: var(--ri-text-muted);
     background: var(--ri-table-row-bg);
 }
-/* Hapus modal */
 .hapus-icon-circle {
     width: 56px; height: 56px;
     border-radius: 50%;
     background: #FCEBEB;
     display: flex; align-items: center; justify-content: center;
-}
-.btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
-    color: #fff !important;
-}
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
 }
 [data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
@@ -220,7 +234,7 @@
                             <button class="btn-hapus btn-sm btn-hapus-se"
                                     data-id="{{ $item['id'] }}"
                                     data-nama="{{ $item['sub_event'] }}"
-                                    data-url="{{ route('admin.sub-event.destroy', $item['id']) }}">
+                                    data-url="{{ route('rgn.sub-event.destroy', $item['id']) }}">
                                 Hapus
                             </button>
                         </td>
@@ -243,7 +257,7 @@
 <div class="modal fade" id="modalSubEvent" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formSubEvent" method="POST" action="{{ route('admin.sub-event.store') }}">
+            <form id="formSubEvent" method="POST" action="{{ route('rgn.sub-event.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formSEMethod" value="POST">
 
@@ -290,9 +304,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
-                    <button type="submit" class="btn btn-warning px-4">Simpan</button>
+                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -319,8 +332,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
+                <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusSE" method="POST">
                     @csrf
                     @method('DELETE')
@@ -338,9 +350,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('admin.sub-event.store') }}";
+    const storeUrl = "{{ route('rgn.sub-event.store') }}";
 
-    // Search
     const searchInput = document.getElementById('searchSubEvent');
     const rows        = document.querySelectorAll('#tabelSubEventBody tr');
     const totalSpan   = document.getElementById('totalSubEvent');
@@ -357,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalSpan.textContent = n;
     });
 
-    // ── Reset modal ──
     document.getElementById('modalSubEvent').addEventListener('hidden.bs.modal', function () {
         document.getElementById('formSubEvent').action = storeUrl;
         document.getElementById('formSEMethod').value  = 'POST';
@@ -368,18 +378,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('seEvent').value = '';
     });
 
-    // ── Tambah ──
     document.getElementById('btnTambahSubEvent').addEventListener('click', function () {
         new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
     });
 
-    // ── Ubah ──
     document.querySelectorAll('.btn-edit-se').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-
             document.getElementById('modalSETitle').textContent    = 'Ubah Sub Event';
-            document.getElementById('formSubEvent').action         = `/admin/sub-event/${id}`;
+            document.getElementById('formSubEvent').action         = `/rgn/sub-event/${this.dataset.id}`;
             document.getElementById('formSEMethod').value          = 'PUT';
             document.getElementById('seTahun').value               = this.dataset.tahun;
             document.getElementById('seSubEvent').value            = this.dataset.subEvent;
@@ -387,7 +393,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('seMulai').value               = this.dataset.mulai;
             document.getElementById('seBerakhir').value            = this.dataset.berakhir;
 
-            // Set select event
             const sel = document.getElementById('seEvent');
             for (let opt of sel.options) {
                 if (opt.value === this.dataset.event) { opt.selected = true; break; }
@@ -397,7 +402,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Hapus ──
     document.querySelectorAll('.btn-hapus-se').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaSEHapus').textContent   = this.dataset.nama;

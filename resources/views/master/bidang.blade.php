@@ -5,7 +5,7 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin: 0 20px;">
+     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -98,7 +98,7 @@
                                         <button class="btn btn-hapus btn-sm btn-hapus-bidang"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
-                                                data-url="{{ route('admin.bidang.destroy', $bidang['id']) }}">
+                                                data-url="{{ route('rgn.bidang.destroy', $bidang['id']) }}">
                                             Hapus
                                         </button>
                                     </td>
@@ -128,7 +128,7 @@
 <div class="modal fade" id="modalBidang" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formBidang" method="POST" action="{{ route('admin.bidang.store') }}">
+            <form id="formBidang" method="POST" action="{{ route('rgn.bidang.store') }}">
                 @csrf
                 <input type="hidden" name="_method"      id="formBidangMethod"   value="POST">
                 <input type="hidden" name="sub_event_id" id="bidangSubEventId">
@@ -168,9 +168,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
-                    <button type="submit" class="btn btn-warning px-4">Simpan</button>
+                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -197,8 +196,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal"
-                            style="background:#F25C05; border-color:#F25C05; color:#fff;">Batal</button>
+                <button type="button" class="btn btn-batal btn-sm px-4" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
@@ -311,20 +309,38 @@
 }
 .btn-hapus:hover { background: #8b2424 !important; }
 .empty-row { color: var(--ri-text-muted) !important; background: var(--ri-table-row-bg) !important; }
+
+/* ── Tombol Simpan & Batal ── */
+.btn-simpan {
+    background: #00838F !important;
+    border-color: #00838F !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-simpan:hover {
+    background: #006064 !important;
+    border-color: #006064 !important;
+    color: #fff !important;
+}
+.btn-batal {
+    background: #546E7A !important;
+    border-color: #546E7A !important;
+    color: #fff !important;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-batal:hover {
+    background: #455A64 !important;
+    border-color: #455A64 !important;
+    color: #fff !important;
+}
+
 /* Hapus modal */
 .hapus-icon-circle {
     width: 56px; height: 56px; border-radius: 50%;
     background: #FCEBEB;
     display: flex; align-items: center; justify-content: center;
-}
-.btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
-    color: #fff !important;
-}
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
 }
 [data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
@@ -336,7 +352,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('admin.bidang.store') }}";
+    const storeUrl = "{{ route('rgn.bidang.store') }}";
 
     // Paksa accordion tertutup
     setTimeout(() => {
@@ -376,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const id = this.dataset.id;
 
             document.getElementById('modalBidangTitle').textContent     = 'Ubah Bidang';
-            document.getElementById('formBidang').action                = `/admin/bidang/${id}`;
+            document.getElementById('formBidang').action                = `/rgn/bidang/${id}`;
             document.getElementById('formBidangMethod').value           = 'PUT';
             document.getElementById('bidangSubEventId').value           = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent   = this.dataset.subEventNama;
