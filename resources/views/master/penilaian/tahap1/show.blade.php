@@ -88,9 +88,9 @@
                             <tr data-id="{{ $nom['id'] }}" class="{{ ($nom['lolos'] ?? false) ? 'row-lolos' : '' }}">
                                 <td class="text-center">
                                     <input type="checkbox"
-                                           class="t1-checkbox chk-umum"
-                                           data-id="{{ $nom['id'] }}"
-                                           {{ ($nom['lolos'] ?? false) ? 'checked' : '' }}>
+                                        class="t1-checkbox chk-umum"
+                                        data-id="{{ $nom['id'] }}"
+                                        {{ ($nom['lolos'] ?? false) ? 'checked' : '' }}>
                                 </td>
                                 <td class="text-center">{{ $i + 1 }}</td>
                                 <td>{{ $nom['inovator'] }}</td>
