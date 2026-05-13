@@ -138,7 +138,7 @@
                       @else
                         <a href="{{ route('indikator.tahap2.indikator', $item['id']) }}"
                            class="btn-detail-indikator" style="background:#9ca3af;">
-                          <i class="bi bi-search"></i> Detail
+                          <i></i> Detail
                         </a>
                       @endif
                     </td>
@@ -146,7 +146,7 @@
                       @if(!empty($item['has_formulasi2']))
                         <a href="{{ route('indikator.tahap2.formulasi', $item['id']) }}"
                            class="btn-detail-formulasi">
-                          <i class="bi bi-search"></i> Detail
+                          <i></i> Detail
                         </a>
                       @else
                         <a href="{{ route('indikator.tahap2.formulasi', $item['id']) }}"
