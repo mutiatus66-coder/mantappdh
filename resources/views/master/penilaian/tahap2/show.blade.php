@@ -11,7 +11,7 @@
             <h4 class="penilaian-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
         <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-kembali">
-            <i class="bi bi-arrow-left"></i> Kembali
+            Kembali
         </a>
     </div>
 
