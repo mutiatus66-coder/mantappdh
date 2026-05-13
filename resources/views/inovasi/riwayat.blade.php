@@ -111,7 +111,7 @@
         @forelse($subEvents as $event)
         <div class="event-card">
             <div class="event-title">{{ $event['nama'] }}</div>
-            <a href="{{ route('rgn.inovasi.usulan', $event['id']) }}" class="btn-lihat-usulan">
+            <a href="/inovasi/usulan-riwayat/{{ $event['id'] }}" class="btn-lihat-usulan">
                 Lihat Usulan
             </a>
         </div>
