@@ -5,7 +5,7 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
+     style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -20,7 +20,7 @@
             <h4 class="t1-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
         <a href="{{ route('penilaian.tahap1.index') }}" class="btn btn-kembali">
-            <i class="bi bi-arrow-left"></i> Kembali
+            Kembali
         </a>
     </div>
 
@@ -48,7 +48,7 @@
                     <h6 class="t1-table-title mb-0">Verifikasi Umum</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-t1-rangking" id="btnRangkingUmum">
-                            </i>Rangking
+                            Rangking
                         </button>
                         <button class="btn btn-t1-excel" id="btnExcelUmum">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
@@ -224,12 +224,12 @@
 .t1-sub-title {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #00838F;
+    color: var(--ri-text-primary);
 }
-[data-bs-theme="dark"] .t1-sub-title { color: #00E5FF; }
 
+/* ── Btn Kembali — navy, sinkron Sub Event btn-gold ── */
 .btn-kembali {
-    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
     color: #fff !important;
     border: none;
     font-weight: 600;
@@ -240,6 +240,7 @@
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    gap: 6px;
 }
 .btn-kembali:hover { opacity: 0.88; color: #fff !important; }
 
@@ -263,14 +264,14 @@
 }
 .t1-tab-btn.active,
 .t1-tab-btn:focus {
-    color: #00838F;
-    border-bottom-color: #00838F;
+    color: #0C4C8A;
+    border-bottom-color: #0C4C8A;
     outline: none;
     background: transparent;
 }
 [data-bs-theme="dark"] .t1-tab-btn.active {
-    color: #00E5FF;
-    border-bottom-color: #00E5FF;
+    color: #378ADD;
+    border-bottom-color: #378ADD;
 }
 
 /* ── Table card ── */
@@ -284,33 +285,33 @@
 .t1-table-title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #00838F;
+    color: var(--ri-text-primary);
 }
-[data-bs-theme="dark"] .t1-table-title { color: #00E5FF; }
 
 /* ── Simpan bar ── */
 .t1-simpan-bar {
     display: flex !important;
     align-items: center;
     justify-content: space-between;
-    background: rgba(0,172,193,0.08);
-    border: 1px solid rgba(0,172,193,0.25);
+    background: rgba(12,76,138,0.06);
+    border: 1px solid rgba(12,76,138,0.20);
     border-radius: 8px;
     padding: 10px 16px;
     gap: 12px;
     flex-wrap: wrap;
 }
 [data-bs-theme="dark"] .t1-simpan-bar {
-    background: rgba(0,229,255,0.06);
-    border-color: rgba(0,229,255,0.20);
+    background: rgba(55,138,221,0.06);
+    border-color: rgba(55,138,221,0.18);
 }
 .t1-simpan-info {
     font-size: 0.84rem;
     font-weight: 600;
-    color: #00838F;
+    color: #92400e;
 }
-[data-bs-theme="dark"] .t1-simpan-info { color: #00E5FF; }
+[data-bs-theme="dark"] .t1-simpan-info { color: #fbbf24; }
 
+/* ── Btn Simpan — teal, sinkron Sub Event ── */
 .btn-t1-simpan {
     background: #00838F !important;
     color: #fff !important;
@@ -319,16 +320,16 @@
     font-size: 0.82rem;
     border-radius: 7px;
     padding: 7px 16px;
-    transition: opacity 0.15s;
+    transition: background 0.15s;
 }
-.btn-t1-simpan:hover { opacity: 0.85; }
+.btn-t1-simpan:hover { background: #006064 !important; }
 
 /* ── Checkbox ── */
 .t1-checkbox {
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: #00838F;
+    accent-color: #0C4C8A;
 }
 
 /* ── Table ── */
@@ -355,23 +356,31 @@
     font-size: 0.875rem;
     transition: background 0.2s;
 }
+.t1-table td:not(.t1-nilai) {
+    color: var(--ri-text-primary) !important;
+}
+.t1-table td a,
+.t1-table td a:hover {
+    color: var(--ri-text-primary) !important;
+    text-decoration: none;
+}
 .t1-table tr:hover td { background: var(--ri-table-row-hover) !important; }
 
 /* ── Row lolos highlight ── */
 .row-lolos td {
-    background: rgba(0,172,193,0.06) !important;
+    background: rgba(12,76,138,0.05) !important;
 }
 [data-bs-theme="dark"] .row-lolos td {
-    background: rgba(0,229,255,0.05) !important;
+    background: rgba(55,138,221,0.05) !important;
 }
 
-/* ── Nilai ── */
-.t1-nilai { color: #00838F !important; }
-[data-bs-theme="dark"] .t1-nilai { color: #00E5FF !important; }
+/* ── Nilai — hanya td, bukan th ── */
+.t1-table td.t1-nilai { color: #0C4C8A !important; font-weight: 700; }
+[data-bs-theme="dark"] .t1-table td.t1-nilai { color: #378ADD !important; }
 
-/* ── Buttons ── */
+/* ── Btn Rangking — navy, sinkron Sub Event btn-gold ── */
 .btn-t1-rangking {
-    background: linear-gradient(135deg, #006064, #00838F) !important;
+    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
     color: #fff !important;
     border: none;
     font-weight: 600;
@@ -382,6 +391,7 @@
 }
 .btn-t1-rangking:hover { opacity: 0.85; }
 
+/* ── Btn Excel — sinkron Sub Event ── */
 .btn-t1-excel {
     background: var(--ri-table-head-bg) !important;
     color: var(--ri-text-primary) !important;
@@ -431,7 +441,6 @@ document.addEventListener('DOMContentLoaded', function () {
             checkAll.checked = n > 0 && n === all.length;
         }
 
-        // Highlight row on check
         document.querySelectorAll('.' + groupClass).forEach(chk => {
             chk.addEventListener('change', function () {
                 this.closest('tr').classList.toggle('row-lolos', this.checked);
@@ -447,19 +456,18 @@ document.addEventListener('DOMContentLoaded', function () {
             updateBar();
         });
 
-        updateBar(); // init count for pre-checked rows
+        updateBar();
     }
 
     setupCheckbox('chk-umum',    'checkAllUmum',    'simpanBarUmum',    'simpanCountUmum');
     setupCheckbox('chk-pelajar', 'checkAllPelajar', 'simpanBarPelajar', 'simpanCountPelajar');
 
-    // ── Simpan — kirim ID yang lolos ke server ──────────────────
+    // ── Simpan ──────────────────────────────────────────────────
     function setupSimpan(btnId, groupClass, kategori) {
         document.getElementById(btnId)?.addEventListener('click', function () {
             const ids = Array.from(document.querySelectorAll('.' + groupClass + ':checked'))
                             .map(c => c.dataset.id);
 
-            // Kirim ke server via fetch (sesuaikan URL / CSRF)
             fetch('{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}', {
                 method : 'POST',
                 headers: {
@@ -483,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupSimpan('btnSimpanUmum',    'chk-umum',    'umum');
     setupSimpan('btnSimpanPelajar', 'chk-pelajar', 'pelajar');
 
-    // ── Toast notif ringan ──────────────────────────────────────
+    // ── Toast ───────────────────────────────────────────────────
     function showToast(msg, type) {
         const t = document.createElement('div');
         t.className = 't1-toast t1-toast-' + type;
@@ -515,7 +523,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!table) return;
         let csv = [];
         table.querySelectorAll('tr').forEach(row => {
-            // skip checkbox column
             const cols = Array.from(row.querySelectorAll('th, td'))
                 .slice(1)
                 .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"');
@@ -554,6 +561,6 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 .t1-toast-show { opacity: 1; transform: translateY(0); }
 .t1-toast-success { background: #00838F; color: #fff; }
-.t1-toast-error   { background: #e53935; color: #fff; }
+.t1-toast-error   { background: #A32D2D; color: #fff; }
 </style>
 @endpush

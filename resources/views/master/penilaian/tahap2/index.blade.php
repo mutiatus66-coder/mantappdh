@@ -5,7 +5,7 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(101,166,5,0.1); border:1px solid rgba(101,166,5,0.3); color:#3a5a02; margin: 0 20px;">
+     style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    {{-- ── CARD GRID — satu card per sub event ── --}}
+    {{-- ── CARD GRID ── --}}
     <div class="row g-4">
         @foreach($subEvents as $se)
         @php
@@ -104,28 +104,27 @@
     transition: box-shadow 0.18s, transform 0.18s, background 0.2s;
 }
 .penilaian-card:hover {
-    box-shadow: 0 6px 20px rgba(60,103,142,0.13);
+    box-shadow: 0 6px 20px rgba(12,76,138,0.13);
     transform: translateY(-2px);
 }
 .penilaian-card-body { padding: 20px 22px 22px; }
 
-.penilaian-card-top { }
 .penilaian-badge-tahun {
-    background: rgba(60,103,142,0.10);
-    color: #3C678E;
+    background: #fef3c7;
+    color: #92400e;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
     padding: 4px 10px;
     border-radius: 20px;
-    border: 1px solid rgba(60,103,142,0.20);
+    border: 1px solid rgba(245,158,11,0.20);
     transition: background 0.2s, color 0.2s;
 }
 [data-bs-theme="dark"] .penilaian-badge-tahun {
-    background: rgba(109,173,216,0.15);
-    color: #6DADD8;
-    border-color: rgba(109,173,216,0.25);
+    background: rgba(245,158,11,0.15);
+    color: #fbbf24;
+    border-color: rgba(245,158,11,0.25);
 }
 .penilaian-card-icon {
     font-size: 1.6rem;
@@ -147,7 +146,6 @@
 }
 
 /* ── Progress ── */
-.penilaian-progress-wrap { }
 .penilaian-progress-label {
     font-size: 0.75rem;
     color: var(--ri-text-muted);
@@ -155,9 +153,9 @@
 .penilaian-progress-pct {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #0C4C8A;
 }
-[data-bs-theme="dark"] .penilaian-progress-pct { color: #6DADD8; }
+[data-bs-theme="dark"] .penilaian-progress-pct { color: #378ADD; }
 
 .penilaian-progress-bar-bg {
     width: 100%;
@@ -168,7 +166,7 @@
 }
 .penilaian-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #3C678E, #6DADD8);
+    background: linear-gradient(90deg, #0C4C8A, #185FA5);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
@@ -189,14 +187,14 @@
     justify-content: center;
 }
 .btn-lihat-nilai:hover {
-    background: #3C678E;
+    background: #0C4C8A;
     color: #fff !important;
-    border-color: #3C678E;
+    border-color: #0C4C8A;
 }
 [data-bs-theme="dark"] .btn-lihat-nilai:hover {
-    background: #6DADD8;
-    border-color: #6DADD8;
-    color: #1C2333 !important;
+    background: #185FA5;
+    border-color: #185FA5;
+    color: #fff !important;
 }
 </style>
 @endpush
