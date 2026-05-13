@@ -2,102 +2,130 @@
 
 @section('content')
 <style>
-.rekap-container {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 20px;
-}
-.rekap-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.rekap-title h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: 0;
-    color: var(--ri-text-primary);
-}
-.rekap-title p {
-    margin: 0;
-    color: var(--ri-text-muted);
-    font-size: 0.875rem;
-}
-.btn-kembali {
-    background: #6c757d;
-    color: white;
-    padding: 6px 14px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-.event-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-.event-card {
-    background: var(--ri-card-bg);
-    border: 1px solid var(--ri-border);
-    border-radius: 12px;
-    padding: 16px;
-    transition: 0.2s;
-}
-.event-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-.event-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--ri-text-primary);
-    margin-bottom: 12px;
-}
-.btn-lihat-usulan {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-}
-.btn-lihat-usulan:hover { opacity: 0.85; }
-.empty-row { text-align: center; padding: 40px; color: var(--ri-text-muted); }
+    .rekap-container {
+        padding: 28px 24px;
+        margin: 20px;
+    }
+    .rekap-title h3 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ri-text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .rekap-title p {
+        color: var(--ri-text-muted);
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 28px;
+    }
+    .card-event {
+        background: var(--ri-card-bg);
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 32px;
+        padding: 28px 24px;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    [data-bs-theme="dark"] .card-event {
+        border-color: rgba(255,255,255,0.06);
+    }
+    .card-event:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+        border-color: rgba(59,130,246,0.2);
+    }
+    .event-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .event-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--ri-text-primary);
+        flex: 1;
+    }
+    .event-year {
+        background: rgba(59,130,246,0.12);
+        color: #3b82f6;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+    .btn-lihat {
+        background: linear-gradient(105deg, #2563eb, #1e40af);
+        color: white;
+        padding: 10px 0;
+        border-radius: 60px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(37,99,235,0.2);
+    }
+    .btn-lihat:hover {
+        background: linear-gradient(105deg, #1d4ed8, #1e3a8a);
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px rgba(37,99,235,0.25);
+    }
+    .btn-lihat i {
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+    }
+    .btn-lihat:hover i {
+        transform: translateX(3px);
+    }
+    @media (max-width: 640px) {
+        .rekap-container { padding: 16px; margin: 10px; }
+        .card-event { padding: 20px; }
+        .event-title { font-size: 1rem; }
+    }
 </style>
 
 <div class="rekap-container">
-    <div class="rekap-header">
-        <div class="rekap-title">
-            <h3>Rekap Nilai Inovasi</h3>
-            <p>Pilih event untuk melihat nilai tahap 1, tahap 2, dan total</p>
-        </div>
-        <a href="/inovasi/riwayat" class="btn-kembali">
-            <i class="bi bi-arrow-left"></i> Kembali
-        </a>
+    <div class="rekap-title">
+        <h3>Rekap Nilai Inovasi</h3>
+        <p>Progress penilaian per sub event</p>
     </div>
 
-    <div class="event-grid">
-        @forelse($subEvents as $event)
-        <div class="event-card">
-            <div class="event-title">{{ $event['nama'] }}</div>
-            <a href="/inovasi/usulan-nilai/{{ $event['id'] }}" class="btn-lihat-usulan">
-                Lihat Usulan
+    <div class="card-grid">
+        @foreach($subEvents as $event)
+        @php
+            preg_match('/\b(19|20)\d{2}\b/', $event['nama'], $matches);
+            $year = $matches[0] ?? '';
+        @endphp
+        <div class="card-event">
+            <div class="event-header">
+                <div class="event-title">{{ $event['nama'] }}</div>
+                @if($year)
+                <div class="event-year">{{ $year }}</div>
+                @endif
+            </div>
+            <a href="/inovasi/usulan-nilai/{{ $event['id'] }}" class="btn-lihat">
+                Lihat Nilai <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-        @empty
-        <div class="empty-row">Belum ada event</div>
-        @endforelse
+        @endforeach
     </div>
 </div>
 @endsection

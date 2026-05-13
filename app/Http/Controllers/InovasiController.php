@@ -8,37 +8,37 @@ use App\Http\Controllers\Admin;
 class InovasiController extends Controller
 {
     public function riwayat()
-    {
-        $subEvents = [
-            ['id' => 1, 'nama' => 'LOMBA INOTEK 2022'],
-            ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
-            ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
-            ['id' => 4, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025'],
-            ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2026'],
-            ['id' => 6, 'nama' => 'PELAPORAN INOVASI DAERAH 2023'],
-            ['id' => 7, 'nama' => 'PAMERAN INOTEK'],
-            ['id' => 8, 'nama' => 'PELAPORAN INOVASI TEKNOLOGI (INOTEK AWARD) 2025'],
-            ['id' => 9, 'nama' => 'PALEMBANG INOVASI DAERAH 2023'],
-            ['id' => 10, 'nama' => 'PALEMBANG INOVASI DAERAH (INOTEK AWARD) 2025'],
-        ];
-        return view('inovasi.riwayat', compact('subEvents'));
-    }
+{
+    $subEvents = [
+        ['id' => 1, 'nama' => 'LOMBA INOTEK 2022', 'total_usulan' => 10, 'dinilai' => 9],
+        ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023', 'total_usulan' => 7, 'dinilai' => 7],
+        ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2023', 'total_usulan' => 3, 'dinilai' => 3],
+        ['id' => 4, 'nama' => 'PELAPORAN INOVASIAWARDI 2023', 'total_usulan' => 5, 'dinilai' => 4],
+        ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025', 'total_usulan' => 10, 'dinilai' => 8],
+        ['id' => 6, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025', 'total_usulan' => 9, 'dinilai' => 5],
+        ['id' => 7, 'nama' => 'PELAPORAN INOVASI DAERAH 2026', 'total_usulan' => 6, 'dinilai' => 2],
+        ['id' => 8, 'nama' => 'PAMERAN INOTEK 2025', 'total_usulan' => 4, 'dinilai' => 0],
+    ];
 
-    public function rekapNilai()
-    {
-        $subEvents = [
-            ['id' => 1, 'nama' => 'LOMBA INOTEK 2022'],
-            ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
-            ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2023'],
-            ['id' => 4, 'nama' => 'PELAPORAN INOVASIAWARDI 2023'],
-            ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
-            ['id' => 6, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025'],
-            ['id' => 7, 'nama' => 'PELAPORAN INOVASI DAERAH 2026'],
-            ['id' => 8, 'nama' => 'PAMERAN INOTEK'],
-            // tambahkan sesuai kebutuhan
-        ];
-        return view('inovasi.rekapnilai', compact('subEvents'));
-    }
+    return view('inovasi.riwayat', compact('subEvents'));
+}
+
+public function rekapNilai()
+{
+    // Data bisa sama atau berbeda (misal total_usulan = total inovasi, dinilai = yang sudah punya nilai)
+    $subEvents = [
+        ['id' => 1, 'nama' => 'LOMBA INOTEK 2022', 'total_usulan' => 10, 'dinilai' => 9],
+        ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023', 'total_usulan' => 7, 'dinilai' => 7],
+        ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2023', 'total_usulan' => 3, 'dinilai' => 3],
+        ['id' => 4, 'nama' => 'PELAPORAN INOVASIAWARDI 2023', 'total_usulan' => 5, 'dinilai' => 4],
+        ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025', 'total_usulan' => 10, 'dinilai' => 8],
+        ['id' => 6, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025', 'total_usulan' => 9, 'dinilai' => 5],
+        ['id' => 7, 'nama' => 'PELAPORAN INOVASI DAERAH 2026', 'total_usulan' => 6, 'dinilai' => 2],
+        ['id' => 8, 'nama' => 'PAMERAN INOTEK 2025', 'total_usulan' => 4, 'dinilai' => 0],
+    ];
+
+    return view('inovasi.rekapnilai', compact('subEvents'));
+}
 
     public function usulan($subEventId)
     {
