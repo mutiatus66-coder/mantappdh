@@ -11,7 +11,7 @@
             <h4 class="penilaian-sub-title mb-0">{{ $subEvent['sub_event'] }}</h4>
         </div>
         <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-kembali">
-            </i>Kembali
+            <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
 
@@ -39,7 +39,7 @@
                     <h6 class="penilaian-table-title mb-0">Nominator Umum</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-rangking" id="btnRangkingUmum">
-                            </i>Rangking
+                            Rangking
                         </button>
                         <button class="btn btn-excel" id="btnExcelUmum">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
@@ -74,7 +74,7 @@
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
-                                <td class="text-center fw-bold" style="color:#3C678E;">
+                                <td class="text-center fw-bold t2-nilai">
                                     {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '-' }}
                                 </td>
                                 @foreach($penilai as $p)
@@ -106,7 +106,7 @@
                     <h6 class="penilaian-table-title mb-0">Nominator Pelajar</h6>
                     <div class="d-flex gap-2">
                         <button class="btn btn-rangking" id="btnRangkingPelajar">
-                            </i>Rangking
+                            Rangking
                         </button>
                         <button class="btn btn-excel" id="btnExcelPelajar">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
@@ -141,7 +141,7 @@
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
-                                <td class="text-center fw-bold" style="color:#3C678E;">
+                                <td class="text-center fw-bold t2-nilai">
                                     {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '-' }}
                                 </td>
                                 @foreach($penilai as $p)
@@ -193,9 +193,9 @@
 .penilaian-sub-title {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #d97706;
 }
-[data-bs-theme="dark"] .penilaian-sub-title { color: #6DADD8; }
+[data-bs-theme="dark"] .penilaian-sub-title { color: #fbbf24; }
 
 .btn-kembali {
     background: linear-gradient(135deg, #f59e0b, #d97706) !important;
@@ -209,6 +209,7 @@
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    gap: 6px;
 }
 .btn-kembali:hover { opacity: 0.88; color: #fff !important; }
 
@@ -232,14 +233,14 @@
 }
 .penilaian-tab-btn.active,
 .penilaian-tab-btn:focus {
-    color: #3C678E;
-    border-bottom-color: #3C678E;
+    color: #d97706;
+    border-bottom-color: #d97706;
     outline: none;
     background: transparent;
 }
 [data-bs-theme="dark"] .penilaian-tab-btn.active {
-    color: #6DADD8;
-    border-bottom-color: #6DADD8;
+    color: #fbbf24;
+    border-bottom-color: #fbbf24;
 }
 
 /* ── Table card ── */
@@ -253,9 +254,9 @@
 .penilaian-table-title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #3C678E;
+    color: #d97706;
 }
-[data-bs-theme="dark"] .penilaian-table-title { color: #6DADD8; }
+[data-bs-theme="dark"] .penilaian-table-title { color: #fbbf24; }
 
 /* ── Table ── */
 .penilaian-table {
@@ -281,14 +282,21 @@
     font-size: 0.875rem;
     transition: background 0.2s;
 }
+.penilaian-table td:not(.t2-nilai) {
+    color: var(--ri-text-primary) !important;
+}
 .penilaian-table tr:hover td { background: var(--ri-table-row-hover) !important; }
+
+/* ── Nilai ── */
+.t2-nilai { color: #d97706 !important; }
+[data-bs-theme="dark"] .t2-nilai { color: #fbbf24 !important; }
 
 /* ── Rangking badge ── */
 .badge-rangking {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #3C678E, #6DADD8);
+    background: linear-gradient(135deg, #f59e0b, #d97706);
     color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
@@ -298,7 +306,7 @@
 
 /* ── Buttons ── */
 .btn-rangking {
-    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
+    background: linear-gradient(135deg, #d97706, #f59e0b) !important;
     color: #fff !important;
     border: none;
     font-weight: 600;
@@ -337,7 +345,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Sort by Rangking ──
+    // ── Sort by Total Nilai ──
     function sortTableByTotal(tableId) {
         const tbody = document.querySelector('#' + tableId + ' tbody');
         if (!tbody) return;

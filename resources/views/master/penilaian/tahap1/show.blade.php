@@ -5,7 +5,7 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
+     style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -224,9 +224,9 @@
 .t1-sub-title {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #00838F;
+    color: #d97706;
 }
-[data-bs-theme="dark"] .t1-sub-title { color: #00E5FF; }
+[data-bs-theme="dark"] .t1-sub-title { color: #fbbf24; }
 
 .btn-kembali {
     background: linear-gradient(135deg, #f59e0b, #d97706) !important;
@@ -263,14 +263,14 @@
 }
 .t1-tab-btn.active,
 .t1-tab-btn:focus {
-    color: #00838F;
-    border-bottom-color: #00838F;
+    color: #d97706;
+    border-bottom-color: #d97706;
     outline: none;
     background: transparent;
 }
 [data-bs-theme="dark"] .t1-tab-btn.active {
-    color: #00E5FF;
-    border-bottom-color: #00E5FF;
+    color: #fbbf24;
+    border-bottom-color: #fbbf24;
 }
 
 /* ── Table card ── */
@@ -284,32 +284,32 @@
 .t1-table-title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #00838F;
+    color: #d97706;
 }
-[data-bs-theme="dark"] .t1-table-title { color: #00E5FF; }
+[data-bs-theme="dark"] .t1-table-title { color: #fbbf24; }
 
 /* ── Simpan bar ── */
 .t1-simpan-bar {
     display: flex !important;
     align-items: center;
     justify-content: space-between;
-    background: rgba(0,172,193,0.08);
-    border: 1px solid rgba(0,172,193,0.25);
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
     border-radius: 8px;
     padding: 10px 16px;
     gap: 12px;
     flex-wrap: wrap;
 }
 [data-bs-theme="dark"] .t1-simpan-bar {
-    background: rgba(0,229,255,0.06);
-    border-color: rgba(0,229,255,0.20);
+    background: rgba(245,158,11,0.06);
+    border-color: rgba(245,158,11,0.20);
 }
 .t1-simpan-info {
     font-size: 0.84rem;
     font-weight: 600;
-    color: #00838F;
+    color: #d97706;
 }
-[data-bs-theme="dark"] .t1-simpan-info { color: #00E5FF; }
+[data-bs-theme="dark"] .t1-simpan-info { color: #fbbf24; }
 
 .btn-t1-simpan {
     background: #00838F !important;
@@ -328,7 +328,7 @@
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: #00838F;
+    accent-color: #d97706;
 }
 
 /* ── Table ── */
@@ -355,23 +355,26 @@
     font-size: 0.875rem;
     transition: background 0.2s;
 }
+.t1-table td:not(.t1-nilai) {
+    color: var(--ri-text-primary) !important;
+}
 .t1-table tr:hover td { background: var(--ri-table-row-hover) !important; }
 
 /* ── Row lolos highlight ── */
 .row-lolos td {
-    background: rgba(0,172,193,0.06) !important;
+    background: rgba(245,158,11,0.06) !important;
 }
 [data-bs-theme="dark"] .row-lolos td {
-    background: rgba(0,229,255,0.05) !important;
+    background: rgba(245,158,11,0.05) !important;
 }
 
 /* ── Nilai ── */
-.t1-nilai { color: #00838F !important; }
-[data-bs-theme="dark"] .t1-nilai { color: #00E5FF !important; }
+.t1-nilai { color: #d97706 !important; }
+[data-bs-theme="dark"] .t1-nilai { color: #fbbf24 !important; }
 
 /* ── Buttons ── */
 .btn-t1-rangking {
-    background: linear-gradient(135deg, #006064, #00838F) !important;
+    background: linear-gradient(135deg, #d97706, #f59e0b) !important;
     color: #fff !important;
     border: none;
     font-weight: 600;
@@ -459,7 +462,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const ids = Array.from(document.querySelectorAll('.' + groupClass + ':checked'))
                             .map(c => c.dataset.id);
 
-            // Kirim ke server via fetch (sesuaikan URL / CSRF)
             fetch('{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}', {
                 method : 'POST',
                 headers: {
@@ -515,7 +517,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!table) return;
         let csv = [];
         table.querySelectorAll('tr').forEach(row => {
-            // skip checkbox column
             const cols = Array.from(row.querySelectorAll('th, td'))
                 .slice(1)
                 .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"');
