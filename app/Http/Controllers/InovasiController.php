@@ -7,7 +7,6 @@ use App\Http\Controllers\Admin;
 
 class InovasiController extends Controller
 {
-    // Halaman riwayat (card grid sesuai screenshot)
     public function riwayat()
     {
         $subEvents = [
@@ -25,59 +24,116 @@ class InovasiController extends Controller
         return view('inovasi.riwayat', compact('subEvents'));
     }
 
-    // Halaman rekap nilai (tabel dengan filter kategori)
     public function rekapNilai()
-{
-    $rekap = [
-        [
-            'inovasi' => 'SI-DICO',
-            'instansi' => 'DINAS DUKCAPIL',
-            'link_youtube' => 'https://youtu.be/xxxx',
-            'no_hp' => '08123456789',
-            'kategori' => 'Umum',
-            'nilai_t1' => 85,
-            'nilai_t2' => 90,
-            'nilai_total' => 87.5,
-        ],
-        // tambah data lain untuk testing
-    ];
-    return view('inovasi.rekapnilai', compact('rekap'));
-}
+    {
+        $subEvents = [
+            ['id' => 1, 'nama' => 'LOMBA INOTEK 2022'],
+            ['id' => 2, 'nama' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
+            ['id' => 3, 'nama' => 'PELAPORAN INOVASI DAERAH 2023'],
+            ['id' => 4, 'nama' => 'PELAPORAN INOVASIAWARDI 2023'],
+            ['id' => 5, 'nama' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
+            ['id' => 6, 'nama' => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025'],
+            ['id' => 7, 'nama' => 'PELAPORAN INOVASI DAERAH 2026'],
+            ['id' => 8, 'nama' => 'PAMERAN INOTEK'],
+            // tambahkan sesuai kebutuhan
+        ];
+        return view('inovasi.rekapnilai', compact('subEvents'));
+    }
 
+    public function usulan($subEventId)
+    {
+        $subEvents = [
+            1 => 'LOMBA INOTEK 2022',
+            2 => 'LOMBA INOTEK (INOTEK AWARD) 2023',
+            3 => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025',
+            4 => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025',
+        ];
+        $subEventNama = $subEvents[$subEventId] ?? 'Sub Event';
 
-    // Sementara untuk detail usulan (bisa diisi nanti)
-public function usulan($subEventId)
-{
-    // Data nama sub event (sesuai dengan id yang diklik dari halaman riwayat)
-    $subEvents = [
-        1 => 'LOMBA INOTEK 2022',
-        2 => 'LOMBA INOTEK (INOTEK AWARD) 2023',
-        3 => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025',
-        4 => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025',
-        5 => 'PELAPORAN INOVASI DAERAH 2026',
-        6 => 'PELAPORAN INOVASI DAERAH 2023',
-        7 => 'PAMERAN INOTEK',
-        8 => 'PELAPORAN INOVASI TEKNOLOGI (INOTEK AWARD) 2025',
-        9 => 'PALEMBANG INOVASI DAERAH 2023',
-        10 => 'PALEMBANG INOVASI DAERAH (INOTEK AWARD) 2025',
-    ];
-    $subEventNama = $subEvents[$subEventId] ?? 'Sub Event tidak dikenal';
+        $usulan = [
+            [
+                'judul' => 'SI-DICO',
+                'instansi' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+                'link_youtube' => 'https://youtu.be/abc123',
+                'no_hp' => '08155618417',
+                'kategori' => 'Umum',
+                'nilai_t1' => 85,
+                'nilai_t2' => 90,
+                'nilai_total' => 87.5,
+            ],
+            [
+                'judul' => 'Aplikasi SISTAN',
+                'instansi' => 'DINAS PERTANIAN',
+                'link_youtube' => 'https://youtu.be/def456',
+                'no_hp' => '08234567890',
+                'kategori' => 'Pelajar',
+                'nilai_t1' => 78,
+                'nilai_t2' => 82,
+                'nilai_total' => 80.0,
+            ],
+        ];
 
-    // Data dummy usulan (biar tampil seperti screenshot)
-    $usulan = [
-        [
-            'status' => 'Melengkapi Data',
-            'inovator' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
-            'nama_inovasi' => 'SI-DICO',
-            'nama_tim' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
-            'ketua_nama' => 'DEWI SRI HANDAYANI, S.Sos',
-            'ketua_email' => 'dewi.sri@magetan.go.id',
-            'ketua_wa' => '08155618417',
-        ],
-        // Bisa tambah data lain jika diperlukan
-    ];
+        return view('inovasi.usulan', compact('usulan', 'subEventNama', 'subEventId'));
+    }
 
-    return view('inovasi.usulan', compact('usulan', 'subEventNama', 'subEventId'));
-}
+    public function usulanRiwayat($subEventId)
+    {
+        $subEventNama = $this->getSubEventName($subEventId); // atau array manual
+        $usulan = [
+            [
+                'status' => 'Melengkapi Data',
+                'inovator' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+                'nama_inovasi' => 'SI-DICO',
+                'nama_tim' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+                'ketua_nama' => 'DEWI SRI HANDAYANI, S.Sos',
+                'ketua_email' => 'dewi.sri@magetan.go.id',
+                'ketua_wa' => '08155618417',
+            ],
+        ];
+        return view('inovasi.usulan_riwayat', compact('usulan', 'subEventNama'));
+    }
 
+    public function usulanNilai($subEventId)
+    {
+        $subEventNama = $this->getSubEventName($subEventId);
+
+        $usulan = [
+            [
+                'judul' => 'SI-DICO',
+                'instansi' => 'DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL',
+                'link_youtube' => 'https://youtu.be/abc123',
+                'no_hp' => '08155618417',
+                'kategori' => 'Umum',
+                'nilai_t1' => 85,
+                'nilai_t2' => 90,
+                'nilai_total' => 87.5,
+            ],
+            [
+                'judul' => 'Aplikasi SISTAN',
+                'instansi' => 'DINAS PERTANIAN',
+                'link_youtube' => 'https://youtu.be/def456',
+                'no_hp' => '08234567890',
+                'kategori' => 'Pelajar',
+                'nilai_t1' => 78,
+                'nilai_t2' => 82,
+                'nilai_total' => 80.0,
+            ],
+        ];
+
+        return view('inovasi.usulan_nilai', compact('usulan', 'subEventNama'));
+    }
+
+    private function getSubEventName($id)
+    {
+        $subEvents = [
+            1 => 'LOMBA INOTEK 2022',
+            2 => 'LOMBA INOTEK (INOTEK AWARD) 2023',
+            3 => 'PELAPORAN INOVASI DAERAH 2023',
+            4 => 'PELAPORAN INOVASIAWARDI 2023',
+            5 => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025',
+            6 => 'KOMPETISI INOVASI DAN TEKNOLOGI (INOTEK AWARD) 2025',
+            7 => 'PELAPORAN INOVASI DAERAH 2026',
+        ];
+        return $subEvents[$id] ?? 'Sub Event';
+    }
 }

@@ -37,158 +37,67 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border: none;
 }
-.filter-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-.filter-label {
-    font-weight: 500;
-    color: var(--ri-text-primary);
-}
-.filter-select {
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--ri-border);
-    background: var(--ri-input-bg);
-    color: var(--ri-text-primary);
-}
-.rekap-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid var(--ri-table-border-outer);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.rekap-table th {
-    background: var(--ri-table-head-bg);
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: var(--ri-text-muted);
-    border-bottom: 2px solid var(--ri-table-border-header);
-}
-.rekap-table td {
-    padding: 12px;
-    border-bottom: 1px solid var(--ri-table-border-row);
-    color: var(--ri-text-primary);
-    background: var(--ri-table-row-bg);
-}
-.rekap-table tr:hover td {
-    background: var(--ri-table-row-hover);
-}
-.nilai-badge {
-    font-weight: 600;
-}
-.pagination-info {
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
     margin-top: 20px;
-    text-align: right;
-    font-size: 0.875rem;
-    color: var(--ri-text-muted);
 }
-.empty-row {
-    text-align: center;
-    padding: 30px;
-    color: var(--ri-text-muted);
+.event-card {
+    background: var(--ri-card-bg);
+    border: 1px solid var(--ri-border);
+    border-radius: 12px;
+    padding: 16px;
+    transition: 0.2s;
 }
-@media (max-width: 640px) {
-    .rekap-container { margin: 10px; padding: 12px; }
-    .rekap-table th, .rekap-table td { padding: 8px; }
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
+.event-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ri-text-primary);
+    margin-bottom: 12px;
+}
+.btn-lihat-usulan {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-lihat-usulan:hover { opacity: 0.85; }
+.empty-row { text-align: center; padding: 40px; color: var(--ri-text-muted); }
 </style>
 
 <div class="rekap-container">
     <div class="rekap-header">
         <div class="rekap-title">
             <h3>Rekap Nilai Inovasi</h3>
-            <p>Nilai tahap 1, tahap 2, dan total</p>
+            <p>Pilih event untuk melihat nilai tahap 1, tahap 2, dan total</p>
         </div>
-        <a href="{{ url()->previous() }}" class="btn-kembali">
+        <a href="/inovasi/riwayat" class="btn-kembali">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
 
-    <div class="filter-wrapper">
-        <span class="filter-label">Pilih Kategori :</span>
-        <select id="kategoriFilter" class="filter-select">
-            <option value="semua">Semua</option>
-            <option value="umum">Umum</option>
-            <option value="pelajar">Pelajar</option>
-        </select>
-    </div>
-
-    <div style="overflow-x: auto;">
-        <table class="rekap-table" id="rekapTable">
-            <thead>
-                <tr>
-                    <th>Inovasi</th>
-                    <th>Instansi/Organisasi</th>
-                    <th>Link Youtube</th>
-                    <th>No Handphone</th>
-                    <th>Kategori</th>
-                    <th>Nilai Tahap 1</th>
-                    <th>Nilai Tahap 2</th>
-                    <th>Nilai Total</th>
-                </tr>
-            </thead>
-            <tbody id="rekapBody">
-                @forelse($rekap as $item)
-                <tr data-kategori="{{ strtolower($item['kategori']) }}">
-                    <td>{{ $item['inovasi'] }}</td>
-                    <td>{{ $item['instansi'] }}</td>
-                    <td>{{ $item['link_youtube'] }}</td>
-                    <td>{{ $item['no_hp'] }}</td>
-                    <td>{{ $item['kategori'] }}</td>
-                    <td class="nilai-badge">{{ $item['nilai_t1'] }}</td>
-                    <td class="nilai-badge">{{ $item['nilai_t2'] }}</td>
-                    <td class="nilai-badge">{{ $item['nilai_total'] }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="8" class="empty-row">No data available in table</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    <div class="pagination-info" id="paginationInfo">
-        Showing 0 to 0 of 0 entries
+    <div class="event-grid">
+        @forelse($subEvents as $event)
+        <div class="event-card">
+            <div class="event-title">{{ $event['nama'] }}</div>
+            <a href="/inovasi/usulan-nilai/{{ $event['id'] }}" class="btn-lihat-usulan">
+                Lihat Usulan
+            </a>
+        </div>
+        @empty
+        <div class="empty-row">Belum ada event</div>
+        @endforelse
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const filter = document.getElementById('kategoriFilter');
-    const tbody = document.getElementById('rekapBody');
-    const infoDiv = document.getElementById('paginationInfo');
-    let allRows = Array.from(tbody.querySelectorAll('tr'));
-
-    function updateDisplay() {
-        const selected = filter.value;
-        let visibleCount = 0;
-        allRows.forEach(row => {
-            const kategori = row.getAttribute('data-kategori');
-            if (selected === 'semua' || kategori === selected) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-        infoDiv.innerText = `Showing ${visibleCount} to ${visibleCount} of ${visibleCount} entries`;
-        if (visibleCount === 0 && allRows.length === 0) {
-            infoDiv.innerText = 'Showing 0 to 0 of 0 entries';
-        }
-    }
-
-    filter.addEventListener('change', updateDisplay);
-    updateDisplay();
-});
-</script>
 @endsection
