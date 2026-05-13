@@ -65,7 +65,7 @@ class SubEventController extends Controller
 
         $this->saveData($data);
 
-        return redirect()->route('rgn.sub-event.index')
+        return redirect()->route('sub-event.index')
                          ->with('success', 'Sub Event berhasil ditambahkan.');
     }
 

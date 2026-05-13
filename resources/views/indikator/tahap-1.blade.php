@@ -115,13 +115,13 @@
                     <td style="text-align:center;">
                       <a href="{{ route('indikator.tahap1.indikator', $item['id']) }}"
                          class="btn-detail-indikator">
-                        <i class="bi bi-search"></i> Detail
+                        <i></i> Detail
                       </a>
                     </td>
                     <td style="text-align:center;">
                       <a href="{{ route('indikator.tahap1.formulasi', $item['id']) }}"
                          class="btn-detail-formulasi">
-                        <i class="bi bi-search"></i> Detail
+                        <i></i> Detail
                       </a>
                     </td>
                   </tr>
