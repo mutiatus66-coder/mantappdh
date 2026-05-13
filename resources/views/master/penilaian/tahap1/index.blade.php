@@ -104,14 +104,14 @@
     transition: box-shadow 0.18s, transform 0.18s, background 0.2s;
 }
 .t1-card:hover {
-    box-shadow: 0 6px 20px rgba(245,158,11,0.15);
+    box-shadow: 0 6px 20px rgba(12,76,138,0.13);
     transform: translateY(-2px);
 }
 .t1-card-body { padding: 20px 22px 22px; }
 
 .t1-badge-tahun {
-    background: rgba(245,158,11,0.10);
-    color: #d97706;
+    background: #fef3c7;
+    color: #92400e;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.8px;
@@ -153,9 +153,9 @@
 .t1-progress-pct {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #d97706;
+    color: #0C4C8A;
 }
-[data-bs-theme="dark"] .t1-progress-pct { color: #fbbf24; }
+[data-bs-theme="dark"] .t1-progress-pct { color: #378ADD; }
 
 .t1-progress-bar-bg {
     width: 100%;
@@ -166,7 +166,7 @@
 }
 .t1-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    background: linear-gradient(90deg, #0C4C8A, #185FA5);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
@@ -187,14 +187,14 @@
     justify-content: center;
 }
 .btn-lihat-verifikasi:hover {
-    background: #d97706;
+    background: #0C4C8A;
     color: #fff !important;
-    border-color: #d97706;
+    border-color: #0C4C8A;
 }
 [data-bs-theme="dark"] .btn-lihat-verifikasi:hover {
-    background: #f59e0b;
-    border-color: #f59e0b;
-    color: #0D1117 !important;
+    background: #185FA5;
+    border-color: #185FA5;
+    color: #fff !important;
 }
 </style>
 @endpush
