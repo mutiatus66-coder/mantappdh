@@ -92,10 +92,27 @@ Route::prefix('inovasi')->name('rgn.inovasi.')->group(function () {
 
 // ── Indikator ─────────────────────────────────────────────────────────────────
 Route::prefix('indikator')->name('indikator.')->group(function () {
-    Route::get('/tahap-1',                [IndikatorController::class, 'tahap1'])          ->name('tahap1');
-    Route::get('/tahap-1/{id}/indikator', [IndikatorController::class, 'detailIndikator1'])->name('tahap1.indikator');
-    Route::get('/tahap-1/{id}/formulasi', [IndikatorController::class, 'detailFormulasi1'])->name('tahap1.formulasi');
 
+    // Tahap 1 — halaman utama
+    Route::get('/tahap-1', [IndikatorController::class, 'tahap1'])->name('tahap1');
+
+    // Tahap 1 — Detail Inovasi (daftar indikator per sub event)
+    Route::get('/tahap-1/{subEventId}/inovasi',              [IndikatorController::class, 'detailInovasi'])  ->name('tahap1.inovasi');
+    Route::get('/tahap-1/{subEventId}/inovasi/create',       [IndikatorController::class, 'inovasiCreate'])  ->name('tahap1.inovasi.create');
+    Route::post('/tahap-1/{subEventId}/inovasi',             [IndikatorController::class, 'inovasiStore'])   ->name('tahap1.inovasi.store');
+    Route::get('/tahap-1/{subEventId}/inovasi/{id}/edit',    [IndikatorController::class, 'inovasiEdit'])    ->name('tahap1.inovasi.edit');
+    Route::put('/tahap-1/{subEventId}/inovasi/{id}',         [IndikatorController::class, 'inovasiUpdate'])  ->name('tahap1.inovasi.update');
+    Route::delete('/tahap-1/{subEventId}/inovasi/{id}',      [IndikatorController::class, 'inovasiDestroy']) ->name('tahap1.inovasi.destroy');
+
+    // Tahap 1 — Detail Indikator (keterangan + nilai min/maks)
+    Route::get('/tahap-1/{subEventId}/detail/{indikatorId}',               [IndikatorController::class, 'detailIndikator'])       ->name('tahap1.detail');
+    Route::get('/tahap-1/{subEventId}/detail/{indikatorId}/create',        [IndikatorController::class, 'detailIndikatorCreate']) ->name('tahap1.detail.create');
+    Route::post('/tahap-1/{subEventId}/detail/{indikatorId}',              [IndikatorController::class, 'detailIndikatorStore'])  ->name('tahap1.detail.store');
+    Route::get('/tahap-1/{subEventId}/detail/{indikatorId}/{id}/edit',     [IndikatorController::class, 'detailIndikatorEdit'])   ->name('tahap1.detail.edit');
+    Route::put('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',          [IndikatorController::class, 'detailIndikatorUpdate']) ->name('tahap1.detail.update');
+    Route::delete('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',       [IndikatorController::class, 'detailIndikatorDestroy'])->name('tahap1.detail.destroy');
+
+    // Tahap 2 — halaman utama
     Route::get('/tahap-2',                [IndikatorController::class, 'tahap2'])          ->name('tahap2');
     Route::get('/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('tahap2.indikator');
     Route::get('/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('tahap2.formulasi');
