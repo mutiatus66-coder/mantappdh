@@ -87,8 +87,9 @@ Route::prefix('pengumuman')->name('admin.pengumuman.')->group(function () {
 Route::prefix('inovasi')->name('rgn.inovasi.')->group(function () {
     Route::get('/riwayat',          [InovasiController::class, 'riwayat'])    ->name('riwayat');
     Route::get('/rekap-nilai',      [InovasiController::class, 'rekapNilai']) ->name('rekapnilai');
-    Route::get('/usulan/{subEventId}', [InovasiController::class, 'usulan'])  ->name('usulan');
 });
+    Route::get('/inovasi/usulan-riwayat/{subEventId}', [InovasiController::class, 'usulanRiwayat']);
+    Route::get('/inovasi/usulan-nilai/{subEventId}', [InovasiController::class, 'usulanNilai']);
 
 // ── Indikator ─────────────────────────────────────────────────────────────────
 Route::prefix('indikator')->name('indikator.')->group(function () {

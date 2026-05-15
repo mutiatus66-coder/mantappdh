@@ -2,125 +2,130 @@
 
 @section('content')
 <style>
-    /* Gaya sama persis dengan penilai, ditambah grid card */
     .riwayat-container {
-        background: var(--ri-card-bg);
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        padding: 20px;
+        padding: 28px 24px;
         margin: 20px;
-        transition: background 0.2s, color 0.2s;
-    }
-    .riwayat-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-        gap: 10px;
     }
     .riwayat-title h3 {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
         color: var(--ri-text-primary);
+        margin-bottom: 0.5rem;
     }
     .riwayat-title p {
-        margin: 0;
         color: var(--ri-text-muted);
-        font-size: 0.875rem;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
     }
-    .btn-kembali {
-        background: #6c757d;
-        color: white;
-        padding: 6px 14px;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        border: none;
-    }
-    .event-grid {
+    .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 28px;
     }
-    .event-card {
+    .card-event {
         background: var(--ri-card-bg);
-        border: 1px solid var(--ri-border);
-        border-radius: 12px;
-        padding: 16px;
-        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 32px;
+        padding: 28px 24px;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
-    .event-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    [data-bs-theme="dark"] .card-event {
+        border-color: rgba(255,255,255,0.06);
+    }
+    .card-event:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+        border-color: rgba(59,130,246,0.2);
+    }
+    .event-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
     }
     .event-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--ri-text-primary);
-        margin-bottom: 12px;
+        font-size: 1.2rem;
+        font-weight: 700;
         line-height: 1.4;
+        color: var(--ri-text-primary);
+        flex: 1;
     }
-    .btn-lihat-usulan {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+    .event-year {
+        background: rgba(59,130,246,0.12);
+        color: #3b82f6;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+    .btn-lihat {
+        background: linear-gradient(105deg, #2563eb, #1e40af);
         color: white;
-        border: none;
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: opacity 0.2s;
+        padding: 10px 0;
+        border-radius: 60px;
+        font-size: 0.85rem;
+        font-weight: 600;
         text-decoration: none;
-        display: inline-block;
-    }
-    .btn-lihat-usulan:hover {
-        opacity: 0.85;
-    }
-    .empty-row {
         text-align: center;
-        padding: 40px;
-        color: var(--ri-text-muted);
-        background: var(--ri-table-row-bg);
-        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(37,99,235,0.2);
+    }
+    .btn-lihat:hover {
+        background: linear-gradient(105deg, #1d4ed8, #1e3a8a);
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px rgba(37,99,235,0.25);
+    }
+    .btn-lihat i {
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+    }
+    .btn-lihat:hover i {
+        transform: translateX(3px);
     }
     @media (max-width: 640px) {
-        .riwayat-container { margin: 10px; padding: 12px; }
-        .event-grid { grid-template-columns: 1fr; }
+        .riwayat-container { padding: 16px; margin: 10px; }
+        .card-event { padding: 20px; }
+        .event-title { font-size: 1rem; }
     }
 </style>
 
 <div class="riwayat-container">
-    <div class="riwayat-header">
-        <div class="riwayat-title">
-            <h3>Riwayat Inovasi</h3>
-            <p>Pilih event untuk melihat usulan inovasi</p>
-        </div>
-        <div>
-            <a href="{{ url()->previous() }}" class="btn-kembali">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
-        </div>
+    <div class="riwayat-title">
+        <h3>Riwayat Inovasi</h3>
+        <p>Daftar sub event dan usulan yang diajukan</p>
     </div>
 
-    <div class="event-grid">
-        @forelse($subEvents as $event)
-        <div class="event-card">
-            <div class="event-title">{{ $event['nama'] }}</div>
-            <a href="{{ route('rgn.inovasi.usulan', $event['id']) }}" class="btn-lihat-usulan">
-                Lihat Usulan
+    <div class="card-grid">
+        @foreach($subEvents as $event)
+        @php
+            preg_match('/\b(19|20)\d{2}\b/', $event['nama'], $matches);
+            $year = $matches[0] ?? '';
+        @endphp
+        <div class="card-event">
+            <div class="event-header">
+                <div class="event-title">{{ $event['nama'] }}</div>
+                @if($year)
+                <div class="event-year">{{ $year }}</div>
+                @endif
+            </div>
+            <a href="/inovasi/usulan-riwayat/{{ $event['id'] }}" class="btn-lihat">
+                Lihat Usulan <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-        @empty
-        <div class="empty-row">
-            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
-            Belum ada event / sub event.
-        </div>
-        @endforelse
+        @endforeach
     </div>
 </div>
 @endsection

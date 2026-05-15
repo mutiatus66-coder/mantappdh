@@ -5,7 +5,7 @@
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
+     style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin: 0 20px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -104,27 +104,27 @@
     transition: box-shadow 0.18s, transform 0.18s, background 0.2s;
 }
 .t1-card:hover {
-    box-shadow: 0 6px 20px rgba(0,172,193,0.15);
+    box-shadow: 0 6px 20px rgba(12,76,138,0.13);
     transform: translateY(-2px);
 }
 .t1-card-body { padding: 20px 22px 22px; }
 
 .t1-badge-tahun {
-    background: rgba(0,172,193,0.10);
-    color: #00838F;
+    background: #fef3c7;
+    color: #92400e;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
     padding: 4px 10px;
     border-radius: 20px;
-    border: 1px solid rgba(0,172,193,0.25);
+    border: 1px solid rgba(245,158,11,0.25);
     transition: background 0.2s, color 0.2s;
 }
 [data-bs-theme="dark"] .t1-badge-tahun {
-    background: rgba(0,229,255,0.12);
-    color: #00E5FF;
-    border-color: rgba(0,229,255,0.25);
+    background: rgba(245,158,11,0.15);
+    color: #fbbf24;
+    border-color: rgba(245,158,11,0.30);
 }
 .t1-card-icon {
     font-size: 1.6rem;
@@ -153,9 +153,9 @@
 .t1-progress-pct {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #00838F;
+    color: #0C4C8A;
 }
-[data-bs-theme="dark"] .t1-progress-pct { color: #00E5FF; }
+[data-bs-theme="dark"] .t1-progress-pct { color: #378ADD; }
 
 .t1-progress-bar-bg {
     width: 100%;
@@ -166,7 +166,7 @@
 }
 .t1-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #00838F, #00E5FF);
+    background: linear-gradient(90deg, #0C4C8A, #185FA5);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
@@ -187,14 +187,14 @@
     justify-content: center;
 }
 .btn-lihat-verifikasi:hover {
-    background: #00838F;
+    background: #0C4C8A;
     color: #fff !important;
-    border-color: #00838F;
+    border-color: #0C4C8A;
 }
 [data-bs-theme="dark"] .btn-lihat-verifikasi:hover {
-    background: #00BCD4;
-    border-color: #00BCD4;
-    color: #0D1117 !important;
+    background: #185FA5;
+    border-color: #185FA5;
+    color: #fff !important;
 }
 </style>
 @endpush
