@@ -18,7 +18,6 @@ class SubEventController extends Controller
         ['id' => 7, 'tahun' => 2025, 'event' => 'KOMPETISI INOVASI DIGITAL',                  'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025',                 'kategori' => 'TEKNOLOGI',    'mulai' => '2025-03-01', 'berakhir' => '2025-08-31'],
     ];
 
-    // ── Helpers ───────────────────────────────────────────────────────────
 
     private function getData(): array
     {
