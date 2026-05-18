@@ -22,4 +22,9 @@ class SubEvent extends Model
         'berakhir' => 'date',
         'tahun'    => 'integer',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 }

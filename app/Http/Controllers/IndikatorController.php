@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SubEvent;
 use App\Models\Indikator;
 use App\Models\KeteranganIndikator;
+use App\Models\FormulasiTahap2;
 
 class IndikatorController extends Controller
 {
@@ -116,11 +117,64 @@ class IndikatorController extends Controller
     }
 
     // ─────────────────────────────────────────
-    // TAHAP 2
+    // TAHAP 2 — Halaman utama
     // ─────────────────────────────────────────
     public function tahap2()
     {
-        $subEvents = SubEvent::orderBy('tahun', 'desc')->get();
-        return view('indikator.tahap-2', compact('subEvents'));
+        $subEvents  = SubEvent::orderBy('tahun', 'desc')->get();
+        $formulasis = FormulasiTahap2::pluck('sub_event_id')->toArray();
+
+        return view('indikator.tahap-2', compact('subEvents', 'formulasis'));
+    }
+
+    // ─────────────────────────────────────────
+    // FORMULASI TAHAP 2 — Simpan / Update
+    // ─────────────────────────────────────────
+    public function formulasiTahap2Store(Request $request, $subEventId)
+    {
+        $request->validate([
+            'nilai_inovasi'  => 'required|integer|min:1|max:100',
+            'nilai_peragaan' => 'required|integer|min:1|max:100',
+        ]);
+
+        if (($request->nilai_inovasi + $request->nilai_peragaan) !== 100) {
+            return back()->withErrors([
+                'total' => 'Total Nilai Inovasi dan Nilai Peragaan harus 100%.'
+            ])->withInput();
+        }
+
+        SubEvent::findOrFail($subEventId);
+
+        FormulasiTahap2::updateOrCreate(
+            ['sub_event_id' => $subEventId],
+            [
+                'nilai_inovasi'  => $request->nilai_inovasi,
+                'nilai_peragaan' => $request->nilai_peragaan,
+            ]
+        );
+
+        return redirect()->route('indikator.tahap2')
+                         ->with('success', 'Formulasi berhasil disimpan.');
+    }
+
+    // ─────────────────────────────────────────
+    // FORMULASI TAHAP 2 — Get JSON (untuk modal)
+    // ─────────────────────────────────────────
+    public function formulasiTahap2Get($subEventId)
+    {
+        $formulasi = FormulasiTahap2::where('sub_event_id', $subEventId)->first();
+        if (!$formulasi) {
+            return response()->json(['nilai_inovasi' => 0, 'nilai_peragaan' => 0]);
+        }
+        return response()->json($formulasi);
+    }
+
+    // ─────────────────────────────────────────
+    // DETAIL INDIKATOR TAHAP 2
+    // ─────────────────────────────────────────
+    public function detailIndikator2($subEventId)
+    {
+        $subEvent = SubEvent::findOrFail($subEventId);
+        return view('indikator.tahap-2-detail', compact('subEvent'));
     }
 }

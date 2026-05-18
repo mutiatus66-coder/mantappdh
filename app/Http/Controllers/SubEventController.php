@@ -3,83 +3,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
 use App\Models\SubEvent;
 
 class SubEventController extends Controller
 {
-    // Daftar event (bisa dipindah ke tabel events jika sudah ada relasi)
-    private array $events = [
-        'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)',
-        'INOVASI DAERAH KAB. MAGETAN',
-        'PAMERAN INOVASI DAN TEKNOLOGI',
-        'KOMPETISI INOVASI DIGITAL',
-    ];
+    private function getEvents()
+    {
+        return Event::query()->orderBy('nama_event', 'asc')->get();
+    }
+
+    private function validationRules(): array
+    {
+        return [
+            'event_id'  => 'required|integer|exists:events,id',
+            'tahun'     => 'required|digits:4',
+            'sub_event' => 'required|string|max:255',
+            'kategori'  => 'nullable|string|max:100',
+            'mulai'     => 'required|date',
+            'berakhir'  => 'required|date|after_or_equal:mulai',
+        ];
+    }
 
     public function index()
     {
-        $subEvents = SubEvent::orderBy('tahun', 'desc')->orderBy('id', 'desc')->get();
-        $events    = $this->events;
-
-        return view('master.sub-event', compact('subEvents', 'events'));
+        return view('master.sub-event', [
+            'subEvents' => SubEvent::with('event')->orderBy('tahun', 'desc')->get(),
+            'events'    => $this->getEvents(),
+        ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'event'     => 'required|string',
-            'tahun'     => 'required|digits:4',
-            'sub_event' => 'required|string|max:255',
-            'mulai'     => 'required|date',
-            'berakhir'  => 'required|date|after_or_equal:mulai',
-        ]);
+        $request->validate($this->validationRules());
 
-        SubEvent::create([
-            'event_id'  => 1, // sesuaikan jika ada relasi ke tabel events
-            'tahun'     => (int) $request->tahun,
-            'sub_event' => $request->sub_event,
-            'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
-            'mulai'     => $request->mulai,
-            'berakhir'  => $request->berakhir,
-        ]);
+        SubEvent::create($request->only([
+            'event_id', 'tahun', 'sub_event', 'kategori', 'mulai', 'berakhir',
+        ]));
 
-        return redirect()->route('sub-event.index')
-                         ->with('success', 'Sub Event berhasil ditambahkan.');
+        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil ditambahkan.');
     }
 
     public function edit(int $id)
     {
-        $item = SubEvent::findOrFail($id);
-        return response()->json($item);
+        return response()->json(SubEvent::with('event')->findOrFail($id));
     }
 
     public function update(Request $request, int $id)
     {
-        $request->validate([
-            'event'     => 'required|string',
-            'tahun'     => 'required|digits:4',
-            'sub_event' => 'required|string|max:255',
-            'mulai'     => 'required|date',
-            'berakhir'  => 'required|date|after_or_equal:mulai',
-        ]);
+        $request->validate($this->validationRules());
 
-        $subEvent = SubEvent::findOrFail($id);
-        $subEvent->update([
-            'tahun'     => (int) $request->tahun,
-            'sub_event' => $request->sub_event,
-            'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
-            'mulai'     => $request->mulai,
-            'berakhir'  => $request->berakhir,
-        ]);
+        SubEvent::findOrFail($id)->update($request->only([
+            'event_id', 'tahun', 'sub_event', 'kategori', 'mulai', 'berakhir',
+        ]));
 
-        return redirect()->route('sub-event.index')
-                         ->with('success', 'Sub Event berhasil diperbarui.');
+        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil diperbarui.');
     }
 
     public function destroy(int $id)
     {
         SubEvent::findOrFail($id)->delete();
 
-        return redirect()->route('sub-event.index')
-                         ->with('success', 'Sub Event berhasil dihapus.');
+        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
     }
 }
