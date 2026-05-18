@@ -18,6 +18,7 @@ class SubEventController extends Controller
         ['id' => 7, 'tahun' => 2025, 'event' => 'KOMPETISI INOVASI DIGITAL',                  'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025',                 'kategori' => 'TEKNOLOGI',    'mulai' => '2025-03-01', 'berakhir' => '2025-08-31'],
     ];
 
+    // ── Helpers ───────────────────────────────────────────────────────────
 
     private function getData(): array
     {
@@ -85,7 +86,8 @@ class SubEventController extends Controller
 
         $this->saveData($data);
 
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil ditambahkan.');
+        return redirect()->route('sub-event.index')
+                         ->with('success', 'Sub Event berhasil ditambahkan.');
     }
 
     public function edit(int $id)
@@ -112,7 +114,8 @@ class SubEventController extends Controller
 
         $this->saveData($data);
 
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil diperbarui.');
+        return redirect()->route('sub-event.index')
+                         ->with('success', 'Sub Event berhasil diperbarui.');
     }
 
     public function destroy(int $id)
@@ -121,6 +124,7 @@ class SubEventController extends Controller
 
         $this->saveData($data);
 
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
+        return redirect()->route('sub-event.index')
+                         ->with('success', 'Sub Event berhasil dihapus.');
     }
 }
