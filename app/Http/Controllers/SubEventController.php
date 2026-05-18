@@ -4,21 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubEvent;
+use App\Models\Event;
 
 class SubEventController extends Controller
 {
-    // Daftar event (bisa dipindah ke tabel events jika sudah ada relasi)
-    private array $events = [
-        'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)',
-        'INOVASI DAERAH KAB. MAGETAN',
-        'PAMERAN INOVASI DAN TEKNOLOGI',
-        'KOMPETISI INOVASI DIGITAL',
-    ];
-
     public function index()
     {
         $subEvents = SubEvent::orderBy('tahun', 'desc')->orderBy('id', 'desc')->get();
-        $events    = $this->events;
+        $events    = Event::orderBy('nama_event')->get();
 
         return view('master.sub-event', compact('subEvents', 'events'));
     }
@@ -26,7 +19,7 @@ class SubEventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'event'     => 'required|string',
+            'event_id'  => 'required|exists:events,id',
             'tahun'     => 'required|digits:4',
             'sub_event' => 'required|string|max:255',
             'mulai'     => 'required|date',
@@ -34,7 +27,7 @@ class SubEventController extends Controller
         ]);
 
         SubEvent::create([
-            'event_id'  => 1, // sesuaikan jika ada relasi ke tabel events
+            'event_id'  => $request->event_id,
             'tahun'     => (int) $request->tahun,
             'sub_event' => $request->sub_event,
             'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
@@ -55,7 +48,7 @@ class SubEventController extends Controller
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'event'     => 'required|string',
+            'event_id'  => 'required|exists:events,id',
             'tahun'     => 'required|digits:4',
             'sub_event' => 'required|string|max:255',
             'mulai'     => 'required|date',
@@ -64,6 +57,7 @@ class SubEventController extends Controller
 
         $subEvent = SubEvent::findOrFail($id);
         $subEvent->update([
+            'event_id'  => $request->event_id,
             'tahun'     => (int) $request->tahun,
             'sub_event' => $request->sub_event,
             'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
