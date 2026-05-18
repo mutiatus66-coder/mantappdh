@@ -113,8 +113,20 @@ Route::prefix('indikator')->name('indikator.')->group(function () {
     Route::put('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',          [IndikatorController::class, 'detailIndikatorUpdate']) ->name('tahap1.detail.update');
     Route::delete('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',       [IndikatorController::class, 'detailIndikatorDestroy'])->name('tahap1.detail.destroy');
 
+// ─────────────────────────────
+// TAHAP 2 ─ Halaman utama, Detail indikator, Detail formulasi, Simpan/update formulasi, Ambil data formulasi untuk modal
+// ─────────────────────────────
     // Tahap 2 — halaman utama
-    Route::get('/tahap-2',                [IndikatorController::class, 'tahap2'])          ->name('tahap2');
-    Route::get('/tahap-2/{id}/indikator', [IndikatorController::class, 'detailIndikator2'])->name('tahap2.indikator');
-    Route::get('/tahap-2/{id}/formulasi', [IndikatorController::class, 'detailFormulasi2'])->name('tahap2.formulasi');
+    Route::get('/tahap-2',                                [IndikatorController::class, 'tahap2'])                ->name('tahap2');
+
+    // Tahap 2 — Detail Indikator
+    Route::get('/tahap-2/{id}/indikator',                 [IndikatorController::class, 'detailIndikator2'])      ->name('tahap2.indikator');
+    Route::post('/tahap-2/{subEventId}/indikator',        [IndikatorController::class, 'indikatorTahap2Store'])  ->name('tahap2.indikator.store');
+    Route::put('/tahap-2/{subEventId}/indikator/{id}',    [IndikatorController::class, 'indikatorTahap2Update']) ->name('tahap2.indikator.update');
+    Route::delete('/tahap-2/{subEventId}/indikator/{id}', [IndikatorController::class, 'indikatorTahap2Destroy'])->name('tahap2.indikator.destroy');
+
+    // Tahap 2 — Formulasi
+    Route::post('/tahap-2/{subEventId}/formulasi',        [IndikatorController::class, 'formulasiTahap2Store'])  ->name('tahap2.formulasi.store');
+    Route::get('/tahap-2/{subEventId}/formulasi/get',     [IndikatorController::class, 'formulasiTahap2Get'])    ->name('tahap2.formulasi.get');
+
 });
