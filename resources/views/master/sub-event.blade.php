@@ -187,6 +187,14 @@
         </button>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-dismissible fade show mb-4" role="alert"
+             style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="sub-event-stats">
         <div class="total-badge">
             Total Sub Event: <span id="totalSubEvent">{{ count($subEvents ?? []) }}</span>
@@ -214,27 +222,27 @@
                 @forelse($subEvents as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item['tahun'] }}</td>
-                        <td>{{ $item['event'] }}</td>
-                        <td>{{ $item['sub_event'] }}</td>
-                        <td><span class="badge-kategori">{{ $item['kategori'] ?: '-' }}</span></td>
-                        <td>{{ $item['mulai'] }}</td>
-                        <td>{{ $item['berakhir'] }}</td>
+                        <td>{{ $item->tahun }}</td>
+                        <td>{{ $item->event->nama_event ?? '-' }}</td>
+                        <td>{{ $item->sub_event }}</td>
+                        <td><span class="badge-kategori">{{ $item->kategori ?: '-' }}</span></td>
+                        <td>{{ $item->mulai?->format('Y-m-d') }}</td>
+                        <td>{{ $item->berakhir?->format('Y-m-d') }}</td>
                         <td style="text-align:center;">
                             <button class="btn-gold btn-sm btn-edit-se me-2"
-                                    data-id="{{ $item['id'] }}"
-                                    data-tahun="{{ $item['tahun'] }}"
-                                    data-event="{{ $item['event'] }}"
-                                    data-sub-event="{{ $item['sub_event'] }}"
-                                    data-kategori="{{ $item['kategori'] }}"
-                                    data-mulai="{{ $item['mulai'] }}"
-                                    data-berakhir="{{ $item['berakhir'] }}">
+                                    data-id="{{ $item->id }}"
+                                    data-tahun="{{ $item->tahun }}"
+                                    data-event-id="{{ $item->event_id }}"
+                                    data-sub-event="{{ $item->sub_event }}"
+                                    data-kategori="{{ $item->kategori }}"
+                                    data-mulai="{{ $item->mulai?->format('Y-m-d') }}"
+                                    data-berakhir="{{ $item->berakhir?->format('Y-m-d') }}">
                                 Ubah
                             </button>
                             <button class="btn-hapus btn-sm btn-hapus-se"
-                                    data-id="{{ $item['id'] }}"
-                                    data-nama="{{ $item['sub_event'] }}"
-                                    data-url="{{ route('sub-event.destroy', $item['id']) }}">
+                                    data-id="{{ $item->id }}"
+                                    data-nama="{{ $item->sub_event }}"
+                                    data-url="{{ route('sub-event.destroy', $item->id) }}">
                                 Hapus
                             </button>
                         </td>
@@ -277,10 +285,10 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label fw-semibold required">Event</label>
-                            <select name="event" id="seEvent" class="form-select" required>
+                            <select name="event_id" id="seEvent" class="form-select" required>
                                 <option value="">-- Pilih Event --</option>
                                 @foreach($events as $event)
-                                    <option value="{{ $event }}">{{ $event }}</option>
+                                    <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -392,11 +400,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('seKategori').value            = this.dataset.kategori;
             document.getElementById('seMulai').value               = this.dataset.mulai;
             document.getElementById('seBerakhir').value            = this.dataset.berakhir;
-
-            const sel = document.getElementById('seEvent');
-            for (let opt of sel.options) {
-                if (opt.value === this.dataset.event) { opt.selected = true; break; }
-            }
+            document.getElementById('seEvent').value               = this.dataset.eventId;
 
             new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
         });

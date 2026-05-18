@@ -29,7 +29,6 @@
     gap: 4px;
 }
 .btn-detail-indikator:hover { opacity: .88; color: white !important; }
-
 .btn-detail-formulasi {
     background: linear-gradient(135deg, #16a34a, #15803d);
     color: white !important;
@@ -46,6 +45,7 @@
     gap: 4px;
 }
 .btn-detail-formulasi:hover { opacity: .88; color: white !important; }
+
 
 .se-table {
     width: 100%;
@@ -111,16 +111,15 @@
                 @forelse($subEvents ?? [] as $item)
                   <tr>
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
-                    <td style="text-align:center;">{{ $item['sub_event'] }}</td>
+                    <td style="text-align:center;">{{ $item->sub_event }}</td>
                     <td style="text-align:center;">
-                      <a href="{{ route('indikator.tahap1.indikator', $item['id']) }}"
+                      <a href="{{ route('indikator.tahap1.inovasi', $item->id) }}"
                          class="btn-detail-indikator">
                         <i></i> Detail
                       </a>
                     </td>
                     <td style="text-align:center;">
-                      <a href="{{ route('indikator.tahap1.formulasi', $item['id']) }}"
-                         class="btn-detail-formulasi">
+                      <a href="#" class="btn-detail-formulasi">
                         <i></i> Detail
                       </a>
                     </td>
