@@ -14,7 +14,6 @@ class SubEvent extends Model
         'tahun'    => 'integer',
     ];
 
-    // ✅ Data statis ditaruh di sini
     private static array $staticData = [
         ['id' => 1, 'sub_event' => 'LOMBA INOTEK 2022'],
         ['id' => 2, 'sub_event' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
@@ -25,7 +24,6 @@ class SubEvent extends Model
         ['id' => 7, 'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025'],
     ];
 
-    // ✅ Akses via method static
     public static function getStaticData(): array
     {
         return self::$staticData;
