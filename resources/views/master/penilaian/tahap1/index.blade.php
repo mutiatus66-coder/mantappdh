@@ -57,8 +57,8 @@
                     </div>
 
                     <a href="{{ route('penilaian.tahap1.show', $seId) }}"
-                        class="btn btn-lihat-verifikasi w-100 mt-3">
-                        <i class="bi bi-search me-2"></i>Lihat Nilai Verifikasi
+                        class="btn-lihat-shared mt-3">
+                        <i class="bi bi-search"></i>Lihat Nilai Verifikasi
                     </a>
                 </div>
             </div>
@@ -169,32 +169,6 @@
     background: linear-gradient(90deg, #0C4C8A, #185FA5);
     border-radius: 99px;
     transition: width 0.5s ease;
-}
-
-/* ── Button ── */
-.btn-lihat-verifikasi {
-    background: var(--ri-table-head-bg);
-    color: var(--ri-text-primary);
-    border: 1px solid var(--ri-border);
-    font-size: 0.82rem;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 9px 14px;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.btn-lihat-verifikasi:hover {
-    background: #0C4C8A;
-    color: #fff !important;
-    border-color: #0C4C8A;
-}
-[data-bs-theme="dark"] .btn-lihat-verifikasi:hover {
-    background: #185FA5;
-    border-color: #185FA5;
-    color: #fff !important;
 }
 </style>
 @endpush
