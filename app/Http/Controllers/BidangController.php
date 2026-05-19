@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SubEvent;
 
 class BidangController extends Controller
 {
@@ -29,23 +30,12 @@ class BidangController extends Controller
     ];
 
     public function index()
-{
-    // Ambil dari session, fallback ke static data SubEvent
-    $subEvents = session('sub_events', [
-        ['id' => 1, 'sub_event' => 'LOMBA INOTEK 2022'],
-        ['id' => 2, 'sub_event' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
-        ['id' => 3, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2023'],
-        ['id' => 4, 'sub_event' => 'LOMBA INOVASI DAN TEKNOLOGI 2024'],
-        ['id' => 5, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
-        ['id' => 6, 'sub_event' => 'PAMERAN INOTEK 2025'],
-        ['id' => 7, 'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025'],
-    ]);
-
-    return view('master.bidang', [
-        'subEvents'  => $subEvents,
-        'bidangData' => self::$bidang,
-    ]);
-}
+    {
+        return view('master.bidang', [
+            'subEvents'  => SubEvent::getStaticData(), // ✅ panggil dari model
+            'bidangData' => self::$bidang,
+        ]);
+    }
 
     // Tambahkan method-method ini nanti
     public function store(Request $request) { /* TODO */ }
