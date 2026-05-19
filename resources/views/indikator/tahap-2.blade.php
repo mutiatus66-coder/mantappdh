@@ -108,16 +108,6 @@
     font-weight: 600;
     margin-top: 6px;
 }
-
-/* .btn-disabled */
-.btn-disabled {
-    background: #9ca3af !important;
-    color: #ffffff !important;
-    cursor: not-allowed !important;
-    pointer-events: none;
-    opacity: 0.7;
-}
-
 .total-ok   { color: #16a34a; }
 .total-warn { color: #dc2626; }
 </style>
@@ -164,25 +154,11 @@
                   <tr>
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
                     <td>{{ $item->sub_event }}</td>
-                   <td style="text-align:center;">
-                    @php
-                    $isValid = isset($detailValid[$item->id]) && $detailValid[$item->id];
-                     @endphp
-                     @if($isValid)
-                    {{-- Jika total formulasi sudah 100 --}}
-                      <a href="{{ route('indikator.tahap2.detail', $item->id) }}"
-                        class="btn-detail-indikator">
-                          <i></i> Detail
-                     </a>
-                       @else
-                     {{-- Jika belum 100 --}}
-                          <button class="btn-detail-indikator btn-disabled"
-                              title="Formulasi belum mencapai 100%"> 
-                                <i></i> Detail
-                           </button>
-                       @endif
-
-                   </td>
+                    <td style="text-align:center;">
+                      <a href="{{ route('indikator.tahap2.indikator', $item->id) }}" class="btn-detail-indikator">
+                        <i></i> Detail
+                      </a>
+                    </td>
                     <td style="text-align:center;">
                       @if(in_array($item->id, $formulasis ?? []))
                         {{-- Sudah ada formulasi — tombol Detail hijau --}}
@@ -196,7 +172,7 @@
                         <button class="btn-tambah-formulasi btn-open-formulasi"
                                 data-id="{{ $item->id }}"
                                 data-nama="{{ $item->sub_event }}">
-                          <i></i> Tambah Formulasi
+                          <i class="bi bi-plus-lg"></i> Tambah Formulasi
                         </button>
                       @endif
                     </td>
