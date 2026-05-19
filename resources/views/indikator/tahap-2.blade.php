@@ -155,9 +155,17 @@
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
                     <td>{{ $item->sub_event }}</td>
                     <td style="text-align:center;">
-                      <a href="{{ route('indikator.tahap2.indikator', $item->id) }}" class="btn-detail-indikator">
+                      @if($detailValid[$item->id] ?? false)
+                       <a href="{{ route('indikator.tahap2.indikator', $item->id) }}"class="btn-detail-indikator">
+                          <i></i> Detail
+                       </a>
+                      @else
+                    <button class="btn-detail-indikator"
+                      style="background:#9ca3af; cursor:not-allowed; opacity:0.7;"
+                      title="Isi formulasi hingga 100% terlebih dahulu"disabled>
                         <i></i> Detail
-                      </a>
+                    </button>
+                     @endif
                     </td>
                     <td style="text-align:center;">
                       @if(in_array($item->id, $formulasis ?? []))
@@ -172,7 +180,7 @@
                         <button class="btn-tambah-formulasi btn-open-formulasi"
                                 data-id="{{ $item->id }}"
                                 data-nama="{{ $item->sub_event }}">
-                          <i class="bi bi-plus-lg"></i> Tambah Formulasi
+                          <i></i> Tambah Formulasi
                         </button>
                       @endif
                     </td>

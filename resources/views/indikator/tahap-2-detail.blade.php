@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.getElementById('hiddenKetId').value = ketId;
             document.getElementById('formIndikator').action =
-                `/indikator/tahap-2/${{{ $subEvent->id }}}/indikator/${ketId}`;
+                `/indikator/tahap-2/{{ $subEvent->id }}/indikator/${ketId}`;
 
             document.getElementById('inputNamaIndikator').value = this.dataset.namaIndikator;
             document.getElementById('inputJenis').value         = this.dataset.jenis;
