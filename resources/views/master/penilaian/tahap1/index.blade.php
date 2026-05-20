@@ -57,8 +57,8 @@
                     </div>
 
                     <a href="{{ route('penilaian.tahap1.show', $seId) }}"
-                        class="btn btn-lihat-verifikasi w-100 mt-3">
-                        <i class="bi bi-search me-2"></i>Lihat Nilai Verifikasi
+                        class="btn-t1 mt-3">
+                        <i class="bi bi-search"></i>Lihat Nilai Verifikasi
                     </a>
                 </div>
             </div>
@@ -72,7 +72,6 @@
 
 @push('styles')
 <style>
-/* ── Container ── */
 .t1-container {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -81,8 +80,6 @@
     margin: 20px;
     transition: background 0.2s, color 0.2s;
 }
-
-/* ── Header ── */
 .t1-title {
     font-size: 1.6rem;
     font-weight: 700;
@@ -94,8 +91,6 @@
     color: var(--ri-text-muted);
     font-size: 0.875rem;
 }
-
-/* ── Card ── */
 .t1-card {
     background: var(--ri-card-bg);
     border: 1px solid var(--ri-border);
@@ -104,11 +99,10 @@
     transition: box-shadow 0.18s, transform 0.18s, background 0.2s;
 }
 .t1-card:hover {
-    box-shadow: 0 6px 20px rgba(12,76,138,0.13);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.13);
     transform: translateY(-2px);
 }
 .t1-card-body { padding: 20px 22px 22px; }
-
 .t1-badge-tahun {
     background: #fef3c7;
     color: #92400e;
@@ -131,7 +125,6 @@
     color: var(--ri-text-muted);
     opacity: 0.4;
 }
-
 .t1-card-title {
     font-size: 0.95rem;
     font-weight: 700;
@@ -139,13 +132,6 @@
     margin: 0 0 4px;
     line-height: 1.4;
 }
-.t1-card-event {
-    font-size: 0.78rem;
-    color: var(--ri-text-muted);
-    margin: 0;
-}
-
-/* ── Progress ── */
 .t1-progress-label {
     font-size: 0.75rem;
     color: var(--ri-text-muted);
@@ -153,10 +139,9 @@
 .t1-progress-pct {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #0C4C8A;
+    color: #2563eb;
 }
-[data-bs-theme="dark"] .t1-progress-pct { color: #378ADD; }
-
+[data-bs-theme="dark"] .t1-progress-pct { color: #60a5fa; }
 .t1-progress-bar-bg {
     width: 100%;
     height: 7px;
@@ -166,35 +151,44 @@
 }
 .t1-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #0C4C8A, #185FA5);
+    background: linear-gradient(90deg, #2563eb, #1e40af);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
-
-/* ── Button ── */
-.btn-lihat-verifikasi {
-    background: var(--ri-table-head-bg);
-    color: var(--ri-text-primary);
-    border: 1px solid var(--ri-border);
-    font-size: 0.82rem;
+/* ── Button langsung biru tanpa hover ── */
+a.btn-t1,
+a.btn-t1:link,
+a.btn-t1:visited {
+    background: linear-gradient(105deg, #2563eb, #1e40af) !important;
+    color: #fff !important;
+    padding: 10px 14px;
+    border-radius: 60px;
+    font-size: 0.85rem;
     font-weight: 600;
-    border-radius: 8px;
-    padding: 9px 14px;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
     text-decoration: none;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-.btn-lihat-verifikasi:hover {
-    background: #0C4C8A;
+a.btn-t1:hover,
+a.btn-t1:active {
+    background: linear-gradient(105deg, #1d4ed8, #1e3a8a) !important;
     color: #fff !important;
-    border-color: #0C4C8A;
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(37,99,235,0.30);
 }
-[data-bs-theme="dark"] .btn-lihat-verifikasi:hover {
-    background: #185FA5;
-    border-color: #185FA5;
-    color: #fff !important;
+a.btn-t1 i {
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+a.btn-t1:hover i {
+    transform: translateX(3px);
 }
 </style>
 @endpush
