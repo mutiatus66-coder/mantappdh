@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SubEvent;
 use App\Models\Indikator;
 use App\Models\KeteranganIndikator;
+use App\Models\FormulasiTahap1;
 use App\Models\FormulasiTahap2;
 use App\Models\IndikatorTahap2;
 use App\Models\KeteranganTahap2;
@@ -15,8 +16,55 @@ class IndikatorController extends Controller
     // ── TAHAP 1 ──────────────────────────────────────────────
     public function tahap1()
     {
-        $subEvents = SubEvent::orderBy('tahun', 'desc')->get();
-        return view('indikator.tahap-1', compact('subEvents'));
+        $subEvents    = SubEvent::orderBy('tahun', 'desc')->get();
+        $formulasis1  = FormulasiTahap1::pluck('sub_event_id')->toArray();
+        $detailValid1 = [];
+        foreach ($subEvents as $subEvent) {
+            $formulasi = FormulasiTahap1::where('sub_event_id', $subEvent->id)->first();
+            if ($formulasi) {
+                $total = ($formulasi->nilai_makalah ?? 0) + ($formulasi->nilai_substansi ?? 0);
+                $detailValid1[$subEvent->id] = ($total == 100);
+            } else {
+                $detailValid1[$subEvent->id] = false;
+            }
+        }
+        return view('indikator.tahap-1', compact('subEvents', 'formulasis1', 'detailValid1'));
+    }
+
+    public function formulasiTahap1Store(Request $request, $subEventId)
+    {
+        $request->validate([
+            'nilai_makalah'   => 'required|integer|min:1|max:100',
+            'nilai_substansi' => 'required|integer|min:1|max:100',
+        ]);
+
+        if (($request->nilai_makalah + $request->nilai_substansi) !== 100) {
+            return back()->withErrors([
+                'total' => 'Total Nilai Makalah dan Nilai Substansi Inovasi harus 100%.'
+            ])->withInput();
+        }
+
+        SubEvent::findOrFail($subEventId);
+
+        FormulasiTahap1::updateOrCreate(
+            ['sub_event_id' => $subEventId],
+            [
+                'nilai_makalah'   => $request->nilai_makalah,
+                'nilai_substansi' => $request->nilai_substansi,
+            ]
+        );
+
+        return redirect()->route('indikator.tahap1')
+                         ->with('success', 'Formulasi Tahap 1 berhasil disimpan.');
+    }
+
+    public function formulasiTahap1Get($subEventId)
+    {
+        $formulasi = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+        if (!$formulasi) {
+            return response()->json(['nilai_makalah' => 0, 'nilai_substansi' => 0]);
+        }
+        return response()->json($formulasi);
     }
 
     public function detailInovasi($subEventId)
