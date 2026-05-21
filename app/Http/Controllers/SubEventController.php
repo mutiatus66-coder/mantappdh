@@ -27,8 +27,11 @@ class SubEventController extends Controller
 
     public function index()
     {
+
+    $subEvents = SubEvent::getStaticData();
+
         return view('master.sub-event', [
-            'subEvents' => SubEvent::with('event')->orderBy('tahun', 'desc')->get(),
+            'subEvents' => $subEvents,
             'events'    => $this->getEvents(),
         ]);
     }
