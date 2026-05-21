@@ -57,7 +57,7 @@
                     </div>
 
                     <a href="{{ route('penilaian.tahap1.show', $seId) }}"
-                        class="btn-t1 mt-3">
+                        class="btn btn-info">
                         <i class="bi bi-search"></i>Lihat Nilai Verifikasi
                     </a>
                 </div>
