@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-    /* Gaya konsisten dengan penilai */
     .usulan-container {
         background: var(--ri-card-bg);
         border-radius: 12px;

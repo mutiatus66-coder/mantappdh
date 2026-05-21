@@ -2,7 +2,7 @@
 
 @section('content')
 <style>
-/* (style sama seperti sebelumnya, tidak diubah) */
+
 .usulan-container { background: var(--ri-card-bg); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin: 20px; }
 .usulan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
 .usulan-title h3 { font-size: 1.5rem; font-weight: bold; margin: 0; color: var(--ri-text-primary); }
