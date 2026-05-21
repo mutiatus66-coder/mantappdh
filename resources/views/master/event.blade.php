@@ -3,15 +3,7 @@
 @section('content')
 
 <style>
-  .btn-warning {
-    background: #65A605 !important;
-    border-color: #65A605 !important;
-    color: #fff !important;
-}
-.btn-warning:hover {
-    background: #538a04 !important;
-    border-color: #538a04 !important;
-}
+
 .sub-card {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -42,7 +34,7 @@
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
 }
-.btn-gold {
+/* .btn-gold {
     background: linear-gradient(135deg, #0C4C8A, #142D54);
     color: white !important;
     border: none;
@@ -52,7 +44,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: opacity .18s;
-}
+} */
 .btn-gold:hover { opacity: .88; color: white !important; }
 .btn-hapus {
     background: #A32D2D;
@@ -113,7 +105,7 @@
               <h3 class="fw-bold m-0" style="font-size:1.5rem; color:var(--ri-text-primary);">Data Event</h3>
               <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua event yang terdaftar</p>
             </div>
-            <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalEvent">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEvent">
               <i></i> Tambah Event
             </button>
           </div>
@@ -137,18 +129,18 @@
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
 
-                        <button class="btn-gold btn-sm btn-edit-event"
+                        <button class="btn btn-warning"
                                 data-id="{{ $item->id }}"
                                 data-nama-event="{{ $item->nama_event }}"
                                 data-jenis="{{ $item->jenis }}">
-                          <i></i>Ubah
+                          Ubah
                         </button>
 
-                        <button class="btn-hapus btn-sm btn-hapus-event"
+                        <button class="btn btn-danger"
                                 data-id="{{ $item->id }}"
                                 data-nama="{{ $item->nama_event }}"
                                 data-url="{{ route('event.destroy', $item->id) }}">
-                          <i></i>Hapus
+                          Hapus
                         </button>
 
                       </div>
