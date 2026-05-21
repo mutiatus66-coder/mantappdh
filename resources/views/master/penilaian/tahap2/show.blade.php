@@ -10,8 +10,8 @@
             <p class="rv-sub-label">Sub Event</p>
             <h3 class="rv-page-title">{{ $subEvent['sub_event'] }}</h3>
         </div>
-        <a href="{{ route('penilaian.tahap2.index') }}" class="btn-rv-back">
-            <i class="bi bi-arrow-left"></i> Kembali
+        <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-primary">
+            Kembali
         </a>
     </div>
 
@@ -40,10 +40,10 @@
                 <div class="rv-card-header">
                     <h6 class="rv-card-title">Nominator Umum</h6>
                     <div class="d-flex gap-2">
-                        <button class="btn-rv-action btn-rv-rank" id="btnRangkingUmum">
+                        <button class="btn btn-primary" id="btnRangkingUmum">
                             <i class="bi bi-sort-numeric-down me-1"></i>Rangking
                         </button>
-                        <button class="btn-rv-action btn-rv-excel" id="btnExcelUmum">
+                        <button class="btn btn-info" id="btnExcelUmum">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
                         </button>
                     </div>
@@ -104,10 +104,10 @@
                 <div class="rv-card-header">
                     <h6 class="rv-card-title">Nominator Pelajar</h6>
                     <div class="d-flex gap-2">
-                        <button class="btn-rv-action btn-rv-rank" id="btnRangkingPelajar">
+                        <button class="btn btn-primary" id="btnRangkingPelajar">
                             <i class="bi bi-sort-numeric-down me-1"></i>Rangking
                         </button>
-                        <button class="btn-rv-action btn-rv-excel" id="btnExcelPelajar">
+                        <button class="btn btn-info" id="btnExcelPelajar">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
                         </button>
                     </div>
@@ -276,28 +276,6 @@
     font-weight: 700;
     color: var(--ri-text-primary);
     margin: 0;
-}
-
-.btn-rv-action {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.82rem;
-    font-weight: 600;
-    border-radius: 60px;
-    padding: 7px 16px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn-rv-rank {
-    background: linear-gradient(105deg, #2563eb, #1e40af);
-    color: #fff;
-    box-shadow: 0 2px 6px rgba(37,99,235,0.2);
-}
-.btn-rv-rank:hover {
-    background: linear-gradient(105deg, #1d4ed8, #1e3a8a);
-    transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(37,99,235,0.25);
 }
 .btn-rv-excel {
     background: var(--ri-table-head-bg);
