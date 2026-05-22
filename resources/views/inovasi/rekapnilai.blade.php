@@ -1,10 +1,10 @@
 @extends('index', ['dummy' => true])
 
 @section('content')
-<link href="{{ asset('template.demo6/demo6/assets/css/rekapnilai.css') }}" rel="stylesheet">
+<link href="{{ asset('template.demo6/demo6/assets/css/setel.css') }}" rel="stylesheet">
 
-<div class="rekap-container">
-    <div class="rekap-title">
+<div class="all-container">
+    <div class="all-title">
         <h3>Rekap Nilai Inovasi</h3>
         <p>Progress penilaian per sub event</p>
     </div>
