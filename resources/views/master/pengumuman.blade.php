@@ -2,165 +2,105 @@
 
 @section('content')
 <style>
-.btn-simpan {
-    background: #00838F !important;
-    border-color: #00838F !important;
-    color: #fff !important;
-    font-weight: 600;
-    transition: background 0.15s, border-color 0.15s;
-}
-.btn-simpan:hover {
-    background: #006064 !important;
-    border-color: #006064 !important;
-    color: #fff !important;
-}
-.btn-batal {
-    background: #546E7A !important;
-    border-color: #546E7A !important;
-    color: #fff !important;
-    font-weight: 600;
-    transition: background 0.15s, border-color 0.15s;
-}
-.btn-batal:hover {
-    background: #455A64 !important;
-    border-color: #455A64 !important;
-    color: #fff !important;
-}
-.pengumuman-container {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 20px;
-    transition: background 0.2s, color 0.2s;
-}
-.pengumuman-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.pengumuman-title h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: 0;
-    color: var(--ri-text-primary);
-}
-.pengumuman-title p {
-    margin: 0;
-    color: var(--ri-text-muted);
-    font-size: 0.875rem;
-}
-.btn-tambah {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.btn-tambah:hover { opacity: 0.9; }
-.stats-search {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.total-badge {
-    background: #dcfce7;
-    color: #166534;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-.search-box input {
-    padding: 6px 12px 6px 32px;
-    border: 1px solid var(--ri-border);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    width: 240px;
-    background: var(--ri-input-bg);
-    color: var(--ri-text-primary);
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-.pengumuman-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid var(--ri-table-border-outer);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.pengumuman-table th {
-    background: var(--ri-table-head-bg);
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--ri-text-muted);
-    border-bottom: 2px solid var(--ri-table-border-header);
-    transition: background 0.2s, color 0.2s;
-}
-.pengumuman-table td {
-    padding: 12px;
-    border-bottom: 1.5px solid var(--ri-table-border-row);
-    color: var(--ri-text-primary);
-    font-size: 0.875rem;
-    background: var(--ri-table-row-bg);
-    transition: background 0.2s, color 0.2s;
-}
-.pengumuman-table tr:hover td { background: var(--ri-table-row-hover); }
-.pengumuman-table tr:last-child td { border-bottom: none; }
-.status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-.status-published { background: #dcfce7; color: #166534; }
-.status-draft     { background: #fef9c3; color: #854d0e; }
-.action-buttons   { display: flex; justify-content: center; gap: 8px; }
-.btn-edit-icon {
-    background: linear-gradient(135deg, #142D54, #0C4C8A);
-    color: white !important;
-    border: none; border-radius: 6px;
-    padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
-    cursor: pointer; transition: opacity 0.15s;
-}
-.btn-edit-icon:hover { opacity: 0.88; }
-.btn-hapus {
-    background: #A32D2D; color: #ffffff !important;
-    border: none; font-weight: 600;
-    padding: 6px 14px; border-radius: 6px;
-    cursor: pointer; font-size: 0.8rem; transition: background 0.15s;
-}
-.btn-hapus:hover { background: #8b2424; }
-.empty-row {
-    text-align: center; padding: 30px;
-    color: var(--ri-text-muted); background: var(--ri-table-row-bg);
-}
-.hapus-icon-circle {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: #FCEBEB;
-    display: flex; align-items: center; justify-content: center;
-}
-[data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
-[data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
-[data-bs-theme="dark"] .hapus-nama-strong  { color: #F5F0E8 !important; }
-@media (max-width: 640px) {
-    .pengumuman-container { margin: 10px; padding: 12px; }
-    .pengumuman-table th, .pengumuman-table td { padding: 8px; }
-    .search-box input { width: 100%; }
-}
+    /* Gaya tambahan untuk card dan tabel (konsisten dengan penilai) */
+    .pengumuman-container {
+        background: var(--ri-card-bg);
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin: 20px;
+    }
+    .pengumuman-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .pengumuman-title h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: var(--ri-text-primary);
+    }
+    .pengumuman-title p {
+        margin: 0;
+        color: var(--ri-text-muted);
+        font-size: 0.875rem;
+    }
+    .pengumuman-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .total-badge {
+        background: #dcfce7;
+        color: #166534;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    .search-box input {
+        padding: 6px 12px 6px 32px;
+        border: 1px solid var(--ri-border);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        width: 240px;
+        background: var(--ri-input-bg);
+        color: var(--ri-text-primary);
+    }
+    .pengumuman-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid var(--ri-table-border-outer);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .pengumuman-table th {
+        background: var(--ri-table-head-bg);
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--ri-text-muted);
+        border-bottom: 2px solid var(--ri-table-border-header);
+    }
+    .pengumuman-table td {
+        padding: 12px;
+        border-bottom: 1.5px solid var(--ri-table-border-row);
+        color: var(--ri-text-primary);
+        font-size: 0.875rem;
+        background: var(--ri-table-row-bg);
+    }
+    .pengumuman-table tr:hover td {
+        background: var(--ri-table-row-hover);
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .status-published {
+        background: #dcfce7;
+        color: #166534;
+    }
+    .status-draft {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+    @media (max-width: 640px) {
+        .pengumuman-container { margin: 10px; padding: 12px; }
+        .pengumuman-table th, .pengumuman-table td { padding: 8px; }
+        .search-box input { width: 100%; }
+    }
 </style>
 
 <div class="pengumuman-container">
@@ -169,13 +109,14 @@
             <h3>Master Pengumuman</h3>
             <p>Kelola pengumuman yang ditampilkan ke publik</p>
         </div>
-        <button class="btn-tambah" id="btnTambahPengumuman">
+        <!-- Tombol Tambah: btn-primary -->
+        <button class="btn btn-primary" id="btnTambahPengumuman">
             Tambah Pengumuman
         </button>
     </div>
 
-    <div class="stats-search">
-        <div class="total-badge">Total Pengumuman: <span id="totalPengumuman">{{ count($pengumuman ?? []) }}</span></div>
+    <div class="pengumuman-stats">
+        <div class="total-badge">Total Pengumuman: <span id="totalPengumuman">{{ $pengumuman->count() }}</span></div>
         <div class="search-box">
             <input type="text" id="searchPengumuman" placeholder="Cari judul atau deskripsi...">
         </div>
@@ -186,36 +127,38 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Judul</th>
+                    <th>Judul Pengumuman</th>
                     <th>Deskripsi</th>
                     <th>Status</th>
                     <th style="text-align:center;">Aksi</th>
                 </tr>
             </thead>
-            <tbody id="pengumumanBody">
-                @forelse(($pengumuman ?? []) as $index => $p)
+            <tbody id="tabelPengumumanBody">
+                @forelse($pengumuman as $index => $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $p['judul'] }}</td>
-                    <td>{{ Str::limit($p['deskripsi'], 60) }}</td>
+                    <td>{{ $item->judul }}</td>
+                    <td>{{ Str::limit($item->deskripsi, 80) }}</td>
                     <td>
-                        <span class="status-badge {{ $p['status'] == 'Published' ? 'status-published' : 'status-draft' }}">
-                            {{ $p['status'] }}
+                        <span class="status-badge {{ $item->status == 'Published' ? 'status-published' : 'status-draft' }}">
+                            {{ $item->status }}
                         </span>
                     </td>
                     <td style="text-align:center;">
-                        <div class="action-buttons">
-                            <button class="btn-edit-icon btn-edit-pengumuman"
-                                    data-id="{{ $p['id'] }}"
-                                    data-judul="{{ $p['judul'] }}"
-                                    data-deskripsi="{{ $p['deskripsi'] }}"
-                                    data-status="{{ $p['status'] }}">
+                        <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+                            @if($item->file_path)
+                            <a href="{{ asset('storage/'.$item->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary" title="Lihat File">📄</a>
+                            @endif
+                            <button class="btn btn-warning btn-sm btn-edit-pengumuman"
+                                    data-id="{{ $item->id }}"
+                                    data-judul="{{ $item->judul }}"
+                                    data-deskripsi="{{ $item->deskripsi }}"
+                                    data-status="{{ $item->status }}">
                                 Ubah
                             </button>
-                            <button class="btn-hapus btn-hapus-pengumuman"
-                                    data-id="{{ $p['id'] }}"
-                                    data-judul="{{ $p['judul'] }}"
-                                    data-url="{{ route('admin.pengumuman.destroy', $p['id']) }}">
+                            <button class="btn btn-danger btn-sm btn-hapus-pengumuman"
+                                    data-id="{{ $item->id }}"
+                                    data-judul="{{ $item->judul }}">
                                 Hapus
                             </button>
                         </div>
@@ -223,7 +166,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="empty-row">Belum ada pengumuman. Silakan tambah.</td>
+                    <td colspan="5" class="empty-row">Belum ada pengumuman</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -234,155 +177,139 @@
     </div>
 </div>
 
-
-{{-- ══ MODAL — Tambah / Ubah Pengumuman ══ --}}
-<div class="modal fade" id="modalPengumuman" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-3 shadow-lg">
-            <form id="formPengumuman" method="POST" action="{{ route('admin.pengumuman.store') }}">
+{{-- MODAL Tambah / Edit Pengumuman --}}
+<div class="modal fade" id="modalPengumuman" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formPengumuman" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="_method" id="formPengumumanMethod" value="POST">
-
-                <div class="modal-header px-5 py-4">
-                    <h5 class="modal-title fw-semibold" id="modalPengumumanTitle">Tambah Pengumuman</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                            data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg fs-5"></i>
-                    </button>
+                <input type="hidden" name="_method" id="formMethod" value="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPengumumanTitle">Tambah Pengumuman</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="modal-body px-5 py-4">
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Judul</label>
-                            <input type="text" name="judul" id="pengumumanJudul"
-                                   class="form-control" placeholder="Masukkan judul pengumuman..." required>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Deskripsi</label>
-                            <textarea name="deskripsi" id="pengumumanDeskripsi"
-                                      class="form-control" rows="4"
-                                      placeholder="Masukkan isi pengumuman..." required></textarea>
-                        </div>
-                        <div class="col-md-12 mb-2">
-                            <label class="form-label fw-semibold">Status</label>
-                            <div class="d-flex gap-4 mt-1">
-                                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                    <input type="radio" name="status" id="statusPublished" value="Published" checked> Published
-                                </label>
-                                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                    <input type="radio" name="status" id="statusDraft" value="Draft"> Draft
-                                </label>
-                            </div>
-                        </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Judul Pengumuman</label>
+                        <input type="text" class="form-control" name="judul" id="judul" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status" id="status">
+                            <option value="Published">Published</option>
+                            <option value="Draft">Draft</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File (PDF/DOC)</label>
+                        <input type="file" class="form-control" name="file" id="file">
+                        <small class="text-muted">Kosongkan jika tidak mengubah file (pada edit).</small>
                     </div>
                 </div>
-
-                <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-
-{{-- ══ MODAL — Konfirmasi Hapus Pengumuman ══ --}}
-<div class="modal fade" id="modalHapusPengumuman" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
-
-            <div class="d-flex justify-content-center mb-3">
-                <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#A32D2D;"></i>
-                </div>
+{{-- MODAL Konfirmasi Hapus --}}
+<div class="modal fade" id="modalHapusPengumuman" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
-            <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
-            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:#6b7280;">
-                Tindakan ini tidak dapat dibatalkan. Pengumuman
-                <strong id="judulPengumumanHapus" class="hapus-nama-strong"></strong>
-                akan dihapus secara permanen.
-            </p>
-
-            <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-batal btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+            <div class="modal-body">
+                <p>Yakin ingin menghapus pengumuman "<strong id="hapusJudulSpan"></strong>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusPengumuman" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm px-4">
-                        <i class="bi bi-trash3 me-1"></i>Ya, Hapus
-                    </button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
 
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search filter
+        const searchInput = document.getElementById('searchPengumuman');
+        const rows = document.querySelectorAll('#tabelPengumumanBody tr');
+        const emptyMsg = document.getElementById('emptySearchMessage');
+        const totalSpan = document.getElementById('totalPengumuman');
 
-    const storeUrl = "{{ route('admin.pengumuman.store') }}";
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                let keyword = this.value.toLowerCase();
+                let visibleCount = 0;
+                rows.forEach(row => {
+                    const judul = row.cells[1]?.innerText.toLowerCase() || '';
+                    const deskripsi = row.cells[2]?.innerText.toLowerCase() || '';
+                    if (judul.includes(keyword) || deskripsi.includes(keyword)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+                totalSpan.innerText = visibleCount;
+            });
+        }
 
-    const searchInput = document.getElementById('searchPengumuman');
-    const rows        = document.querySelectorAll('#pengumumanBody tr');
-    const emptyMsg    = document.getElementById('emptySearchMessage');
-    const totalSpan   = document.getElementById('totalPengumuman');
-
-    searchInput.addEventListener('keyup', function () {
-        let kw = this.value.toLowerCase();
-        let n  = 0;
-        rows.forEach(row => {
-            const judul  = row.cells[1]?.innerText.toLowerCase() || '';
-            const desk   = row.cells[2]?.innerText.toLowerCase() || '';
-            const show   = judul.includes(kw) || desk.includes(kw);
-            row.style.display = show ? '' : 'none';
-            if (show) n++;
+        // Reset modal
+        const modalPengumuman = document.getElementById('modalPengumuman');
+        modalPengumuman.addEventListener('hidden.bs.modal', function() {
+            document.getElementById('formPengumuman').action = "{{ route('pengumuman.store') }}";
+            document.getElementById('formMethod').value = 'POST';
+            document.getElementById('modalPengumumanTitle').innerText = 'Tambah Pengumuman';
+            document.getElementById('judul').value = '';
+            document.getElementById('deskripsi').value = '';
+            document.getElementById('status').value = 'Published';
+            document.getElementById('file').value = '';
         });
-        emptyMsg.style.display = n === 0 ? 'block' : 'none';
-        totalSpan.innerText = n;
-    });
 
-    document.getElementById('modalPengumuman').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formPengumuman').action      = storeUrl;
-        document.getElementById('formPengumumanMethod').value = 'POST';
-        document.getElementById('modalPengumumanTitle').textContent = 'Tambah Pengumuman';
-        document.getElementById('pengumumanJudul').value      = '';
-        document.getElementById('pengumumanDeskripsi').value  = '';
-        document.getElementById('statusPublished').checked    = true;
-    });
+        // Tombol Tambah
+        document.getElementById('btnTambahPengumuman').addEventListener('click', function() {
+            new bootstrap.Modal(modalPengumuman).show();
+        });
 
-    document.getElementById('btnTambahPengumuman').addEventListener('click', function () {
-        new bootstrap.Modal(document.getElementById('modalPengumuman')).show();
-    });
+        // Tombol Edit
+        document.querySelectorAll('.btn-edit-pengumuman').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                document.getElementById('modalPengumumanTitle').innerText = 'Edit Pengumuman';
+                document.getElementById('formPengumuman').action = `/pengumuman/${id}`;
+                document.getElementById('formMethod').value = 'PUT';
+                document.getElementById('judul').value = this.dataset.judul;
+                document.getElementById('deskripsi').value = this.dataset.deskripsi;
+                document.getElementById('status').value = this.dataset.status;
+                document.getElementById('file').value = ''; // reset file input
+                new bootstrap.Modal(modalPengumuman).show();
+            });
+        });
 
-    document.querySelectorAll('.btn-edit-pengumuman').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalPengumumanTitle').textContent    = 'Ubah Pengumuman';
-            document.getElementById('formPengumuman').action               = `/admin/pengumuman/${this.dataset.id}`;
-            document.getElementById('formPengumumanMethod').value          = 'PUT';
-            document.getElementById('pengumumanJudul').value               = this.dataset.judul;
-            document.getElementById('pengumumanDeskripsi').value           = this.dataset.deskripsi;
-            if (this.dataset.status === 'Draft') {
-                document.getElementById('statusDraft').checked = true;
-            } else {
-                document.getElementById('statusPublished').checked = true;
-            }
-            new bootstrap.Modal(document.getElementById('modalPengumuman')).show();
+        // Tombol Hapus
+        const hapusModal = document.getElementById('modalHapusPengumuman');
+        document.querySelectorAll('.btn-hapus-pengumuman').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('hapusJudulSpan').innerText = this.dataset.judul;
+                document.getElementById('formHapusPengumuman').action = `/pengumuman/${this.dataset.id}`;
+                new bootstrap.Modal(hapusModal).show();
+            });
         });
     });
-
-    document.querySelectorAll('.btn-hapus-pengumuman').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('judulPengumumanHapus').textContent  = this.dataset.judul;
-            document.getElementById('formHapusPengumuman').action        = this.dataset.url;
-            new bootstrap.Modal(document.getElementById('modalHapusPengumuman')).show();
-        });
-    });
-
-});
 </script>
 @endsection

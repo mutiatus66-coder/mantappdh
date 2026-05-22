@@ -2,32 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengumuman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengumumanController extends Controller
 {
     public function index()
     {
-        // Data dummy (nanti ganti dengan database)
-        $pengumuman = [
-            [
-                'id'          => 1,
-                'judul'       => 'POSTER INOTEK AWARD 2023',
-                'deskripsi'   => 'Pengumuman lomba poster INOTEK 2023',
-                'status'      => 'Published',
-                'file_path'   => null,
-                'created_at'  => '2025-01-10'
-            ],
-            [
-                'id'          => 2,
-                'judul'       => 'Instruksi Bupati Magetan tentang Gerakan Magetan Berinovasi',
-                'deskripsi'   => 'Instruksi Bupati untuk percepatan inovasi daerah',
-                'status'      => 'Published',
-                'file_path'   => null,
-                'created_at'  => '2025-02-15'
-            ],
-        ];
-
+        $pengumuman = Pengumuman::latest()->get();
         return view('master.pengumuman', compact('pengumuman'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status' => 'required|in:Published,Draft',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $data = $request->only('judul', 'deskripsi', 'status');
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('pengumuman', 'public');
+            $data['file_path'] = $path;
+        }
+
+        Pengumuman::create($data);
+
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status' => 'required|in:Published,Draft',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $data = $request->only('judul', 'deskripsi', 'status');
+
+        if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($pengumuman->file_path) {
+                Storage::disk('public')->delete($pengumuman->file_path);
+            }
+            $path = $request->file('file')->store('pengumuman', 'public');
+            $data['file_path'] = $path;
+        }
+
+        $pengumuman->update($data);
+
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil diupdate.');
+    }
+
+    public function destroy($id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+        if ($pengumuman->file_path) {
+            Storage::disk('public')->delete($pengumuman->file_path);
+        }
+        $pengumuman->delete();
+
+        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
     }
 }
