@@ -13,7 +13,7 @@
     border: none;
     overflow: hidden;
 }
-.btn-tambah-se {
+/* .btn-tambah-se {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
     padding: 10px 20px;
@@ -27,12 +27,13 @@
     gap: 6px;
     font-size: .9rem;
     box-shadow: 0 3px 12px rgba(245,158,11,.30);
-}
+} */
+
 .btn-tambah-se:hover {opacity: 0.9;
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
 }
-.btn-kembali {
+/* .btn-kembali {
     background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white !important;
     padding: 10px 20px;
@@ -46,9 +47,9 @@
     gap: 6px;
     font-size: .9rem;
     text-decoration: none;
-}
+} */
 .btn-kembali:hover { opacity: 0.9; color: white !important; }
-.btn-gold {
+/* .btn-gold {
     background: linear-gradient(135deg, #0C4C8A, #142D54);
     color: white !important;
     border: none;
@@ -58,7 +59,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: opacity .18s;
-}
+} */
 .btn-gold:hover { opacity: .88; color: white !important; }
 .btn-detail {
     background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -147,6 +148,11 @@
     opacity: 1;
 }
 
+.btn-action-sm{
+    padding: 5px 12px !important;
+    font-size: 13px !important;
+}
+
 [data-bs-theme="dark"] .hapus-icon-circle { background: rgba(163,45,45,0.20); }
 [data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245,240,232,.55) !important; }
 [data-bs-theme="dark"] .hapus-nama-strong { color: #F5F0E8 !important; }
@@ -177,11 +183,11 @@
               </p>
             </div>
             <div class="d-flex gap-2">
-              <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalIndikator">
-                <i></i> Tambah Indikator
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIndikator">
+                Tambah Indikator
               </button>
-              <a href="{{ route('indikator.tahap1') }}" class="btn-kembali">
-                <i></i> Kembali
+              <a href="{{ route('indikator.tahap1') }}" class="btn btn-secondary">
+                 Kembali
               </a>
             </div>
           </div>
@@ -209,10 +215,10 @@
                     </td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
-                        <button class="btn-gold btn-sm btn-edit-indikator"
+                        <button class="btn btn-warning btn-action-sm"
                                 data-id="{{ $item->id }}"
                                 data-indikator="{{ $item->nama_indikator ?? $item->indikator }}">
-                          <i></i> Ubah
+                           Ubah
                         </button>
                         <button class="btn btn-danger"
                                 data-id="{{ $item->id }}"
