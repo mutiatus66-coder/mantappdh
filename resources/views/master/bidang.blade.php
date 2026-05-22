@@ -87,7 +87,8 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning"
+                                        <div class="btn-aksi-wrap">
+                                        <button class="btn btn-warning btn-aksi"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
                                                 data-status="{{ $bidang['status'] }}"
@@ -95,12 +96,13 @@
                                                 data-sub-event-nama="{{ $se['sub_event'] }}">
                                             Ubah
                                         </button>
-                                        <button class="btn btn-danger"
+                                        <button class="btn btn-danger btn-aksi"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
                                                 data-url="{{ route('bidang.destroy', $bidang['id']) }}">
                                             Hapus
                                         </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -196,7 +198,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
@@ -212,162 +214,64 @@
 
 
 @endsection
-
-@push('styles')
-<style>
-.bidang-container {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 24px;
-    margin: 20px;
-    transition: background 0.2s, color 0.2s;
-}
-.bidang-header { margin-bottom: 24px; }
-.bidang-title h3 {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin: 0;
-    color: var(--ri-text-primary);
-}
-.bidang-title p { margin: 0; color: var(--ri-text-muted); }
-
-.bidang-accordion-item {
-    background: var(--ri-card-bg) !important;
-    border: 1px solid var(--ri-border) !important;
-    border-radius: 8px !important;
-    overflow: hidden;
-    transition: background 0.2s;
-}
-.bidang-accordion-btn {
-    background: var(--ri-accordion-head-bg) !important;
-    color: var(--ri-text-primary) !important;
-    font-weight: 600;
-    padding: 16px 20px !important;
-    transition: background 0.2s, color 0.2s;
-}
-.bidang-accordion-btn:not(.collapsed) {
-    background: var(--ri-accordion-head-active-bg) !important;
-    color: var(--ri-accordion-head-active-color) !important;
-}
-.accordion-body {
-    background: var(--ri-card-bg);
-    transition: background 0.2s;
-}
-.bidang-table {
-    border: 2px solid var(--ri-table-border-outer) !important;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.bidang-table th {
-    background: var(--ri-table-head-bg) !important;
-    padding: 14px 12px;
-    border-bottom: 2.5px solid var(--ri-table-border-header) !important;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--ri-text-muted) !important;
-    transition: background 0.2s, color 0.2s;
-}
-.bidang-table td {
-    padding: 14px 12px;
-    border-bottom: 1.5px solid var(--ri-table-border-row) !important;
-    color: var(--ri-text-primary) !important;
-    background: var(--ri-table-row-bg) !important;
-    transition: background 0.2s, color 0.2s;
-}
-.bidang-table tr:hover td { background: var(--ri-table-row-hover) !important; }
-.badge-aktif {
-    background: #d1fae5; color: #166534;
-    padding: 6px 14px; border-radius: 9999px;
-    font-weight: 600; display: inline-block;
-}
-.badge-nonaktif {
-    background: var(--ri-badge-inactive-bg);
-    color: var(--ri-badge-inactive-color);
-    padding: 6px 14px; border-radius: 9999px;
-    font-weight: 600; display: inline-block;
-    transition: background 0.2s, color 0.2s;
-}
-
-/* Hapus modal */
-.hapus-icon-circle {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: #FCEBEB;
-    display: flex; align-items: center; justify-content: center;
-}
-[data-bs-theme="dark"] .hapus-icon-circle  { background: rgba(163,45,45,0.20); }
-[data-bs-theme="dark"] .hapus-teks-muted   { color: rgba(245,240,232,.55) !important; }
-[data-bs-theme="dark"] .hapus-nama-strong  { color: #F5F0E8 !important; }
-</style>
-@endpush
-
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('bidang.store') }}";
+    const storeUrl  = "{{ route('bidang.store') }}";
+    const updateUrl = "{{ url('bidang') }}";
 
-    // Paksa accordion tertutup
-    setTimeout(() => {
-        document.querySelectorAll('#accordionBidang .accordion-collapse').forEach(c => {
-            if (c.classList.contains('show')) new bootstrap.Collapse(c, { toggle: false }).hide();
-        });
-    }, 100);
+    // Tutup semua accordion
+    document.querySelectorAll('#accordionBidang .accordion-collapse.show').forEach(c => {
+        bootstrap.Collapse.getOrCreateInstance(c).hide();
+    });
 
-    // ── Reset modal ──
+    // Reset modal
     document.getElementById('modalBidang').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formBidang').action      = storeUrl;
-        document.getElementById('formBidangMethod').value = 'POST';
+        document.getElementById('formBidang').action        = storeUrl;
+        document.getElementById('formBidangMethod').value   = 'POST';
         document.getElementById('modalBidangTitle').textContent = 'Tambah Bidang';
-        document.getElementById('bidangNama').value        = '';
-        document.getElementById('bidangSubEventId').value  = '';
+        document.getElementById('bidangNama').value         = '';
+        document.getElementById('bidangSubEventId').value   = '';
         document.getElementById('bidangSubEventNama').textContent = '';
         document.getElementById('statusAktifBidang').checked = true;
     });
 
-    // ── Tambah ──
-    document.querySelectorAll('.btn-primary').forEach(btn => {
+    // Tambah
+    document.querySelectorAll('[data-sub-event-id].btn-primary').forEach(btn => {
         btn.addEventListener('click', function () {
-            document.getElementById('bidangSubEventId').value           = this.dataset.subEventId;
-            document.getElementById('bidangSubEventNama').textContent   = this.dataset.subEventNama;
-            document.getElementById('modalBidangTitle').textContent     = 'Tambah Bidang';
-            document.getElementById('formBidang').action                = storeUrl;
-            document.getElementById('formBidangMethod').value           = 'POST';
-            document.getElementById('bidangNama').value                 = '';
-            document.getElementById('statusAktifBidang').checked        = true;
+            document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
+            document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
+            document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
+            document.getElementById('formBidang').action              = storeUrl;
+            document.getElementById('formBidangMethod').value         = 'POST';
+            document.getElementById('bidangNama').value               = '';
+            document.getElementById('statusAktifBidang').checked      = true;
             new bootstrap.Modal(document.getElementById('modalBidang')).show();
         });
     });
 
-    // ── Ubah ──
-    document.querySelectorAll('.btn-warning').forEach(btn => {
+    // Ubah
+    document.querySelectorAll('.btn-warning.btn-aksi').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.dataset.id;
-
-            document.getElementById('modalBidangTitle').textContent     = 'Ubah Bidang';
-            document.getElementById('formBidang').action                = `/bidang/${id}`;
-            document.getElementById('formBidangMethod').value           = 'PUT';
-            document.getElementById('bidangSubEventId').value           = this.dataset.subEventId;
-            document.getElementById('bidangSubEventNama').textContent   = this.dataset.subEventNama;
-            document.getElementById('bidangNama').value                 = this.dataset.nama;
-
-            if (this.dataset.status === 'tidak_aktif') {
-                document.getElementById('statusNonaktifBidang').checked = true;
-            } else {
-                document.getElementById('statusAktifBidang').checked = true;
-            }
-
+            document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
+            document.getElementById('formBidang').action              = `${updateUrl}/${id}`;
+            document.getElementById('formBidangMethod').value         = 'PUT';
+            document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
+            document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
+            document.getElementById('bidangNama').value               = this.dataset.nama;
+            const isNonaktif = this.dataset.status === 'tidak_aktif';
+            document.getElementById(isNonaktif ? 'statusNonaktifBidang' : 'statusAktifBidang').checked = true;
             new bootstrap.Modal(document.getElementById('modalBidang')).show();
         });
     });
 
-    // ── Hapus ──
-    document.querySelectorAll('.btn-danger').forEach(btn => {
+    // Hapus
+    document.querySelectorAll('.btn-danger.btn-aksi').forEach(btn => {
         btn.addEventListener('click', function () {
-            document.getElementById('namaBidangHapus').textContent  = this.dataset.nama;
-            document.getElementById('formHapusBidang').action       = this.dataset.url;
+            document.getElementById('namaBidangHapus').textContent = this.dataset.nama;
+            document.getElementById('formHapusBidang').action      = this.dataset.url;
             new bootstrap.Modal(document.getElementById('modalHapusBidang')).show();
         });
     });
