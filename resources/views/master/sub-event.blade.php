@@ -182,7 +182,7 @@
             <h3>Data Sub Event</h3>
             <p>Kelola semua sub event yang tersedia</p>
         </div>
-        <button class="btn-tambah-se" id="btnTambahSubEvent">
+        <button class="btn btn-primary" id="btnTambahSubEvent">
             Tambah Sub Event
         </button>
     </div>
@@ -229,7 +229,7 @@
                         <td>{{ $item['mulai'] ?? '-' }}</td>
                         <td>{{ $item['berakhir'] ?? '-' }}</td>
                         <td style="text-align:center;">
-                            <button class="btn-gold btn-sm btn-edit-se me-2"
+                            <button class="btn btn-warning btn-sm btn-edit-se me-2"
                                     data-id="{{ $item['id'] }}"
                                     data-tahun="{{ $item['tahun'] ?? '' }}"
                                     data-event-id="{{ $item['event_id'] ?? '' }}"
@@ -239,7 +239,7 @@
                                     data-berakhir="{{ $item['berakhir'] ?? '' }}">
                                 Ubah
                             </button>
-                            <button class="btn-hapus btn-sm btn-hapus-se"
+                            <button class="btn btn-danger btn-sm btn-hapus-se"
                                     data-id="{{ $item['id'] }}"
                                     data-nama="{{ $item['sub_event'] }}"
                                     data-url="{{ route('sub-event.destroy', $item['id']) }}">
@@ -312,8 +312,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -340,12 +340,12 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusSE" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-sm px-4">
-                        <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+                        Hapus
                     </button>
                 </form>
             </div>

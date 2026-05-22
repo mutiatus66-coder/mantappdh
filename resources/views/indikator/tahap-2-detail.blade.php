@@ -13,7 +13,7 @@
     border: none;
     overflow: hidden;
 }
-.btn-tambah {
+/* .btn-tambah {
     background: #1d4ed8;
     color: white !important;
     padding: 8px 18px;
@@ -27,9 +27,9 @@
     gap: 6px;
     font-size: .875rem;
     text-decoration: none;
-}
+} */
 .btn-tambah:hover { opacity: 0.88; color: white !important; }
-.btn-kembali {
+/* .btn-kembali {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
     padding: 8px 18px;
@@ -43,9 +43,9 @@
     gap: 6px;
     font-size: .875rem;
     text-decoration: none;
-}
+} */
 .btn-kembali:hover { opacity: 0.88; color: white !important; }
-.btn-edit {
+/* .btn-edit {
     background: #f59e0b;
     color: white !important;
     border: none;
@@ -58,9 +58,9 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-}
+} */
 .btn-edit:hover { opacity: .88; color: white !important; }
-.btn-hapus {
+/* .btn-hapus {
     background: #A32D2D;
     color: white !important;
     border: none;
@@ -73,7 +73,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-}
+} */
 .btn-hapus:hover { background: #8b2424; color: white !important; }
 .se-table {
     width: 100%;
@@ -147,11 +147,11 @@
 
         {{-- Tombol atas --}}
         <div class="d-flex gap-2 mb-4">
-          <button class="btn-tambah" id="btnTambahIndikator">
-            <i></i> Tambah Indikator
+          <button class="btn btn-primary" id="btnTambahIndikator">
+            Tambah Indikator
           </button>
-          <a href="{{ route('indikator.tahap2') }}" class="btn-kembali">
-            <i></i> Kembali
+          <a href="{{ route('indikator.tahap2') }}" class="btn btn-secondary">
+            Kembali
           </a>
         </div>
 
@@ -197,7 +197,7 @@
                         <td style="text-align:center;">{{ $ket->nilai_maksimal }}</td>
                         <td style="text-align:center;">
                           <div class="d-flex gap-1 justify-content-center">
-                            <button class="btn-edit btn-edit-indikator"
+                            <button class="btn btn-warning"
                                     data-id="{{ $ket->id }}"
                                     data-indikator-id="{{ $ind->id }}"
                                     data-nama-indikator="{{ $ind->nama_indikator }}"
@@ -205,12 +205,12 @@
                                     data-keterangan="{{ $ket->keterangan }}"
                                     data-nilai-minimal="{{ $ket->nilai_minimal }}"
                                     data-nilai-maksimal="{{ $ket->nilai_maksimal }}">
-                              <i></i> Edit
+                              Edit
                             </button>
-                            <button class="btn-hapus btn-hapus-indikator"
+                            <button class="btn btn-danger btn-hapus-indikator"
                                     data-id="{{ $ket->id }}"
                                     data-url="{{ route('indikator.tahap2.indikator.destroy', [$subEvent->id, $ket->id]) }}">
-                              <i></i> Hapus
+                             Hapus
                             </button>
                           </div>
                         </td>

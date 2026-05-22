@@ -37,7 +37,7 @@
     border: none;
     overflow: hidden;
 }
-.btn-tambah-se {
+/* .btn-tambah-se {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
     padding: 10px 20px;
@@ -51,13 +51,13 @@
     gap: 6px;
     font-size: .9rem;
     box-shadow: 0 3px 12px rgba(245,158,11,.30);
-}
+} */
 .btn-tambah-se:hover {
     opacity: 0.9;
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
 }
-.btn-gold {
+/* .btn-gold {
     background: linear-gradient(135deg, #0C4C8A, #142D54);
     color: white !important;
     border: none;
@@ -67,9 +67,9 @@
     font-weight: 600;
     cursor: pointer;
     transition: opacity .18s;
-}
+} */
 .btn-gold:hover { opacity: .88; color: white !important; }
-.btn-hapus {
+/* .btn-hapus {
     background: #A32D2D;
     color: #ffffff !important;
     border: none;
@@ -79,9 +79,9 @@
     cursor: pointer;
     font-size: 0.8rem;
     transition: background 0.15s;
-}
+} */
 .btn-hapus:hover { background: #8b2424; color: #ffffff !important; }
-.btn-login-as {
+/* .btn-login-as {
     background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #15803d 100%);
     color: #fff !important;
     font-weight: 700;
@@ -90,7 +90,7 @@
     padding: 6px 14px;
     font-size: 0.8rem;
     transition: opacity .18s;
-}
+} */
 .btn-login-as:hover { opacity: .88; color: #fff !important; }
 .se-table {
     width: 100%;
@@ -156,7 +156,7 @@
               <h3 class="fw-bold m-0" style="font-size:1.5rem; color:var(--ri-text-primary);">Data User</h3>
               <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua user yang terdaftar</p>
             </div>
-            <button class="btn-tambah-se" data-bs-toggle="modal" data-bs-target="#modalUser">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUser">
               Tambah User
             </button>
           </div>
@@ -183,7 +183,7 @@
                     <td style="text-align:center;">{{ $item['status'] }}</td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
-                        <button class="btn-gold btn-sm btn-edit-user"
+                        <button class="btn btn-warning"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['nama'] }}"
                                 data-email="{{ $item['email'] }}"
@@ -191,14 +191,14 @@
                                 data-status="{{ $item['status'] }}">
                           Ubah
                         </button>
-                        <button class="btn-hapus btn-sm btn-hapus-user"
+                        <button class="btn btn-danger"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['nama'] }}"
                                 data-url="{{ route('user.destroy', $item['id']) }}">
                           Hapus
                         </button>
                         <a href="{{ route('user.login-as', $item['id']) }}">
-                          <button class="btn-login-as btn-sm">Login As</button>
+                          <button class="btn btn-success">Login As</button>
                         </a>
                       </div>
                     </td>

@@ -57,7 +57,7 @@
                             <span class="badge-nonaktif rounded-pill px-3 py-2">Tidak Aktif <strong>{{ $nonaktif }}</strong></span>
                         </div>
 
-                        <button class="btn btn-tambah-bidang"
+                        <button class="btn btn-primary"
                                 data-sub-event-id="{{ $seId }}"
                                 data-sub-event-nama="{{ $se['sub_event'] }}">
                             Tambah Bidang
@@ -87,7 +87,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-gold btn-sm btn-edit-bidang me-2"
+                                        <button class="btn btn-warning"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
                                                 data-status="{{ $bidang['status'] }}"
@@ -95,7 +95,7 @@
                                                 data-sub-event-nama="{{ $se['sub_event'] }}">
                                             Ubah
                                         </button>
-                                        <button class="btn btn-hapus btn-sm btn-hapus-bidang"
+                                        <button class="btn btn-danger"
                                                 data-id="{{ $bidang['id'] }}"
                                                 data-nama="{{ $bidang['nama'] }}"
                                                 data-url="{{ route('bidang.destroy', $bidang['id']) }}">
@@ -168,8 +168,8 @@
                 </div>
 
                 <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-batal" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-simpan px-4">Simpan</button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -196,12 +196,12 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-batal btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm px-4">
-                        <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+                    <button type="submit" class="btn btn-danger">
+                        Hapus
                     </button>
                 </form>
             </div>
@@ -290,51 +290,6 @@
     font-weight: 600; display: inline-block;
     transition: background 0.2s, color 0.2s;
 }
-.btn-tambah-bidang {
-    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-    color: white !important; border: none; font-weight: 600;
-    border-radius: 8px; padding: 8px 16px; cursor: pointer; transition: opacity .18s;
-}
-.btn-tambah-bidang:hover { opacity: .88; }
-.btn-gold {
-    background: linear-gradient(135deg, #0C4C8A, #142D54) !important;
-    color: white !important; border: none; font-weight: 600;
-    border-radius: 6px; padding: 6px 14px; cursor: pointer; transition: opacity .18s;
-}
-.btn-gold:hover { opacity: .88; }
-.btn-hapus {
-    background: #A32D2D !important; color: #ffffff !important;
-    border: none; font-weight: 600; padding: 6px 14px;
-    border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: background 0.15s;
-}
-.btn-hapus:hover { background: #8b2424 !important; }
-.empty-row { color: var(--ri-text-muted) !important; background: var(--ri-table-row-bg) !important; }
-
-/* ── Tombol Simpan & Batal ── */
-.btn-simpan {
-    background: #00838F !important;
-    border-color: #00838F !important;
-    color: #fff !important;
-    font-weight: 600;
-    transition: background 0.15s, border-color 0.15s;
-}
-.btn-simpan:hover {
-    background: #006064 !important;
-    border-color: #006064 !important;
-    color: #fff !important;
-}
-.btn-batal {
-    background: #546E7A !important;
-    border-color: #546E7A !important;
-    color: #fff !important;
-    font-weight: 600;
-    transition: background 0.15s, border-color 0.15s;
-}
-.btn-batal:hover {
-    background: #455A64 !important;
-    border-color: #455A64 !important;
-    color: #fff !important;
-}
 
 /* Hapus modal */
 .hapus-icon-circle {
@@ -373,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── Tambah ──
-    document.querySelectorAll('.btn-tambah-bidang').forEach(btn => {
+    document.querySelectorAll('.btn-primary').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('bidangSubEventId').value           = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent   = this.dataset.subEventNama;
@@ -387,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── Ubah ──
-    document.querySelectorAll('.btn-edit-bidang').forEach(btn => {
+    document.querySelectorAll('.btn-warning').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.dataset.id;
 
@@ -409,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── Hapus ──
-    document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
+    document.querySelectorAll('.btn-danger').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaBidangHapus').textContent  = this.dataset.nama;
             document.getElementById('formHapusBidang').action       = this.dataset.url;

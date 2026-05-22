@@ -76,7 +76,7 @@
     gap: 4px;
 }
 .btn-detail:hover { opacity: .88; color: white !important; }
-.btn-hapus {
+/* .btn-hapus {
     background: #A32D2D;
     color: #ffffff !important;
     border: none;
@@ -86,7 +86,7 @@
     cursor: pointer;
     font-size: 0.8rem;
     transition: background 0.15s;
-}
+} */
 .btn-hapus:hover { background: #8b2424; color: #ffffff !important; }
 .se-table {
     width: 100%;
@@ -214,7 +214,7 @@
                                 data-indikator="{{ $item->nama_indikator ?? $item->indikator }}">
                           <i></i> Ubah
                         </button>
-                        <button class="btn-hapus btn-sm btn-hapus-indikator"
+                        <button class="btn btn-danger"
                                 data-id="{{ $item->id }}"
                                 data-nama="{{ $item->nama_indikator ?? $item->indikator }}"
                                 data-url="{{ route('indikator.tahap1.inovasi.destroy', [$subEventId, $item->id]) }}">
