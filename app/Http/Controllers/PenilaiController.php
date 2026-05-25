@@ -9,9 +9,6 @@ class PenilaiController extends Controller
 {
     public function index()
     {
-        // Gunakan salah satu dari dua pilihan di bawah:
-
-        // Pilihan 1: Dummy Data (untuk testing)
         $penilai = [
             ['id' => 1, 'nama' => 'muhammad noor majid', 'email' => 'm.noormajid12@gmail.com'],
             ['id' => 2, 'nama' => 'Moch Nurrudin', 'email' => 'moch.nurrudin72@gmail.com'],
