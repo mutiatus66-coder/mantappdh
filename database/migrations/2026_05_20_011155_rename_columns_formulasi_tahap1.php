@@ -5,20 +5,22 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
-
-{public function up(): void
 {
-    Schema::table('formulasi_tahap1', function (Blueprint $table) {
-        $table->renameColumn('nilai_inovasi', 'nilai_makalah');
-        $table->renameColumn('nilai_presentasi', 'nilai_substansi');
-    });
-}
+    public function up(): void
+    {
+        if (!Schema::hasTable('formulasi_tahap1')) {
+            Schema::create('formulasi_tahap1', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('sub_event_id')->constrained('sub_events')->onDelete('cascade');
+                $table->integer('nilai_makalah');
+                $table->integer('nilai_substansi');
+                $table->timestamps();
+            });
+        }
+    }
 
-public function down(): void
-{
-    Schema::table('formulasi_tahap1', function (Blueprint $table) {
-        $table->renameColumn('nilai_makalah', 'nilai_inovasi');
-        $table->renameColumn('nilai_substansi', 'nilai_presentasi');
-    });
-}
+    public function down(): void
+    {
+        Schema::dropIfExists('formulasi_tahap1');
+    }
 };

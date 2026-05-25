@@ -46,7 +46,7 @@
                     <th>Kategori</th>
                     <th>Tgl Mulai</th>
                     <th>Tgl Berakhir</th>
-                    <th width="180" style="text-align:center;">Aksi</th>
+                    <th width="220" style="text-align:center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tabelSubEventBody">
@@ -60,23 +60,25 @@
                     <td>{{ $item['mulai'] ?? '-' }}</td>
                     <td>{{ $item['berakhir'] ?? '-' }}</td>
                     <td style="text-align:center;">
-                        <button class="btn btn-warning btn-edit-se me-2"
-                                data-id="{{ $item['id'] }}"
-                                data-tahun="{{ $item['tahun'] ?? '' }}"
-                                data-event-id="{{ $item['event_id'] ?? '' }}"
-                                data-sub-event="{{ $item['sub_event'] }}"
-                                data-kategori="{{ $item['kategori'] ?? '' }}"
-                                data-mulai="{{ $item['mulai'] ?? '' }}"
-                                data-berakhir="{{ $item['berakhir'] ?? '' }}">
-                            Ubah
-                        </button>
-                        <button class="btn btn-danger btn-hapus-se"
-                                data-id="{{ $item['id'] }}"
-                                data-nama="{{ $item['sub_event'] }}"
-                                data-url="{{ route('sub-event.destroy', $item['id']) }}">
-                            Hapus
-                        </button>
-                    </td>
+    <div class="btn-aksi-wrap">
+        <button class="btn btn-warning btn-edit-se btn-aksi"
+                data-id="{{ $item['id'] }}"
+                data-tahun="{{ $item['tahun'] ?? '' }}"
+                data-event-id="{{ $item['event_id'] ?? '' }}"
+                data-sub-event="{{ $item['sub_event'] }}"
+                data-kategori="{{ $item['kategori'] ?? '' }}"
+                data-mulai="{{ $item['mulai'] ?? '' }}"
+                data-berakhir="{{ $item['berakhir'] ?? '' }}">
+            Ubah
+        </button>
+        <button class="btn btn-danger btn-hapus-se btn-aksi"
+        data-id="{{ $item['id'] }}"
+        data-nama="{{ $item['sub_event'] }}"
+        data-url="{{ route('sub-event.destroy', $item['id']) }}">
+    Hapus
+</button>
+    </div>
+</td>
                 </tr>
                 @empty
                 <tr>
@@ -120,7 +122,7 @@
                             <select name="event_id" id="seEvent" class="form-select" required>
                                 <option value="">-- Pilih Event --</option>
                                 @foreach($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
+                                <option value="{{ $event['id'] }}">{{ $event['nama_event'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -145,7 +147,7 @@
 
                 <div class="modal-footer px-5 py-3">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success px-4">Simpan</button>
+                    <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
             </form>
         </div>

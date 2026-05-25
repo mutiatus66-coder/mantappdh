@@ -1,116 +1,10 @@
 @extends('index', ['dummy' => true])
 
 @section('content')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/indikator.css') }}">
+@endpush
 
-<style>
-.sub-card {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 24px;
-    margin: 20px;
-    transition: background 0.2s, color 0.2s;
-    border: none;
-    overflow: hidden;
-}
-.btn-detail-indikator {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.btn-detail-indikator:hover { opacity: .88; color: white !important; }
-.btn-detail-formulasi {
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.btn-detail-formulasi:hover { opacity: .88; color: white !important; }
-.btn-tambah-formulasi {
-    background: #0bc5bf;
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.btn-tambah-formulasi:hover { opacity: .88; color: white !important; }
-.se-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid var(--ri-table-border-outer);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.se-table th {
-    background: var(--ri-table-head-bg, #f3f4f6);
-    color: var(--ri-text-primary);
-    font-weight: 600;
-    padding: 12px 16px;
-    border-bottom: 2px solid var(--ri-table-border-outer);
-    text-align: center;
-}
-.se-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--ri-table-border, #e5e7eb);
-    color: var(--ri-text-primary);
-    vertical-align: middle;
-}
-.se-table tr:hover td { background: var(--ri-table-row-hover); }
-.se-table tr:last-child td { border-bottom: none; }
-.empty-row {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ri-text-muted);
-}
-/* Input group icon */
-.input-icon-group { position: relative; }
-.input-icon-group .form-control { padding-right: 48px; }
-.input-icon-group .icon-badge {
-    position: absolute;
-    right: 0; top: 0; bottom: 0;
-    width: 42px;
-    display: flex; align-items: center; justify-content: center;
-    background: #2563eb;
-    color: white;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.85rem;
-    font-weight: 700;
-    pointer-events: none;
-}
-.total-preview {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-top: 6px;
-}
-.total-ok   { color: #16a34a; }
-.total-warn { color: #dc2626; }
-</style>
 
 <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
   <div class="p-6">
@@ -153,10 +47,10 @@
                 @forelse($subEvents ?? [] as $item)
                   <tr>
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
-                    <td>{{ $item->sub_event }}</td>
+                    <td>{{ $item['sub_event'] }}</td>
                     <td style="text-align:center;">
-                      @if($detailValid[$item->id] ?? false)
-                       <a href="{{ route('indikator.tahap2.indikator', $item->id) }}"class="btn-detail-indikator">
+                      @if($detailValid[$item['id']] ?? false)
+                       <a href="{{ route('indikator.tahap2.indikator', $item['id']) }}"class="btn-detail-indikator">
                           <i></i> Detail
                        </a>
                       @else
@@ -168,18 +62,18 @@
                      @endif
                     </td>
                     <td style="text-align:center;">
-                      @if(in_array($item->id, $formulasis ?? []))
+                      @if(in_array($item['id'], $formulasis ?? []))
                         {{-- Sudah ada formulasi — tombol Detail hijau --}}
                         <button class="btn-detail-formulasi btn-open-formulasi"
-                                data-id="{{ $item->id }}"
-                                data-nama="{{ $item->sub_event }}">
+                                data-id="{{ $item['id'] }}"
+                                data-nama="{{ $item['sub_event'] }}">
                           <i></i> Detail
                         </button>
                       @else
                         {{-- Belum ada — tombol Tambah Formulasi --}}
                         <button class="btn-tambah-formulasi btn-open-formulasi"
-                                data-id="{{ $item->id }}"
-                                data-nama="{{ $item->sub_event }}">
+                                data-id="{{ $item['id'] }}"
+                                data-nama="{{ $item['sub_event'] }}">
                           <i></i> Tambah Formulasi
                         </button>
                       @endif
@@ -331,10 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Jika sudah ada data, fetch dan isi
             @foreach($subEvents as $item)
-            @if(in_array($item->id, $formulasis ?? []))
-            if (subEventId == '{{ $item->id }}') {
+            @if(in_array($item['id'], $formulasis ?? []))
+            if (subEventId == '{{ $item['id'] }}') {
                 // Ambil data formulasi via fetch
-                fetch(`/indikator/tahap-2/{{ $item->id }}/formulasi/get`)
+                fetch(`/indikator/tahap-2/{{ $item['id'] }}/formulasi/get`)
                     .then(r => r.json())
                     .then(data => {
                         document.getElementById('inputNilaiInovasi').value  = data.nilai_inovasi;
