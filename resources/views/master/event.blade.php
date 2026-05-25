@@ -2,8 +2,70 @@
 
 @section('content')
 
-<style>
+{{-- ══════════════════════════════════════════════════
+     DATA EVENT — disimpan langsung di kode (tanpa database)
+     Format: ['id' => ..., 'nama_event' => '...', 'jenis' => '...']
+══════════════════════════════════════════════════ --}}
+@php
+    // ── Inisialisasi data event di session jika belum ada ──
+    if (!session()->has('events')) {
+        session(['events' => [
+            ['id' => 1, 'nama_event' => 'Kompetisi Inovasi Teknologi 2025', 'jenis' => 'INOTEK'],
+            ['id' => 2, 'nama_event' => 'Festival Inovasi Daerah',          'jenis' => 'INODA'],
+        ]]);
+    }
 
+    $events    = collect(session('events'));
+    $nextId    = $events->max('id') + 1;
+
+    // ── Proses POST: Tambah atau Edit ──
+    if (request()->isMethod('post') || request()->isMethod('put')) {
+        $method = strtoupper(request()->input('_method', request()->method()));
+
+        if ($method === 'POST') {
+            // Tambah
+            $newEvents = session('events');
+            $newEvents[] = [
+                'id'         => $nextId,
+                'nama_event' => request()->input('nama_event'),
+                'jenis'      => request()->input('jenis'),
+            ];
+            session(['events' => $newEvents]);
+            return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
+        }
+
+        if ($method === 'PUT') {
+            // Edit
+            $editId  = (int) request()->input('edit_id');
+            $updated = collect(session('events'))->map(function ($e) use ($editId) {
+                if ($e['id'] === $editId) {
+                    $e['nama_event'] = request()->input('nama_event');
+                    $e['jenis']      = request()->input('jenis');
+                }
+                return $e;
+            })->toArray();
+            session(['events' => $updated]);
+            return redirect()->route('event.index')->with('success', 'Event berhasil diubah.');
+        }
+    }
+
+    // ── Proses DELETE ──
+    if (request()->isMethod('delete')) {
+        $deleteId = (int) request()->input('delete_id');
+        $filtered = collect(session('events'))
+                        ->reject(fn($e) => $e['id'] === $deleteId)
+                        ->values()
+                        ->toArray();
+        session(['events' => $filtered]);
+        return redirect()->route('event.index')->with('success', 'Event berhasil dihapus.');
+    }
+
+    // ── Refresh $events & $nextId setelah operasi ──
+    $events = collect(session('events'));
+    $nextId = ($events->max('id') ?? 0) + 1;
+@endphp
+
+<style>
 .sub-card {
     background: var(--ri-card-bg);
     border-radius: 12px;
@@ -12,7 +74,7 @@
     margin: 20px;
     transition: background 0.2s, color 0.2s;
     border: none;
-     overflow: hidden;
+    overflow: hidden;
 }
 .btn-tambah-se {
     background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -34,17 +96,6 @@
     box-shadow: 0 4px 12px rgba(245,158,11,0.3);
     color: white !important;
 }
-/* .btn-gold {
-    background: linear-gradient(135deg, #0C4C8A, #142D54);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-} */
 .btn-gold:hover { opacity: .88; color: white !important; }
 .btn-hapus {
     background: #A32D2D;
@@ -64,6 +115,26 @@
     border: 2px solid var(--ri-table-border-outer);
     border-radius: 8px;
     overflow: hidden;
+}
+.se-table th {
+    background: var(--ri-table-head-bg);
+    padding: 14px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ri-text-muted);
+    border-bottom: 2px solid var(--ri-table-border-header);
+    transition: background 0.2s, color 0.2s;
+}
+.se-table td {
+    padding: 14px 12px;
+    border-bottom: 1.5px solid var(--ri-table-border-row);
+    color: var(--ri-text-primary);
+    font-size: 0.875rem;
+    background: var(--ri-table-row-bg);
+    transition: background 0.2s, color 0.2s;
 }
 .se-table tr:hover td { background: var(--ri-table-row-hover); }
 .se-table tr:last-child td { border-bottom: none; }
@@ -106,7 +177,7 @@
               <p class="m-0" style="color:var(--ri-text-muted); font-size:0.875rem;">Kelola semua event yang terdaftar</p>
             </div>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEvent">
-              <i></i> Tambah Event
+              <i class="bi bi-plus-lg me-1"></i> Tambah Event
             </button>
           </div>
 
@@ -121,25 +192,26 @@
                 </tr>
               </thead>
               <tbody>
-                @forelse($events ?? [] as $item)
+                @forelse($events as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama_event }}</td>
-                    <td style="text-align:center;">{{ $item->jenis }}</td>
+                    <td>{{ $item['nama_event'] }}</td>
+                    <td style="text-align:center;">{{ $item['jenis'] }}</td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
 
-                        <button class="btn btn-warning"
-                                data-id="{{ $item->id }}"
-                                data-nama-event="{{ $item->nama_event }}"
-                                data-jenis="{{ $item->jenis }}">
+                        {{-- Tombol Ubah — class btn-edit-event agar ditangkap JS --}}
+                        <button class="btn btn-warning btn-edit-event"
+                                data-id="{{ $item['id'] }}"
+                                data-nama-event="{{ $item['nama_event'] }}"
+                                data-jenis="{{ $item['jenis'] }}">
                           Ubah
                         </button>
 
-                        <button class="btn btn-danger"
-                                data-id="{{ $item->id }}"
-                                data-nama="{{ $item->nama_event }}"
-                                data-url="{{ route('event.destroy', $item->id) }}">
+                        {{-- Tombol Hapus — class btn-hapus-event agar ditangkap JS --}}
+                        <button class="btn btn-danger btn-hapus-event"
+                                data-id="{{ $item['id'] }}"
+                                data-nama="{{ $item['nama_event'] }}">
                           Hapus
                         </button>
 
@@ -171,9 +243,12 @@
 <div class="modal fade" id="modalEvent" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3 shadow-lg">
-      <form id="formEvent" method="POST" action="{{ route('event.store') }}">
+      <form id="formEvent" method="POST" action="{{ route('event.index') }}">
         @csrf
-        <input type="hidden" name="_method" id="formEventMethod" value="POST">
+        {{-- _method diisi PUT saat edit, POST saat tambah --}}
+        <input type="hidden" name="_method"  id="formEventMethod" value="POST">
+        {{-- edit_id hanya terpakai saat mode edit --}}
+        <input type="hidden" name="edit_id"  id="formEventEditId" value="">
 
         <div class="modal-header px-5 py-4">
           <h5 class="modal-title fw-semibold" id="modalEventTitle">Tambah Event</h5>
@@ -237,9 +312,11 @@
 
       <div class="d-flex gap-2 justify-content-center">
         <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
-        <form id="formHapusEvent" method="POST">
+        {{-- Form hapus: method DELETE dengan delete_id --}}
+        <form id="formHapusEvent" method="POST" action="{{ route('event.index') }}">
           @csrf
-          @method('DELETE')
+          <input type="hidden" name="_method"   value="DELETE">
+          <input type="hidden" name="delete_id" id="deleteEventId" value="">
           <button type="submit" class="btn btn-danger btn-sm px-4">
             <i class="bi bi-trash3 me-1"></i>Ya, Hapus
           </button>
@@ -253,30 +330,23 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('event.store') }}";
-
     // ── Reset modal ke mode Tambah saat ditutup ──
     document.getElementById('modalEvent').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formEvent').action = storeUrl;
-        document.getElementById('formEventMethod').value = 'POST';
+        document.getElementById('formEventMethod').value  = 'POST';
+        document.getElementById('formEventEditId').value  = '';
         document.getElementById('modalEventTitle').textContent = 'Tambah Event';
-        document.getElementById('inputNamaEvent').value = '';
-        document.getElementById('inputJenis').value = '';
+        document.getElementById('inputNamaEvent').value   = '';
+        document.getElementById('inputJenis').value       = '';
     });
 
     // ── Tombol Ubah ──
     document.querySelectorAll('.btn-edit-event').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id        = this.dataset.id;
-            const namaEvent = this.dataset.namaEvent;
-            const jenis     = this.dataset.jenis;
-
             document.getElementById('modalEventTitle').textContent = 'Ubah Event';
-            document.getElementById('formEvent').action = `/event/${id}`;
-            document.getElementById('formEventMethod').value = 'PUT';
-
-            document.getElementById('inputNamaEvent').value = namaEvent;
-            document.getElementById('inputJenis').value = jenis;
+            document.getElementById('formEventMethod').value       = 'PUT';
+            document.getElementById('formEventEditId').value       = this.dataset.id;
+            document.getElementById('inputNamaEvent').value        = this.dataset.namaEvent;
+            document.getElementById('inputJenis').value            = this.dataset.jenis;
 
             new bootstrap.Modal(document.getElementById('modalEvent')).show();
         });
@@ -286,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-hapus-event').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaEventHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusEvent').action = this.dataset.url;
+            document.getElementById('deleteEventId').value        = this.dataset.id;
             new bootstrap.Modal(document.getElementById('modalHapusEvent')).show();
         });
     });
