@@ -1,162 +1,9 @@
 @extends('index', ['dummy' => true])
 
 @section('content')
-
-<style>
-.sub-card {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 24px;
-    margin: 20px;
-    transition: background 0.2s, color 0.2s;
-    border: none;
-    overflow: hidden;
-}
-/* .btn-tambah-se {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white !important;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: .9rem;
-    box-shadow: 0 3px 12px rgba(245,158,11,.30);
-} */
-
-.btn-tambah-se:hover {opacity: 0.9;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-    color: white !important;
-}
-/* .btn-kembali {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    color: white !important;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: .9rem;
-    text-decoration: none;
-} */
-.btn-kembali:hover { opacity: 0.9; color: white !important; }
-/* .btn-gold {
-    background: linear-gradient(135deg, #0C4C8A, #142D54);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-} */
-.btn-gold:hover { opacity: .88; color: white !important; }
-.btn-detail {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .18s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.btn-detail:hover { opacity: .88; color: white !important; }
-/* .btn-hapus {
-    background: #A32D2D;
-    color: #ffffff !important;
-    border: none;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background 0.15s;
-} */
-.btn-hapus:hover { background: #8b2424; color: #ffffff !important; }
-.se-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid var(--ri-table-border-outer);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.se-table th {
-    background: var(--ri-table-head-bg, #f3f4f6);
-    color: var(--ri-text-primary);
-    font-weight: 600;
-    padding: 12px 16px;
-    border-bottom: 2px solid var(--ri-table-border-outer);
-    text-align: center;
-}
-.se-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--ri-table-border, #e5e7eb);
-    color: var(--ri-text-primary);
-    vertical-align: middle;
-}
-.se-table tr:hover td { background: var(--ri-table-row-hover); }
-.se-table tr:last-child td { border-bottom: none; }
-.empty-row {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ri-text-muted);
-    background: var(--ri-table-row-bg);
-}
-/* ── Hapus modal icon ── */
-.hapus-icon-circle {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: #FCEBEB;
-    display: flex; align-items: center; justify-content: center;
-}
-
-.custom-alert-success{
-    background: #eef2ff;
-    border: 1px solid #c7d2fe;
-    color: #1d4ed8;
-    border-radius: 10px;
-    padding: 14px 18px;
-    font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-}
-
-.custom-alert-success i{
-    color: #64748b;
-}
-
-.custom-close-btn{
-    opacity: .7;
-}
-
-.custom-close-btn:hover{
-    opacity: 1;
-}
-
-.btn-action-sm{
-    padding: 5px 12px !important;
-    font-size: 13px !important;
-}
-
-[data-bs-theme="dark"] .hapus-icon-circle { background: rgba(163,45,45,0.20); }
-[data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245,240,232,.55) !important; }
-[data-bs-theme="dark"] .hapus-nama-strong { color: #F5F0E8 !important; }
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/indikator.css') }}">
+@endpush
 
 <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
   <div class="p-6">
@@ -206,9 +53,9 @@
                 @forelse($indikators ?? [] as $item)
                   <tr>
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama_indikator ?? $item->indikator ?? '-' }}</td>
+                    <td>{{ $item['nama_indikator'] ?? '-' }}</td>
                     <td style="text-align:center;">
-                      <a href="{{ route('indikator.tahap1.detail', [$subEventId, $item->id]) }}"
+                      <a href="{{ route('indikator.tahap1.detail', [$subEventId, $item['id']]) }}"
                          class="btn-detail">
                         <i></i> Detail
                       </a>
@@ -216,14 +63,14 @@
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
                         <button class="btn btn-warning btn-action-sm"
-                                data-id="{{ $item->id }}"
-                                data-indikator="{{ $item->nama_indikator ?? $item->indikator }}">
+                                data-id="{{ $item['id'] }}"
+                                data-indikator="{{ $item['nama_indikator'] ?? '-' }}">
                            Ubah
                         </button>
-                        <button class="btn btn-danger"
-                                data-id="{{ $item->id }}"
-                                data-nama="{{ $item->nama_indikator ?? $item->indikator }}"
-                                data-url="{{ route('indikator.tahap1.inovasi.destroy', [$subEventId, $item->id]) }}">
+                        <button class="btn btn-danger btn-action-sm"
+                                data-id="{{ $item['id'] }}"
+                                data-nama="{{ $item['nama_indikator'] ?? '-' }}"
+                                data-url="{{ route('indikator.tahap1.inovasi.destroy', [$subEventId, $item['id']]) }}">
                           <i></i> Hapus
                         </button>
                       </div>

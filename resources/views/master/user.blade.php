@@ -177,27 +177,27 @@
                 @forelse($users ?? [] as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item['nama'] }}</td>
-                    <td>{{ $item['email'] }}</td>
-                    <td style="text-align:center;">{{ $item['hak_akses'] }}</td>
-                    <td style="text-align:center;">{{ $item['status'] }}</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>{{ $item->email }}</td>
+                    <td style="text-align:center;">{{ $item->hak_akses }}</td>
+                    <td style="text-align:center;">{{ $item->status }}</td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
                         <button class="btn btn-warning"
-                                data-id="{{ $item['id'] }}"
-                                data-nama="{{ $item['nama'] }}"
-                                data-email="{{ $item['email'] }}"
-                                data-hak-akses="{{ $item['hak_akses'] }}"
-                                data-status="{{ $item['status'] }}">
+                                data-id="{{ $item->id }}"
+                                data-nama="{{ $item->nama }}"
+                                data-email="{{ $item->email }}"
+                                data-hak-akses="{{ $item->hak_akses }}"
+                                data-status="{{ $item->status }}">
                           Ubah
                         </button>
                         <button class="btn btn-danger"
-                                data-id="{{ $item['id'] }}"
-                                data-nama="{{ $item['nama'] }}"
-                                data-url="{{ route('user.destroy', $item['id']) }}">
+                                data-id="{{ $item->id }}"
+                                data-nama="{{ $item->nama }}"
+                                data-url="{{ route('user.destroy', $item->id) }}">
                           Hapus
                         </button>
-                        <a href="{{ route('user.login-as', $item['id']) }}">
+                        <a href="{{ route('user.login-as', $item->id) }}">
                           <button class="btn btn-success">Login As</button>
                         </a>
                       </div>
