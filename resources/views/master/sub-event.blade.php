@@ -122,7 +122,7 @@
                             <select name="event_id" id="seEvent" class="form-select" required>
                                 <option value="">-- Pilih Event --</option>
                                 @foreach($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
+                                <option value="{{ $event['id'] }}">{{ $event['nama_event'] }}</option>
                                 @endforeach
                             </select>
                         </div>

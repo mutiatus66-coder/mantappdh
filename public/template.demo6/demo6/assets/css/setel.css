@@ -536,9 +536,7 @@
     transition: background 0.2s;
 }
 
-/* ══════════════════════════════════════════
-   HAPUS MODAL (shared)
-══════════════════════════════════════════ */
+/*hapus data(tombol)*/
 .hapus-icon-circle {
     width: 56px;
     height: 56px;
@@ -552,16 +550,14 @@
 [data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245, 240, 232, 0.55) !important; }
 [data-bs-theme="dark"] .hapus-nama-strong { color: #f5f0e8 !important; }
 
-/* ══════════════════════════════════════════
-   ACTION BUTTONS
-══════════════════════════════════════════ */
+/* tombol aksi */
 .btn-aksi-wrap {
     display: flex;
     gap: 6px;
     justify-content: center;
     flex-wrap: nowrap;
 }
-.btn-aksi-wrap .btn.btn-aksi {
+.btn-aksi-wrap .btn {
     padding: 10px 30px !important;
     font-size: 0.85rem !important;
     font-weight: 500 !important;
@@ -571,9 +567,7 @@
     white-space: nowrap !important;
 }
 
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
+/*respon*/
 @media (max-width: 640px) {
     .all-container { padding: 16px; margin: 10px; }
     .card-event    { padding: 20px; }

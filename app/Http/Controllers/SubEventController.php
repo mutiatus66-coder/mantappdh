@@ -9,7 +9,7 @@ class SubEventController extends Controller
     // ── DATA MASTER ───────────────────────────────────────────
     public static function getData(): array
     {
-        return session('sub_events', [
+        return (array) session('sub_events', [
             ['id'=>1,'tahun'=>2022,'event_id'=>1,'event'=>'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)','sub_event'=>'LOMBA INOTEK 2022','kategori'=>'SEMUA BIDANG','mulai'=>'2022-08-12','berakhir'=>'2022-10-03'],
             ['id'=>2,'tahun'=>2023,'event_id'=>1,'event'=>'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)','sub_event'=>'LOMBA INOTEK (INOTEK AWARD) 2023','kategori'=>'SEMUA BIDANG','mulai'=>'2023-03-15','berakhir'=>'2023-07-23'],
             ['id'=>3,'tahun'=>2023,'event_id'=>2,'event'=>'INOVASI DAERAH KAB. MAGETAN','sub_event'=>'PELAPORAN INOVASI DAERAH 2023','kategori'=>'SEMUA BIDANG','mulai'=>'2023-09-09','berakhir'=>'2023-12-20'],
