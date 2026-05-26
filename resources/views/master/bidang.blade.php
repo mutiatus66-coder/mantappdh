@@ -70,8 +70,8 @@
                                 <tr>
                                     <th width="60" class="text-center">No</th>
                                     <th>Bidang</th>
-                                    <th width="160" class="text-center">Status</th>
-                                    <th width="260" class="text-center">Aksi</th>
+                                    <th width="180" class="text-center">Status</th>
+                                    <th width="280" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
