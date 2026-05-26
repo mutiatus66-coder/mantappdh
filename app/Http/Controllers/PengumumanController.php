@@ -49,7 +49,6 @@ class PengumumanController extends Controller
         $data = $request->only('judul', 'deskripsi', 'status');
 
         if ($request->hasFile('file')) {
-            // Hapus file lama jika ada
             if ($pengumuman->file_path) {
                 Storage::disk('public')->delete($pengumuman->file_path);
             }
