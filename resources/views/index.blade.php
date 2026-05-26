@@ -291,7 +291,7 @@
                       </a>
                     </div>
                     <div class="menu-item px-3 my-0">
-                      <a href="#" class="menu-lin6k px-3 py-2" data-kt-element="mode" data-kt-value="system">
+                      <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
                         <span class="menu-icon" data-kt-element="icon"><i class="ki-outline ki-screen fs-2"></i></span>
                         <span class="menu-title">System</span>
                       </a>
@@ -449,6 +449,21 @@
   <script src="{{ asset('template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js') }}"></script>
 
   <script>
+    (function () {
+  function updateThemeMenuHighlight() {
+    var stored = localStorage.getItem("data-bs-theme") || "light";
+    document.querySelectorAll('[data-kt-element="mode"]').forEach(function (el) {
+      var val = el.getAttribute("data-kt-value");
+      el.classList.toggle("active", val === stored);
+    });
+  }
+  document.addEventListener("DOMContentLoaded", updateThemeMenuHighlight);
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest('[data-kt-element="mode"]');
+    if (!el) return;
+    setTimeout(updateThemeMenuHighlight, 50);
+  });
+})();
     document.addEventListener('DOMContentLoaded', function () {
       var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
       document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function (link) {
