@@ -56,22 +56,22 @@
                     <td>{{ $item['nama_indikator'] ?? '-' }}</td>
                     <td style="text-align:center;">
                       <a href="{{ route('indikator.tahap1.detail', [$subEventId, $item['id']]) }}"
-                         class="btn-detail">
+                         class="btn btn-warning btn-detail">
                         <i></i> Detail
                       </a>
                     </td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
-                        <button class="btn btn-warning btn-action-sm"
+                        <button class="btn btn-warning btn-edit-indikator"
                                 data-id="{{ $item['id'] }}"
                                 data-indikator="{{ $item['nama_indikator'] ?? '-' }}">
                            Ubah
                         </button>
-                        <button class="btn btn-danger btn-action-sm"
+                        <button class="btn btn-danger btn-hapus-indikator"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['nama_indikator'] ?? '-' }}"
                                 data-url="{{ route('indikator.tahap1.inovasi.destroy', [$subEventId, $item['id']]) }}">
-                          <i></i> Hapus
+                          Hapus
                         </button>
                       </div>
                     </td>
@@ -127,7 +127,7 @@
 
         <div class="modal-footer px-5 py-3">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-warning px-4">Simpan</button>
+          <button type="submit" class="btn btn-warning">Simpan</button>
         </div>
       </form>
     </div>
@@ -156,11 +156,11 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusIndikator" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger btn-sm px-4">
+          <button type="submit" class="btn btn-danger">
             <i class="bi bi-trash3 me-1"></i>Ya, Hapus
           </button>
         </form>

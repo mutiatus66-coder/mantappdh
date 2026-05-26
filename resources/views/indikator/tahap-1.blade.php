@@ -157,7 +157,7 @@
 
         <div class="modal-footer px-5 py-3">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" id="btnSimpan1" class="btn btn-primary px-4" disabled>Simpan</button>
+          <button type="submit" id="btnSimpan1" class="btn btn-primary" disabled>Simpan</button>
         </div>
       </form>
     </div>

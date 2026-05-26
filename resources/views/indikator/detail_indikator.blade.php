@@ -53,14 +53,14 @@
                     <td style="text-align:center;">{{ $item['nilai_maksimal'] }}</td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
-                        <button class="btn btn-warning"
+                        <button class="btn btn-warning btn-edit-keterangan"
                                 data-id="{{ $item['id'] }}"
                                 data-keterangan="{{ $item['keterangan'] }}"
                                 data-nilai-minimal="{{ $item['nilai_minimal'] }}"
                                 data-nilai-maksimal="{{ $item['nilai_maksimal'] }}">
                           Edit 
                         </button>
-                        <button class="btn btn-danger"
+                        <button class="btn btn-danger btn-hapus-keterangan"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['keterangan'] }}"
                                 data-url="{{ route('indikator.tahap1.detail.destroy', [$subEventId, $indikatorId, $item['id']]) }}">
@@ -129,7 +129,7 @@
 
         <div class="modal-footer px-5 py-3">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary px-4">Simpan</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
       </form>
     </div>
@@ -158,11 +158,11 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusKeterangan" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger btn-sm px-4">
+          <button type="submit" class="btn btn-danger">
             <i class="bi bi-trash3 me-1"></i>Ya, Hapus
           </button>
         </form>

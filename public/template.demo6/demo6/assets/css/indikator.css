@@ -1,35 +1,72 @@
-.sub-card {
-    background: var(--ri-card-bg);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 24px;
-    margin: 20px;
-    transition: background 0.2s, color 0.2s;
-    border: none;
-    overflow: hidden;
+/* ═══════════════════════════════════════════════════════════
+   STANDAR TOMBOL GLOBAL
+   font-size : 0.875rem  (14px)
+   padding   : 7px 16px
+   min-height: 36px
+   font-weight: 600
+   border-radius: 6px
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Override Bootstrap btn agar seragam ── */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-warning,
+.btn-danger,
+.btn-success {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    padding: 7px 16px !important;
+    min-height: 36px !important;
+    border-radius: 6px !important;
+    line-height: 1.4 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
 }
 
+/* ── Tombol kecil di dalam modal footer tetap proporsional ── */
+.btn.btn-sm,
+.modal-footer .btn {
+    font-size: 0.875rem !important;
+    padding: 7px 16px !important;
+    min-height: 36px !important;
+}
+
+/* ── Khusus tombol icon (X tutup modal) — jangan diubah ── */
+.btn.btn-icon {
+    padding: 6px !important;
+    min-height: unset !important;
+    width: 32px;
+    height: 32px;
+}
+
+/* ── Custom buttons (non-Bootstrap) — samakan ke standar yang sama ── */
 .btn-detail-indikator,
 .btn-detail-formulasi,
 .btn-tambah-formulasi,
-.btn-detail {
+.btn-detail,
+.btn-tambah-se,
+.btn-kembali {
     border: none;
     border-radius: 6px;
-    padding: 8px 16px;
-    min-height: 38px;
-    font-size: 0.8rem;
+    padding: 7px 16px;
+    min-height: 36px;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
     transition: opacity .18s;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 5px;
     text-decoration: none;
-    line-height: 1.2;
+    line-height: 1.4;
     box-sizing: border-box;
 }
 
+/* ── Warna custom buttons ── */
 .btn-detail-indikator {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
@@ -50,58 +87,26 @@
     color: white !important;
 }
 
-.btn-detail-indikator:hover,
-.btn-detail-formulasi:hover,
-.btn-tambah-formulasi:hover,
-.btn-detail:hover {
-    opacity: .88;
-    color: white !important;
-}
-
 .btn-tambah-se {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white !important;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: .9rem;
     box-shadow: 0 3px 12px rgba(245,158,11,.30);
-}
-
-.btn-tambah-se:hover {
-    opacity: 0.9;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-    color: white !important;
 }
 
 .btn-kembali {
     background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white !important;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: .9rem;
-    text-decoration: none;
 }
 
-.btn-kembali:hover {
-    opacity: 0.9;
-    color: white !important;
-}
-
-.btn-gold:hover {
+/* ── Hover semua custom buttons ── */
+.btn-detail-indikator:hover,
+.btn-detail-formulasi:hover,
+.btn-tambah-formulasi:hover,
+.btn-detail:hover,
+.btn-tambah-se:hover,
+.btn-kembali:hover,
+.btn-gold:hover,
+.btn-edit:hover {
     opacity: .88;
     color: white !important;
 }
@@ -111,14 +116,21 @@
     color: white !important;
 }
 
-.btn-edit:hover {
-    opacity: .88;
-    color: white !important;
-}
+/* ── btn-action-sm dihapus (sudah tidak perlu, semua sudah seragam) ── */
 
-.btn-action-sm {
-    padding: 5px 12px !important;
-    font-size: 13px !important;
+/* ══════════════════════════════════════════════
+   LAYOUT & KOMPONEN LAINNYA (tidak berubah)
+   ══════════════════════════════════════════════ */
+
+.sub-card {
+    background: var(--ri-card-bg);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 24px;
+    margin: 20px;
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    overflow: hidden;
 }
 
 .input-icon-group {

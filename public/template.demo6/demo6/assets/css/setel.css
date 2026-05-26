@@ -557,13 +557,18 @@
 }
 .bidang-container .btn-aksi-wrap .btn,
 .page-container .btn-aksi-wrap .btn {
-    padding: 10px 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 24px !important;
     font-size: 0.85rem !important;
     font-weight: 500 !important;
     border-radius: 6px !important;
-    min-width: 58px !important;
+    min-width: 120px !important;
+    height: 42px !important;
     line-height: 1.5 !important;
     white-space: nowrap !important;
+    text-align: center !important;
 }
 
 /*respon*/
