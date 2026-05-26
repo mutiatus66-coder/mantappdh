@@ -1,7 +1,7 @@
 @extends('index', ['dummy' => true])
 
 @push('styles')
-<link href="{{ asset('template.demo6/demo6/assets/css/setel.css') }}" rel="stylesheet">
+<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
