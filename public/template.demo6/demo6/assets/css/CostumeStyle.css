@@ -354,6 +354,12 @@
     background: var(--ri-table-row-bg);
     transition: background 0.2s, color 0.2s;
 }
+.se-table th:nth-child(3),
+.se-table th:nth-child(4),
+.se-table td:nth-child(3),
+.se-table td:nth-child(4) {
+    text-align: center;
+}
 .se-table tr:hover td,
 .bidang-table tr:hover td { background: var(--ri-table-row-hover); }
 .se-table tr:last-child td,
@@ -569,6 +575,78 @@
     line-height: 1.5 !important;
     white-space: nowrap !important;
     text-align: center !important;
+}
+
+/* ── Custom buttons (indikator) ── */
+.btn-detail-indikator,
+.btn-detail-formulasi,
+.btn-tambah-formulasi,
+.btn-detail,
+.btn-tambah-se,
+.btn-kembali {
+    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    min-height: 36px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .18s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+
+.btn-detail-indikator {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white !important;
+}
+
+.btn-detail-formulasi {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: white !important;
+}
+
+.btn-tambah-formulasi {
+    background: #0bc5bf;
+    color: white !important;
+}
+
+.btn-detail {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white !important;
+}
+
+.btn-tambah-se {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white !important;
+    box-shadow: 0 3px 12px rgba(245,158,11,.30);
+}
+
+.btn-kembali {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white !important;
+}
+
+.btn-detail-indikator:hover,
+.btn-detail-formulasi:hover,
+.btn-tambah-formulasi:hover,
+.btn-detail:hover,
+.btn-tambah-se:hover,
+.btn-kembali:hover,
+.btn-gold:hover,
+.btn-edit:hover {
+    opacity: .88;
+    color: white !important;
+}
+
+.btn-hapus:hover {
+    background: #8b2424;
+    color: white !important;
 }
 
 /* ══════════════════════════════════════════

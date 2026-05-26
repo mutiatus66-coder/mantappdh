@@ -2,7 +2,7 @@
 
 @section('content')
 @push('styles')
-<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/indikator.css') }}">
+<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}">
 @endpush
 
 
@@ -50,7 +50,7 @@
                     <td>{{ $item['sub_event'] }}</td>
                     <td style="text-align:center;">
                       @if($detailValid[$item['id']] ?? false)
-                       <a href="{{ route('indikator.tahap2.indikator', $item['id']) }}"class="btn-detail-indikator">
+                       <a href="{{ route('indikator.tahap2.indikator', $item['id']) }}" class="btn-detail-indikator">
                           <i></i> Detail
                        </a>
                       @else

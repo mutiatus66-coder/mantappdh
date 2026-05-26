@@ -2,7 +2,7 @@
 
 @section('content')
 @push('styles')
-<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/indikator.css') }}">
+<link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}">
 @endpush
 
 <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
