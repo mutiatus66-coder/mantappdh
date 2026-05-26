@@ -1,7 +1,7 @@
 @extends('index', ['dummy' => true])
 
 @section('content')
-<link href="{{ asset('template.demo6/demo6/assets/css/setel.css') }}" rel="stylesheet">
+<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
 {{-- Flash Message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"

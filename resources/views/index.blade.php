@@ -18,254 +18,12 @@
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  @push('styles')
+  <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
+  @endpush
 
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
   @stack('styles')
-
-  <style>
-    /* ============================================================
-       SIDEBAR (Aside)
-       ============================================================ */
-
-    #kt_aside,
-    .aside {
-      width: 260px !important;
-      min-width: 260px !important;
-      max-width: 260px !important;
-      background: #3C678E !important;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    /* Logo area */
-    #kt_aside_logo {
-      background: #2f5478 !important;
-      border-bottom: 1px solid rgba(109,173,216,0.30);
-      min-height: 80px;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    #kt_aside_logo a {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      background: transparent !important;
-    }
-
-    .aside-logo-text     { line-height: 1.3; }
-    .aside-logo-title    { color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
-    .aside-logo-subtitle { color: rgba(109,173,216,0.85); font-size: 11px; font-weight: 400; letter-spacing: 0.3px; }
-
-    /* Scrollable menu */
-    #kt_aside_menu {
-      background: transparent !important;
-      flex: 1 1 auto;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(109,173,216,0.30) transparent;
-    }
-    #kt_aside_menu::-webkit-scrollbar        { width: 4px; }
-    #kt_aside_menu::-webkit-scrollbar-track  { background: transparent; }
-    #kt_aside_menu::-webkit-scrollbar-thumb  { background-color: rgba(109,173,216,0.30); border-radius: 4px; }
-    #kt_aside_menu::-webkit-scrollbar-thumb:hover { background-color: rgba(109,173,216,0.55); }
-
-    /* Wrapper */
-    #kt_wrapper {
-      padding-left: 260px !important;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    @media (max-width: 991.98px) {
-      #kt_wrapper { padding-left: 0 !important; }
-    }
-
-    :root,
-    [data-bs-theme="light"] {
-      --ri-card-bg:                  #ffffff;
-      --ri-text-primary:             #1a1a2e;
-      --ri-text-muted:               #6b7280;
-      --ri-border:                   #e5e7eb;
-      --ri-input-bg:                 #ffffff;
-
-      --ri-table-border-outer:       #d1d5db;
-      --ri-table-border-header:      #9ca3af;
-      --ri-table-border-row:         #e5e7eb;
-      --ri-table-head-bg:            #f3f4f6;
-      --ri-table-row-bg:             #ffffff;
-      --ri-table-row-hover:          #f9fafb;
-
-      --ri-accordion-head-bg:              #f3f4f6;
-      --ri-accordion-head-active-bg:       rgba(60,103,142,0.12);
-      --ri-accordion-head-active-color:    #3C678E;
-
-      --ri-badge-inactive-bg:        #f3f4f6;
-      --ri-badge-inactive-color:     #6b7280;
-    }
-
-    [data-bs-theme="dark"] {
-      --ri-card-bg:                  #1e2736;
-      --ri-text-primary:             #e2e8f0;
-      --ri-text-muted:               #94a3b8;
-      --ri-border:                   #2d3748;
-      --ri-input-bg:                 #2d3748;
-
-      --ri-table-border-outer:       #4a5568;
-      --ri-table-border-header:      #6DADD8;
-      --ri-table-border-row:         #2d3748;
-      --ri-table-head-bg:            #253044;
-      --ri-table-row-bg:             #1e2736;
-      --ri-table-row-hover:          #253044;
-
-      --ri-accordion-head-bg:              #253044;
-      --ri-accordion-head-active-bg:       rgba(109,173,216,0.18);
-      --ri-accordion-head-active-color:    #6DADD8;
-
-      --ri-badge-inactive-bg:        #2d3748;
-      --ri-badge-inactive-color:     #94a3b8;
-    }
-
-    /* ============================================================
-       CONTENT AREA
-       ============================================================ */
-
-    [data-bs-theme="light"] #kt_wrapper,
-    [data-bs-theme="light"] #kt_content,
-    [data-bs-theme="light"] #kt_content_container { background-color: #F9FBFF !important; }
-
-    [data-bs-theme="dark"] #kt_wrapper,
-    [data-bs-theme="dark"] #kt_content,
-    [data-bs-theme="dark"] #kt_content_container  { background-color: #1C2333 !important; }
-
-    #kt_content { flex: 1 1 auto; }
-
-    /* ============================================================
-       TOOLBAR
-       ============================================================ */
-
-    [data-bs-theme="light"] #kt_toolbar { background: #F9FBFF !important; border-bottom: none !important; }
-    [data-bs-theme="dark"]  #kt_toolbar { background: #1C2333 !important; border-bottom: none !important; }
-
-    /* ============================================================
-       SIDEBAR NAV — Menu Items
-       ============================================================ */
-
-    #ri-sidebar-nav { padding: 10px 0 30px; }
-
-    #ri-sidebar-nav a.ri-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 22px;
-      color: rgba(255,255,255,0.85);
-      font-size: 13.5px;
-      font-family: inherit;
-      font-weight: 400;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    #ri-sidebar-nav a.ri-menu-item:hover {
-      background: rgba(109,173,216,0.18);
-      color: #ffffff;
-    }
-    #ri-sidebar-nav a.ri-menu-item.active {
-      background: rgba(109,173,216,0.28);
-      color: #ffffff;
-      font-weight: 600;
-      border-left: 3px solid #6DADD8;
-      padding-left: 19px;
-    }
-
-    #ri-sidebar-nav .ri-menu-label {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
-    }
-    #ri-sidebar-nav .ri-section-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 16px 22px 6px;
-      display: block;
-      white-space: nowrap;
-      opacity: 0.80;
-    }
-    #ri-sidebar-nav .ri-divider {
-      height: 1px;
-      background: rgba(109,173,216,0.20);
-      margin: 8px 16px;
-    }
-    #ri-sidebar-nav .ri-icon {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      opacity: 0.85;
-    }
-    #ri-sidebar-nav .ri-icon svg {
-      width: 16px;
-      height: 16px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* ============================================================
-       HEADER
-       ============================================================ */
-
-    #kt_header {
-      background: linear-gradient(90deg, #3C678E 0%, #6DADD8 100%) !important;
-    }
-
-    #kt_header .header-welcome-text {
-      font-size: 20px !important;
-      font-weight: 600 !important;
-      color: #ffffff !important;
-      text-align: left !important;
-      flex: 1;
-      letter-spacing: 0.2px;
-    }
-    #kt_header .btn-active-light-primary       { color: #ffffff !important; }
-    #kt_header .btn-active-light-primary:hover { background: rgba(255,255,255,0.15) !important; }
-
-    #kt_header .ki-outline,
-    #kt_header i[class*="ki-"] { color: #ffffff !important; }
-
-    /* ============================================================
-       FOOTER
-       ============================================================ */
-
-    #kt_footer {
-      background: #3C678E !important;
-      border-top: 1px solid rgba(109,173,216,0.25) !important;
-    }
-    #kt_footer .text-gray-900,
-    #kt_footer a.text-gray-800,
-    #kt_footer .menu-link              { color: rgba(255,255,255,0.65) !important; }
-    #kt_footer a.text-hover-primary:hover,
-    #kt_footer .menu-link:hover        { color: #6DADD8 !important; }
-    #kt_footer .text-muted             { color: rgba(109,173,216,0.60) !important; }
-    #kt_footer a.text-gray-800         { color: rgba(255,255,255,0.65) !important; }
-    #kt_footer a.text-gray-800:hover   { color: #6DADD8 !important; }
-  </style>
 </head>
 
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
@@ -289,9 +47,7 @@
   <div class="d-flex flex-column flex-root">
     <div class="page d-flex flex-row flex-column-fluid">
 
-      <!-- ============================================================
-           SIDEBAR
-           ============================================================ -->
+      <!-- sidebar -->
       <div id="kt_aside"
         class="aside pb-5 pt-5 pt-lg-0"
         data-kt-drawer="true"
@@ -302,7 +58,7 @@
         data-kt-drawer-direction="start"
         data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 
-        <!-- Logo -->
+        <!-- logo -->
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
             <img alt="Logo" src="{{ asset('img/bulb.png') }}" class="h-60px logo" />
@@ -313,7 +69,7 @@
           </a>
         </div>
 
-        <!-- Scrollable Menu -->
+        <!--menu  scroll -->
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
@@ -484,14 +240,12 @@
         </div>
 
       </div>
-      <!-- /SIDEBAR -->
+      <!-- end sidebar -->
 
-      <!-- ============================================================
-           MAIN WRAPPER
-           ============================================================ -->
+      <!-- wrapper main -->
       <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-        <!-- HEADER -->
+        <!-- header -->
         <div id="kt_header" class="header align-items-stretch">
           <div class="container-fluid d-flex align-items-stretch justify-content-between">
 
@@ -512,7 +266,7 @@
               <p class="mb-0 flex-grow-1 header-welcome-text">..... &nbsp;</p>
               <div class="d-flex align-items-stretch flex-shrink-0">
 
-                <!-- Theme Mode Toggle -->
+                <!-- ubah tema -->
                 <div class="d-flex align-items-center ms-1 ms-lg-3">
                   <a href="#"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
@@ -523,7 +277,7 @@
                     <i class="ki-outline ki-moon theme-dark-show fs-1"></i>
                   </a>
                   <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
-                       data-kt-menu="true" data-kt-element="theme-mode-menu">
+                      data-kt-menu="true" data-kt-element="theme-mode-menu">
                     <div class="menu-item px-3 my-0">
                       <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
                         <span class="menu-icon" data-kt-element="icon"><i class="ki-outline ki-night-day fs-2"></i></span>
@@ -545,7 +299,7 @@
                   </div>
                 </div>
 
-                <!-- User Menu -->
+                <!-- menu user -->
                 <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                   <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
                     data-kt-menu-trigger="click"
@@ -571,11 +325,6 @@
                     <div class="menu-item px-5">
                       <a href="#" class="menu-link px-5">My Profile</a>
                     </div>
-                    <div class="menu-item px-5">
-                      <a href="#" class="menu-link px-5">
-                        <span class="menu-text">My Projects</span>
-                      </a>
-                    </div>
                     <div class="separator my-2"></div>
                     <div class="menu-item px-5 my-1">
                       <a href="#" class="menu-link px-5">Account Settings</a>
@@ -596,9 +345,9 @@
             </div>
           </div>
         </div>
-        <!-- /HEADER -->
+        <!-- end header -->
 
-        <!-- TOOLBAR -->
+        <!-- toolbar -->
         <div class="toolbar py-2" id="kt_toolbar">
           <div id="kt_toolbar_container" class="container-fluid d-flex align-items-center">
             <div class="flex-grow-1 flex-shrink-0 me-5">
@@ -610,17 +359,17 @@
             </div>
           </div>
         </div>
-        <!-- /TOOLBAR -->
+        <!-- end toolbar -->
 
-        <!-- CONTENT -->
+        <!-- content -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div id="kt_content_container" class="container-fluid">
             @yield('content')
           </div>
         </div>
-        <!-- /CONTENT -->
+        <!-- end content -->
 
-        <!-- FOOTER -->
+        <!-- footer -->
         <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
           <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
             <div class="text-gray-900 order-2 order-md-1">
@@ -633,15 +382,15 @@
             </ul>
           </div>
         </div>
-        <!-- /FOOTER -->
+        <!-- end footer -->
 
       </div>
-      <!-- /MAIN WRAPPER -->
+      <!-- end main wrapper -->
 
     </div>
   </div>
 
-  <!-- Drawers -->
+  <!-- drawer -->
   <div id="kt_activities" class="bg-body"
     data-kt-drawer="true" data-kt-drawer-name="activities" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
@@ -675,7 +424,7 @@
     <i class="ki-outline ki-arrow-up"></i>
   </div>
 
-  <!-- JS Bundles — semua pakai asset() -->
+  <!-- JS bundles -->
   <script>var hostUrl = "{{ asset('template.demo6/demo6/assets/') }}";</script>
   <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
