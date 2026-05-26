@@ -6,7 +6,7 @@
 
 @section('content')
 
-{{-- Flash Message --}}
+{{-- warning/message --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
      style="background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); color:#1e40af; margin: 0 24px;">
@@ -17,7 +17,7 @@
 
 <div class="all-container">
 
-    {{-- ── HEADER ── --}}
+    {{-- ── header ── --}}
     <div class="rv-page-header">
         <div>
             <p class="rv-sub-label">Sub Event</p>
@@ -28,7 +28,7 @@
         </a>
     </div>
 
-    {{-- ── TABS ── --}}
+    {{-- ── tab ── --}}
     <div class="rv-tabs-wrap">
         <ul class="nav rv-tabs" id="tabNominator" role="tablist">
             <li class="nav-item" role="presentation">
@@ -46,7 +46,7 @@
 
     <div class="tab-content" id="tabNominatorContent">
 
-        {{-- ── TAB UMUM ── --}}
+        {{-- ── bagian umum ── --}}
         <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
             @include('master.penilaian.tahap1.panel', [
                 'group'    => 'umum',
@@ -58,7 +58,7 @@
             ])
         </div>
 
-        {{-- ── TAB PELAJAR ── --}}
+        {{-- ── bagian pelajar ── --}}
         <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
             @include('master.penilaian.tahap1.panel', [
                 'group'    => 'pelajar',
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Rangking — sort by Total Nilai (desc)
+    // Rangking
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {
             const tbody = document.querySelector(`#${this.dataset.table} tbody`);
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Export CSV (skip checkbox col)
+    // Expor
     document.querySelectorAll('.btn-rv-excel').forEach(btn => {
         btn.addEventListener('click', function () {
             const table = document.getElementById(this.dataset.table);

@@ -213,14 +213,12 @@
 }
 .ec-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2563eb, #1e40af);
+    background: var(--bs-info);
     border-radius: 99px;
     transition: width 0.5s ease;
 }
 
-/* ══════════════════════════════════════════
-   TABS
-══════════════════════════════════════════ */
+/*tab*/
 .rv-tabs-wrap { margin-bottom: 20px; }
 .rv-tabs {
     border-bottom: 2px solid var(--ri-border);
@@ -536,9 +534,7 @@
     transition: background 0.2s;
 }
 
-/* ══════════════════════════════════════════
-   HAPUS MODAL (shared)
-══════════════════════════════════════════ */
+/*hapus data(tombol)*/
 .hapus-icon-circle {
     width: 56px;
     height: 56px;
@@ -552,16 +548,15 @@
 [data-bs-theme="dark"] .hapus-teks-muted  { color: rgba(245, 240, 232, 0.55) !important; }
 [data-bs-theme="dark"] .hapus-nama-strong { color: #f5f0e8 !important; }
 
-/* ══════════════════════════════════════════
-   ACTION BUTTONS
-══════════════════════════════════════════ */
+/* tombol aksi */
 .btn-aksi-wrap {
     display: flex;
     gap: 6px;
     justify-content: center;
     flex-wrap: nowrap;
 }
-.btn-aksi-wrap .btn.btn-aksi {
+.bidang-container .btn-aksi-wrap .btn,
+.page-container .btn-aksi-wrap .btn {
     padding: 10px 30px !important;
     font-size: 0.85rem !important;
     font-weight: 500 !important;
@@ -571,11 +566,13 @@
     white-space: nowrap !important;
 }
 
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
+/*respon*/
 @media (max-width: 640px) {
     .all-container { padding: 16px; margin: 10px; }
     .card-event    { padding: 20px; }
     .event-title   { font-size: 1rem; }
+}
+/* gap table n tombol hapus */
+.bidang-table td:last-child {
+    padding: 14px 20px;
 }
