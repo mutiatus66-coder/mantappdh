@@ -70,8 +70,8 @@
                                 <tr>
                                     <th width="60" class="text-center">No</th>
                                     <th>Bidang</th>
-                                    <th width="160" class="text-center">Status</th>
-                                    <th width="260" class="text-center">Aksi</th>
+                                    <th width="180" class="text-center">Status</th>
+                                    <th width="280" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -125,8 +125,6 @@
     </div>
 </div>
 
-
-{{-- ══ MODAL — Tambah / Ubah Bidang ══ --}}
 <div class="modal fade" id="modalBidang" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
@@ -152,7 +150,7 @@
                     <div class="mb-4">
                         <label class="form-label fw-semibold required">Nama Bidang</label>
                         <input type="text" name="nama" id="bidangNama"
-                               class="form-control" placeholder="Masukkan nama bidang..." required>
+                            class="form-control" placeholder="Masukkan nama bidang..." required>
                     </div>
 
                     <div class="mb-2">
@@ -186,12 +184,12 @@
 
             <div class="d-flex justify-content-center mb-3">
                 <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#A32D2D;"></i>
+                    <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-text-danger);"></i>
                 </div>
             </div>
 
             <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
-            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:#6b7280;">
+            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:var(--ri-text-muted);">
                 Tindakan ini tidak dapat dibatalkan. Bidang
                 <strong id="namaBidangHapus" class="hapus-nama-strong"></strong>
                 akan dihapus secara permanen.
