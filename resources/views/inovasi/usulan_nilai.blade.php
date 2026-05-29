@@ -1,8 +1,6 @@
 @extends('index', ['dummy' => true])
 
 @section('content')
-<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
-
 <div class="usulan-container">
     <div class="usulan-header">
         <div class="usulan-title">
@@ -10,7 +8,7 @@
             <p>Sub Event: <strong>{{ $subEventNama }}</strong></p>
         </div>
         <div>
-            <a href="/inovasi/rekap-nilai" class="btn-kembali">← Kembali</a>
+            <a href="{{ url('/inovasi/rekap-nilai') }}" class="btn-kembali">← Kembali</a>
             <button class="btn-download btn-download-pdf" id="pdfBtn">DOWNLOAD PDF</button>
             <button class="btn-download" id="excelBtn">DOWNLOAD EXCEL</button>
         </div>
@@ -61,7 +59,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="empty-row">No data available in table</td>
+                    <td colspan="8" class="empty-row">No data available in table</td
                 </tr>
                 @endforelse
             </tbody>
