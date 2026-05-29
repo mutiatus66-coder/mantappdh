@@ -129,7 +129,7 @@
               <input type="number" name="nilai_makalah" id="inputNilaiMakalah"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal1()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 
@@ -139,7 +139,7 @@
               <input type="number" name="nilai_substansi" id="inputNilaiSubstansi"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal1()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 
@@ -179,13 +179,15 @@ function hitungTotal1() {
 
     if (total === 100) {
         preview.className = 'total-preview total-ok';
+        preview.style.setProperty('color', '#16a34a', 'important');
         status.textContent = ' ✓ Valid';
         btnSimpan.disabled = false;
     } else {
         preview.className = 'total-preview total-warn';
+        preview.style.setProperty('color', '#dc2626', 'important');
         status.textContent = total < 100
-            ? ` (kurang ${100 - total}%)`
-            : ` (lebih ${total - 100}%)`;
+            ? ` (kurang ${100 - total}%) Tolong penuhi mencapai 100%`
+            : ` (lebih ${total - 100}%) Tolong kurangi mencapai 100%`;
         btnSimpan.disabled = true;
     }
 }

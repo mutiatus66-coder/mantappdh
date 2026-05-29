@@ -274,6 +274,19 @@
     color: #1e40af;
 }
 [data-bs-theme="dark"] .rv-simpan-info { color: #93c5fd; }
+.total-preview {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+.modal-body .total-preview.total-ok,
+.total-preview.total-ok {
+    color: #16a34a !important;
+}
+.modal-body .total-preview.total-warn,
+.total-preview.total-warn {
+    color: #dc2626 !important;
+}
 
 /* ══════════════════════════════════════════
    CHECKBOX
