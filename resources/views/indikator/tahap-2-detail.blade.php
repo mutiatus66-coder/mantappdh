@@ -30,7 +30,7 @@
 
         <div class="sub-card">
           <div class="sub-event-label">
-            Sub Event : {{ $subEvent['sub_event'] }}
+            Sub Event : {{ $subEvent->sub_event }}
           </div>
 
           <div style="overflow-x: auto;">
@@ -53,7 +53,7 @@
 
                 @foreach($jenisList as $jenis)
                   @php
-                    $indikatorsByJenis = collect($indikators)->where('jenis', $jenis);
+                    $indikatorsByJenis = $indikators->where('jenis', $jenis);
                   @endphp
 
                   <tr class="group-header">
@@ -61,28 +61,28 @@
                   </tr>
 
                   @forelse($indikatorsByJenis as $ind)
-                    @forelse($ind['keterangans'] as $ket)
+                    @forelse($ind->keterangans as $ket)
                       <tr>
                         <td style="text-align:center;">{{ $no++ }}</td>
-                        <td>{{ $ind['nama_indikator'] }}</td>
-                        <td>{{ $ket['keterangan'] }}</td>
-                        <td style="text-align:center;">{{ $ket['nilai_minimal'] }}</td>
-                        <td style="text-align:center;">{{ $ket['nilai_maksimal'] }}</td>
+                        <td>{{ $ind->nama_indikator }}</td>
+                        <td>{{ $ket->keterangan }}</td>
+                        <td style="text-align:center;">{{ $ket->nilai_minimal }}</td>
+                        <td style="text-align:center;">{{ $ket->nilai_maksimal }}</td>
                         <td style="text-align:center;">
                           <div class="d-flex gap-1 justify-content-center">
                             <button class="btn btn-warning btn-edit-indikator"
-                                    data-id="{{ $ket['id'] }}"
-                                    data-indikator-id="{{ $ind['id'] }}"
-                                    data-nama-indikator="{{ $ind['nama_indikator'] }}"
-                                    data-jenis="{{ $ind['jenis'] }}"
-                                    data-keterangan="{{ $ket['keterangan'] }}"
-                                    data-nilai-minimal="{{ $ket['nilai_minimal'] }}"
-                                    data-nilai-maksimal="{{ $ket['nilai_maksimal'] }}">
+                                    data-id="{{ $ket->id }}"
+                                    data-indikator-id="{{ $ind->id }}"
+                                    data-nama-indikator="{{ $ind->nama_indikator }}"
+                                    data-jenis="{{ $ind->jenis }}"
+                                    data-keterangan="{{ $ket->keterangan }}"
+                                    data-nilai-minimal="{{ $ket->nilai_minimal }}"
+                                    data-nilai-maksimal="{{ $ket->nilai_maksimal }}">
                               Edit
                             </button>
                             <button class="btn btn-danger btn-hapus-indikator"
-                                    data-id="{{ $ket['id'] }}"
-                                    data-url="{{ route('indikator.tahap2.indikator.destroy', [$subEvent['id'], $ket['id']]) }}">
+                                    data-id="{{ $ket->id }}"
+                                    data-url="{{ route('indikator.tahap2.indikator.destroy', [$subEvent->id, $ket->id]) }}">
                              Hapus
                             </button>
                           </div>
@@ -92,15 +92,15 @@
                       {{-- indikator ada tapi belum punya keterangan --}}
                       <tr>
                         <td style="text-align:center;">{{ $no++ }}</td>
-                        <td>{{ $ind['nama_indikator'] }}</td>
+                        <td>{{ $ind->nama_indikator }}</td>
                         <td colspan="3" style="color:var(--ri-text-muted); font-style:italic;">Belum ada keterangan</td>
                         <td style="text-align:center;">
                           <div class="d-flex gap-1 justify-content-center">
                             <button class="btn-edit btn-edit-indikator"
                                     data-id=""
-                                    data-indikator-id="{{ $ind['id'] }}"
-                                    data-nama-indikator="{{ $ind['nama_indikator'] }}"
-                                    data-jenis="{{ $ind['jenis'] }}"
+                                    data-indikator-id="{{ $ind->id }}"
+                                    data-nama-indikator="{{ $ind->nama_indikator }}"
+                                    data-jenis="{{ $ind->jenis }}"
                                     data-keterangan=""
                                     data-nilai-minimal=""
                                     data-nilai-maksimal="">
@@ -147,7 +147,7 @@
         <div class="modal-body px-5 py-4">
           <div class="mb-4">
             <label class="form-label fw-semibold">Sub Event</label>
-            <input type="text" class="form-control" value="{{ $subEvent['sub_event'] }}" disabled>
+            <input type="text" class="form-control" value="{{ $subEvent->sub_event }}" disabled>
           </div>
 
           <div class="mb-4">
@@ -224,7 +224,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('indikator.tahap2.indikator.store', $subEvent['id']) }}";
+    const storeUrl = "{{ route('indikator.tahap2.indikator.store', $subEvent->id) }}";
 
     // ── Reset modal ──
     document.getElementById('modalIndikator').addEventListener('hidden.bs.modal', function () {
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.getElementById('hiddenKetId').value = ketId;
             document.getElementById('formIndikator').action =
-                `/indikator/tahap-2/{{ $subEvent['id'] }}/indikator/${ketId}`;
+                `/indikator/tahap-2/{{ $subEvent->id }}/indikator/${ketId}`;
 
             document.getElementById('inputNamaIndikator').value = this.dataset.namaIndikator;
             document.getElementById('inputJenis').value         = this.dataset.jenis;
