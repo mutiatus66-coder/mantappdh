@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('sub_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->integer('tahun');
+            $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
+            $table->unsignedSmallInteger('tahun');
             $table->string('sub_event');
-            $table->string('kategori')->default('SEMUA BIDANG');
+            $table->string('kategori')->nullable();
             $table->date('mulai');
             $table->date('berakhir');
             $table->timestamps();
