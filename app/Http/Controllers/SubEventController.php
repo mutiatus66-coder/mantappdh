@@ -59,7 +59,7 @@ class SubEventController extends Controller
 
     public function destroy(SubEvent $subEvent)
     {
-        // Cegah hapus jika masih punya bidang
+
         if ($subEvent->bidangs()->exists()) {
             return redirect()->back()->with('error', 'Sub Event tidak dapat dihapus karena masih memiliki Bidang.');
         }

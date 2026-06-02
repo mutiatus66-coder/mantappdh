@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EventController extends Controller
 {
@@ -44,7 +45,6 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        // Cegah hapus jika masih punya sub event
         if ($event->subEvents()->exists()) {
             return redirect()->back()->with('error', 'Event tidak dapat dihapus karena masih memiliki Sub Event.');
         }
