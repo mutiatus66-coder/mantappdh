@@ -78,7 +78,8 @@ public function rekapNilai()
 
     public function usulanRiwayat($subEventId)
     {
-        $subEventNama = $this->getSubEventName($subEventId); // atau array manual
+        $subEventNama = $this->getSubEventName($subEventId);
+
         $usulan = [
             [
                 'status' => 'Melengkapi Data',
@@ -90,8 +91,9 @@ public function rekapNilai()
                 'ketua_wa' => '08155618417',
             ],
         ];
+
         return view('inovasi.usulan_riwayat', compact('usulan', 'subEventNama'));
-    }
+    }    
 
     public function usulanNilai($subEventId)
     {
