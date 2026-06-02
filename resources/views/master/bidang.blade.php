@@ -2,7 +2,8 @@
 
 @section('content')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
-{{-- Flash Message --}}
+
+{{-- ══ FLASH MESSAGES ══ --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
      style="background:rgba(0,172,193,0.10); border:1px solid rgba(0,172,193,0.3); color:#006064; margin: 0 20px;">
@@ -11,6 +12,15 @@
 </div>
 @endif
 
+@if(session('error'))
+<div class="alert alert-dismissible fade show mb-4" role="alert"
+     style="background:rgba(163,45,45,0.1); border:1px solid rgba(163,45,45,0.3); color:#A32D2D; margin: 0 20px;">
+    <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
+{{-- ══ MAIN CONTAINER ══ --}}
 <div class="bidang-container">
 
     <div class="bidang-header">
@@ -20,117 +30,154 @@
         </div>
     </div>
 
-    <div class="accordion" id="accordionBidang">
+    {{-- ══ LOOP PER EVENT (PARENT) ══ --}}
+    @forelse($events as $event)
+    <div class="mb-4">
 
-        @foreach($subEvents as $index => $se)
-        @php
-            $seId     = $se['id'];
-            $rows     = $bidangData[$seId] ?? [];
-            $aktif    = collect($rows)->where('status', 'aktif')->count();
-            $nonaktif = collect($rows)->where('status', 'tidak_aktif')->count();
-        @endphp
+        {{-- Event Label --}}
+        <div class="px-1 mb-2 d-flex align-items-center gap-2">
+            <span class="badge bg-secondary text-uppercase" style="font-size:.7rem; letter-spacing:.05em;">
+                {{ $event->jenis }}
+            </span>
+            <h6 class="mb-0 fw-bold" style="color:var(--ri-text-primary); font-size:.95rem;">
+                {{ $event->nama_event }}
+            </h6>
+        </div>
 
-        <div class="accordion-item bidang-accordion-item mb-3">
+        {{-- Accordion Sub Events --}}
+        <div class="accordion" id="accordion-event-{{ $event->id }}">
 
-            <h2 class="accordion-header" id="heading-{{ $seId }}">
-                <button class="accordion-button bidang-accordion-btn fw-semibold collapsed px-4"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse-{{ $seId }}"
-                        aria-expanded="false"
-                        aria-controls="collapse-{{ $seId }}">
-                    <span class="me-2 small">Sub Event:</span>
-                    <span class="fw-bold">{{ $se['sub_event'] }}</span>
-                </button>
-            </h2>
+            @forelse($event->subEvents as $se)
+            @php
+                $aktif    = $se->bidangs->where('status', 'aktif')->count();
+                $nonaktif = $se->bidangs->where('status', 'tidak_aktif')->count();
+            @endphp
 
-            <div id="collapse-{{ $seId }}"
-                 class="accordion-collapse collapse"
-                 aria-labelledby="heading-{{ $seId }}"
-                 data-bs-parent="#accordionBidang">
+            <div class="accordion-item bidang-accordion-item mb-2">
 
-                <div class="accordion-body p-4">
+                {{-- Accordion Header --}}
+                <h2 class="accordion-header" id="heading-{{ $se->id }}">
+                    <button class="accordion-button bidang-accordion-btn fw-semibold collapsed px-4"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse-{{ $se->id }}"
+                            aria-expanded="false"
+                            aria-controls="collapse-{{ $se->id }}">
+                        <span class="me-2 small text-muted">{{ $se->tahun }}</span>
+                        <span class="fw-bold">{{ $se->sub_event }}</span>
+                    </button>
+                </h2>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                        <div class="d-flex gap-2">
-                            <span class="badge-aktif rounded-pill px-3 py-2">Aktif <strong>{{ $aktif }}</strong></span>
-                            <span class="badge-nonaktif rounded-pill px-3 py-2">Tidak Aktif <strong>{{ $nonaktif }}</strong></span>
+                {{-- Accordion Body --}}
+                <div id="collapse-{{ $se->id }}"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="heading-{{ $se->id }}">
+
+                    <div class="accordion-body p-4">
+
+                        {{-- Stats + Tambah --}}
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <div class="d-flex gap-2">
+                                <span class="badge-aktif rounded-pill px-3 py-2">
+                                    Aktif <strong>{{ $aktif }}</strong>
+                                </span>
+                                <span class="badge-nonaktif rounded-pill px-3 py-2">
+                                    Tidak Aktif <strong>{{ $nonaktif }}</strong>
+                                </span>
+                            </div>
+
+                            <button class="btn btn-primary btn-tambah-bidang"
+                                    data-sub-event-id="{{ $se->id }}"
+                                    data-sub-event-nama="{{ $se->sub_event }}">
+                                Tambah Bidang
+                            </button>
                         </div>
 
-                        <button class="btn btn-primary"
-                                data-sub-event-id="{{ $seId }}"
-                                data-sub-event-nama="{{ $se['sub_event'] }}">
-                            Tambah Bidang
-                        </button>
-                    </div>
+                        {{-- Tabel Bidang --}}
+                        <div class="table-responsive">
+                            <table class="table bidang-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th width="60" class="text-center">No</th>
+                                        <th>Bidang</th>
+                                        <th width="180" class="text-center">Status</th>
+                                        <th width="280" class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($se->bidangs as $bidang)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($bidang->nama) }}</td>
+                                        <td class="text-center">
+                                            @if($bidang->status === 'aktif')
+                                                <span class="badge-aktif px-3 py-2">Aktif</span>
+                                            @else
+                                                <span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-aksi-wrap">
+                                                <button class="btn btn-warning btn-ubah-bidang btn-aksi"
+                                                        data-id="{{ $bidang->id }}"
+                                                        data-nama="{{ $bidang->nama }}"
+                                                        data-status="{{ $bidang->status }}"
+                                                        data-sub-event-id="{{ $se->id }}"
+                                                        data-sub-event-nama="{{ $se->sub_event }}">
+                                                    Ubah
+                                                </button>
+                                                <button class="btn btn-danger btn-hapus-bidang btn-aksi"
+                                                        data-id="{{ $bidang->id }}"
+                                                        data-nama="{{ $bidang->nama }}"
+                                                        data-url="{{ route('bidang.destroy', $bidang->id) }}">
+                                                    Hapus
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center py-5 empty-row">
+                                            <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+                                            Belum ada bidang untuk sub event ini.
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="table-responsive">
-                        <table class="table bidang-table align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th width="60" class="text-center">No</th>
-                                    <th>Bidang</th>
-                                    <th width="180" class="text-center">Status</th>
-                                    <th width="280" class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($rows as $i => $bidang)
-                                <tr>
-                                    <td class="text-center">{{ $i + 1 }}</td>
-                                    <td>{{ ucfirst($bidang['nama']) }}</td>
-                                    <td class="text-center">
-                                        @if($bidang['status'] === 'aktif')
-                                            <span class="badge-aktif px-3 py-2">Aktif</span>
-                                        @else
-                                            <span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-aksi-wrap">
-                                        <button class="btn btn-warning btn-aksi"
-                                                data-id="{{ $bidang['id'] }}"
-                                                data-nama="{{ $bidang['nama'] }}"
-                                                data-status="{{ $bidang['status'] }}"
-                                                data-sub-event-id="{{ $seId }}"
-                                                data-sub-event-nama="{{ $se['sub_event'] }}">
-                                            Ubah
-                                        </button>
-                                        <button class="btn btn-danger btn-aksi"
-                                                data-id="{{ $bidang['id'] }}"
-                                                data-nama="{{ $bidang['nama'] }}"
-                                                data-url="{{ route('bidang.destroy', $bidang['id']) }}">
-                                            Hapus
-                                        </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center py-5 empty-row">
-                                        <i class="bi bi-inbox fs-4 d-block mb-2"></i>
-                                        Belum ada bidang untuk sub event ini.
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
                     </div>
-
                 </div>
             </div>
-        </div>
-        @endforeach
 
+            @empty
+            <div class="text-center py-4 empty-row">
+                <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+                Belum ada sub event untuk event ini.
+            </div>
+            @endforelse
+
+        </div>
     </div>
+
+    @empty
+    <div class="text-center py-5 empty-row">
+        <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+        Belum ada data event.
+    </div>
+    @endforelse
+
 </div>
 
+
+{{-- ══ MODAL — Tambah / Ubah Bidang ══ --}}
 <div class="modal fade" id="modalBidang" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
             <form id="formBidang" method="POST" action="{{ route('bidang.store') }}">
                 @csrf
-                <input type="hidden" name="_method"      id="formBidangMethod"   value="POST">
+                <input type="hidden" name="_method"      id="formBidangMethod" value="POST">
                 <input type="hidden" name="sub_event_id" id="bidangSubEventId">
 
                 <div class="modal-header px-5 py-4">
@@ -150,7 +197,7 @@
                     <div class="mb-4">
                         <label class="form-label fw-semibold required">Nama Bidang</label>
                         <input type="text" name="nama" id="bidangNama"
-                            class="form-control" placeholder="Masukkan nama bidang..." required>
+                               class="form-control" placeholder="Masukkan nama bidang..." required>
                     </div>
 
                     <div class="mb-2">
@@ -189,7 +236,7 @@
             </div>
 
             <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
-            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:var(--ri-text-muted);">
+            <p class="mb-4" style="font-size:.875rem; line-height:1.6; color:var(--ri-text-muted);">
                 Tindakan ini tidak dapat dibatalkan. Bidang
                 <strong id="namaBidangHapus" class="hapus-nama-strong"></strong>
                 akan dihapus secara permanen.
@@ -200,9 +247,7 @@
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        Hapus
-                    </button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
                 </form>
             </div>
 
@@ -210,33 +255,28 @@
     </div>
 </div>
 
-
 @endsection
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     const storeUrl  = "{{ route('bidang.store') }}";
-    const updateUrl = "{{ url('bidang') }}";
+    const updateUrl = "{{ url('master/bidang') }}";
 
-    // Tutup semua accordion
-    document.querySelectorAll('#accordionBidang .accordion-collapse.show').forEach(c => {
-        bootstrap.Collapse.getOrCreateInstance(c).hide();
-    });
-
-    // Reset modal
+    // ── Reset modal ke state Tambah saat ditutup ──
     document.getElementById('modalBidang').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formBidang').action        = storeUrl;
-        document.getElementById('formBidangMethod').value   = 'POST';
-        document.getElementById('modalBidangTitle').textContent = 'Tambah Bidang';
-        document.getElementById('bidangNama').value         = '';
-        document.getElementById('bidangSubEventId').value   = '';
+        document.getElementById('formBidang').action              = storeUrl;
+        document.getElementById('formBidangMethod').value         = 'POST';
+        document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
+        document.getElementById('bidangNama').value               = '';
+        document.getElementById('bidangSubEventId').value         = '';
         document.getElementById('bidangSubEventNama').textContent = '';
-        document.getElementById('statusAktifBidang').checked = true;
+        document.getElementById('statusAktifBidang').checked      = true;
     });
 
-    // Tambah
-    document.querySelectorAll('[data-sub-event-id].btn-primary').forEach(btn => {
+    // ── Tambah Bidang ──
+    document.querySelectorAll('.btn-tambah-bidang').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
@@ -249,24 +289,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Ubah
-    document.querySelectorAll('.btn-warning.btn-aksi').forEach(btn => {
+    // ── Ubah Bidang ──
+    document.querySelectorAll('.btn-ubah-bidang').forEach(btn => {
         btn.addEventListener('click', function () {
-            const id = this.dataset.id;
             document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
-            document.getElementById('formBidang').action              = `${updateUrl}/${id}`;
+            document.getElementById('formBidang').action              = `${updateUrl}/${this.dataset.id}`;
             document.getElementById('formBidangMethod').value         = 'PUT';
             document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
             document.getElementById('bidangNama').value               = this.dataset.nama;
-            const isNonaktif = this.dataset.status === 'tidak_aktif';
-            document.getElementById(isNonaktif ? 'statusNonaktifBidang' : 'statusAktifBidang').checked = true;
+
+            const radioId = this.dataset.status === 'tidak_aktif'
+                ? 'statusNonaktifBidang'
+                : 'statusAktifBidang';
+            document.getElementById(radioId).checked = true;
+
             new bootstrap.Modal(document.getElementById('modalBidang')).show();
         });
     });
 
-    // Hapus
-    document.querySelectorAll('.btn-danger.btn-aksi').forEach(btn => {
+    // ── Hapus Bidang ──
+    document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaBidangHapus').textContent = this.dataset.nama;
             document.getElementById('formHapusBidang').action      = this.dataset.url;

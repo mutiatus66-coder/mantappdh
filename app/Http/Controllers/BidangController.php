@@ -10,19 +10,13 @@ class BidangController extends Controller
 {
     public function index()
     {
-        $bidangs = Bidang::with(['subEvent.event'])
-            ->orderBy('sub_event_id')
-            ->orderBy('nama')
+        $events = \App\Models\Event::with(['subEvents.bidangs'])
+            ->whereHas('subEvents')
+            ->orderBy('nama_event')
             ->get();
 
-        $subEvents = SubEvent::with('event')
-            ->orderByDesc('tahun')
-            ->orderBy('sub_event')
-            ->get();
-
-        return view('master.bidang', compact('bidangs', 'subEvents'));
-    }
-
+        return view('master.bidang', compact('events'));
+}
     public function store(Request $request)
     {
         $request->validate([
@@ -77,17 +71,8 @@ class BidangController extends Controller
 
     public function destroy(Bidang $bidang)
     {
-    Bidang::destroy($bidang->id);
+        Bidang::destroy($bidang->id);
 
         return redirect()->route('bidang.index')->with('success', 'Bidang berhasil dihapus.');
-    }
-
-    public function bySubEvent(int $subEventId)
-    {
-        $bidangs = Bidang::where('sub_event_id', $subEventId)
-            ->orderBy('nama')
-            ->get(['id', 'nama', 'status']);
-
-        return response()->json($bidangs);
     }
 }

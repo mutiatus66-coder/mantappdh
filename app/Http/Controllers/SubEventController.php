@@ -64,7 +64,7 @@ class SubEventController extends Controller
             return redirect()->back()->with('error', 'Sub Event tidak dapat dihapus karena masih memiliki Bidang.');
         }
 
-        $subEvent->delete();
+        SubEvent::destroy($subEvent->id);
 
         return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
     }
