@@ -2,30 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EventController extends Controller
 {
-    // ── DATA MASTER — disimpan di session ────────────────────
-    public static function getData(): array
-    {
-        return session('events', [
-            ['id' => 1, 'nama_event' => 'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)', 'jenis' => 'INOTEK'],
-            ['id' => 2, 'nama_event' => 'INOVASI DAERAH KAB. MAGETAN',                'jenis' => 'INODA'],
-            ['id' => 3, 'nama_event' => 'PAMERAN INOVASI DAN TEKNOLOGI',               'jenis' => 'INOTEK'],
-            ['id' => 4, 'nama_event' => 'KOMPETISI INOVASI DIGITAL',                   'jenis' => 'INOTEK'],
-        ]);
-    }
-
-    private static function saveData(array $data): void
-    {
-        session(['events' => array_values($data)]);
-    }
-
-    // ── CRUD ─────────────────────────────────────────────────
     public function index()
     {
-        $events = self::getData();
+        $events = Event::orderBy('jenis')->orderBy('nama_event')->get();
         return view('master.event', compact('events'));
     }
 
@@ -36,43 +21,36 @@ class EventController extends Controller
             'jenis'      => 'required|in:INOTEK,INODA',
         ]);
 
-        $data  = self::getData();
-        $maxId = count($data) ? max(array_column($data, 'id')) : 0;
+        Event::create($request->only('nama_event', 'jenis'));
 
-        $data[] = [
-            'id'         => $maxId + 1,
-            'nama_event' => $request->nama_event,
-            'jenis'      => $request->jenis,
-        ];
-
-        self::saveData($data);
         return redirect()->back()->with('success', 'Event berhasil ditambahkan!');
     }
 
-    public function update(Request $request, $id)
+    public function edit(Event $event)
+    {
+        return response()->json($event);
+    }
+
+    public function update(Request $request, Event $event)
     {
         $request->validate([
             'nama_event' => 'required|string|max:255',
             'jenis'      => 'required|in:INOTEK,INODA',
         ]);
 
-        $data = self::getData();
-        foreach ($data as &$row) {
-            if ($row['id'] == $id) {
-                $row['nama_event'] = $request->nama_event;
-                $row['jenis']      = $request->jenis;
-                break;
-            }
-        }
+        $event->update($request->only('nama_event', 'jenis'));
 
-        self::saveData($data);
         return redirect()->back()->with('success', 'Event berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy(Event $event)
     {
-        $data = array_filter(self::getData(), fn($r) => $r['id'] != $id);
-        self::saveData($data);
+        if ($event->subEvents()->exists()) {
+            return redirect()->back()->with('error', 'Event tidak dapat dihapus karena masih memiliki Sub Event.');
+        }
+
+        Event::destroy($event->id);
+
         return redirect()->back()->with('success', 'Event berhasil dihapus.');
     }
 }

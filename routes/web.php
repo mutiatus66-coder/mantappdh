@@ -130,5 +130,18 @@ Route::prefix('indikator')->name('indikator.')->group(function () {
     Route::get('/tahap-2/{subEventId}/formulasi/get',     [IndikatorController::class, 'formulasiTahap2Get'])    ->name('tahap2.formulasi.get');
     Route::post('/tahap-1/{subEventId}/formulasi',        [IndikatorController::class, 'formulasiTahap1Store'])->name('tahap1.formulasi.store');
     Route::get('/tahap-1/{subEventId}/formulasi/get',    [IndikatorController::class, 'formulasiTahap1Get'])  ->name('tahap1.formulasi.get');
-
+    Route::prefix('master')->name('master.')->group(function () {
+    // Event
+    Route::resource('event', EventController::class)
+        ->except(['create', 'show']);
+    // Sub Event
+    Route::resource('sub-event', SubEventController::class)
+        ->except(['create', 'show']);
+    // Bidang
+    Route::resource('bidang', BidangController::class)
+        ->except(['create', 'show']);
+    // AJAX: ambil bidang by sub_event (untuk dropdown dinamis)
+    Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])
+        ->name('bidang.by-sub-event');
+    });
 });
