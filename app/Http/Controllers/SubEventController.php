@@ -11,11 +11,10 @@ class SubEventController extends Controller
     public function index()
     {
         $subEvents = SubEvent::with('event')
-            ->orderByDesc('tahun')
-            ->orderBy('sub_event')
+            ->orderBy('tahun', 'desc')
+            ->orderBy('sub_event', 'asc')
             ->get();
-
-        $events = Event::orderBy('nama_event')->get();
+        $events = Event::orderBy('nama_event', 'asc')->get();
 
         return view('master.sub-event', compact('subEvents', 'events'));
     }

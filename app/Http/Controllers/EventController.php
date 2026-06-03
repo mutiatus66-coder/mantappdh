@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Event as EventModel;
+
 
 class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::orderBy('jenis')->orderBy('nama_event')->get();
+        $events = EventModel::query()->orderBy('jenis', 'asc')->orderBy('nama_event', 'asc')->get();
         return view('master.event', compact('events'));
     }
 

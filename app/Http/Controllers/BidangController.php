@@ -25,7 +25,7 @@ class BidangController extends Controller
             'status'       => 'required|in:aktif,tidak_aktif',
         ]);
 
-        $exists = Bidang::where('sub_event_id', $request->sub_event_id)
+        $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
             ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
             ->exists();
 
@@ -55,7 +55,7 @@ class BidangController extends Controller
         'status'       => 'required|in:aktif,tidak_aktif',
     ]);
 
-    $exists = Bidang::where('sub_event_id', $request->sub_event_id)
+    $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
         ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
         ->where('id', '!=', $bidang->id)
         ->exists();
