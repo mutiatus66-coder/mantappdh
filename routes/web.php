@@ -10,6 +10,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
+use Illuminate\Support\Facades\Auth;
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 Route::get('/login',          fn() => view('login'))->name('login');
@@ -144,4 +145,25 @@ Route::prefix('indikator')->name('indikator.')->group(function () {
     Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])
         ->name('bidang.by-sub-event');
     });
+
 });
+        Route::middleware(['auth'])->group(function () {
+        Route::get('/admin', function () {
+            if (!Auth::user()->isAdminBapperida()) {
+                abort(403, 'Akses ditolak.');
+            }
+            return view('admin.index');
+        });
+    });
+// ── DEV ONLY: Auto-login sebagai admin ────────────────────────────────────────
+    // HAPUS sebelum rilis!
+    Route::get('/dev-login-admin', function () {
+        $admin = \App\Models\User::where('hak_akses', 'admin_bapperida')->first();
+
+        if (!$admin) {
+            return 'Belum ada user dengan hak_akses admin_bapperida di database.';
+        }
+
+        Auth::login($admin);
+        return redirect('/index');
+    })->name('index');

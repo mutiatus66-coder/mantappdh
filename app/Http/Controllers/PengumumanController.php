@@ -10,7 +10,7 @@ class PengumumanController extends Controller
 {
     public function index()
     {
-        $pengumuman = Pengumuman::latest()->get();
+        $pengumuman = Pengumuman::latest('created_at')->get();
         return view('master.pengumuman', compact('pengumuman'));
     }
 

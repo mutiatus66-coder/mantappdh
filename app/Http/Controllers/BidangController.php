@@ -25,7 +25,7 @@ class BidangController extends Controller
             'status'       => 'required|in:aktif,tidak_aktif',
         ]);
 
-        $exists = Bidang::where('sub_event_id', $request->sub_event_id)
+        $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
             ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
             ->exists();
 
@@ -45,29 +45,35 @@ class BidangController extends Controller
         return response()->json($bidang);
     }
 
-    public function update(Request $request, Bidang $bidang)
-    {
-        $request->validate([
-            'sub_event_id' => 'required|exists:sub_events,id',
-            'nama'         => 'required|string|max:255',
-            'status'       => 'required|in:aktif,tidak_aktif',
-        ]);
+    public function update(Request $request, $id)
+{
+    $bidang = Bidang::findOrFail($id);
 
-        $exists = Bidang::where('sub_event_id', $request->sub_event_id)
-            ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
-            ->where('id', '!=', $bidang->id)
-            ->exists();
+    $request->validate([
+        'nama'         => 'required|string|max:255',
+        'sub_event_id' => 'required|exists:sub_events,id',
+        'status'       => 'required|in:aktif,tidak_aktif',
+    ]);
 
-        if ($exists) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Bidang dengan nama yang sama sudah ada pada Sub Event ini.');
-        }
+    $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
+        ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
+        ->where('id', '!=', $bidang->id)
+        ->exists();
 
-        $bidang->update($request->only('sub_event_id', 'nama', 'status'));
-
-        return redirect()->route('bidang.index')->with('success', 'Bidang berhasil diperbarui.');
+    if ($exists) {
+        return redirect()->back()
+            ->withErrors(['nama' => 'Nama bidang sudah digunakan di sub event ini.'])
+            ->withInput();
     }
+
+    $bidang->update([
+        'nama'         => $request->nama,
+        'sub_event_id' => $request->sub_event_id,
+        'status'       => $request->status,
+    ]);
+
+    return redirect()->back()->with('success', 'Bidang berhasil diperbarui!');
+}
 
     public function destroy(Bidang $bidang)
     {
