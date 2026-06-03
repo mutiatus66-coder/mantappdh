@@ -49,7 +49,10 @@ class User extends Authenticatable
     {
         return $this->hak_akses === 'user';
     }
-
+    public function isAdminBapperida(): bool
+{
+    return $this->hak_akses === 'admin_bapperida';
+}
     public function hasRole(string|array $roles): bool
     {
         return in_array($this->hak_akses, (array) $roles);

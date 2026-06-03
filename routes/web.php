@@ -145,6 +145,7 @@ Route::prefix('indikator')->name('indikator.')->group(function () {
     Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])
         ->name('bidang.by-sub-event');
     });
+
 });
         Route::middleware(['auth'])->group(function () {
         Route::get('/admin', function () {
