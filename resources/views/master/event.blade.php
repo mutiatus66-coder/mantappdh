@@ -6,65 +6,6 @@
      DATA EVENT — disimpan langsung di kode (tanpa database)
      Format: ['id' => ..., 'nama_event' => '...', 'jenis' => '...']
 ══════════════════════════════════════════════════ --}}
-@php
-    // ── Inisialisasi data event di session jika belum ada ──
-    if (!session()->has('events')) {
-        session(['events' => [
-            ['id' => 1, 'nama_event' => 'Kompetisi Inovasi Teknologi 2025', 'jenis' => 'INOTEK'],
-            ['id' => 2, 'nama_event' => 'Festival Inovasi Daerah',          'jenis' => 'INODA'],
-        ]]);
-    }
-
-    $events    = collect(session('events'));
-    $nextId    = $events->max('id') + 1;
-
-    // ── Proses POST: Tambah atau Edit ──
-    if (request()->isMethod('post') || request()->isMethod('put')) {
-        $method = strtoupper(request()->input('_method', request()->method()));
-
-        if ($method === 'POST') {
-            // Tambah
-            $newEvents = session('events');
-            $newEvents[] = [
-                'id'         => $nextId,
-                'nama_event' => request()->input('nama_event'),
-                'jenis'      => request()->input('jenis'),
-            ];
-            session(['events' => $newEvents]);
-            return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
-        }
-
-        if ($method === 'PUT') {
-            // Edit
-            $editId  = (int) request()->input('edit_id');
-            $updated = collect(session('events'))->map(function ($e) use ($editId) {
-                if ($e['id'] === $editId) {
-                    $e['nama_event'] = request()->input('nama_event');
-                    $e['jenis']      = request()->input('jenis');
-                }
-                return $e;
-            })->toArray();
-            session(['events' => $updated]);
-            return redirect()->route('event.index')->with('success', 'Event berhasil diubah.');
-        }
-    }
-
-    // ── Proses DELETE ──
-    if (request()->isMethod('delete')) {
-        $deleteId = (int) request()->input('delete_id');
-        $filtered = collect(session('events'))
-                        ->reject(fn($e) => $e['id'] === $deleteId)
-                        ->values()
-                        ->toArray();
-        session(['events' => $filtered]);
-        return redirect()->route('event.index')->with('success', 'Event berhasil dihapus.');
-    }
-
-    // ── Refresh $events & $nextId setelah operasi ──
-    $events = collect(session('events'));
-    $nextId = ($events->max('id') ?? 0) + 1;
-@endphp
-
 <style>
 .sub-card {
     background: var(--ri-card-bg);
@@ -195,23 +136,23 @@
                 @forelse($events as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item['nama_event'] }}</td>
-                    <td style="text-align:center;">{{ $item['jenis'] }}</td>
+                    <td>{{ $item->nama_event }}</td>
+                    <td style="text-align:center;">{{ $item->jenis }}</td>
                     <td style="text-align:center;">
                       <div class="d-flex align-items-center justify-content-center gap-1">
 
                         {{-- Tombol Ubah — class btn-edit-event agar ditangkap JS --}}
                         <button class="btn btn-warning btn-edit-event"
-                                data-id="{{ $item['id'] }}"
-                                data-nama-event="{{ $item['nama_event'] }}"
-                                data-jenis="{{ $item['jenis'] }}">
+                                data-id="{{ $item->id }}"
+                                data-nama-event="{{ $item->nama_event }}"
+                                data-jenis="{{ $item->jenis }}">
                           Ubah
                         </button>
 
                         {{-- Tombol Hapus — class btn-hapus-event agar ditangkap JS --}}
                         <button class="btn btn-danger btn-hapus-event"
-                                data-id="{{ $item['id'] }}"
-                                data-nama="{{ $item['nama_event'] }}">
+                                data-id="{{ $item->id }}"
+                                data-nama="{{ $item->nama_event }}">
                           Hapus
                         </button>
 
@@ -243,7 +184,7 @@
 <div class="modal fade" id="modalEvent" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3 shadow-lg">
-      <form id="formEvent" method="POST" action="{{ route('event.index') }}">
+      <form id="formEvent" method="POST" action="{{ route('event.store') }}">
         @csrf
         {{-- _method diisi PUT saat edit, POST saat tambah --}}
         <input type="hidden" name="_method"  id="formEventMethod" value="POST">
@@ -313,7 +254,7 @@
       <div class="d-flex gap-2 justify-content-center">
         <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
         {{-- Form hapus: method DELETE dengan delete_id --}}
-        <form id="formHapusEvent" method="POST" action="{{ route('event.index') }}">
+        <form id="formHapusEvent" method="POST" action="{{ route('event.store') }}">
           @csrf
           <input type="hidden" name="_method"   value="DELETE">
           <input type="hidden" name="delete_id" id="deleteEventId" value="">
@@ -343,11 +284,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-edit-event').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('modalEventTitle').textContent = 'Ubah Event';
-            document.getElementById('formEventMethod').value       = 'PUT';
-            document.getElementById('formEventEditId').value       = this.dataset.id;
-            document.getElementById('inputNamaEvent').value        = this.dataset.namaEvent;
-            document.getElementById('inputJenis').value            = this.dataset.jenis;
-
+            document.getElementById('formEvent').action           = `/event/${this.dataset.id}`;
+            document.getElementById('formEventMethod').value      = 'PUT';
+            document.getElementById('inputNamaEvent').value       = this.dataset.namaEvent;
+            document.getElementById('inputJenis').value           = this.dataset.jenis;
             new bootstrap.Modal(document.getElementById('modalEvent')).show();
         });
     });
@@ -356,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-hapus-event').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaEventHapus').textContent = this.dataset.nama;
-            document.getElementById('deleteEventId').value        = this.dataset.id;
+            document.getElementById('formHapusEvent').action     = `/event/${this.dataset.id}`;
             new bootstrap.Modal(document.getElementById('modalHapusEvent')).show();
         });
     });

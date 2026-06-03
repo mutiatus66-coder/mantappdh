@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SubEvent;
 use App\Models\Indikator;
 use App\Models\KeteranganIndikator;
+use App\Models\FormulasiTahap1;
 use App\Models\FormulasiTahap2;
 use App\Models\IndikatorTahap2;
 use App\Models\KeteranganTahap2;
@@ -17,8 +18,18 @@ class IndikatorController extends Controller
     // ══════════════════════════════════════════════════════════
     public function tahap1()
     {
-        $subEvents = SubEvent::orderBy('tahun', 'desc')->get();
-        return view('indikator.tahap-1', compact('subEvents'));
+        $subEvents   = SubEvent::orderBy('tahun', 'desc')->get();
+        $formulasis1 = FormulasiTahap1::pluck('sub_event_id')->toArray();
+
+        $detailValid1 = [];
+        foreach ($subEvents as $se) {
+            $f = FormulasiTahap1::where('sub_event_id', $se->id)->first();
+            $detailValid1[$se->id] = $f
+                ? (($f->nilai_makalah + $f->nilai_substansi) == 100)
+                : false;
+        }
+
+        return view('indikator.tahap-1', compact('subEvents', 'formulasis1', 'detailValid1'));
     }
 
     public function formulasiTahap1Store(Request $request, $subEventId)
@@ -27,29 +38,27 @@ class IndikatorController extends Controller
             'nilai_makalah'   => 'required|integer|min:1|max:100',
             'nilai_substansi' => 'required|integer|min:1|max:100',
         ]);
+
         if (($request->nilai_makalah + $request->nilai_substansi) !== 100) {
             return back()->withErrors(['total' => 'Total harus 100%.'])->withInput();
         }
-        $data = session('formulasi_tahap1', []);
-        $found = false;
-        foreach ($data as &$row) {
-            if ($row['sub_event_id'] == $subEventId) {
-                $row['nilai_makalah']   = $request->nilai_makalah;
-                $row['nilai_substansi'] = $request->nilai_substansi;
-                $found = true; break;
-            }
-        }
-        if (!$found) {
-            $data[] = ['id' => count($data)+1, 'sub_event_id' => (int)$subEventId,
-                       'nilai_makalah' => $request->nilai_makalah, 'nilai_substansi' => $request->nilai_substansi];
-        }
-        session(['formulasi_tahap1' => $data]);
+
+        SubEvent::findOrFail($subEventId);
+
+        FormulasiTahap1::updateOrCreate(
+            ['sub_event_id' => $subEventId],
+            [
+                'nilai_makalah'   => $request->nilai_makalah,
+                'nilai_substansi' => $request->nilai_substansi,
+            ]
+        );
+
         return redirect()->route('indikator.tahap1')->with('success', 'Formulasi Tahap 1 berhasil disimpan.');
     }
 
     public function formulasiTahap1Get($subEventId)
     {
-        $f = collect(session('formulasi_tahap1', []))->firstWhere('sub_event_id', (int)$subEventId);
+        $f = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
         return response()->json($f ?? ['nilai_makalah' => 0, 'nilai_substansi' => 0]);
     }
 
@@ -184,7 +193,7 @@ class IndikatorController extends Controller
     public function indikatorTahap2Destroy($subEventId, $id)
     {
         $keterangan = KeteranganTahap2::findOrFail($id);
-        $indikator = $keterangan->indikator;
+        $indikator  = $keterangan->indikator;
 
         $keterangan->delete();
 
