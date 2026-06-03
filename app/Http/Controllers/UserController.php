@@ -1,85 +1,84 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class UserController extends Controller
+/**
+ * @property int    $id
+ * @property string $nama
+ * @property string $name
+ * @property string $email
+ * @property string $hak_akses
+ * @property string $status
+ * @property string $password
+ */
+class UserController extends Authenticatable
 {
-    public function index()
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'nama',
+        'name',
+        'email',
+        'hak_akses',
+        'status',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected function casts(): array
     {
-        $users = User::all();
-        return view('master.user', compact('users'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'hak_akses' => 'required|in:admin,user',
-            'status'    => 'required|in:aktif,nonaktif',
-            'password'  => 'required|min:6',
-        ]);
-
-        User::create([
-            'nama'      => $request->nama,
-            'name'      => $request->nama,
-            'email'     => $request->email,
-            'hak_akses' => $request->hak_akses,
-            'status'    => $request->status,
-            'password'  => Hash::make($request->password),
-        ]);
-
-        return redirect()->back()->with('success', 'User berhasil ditambahkan!');
-    }
-
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $request->validate([
-            'nama'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email,' . $id,
-            'hak_akses' => 'required|in:admin,user',
-            'status'    => 'required|in:aktif,nonaktif',
-            'password'  => 'nullable|min:6',
-        ]);
-
-        $data = [
-            'nama'      => $request->nama,
-            'email'     => $request->email,
-            'hak_akses' => $request->hak_akses,
-            'status'    => $request->status,
+        return [
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
         ];
-
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        $user->update($data);
-
-        return redirect()->back()->with('success', 'User berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    // ─── Role Checks ───────────────────────────────────────────
+
+    public function isAdminBapperida(): bool
     {
-        User::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'User berhasil dihapus.');
+        return $this->hak_akses === 'admin_bapperida';
     }
 
-    public function loginAs($id)
+    public function isAdminKecamatan(): bool
     {
-        $user = User::findOrFail($id);
+        return $this->hak_akses === 'admin_kecamatan';
+    }
 
-        // Simpan ID admin asli ke session sebelum berpindah
-        session(['admin_original_id' => Auth::id()]);
+    public function isAdminOpd(): bool
+    {
+        return $this->hak_akses === 'admin_opd';
+    }
 
-        Auth::login($user);
+    public function isPenilai(): bool
+    {
+        return $this->hak_akses === 'penilai';
+    }
 
-        return redirect('/')->with('success', 'Login sebagai ' . $user->nama);
+    public function isPeserta(): bool
+    {
+        return $this->hak_akses === 'peserta';
+    }
+
+    public function hasRole(string|array $roles): bool
+    {
+        return in_array($this->hak_akses, (array) $roles);
+    }
+
+    public function isAnyAdmin(): bool
+    {
+        return in_array($this->hak_akses, [
+            'admin_bapperida',
+            'admin_kecamatan',
+            'admin_opd',
+        ]);
     }
 }
