@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('penilai_sub_event', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_event');
-            $table->enum('jenis', ['INOTEK', 'INODA']);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('sub_event_id')->constrained('sub_events')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('penilai_sub_event');
     }
 };

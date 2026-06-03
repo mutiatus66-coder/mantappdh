@@ -10,6 +10,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
+use Illuminate\Support\Facades\Auth;
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 Route::get('/login',          fn() => view('login'))->name('login');
@@ -130,5 +131,39 @@ Route::prefix('indikator')->name('indikator.')->group(function () {
     Route::get('/tahap-2/{subEventId}/formulasi/get',     [IndikatorController::class, 'formulasiTahap2Get'])    ->name('tahap2.formulasi.get');
     Route::post('/tahap-1/{subEventId}/formulasi',        [IndikatorController::class, 'formulasiTahap1Store'])->name('tahap1.formulasi.store');
     Route::get('/tahap-1/{subEventId}/formulasi/get',    [IndikatorController::class, 'formulasiTahap1Get'])  ->name('tahap1.formulasi.get');
+    Route::prefix('master')->name('master.')->group(function () {
+    // Event
+    Route::resource('event', EventController::class)
+        ->except(['create', 'show']);
+    // Sub Event
+    Route::resource('sub-event', SubEventController::class)
+        ->except(['create', 'show']);
+    // Bidang
+    Route::resource('bidang', BidangController::class)
+        ->except(['create', 'show']);
+    // AJAX: ambil bidang by sub_event (untuk dropdown dinamis)
+    Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])
+        ->name('bidang.by-sub-event');
+    });
 
 });
+        Route::middleware(['auth'])->group(function () {
+        Route::get('/admin', function () {
+            if (!Auth::user()->isAdminBapperida()) {
+                abort(403, 'Akses ditolak.');
+            }
+            return view('admin.index');
+        });
+    });
+// ── DEV ONLY: Auto-login sebagai admin ────────────────────────────────────────
+    // HAPUS sebelum rilis!
+    Route::get('/dev-login-admin', function () {
+        $admin = \App\Models\User::where('hak_akses', 'admin_bapperida')->first();
+
+        if (!$admin) {
+            return 'Belum ada user dengan hak_akses admin_bapperida di database.';
+        }
+
+        Auth::login($admin);
+        return redirect('/index');
+    })->name('index');

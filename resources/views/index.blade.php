@@ -364,7 +364,14 @@
         <!-- content -->
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div id="kt_content_container" class="container-fluid">
-            @yield('content')
+              @if(!isset($dummy))
+                  <div class="p-6">
+                      <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->nama }}</h2>
+                      <p>Panel Admin Rumah Inovasi Magetan</p>
+                  </div>
+              @else
+                  @yield('content')
+              @endif
           </div>
         </div>
         <!-- end content -->

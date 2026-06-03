@@ -11,10 +11,11 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+        public function run(): void
     {
-        User::create(['name' => 'admin', 'email' => 'admin@gmail.com', 'status' => 'active', 'role' => 'admin', 'password' => 'admin']);
-        User::create(['name' => 'staff', 'email' => 'staff@gmail.com', 'status' => 'active', 'role' => 'staff', 'password' => 'staff']);
-        User::create(['name' => 'customer', 'email' => 'customer@gmail.com', 'status' => 'active', 'role' => 'customer', 'password' => 'customer']);
+        User::create(['nama' => 'admin',           'email' => 'admin@gmail.com',          'status' => 'active', 'hak_akses' => 'admin',           'password' => bcrypt('admin')]);
+        User::create(['nama' => 'staff',           'email' => 'staff@gmail.com',          'status' => 'active', 'hak_akses' => 'staff',           'password' => bcrypt('staff')]);
+        User::create(['nama' => 'customer',        'email' => 'customer@gmail.com',       'status' => 'active', 'hak_akses' => 'customer',        'password' => bcrypt('customer')]);
+        User::create(['nama' => 'Admin Bapperida', 'email' => 'admin@bapperida.go.id',    'status' => 'active', 'hak_akses' => 'admin_bapperida', 'password' => bcrypt('password123')]);
     }
 }

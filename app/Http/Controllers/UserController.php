@@ -20,7 +20,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'hak_akses' => 'required|in:admin,user',
+            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'required|min:6',
         ]);
@@ -74,12 +74,8 @@ class UserController extends Controller
     public function loginAs($id)
     {
         $user = User::findOrFail($id);
-
-        // Simpan ID admin asli ke session sebelum berpindah
         session(['admin_original_id' => Auth::id()]);
-
         Auth::login($user);
-
         return redirect('/')->with('success', 'Login sebagai ' . $user->nama);
     }
 }

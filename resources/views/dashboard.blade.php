@@ -286,7 +286,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                             <div class="menu-item"><a class="menu-link nav-link" href="#team">KKN Award</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="#portfolio">Jurnal Inovasi</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="#dokumentasi">Dokumentasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="#pengumuman">Pengumuman</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="pengumuman">Pengumuman</a></div>
                         </div>
                     </div>
 
@@ -321,7 +321,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                     <img src="template.demo6/demo6/assets/media/logos/rmh.png" alt="Rumah Inovasi Magetan" class="hero-logo" />
 
                     <div class="mt-4">
-                        <a href="index" class="btn btn-register px-5 py-3 fs-5 fw-bold">
+                        <a href="/dev-login-admin" class="btn btn-register px-5 py-3 fs-5 fw-bold">
                             PENDAFTARAN →
                         </a>
                     </div>

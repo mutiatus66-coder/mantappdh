@@ -2,44 +2,83 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Bidang;
 use App\Models\SubEvent;
+use Illuminate\Http\Request;
 
 class BidangController extends Controller
 {
-    private static array $bidang = [
-        1 => [
-            ['id' => 1, 'nama' => 'Teknologi Informasi', 'status' => 'aktif'],
-            ['id' => 2, 'nama' => 'Pertanian',            'status' => 'tidak_aktif'],
-        ],
-        2 => [
-            ['id' => 3, 'nama' => 'Kesehatan',            'status' => 'aktif'],
-            ['id' => 4, 'nama' => 'Pendidikan',           'status' => 'aktif'],
-        ],
-        3 => [
-            ['id' => 5, 'nama' => 'Lingkungan Hidup',     'status' => 'aktif'],
-            ['id' => 6, 'nama' => 'Energi Terbarukan',    'status' => 'tidak_aktif'],
-        ],
-        4 => [
-            ['id' => 7,  'nama' => 'Teknologi Informasi',  'status' => 'aktif'],
-            ['id' => 8,  'nama' => 'Kesehatan',            'status' => 'aktif'],
-            ['id' => 9,  'nama' => 'Pertanian',            'status' => 'aktif'],
-            ['id' => 10, 'nama' => 'Pendidikan',           'status' => 'aktif'],
-            ['id' => 11, 'nama' => 'Lingkungan Hidup',     'status' => 'aktif'],
-        ],
-    ];
-
     public function index()
     {
-        return view('master.bidang', [
-            'subEvents'  => SubEvent::getStaticData(), // ✅ panggil dari model
-            'bidangData' => self::$bidang,
+        $events = \App\Models\Event::with(['subEvents.bidangs'])
+            ->whereHas('subEvents')
+            ->orderBy('nama_event')
+            ->get();
+
+        return view('master.bidang', compact('events'));
+}
+    public function store(Request $request)
+    {
+        $request->validate([
+            'sub_event_id' => 'required|exists:sub_events,id',
+            'nama'         => 'required|string|max:255',
+            'status'       => 'required|in:aktif,tidak_aktif',
         ]);
+
+        $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
+            ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Bidang dengan nama yang sama sudah ada pada Sub Event ini.');
+        }
+
+        Bidang::create($request->only('sub_event_id', 'nama', 'status'));
+
+        return redirect()->route('bidang.index')->with('success', 'Bidang berhasil ditambahkan.');
     }
 
-    // Tambahkan method-method ini nanti
-    public function store(Request $request) { /* TODO */ }
-    public function edit(int $id) { /* TODO */ }
-    public function update(Request $request, int $id) { /* TODO */ }
-    public function destroy(int $id) { /* TODO */ }
+    public function edit(Bidang $bidang)
+    {
+        return response()->json($bidang);
+    }
+
+    public function update(Request $request, $id)
+{
+    $bidang = Bidang::findOrFail($id);
+
+    $request->validate([
+        'nama'         => 'required|string|max:255',
+        'sub_event_id' => 'required|exists:sub_events,id',
+        'status'       => 'required|in:aktif,tidak_aktif',
+    ]);
+
+    $exists = Bidang::query()->where('sub_event_id', $request->sub_event_id)
+        ->whereRaw('LOWER(nama) = ?', [strtolower($request->nama)])
+        ->where('id', '!=', $bidang->id)
+        ->exists();
+
+    if ($exists) {
+        return redirect()->back()
+            ->withErrors(['nama' => 'Nama bidang sudah digunakan di sub event ini.'])
+            ->withInput();
+    }
+
+    $bidang->update([
+        'nama'         => $request->nama,
+        'sub_event_id' => $request->sub_event_id,
+        'status'       => $request->status,
+    ]);
+
+    return redirect()->back()->with('success', 'Bidang berhasil diperbarui!');
+}
+
+    public function destroy(Bidang $bidang)
+    {
+        Bidang::destroy($bidang->id);
+
+        return redirect()->route('bidang.index')->with('success', 'Bidang berhasil dihapus.');
+    }
 }
