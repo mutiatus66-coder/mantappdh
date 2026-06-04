@@ -1,4 +1,4 @@
-@extends('index', ['dummy' => true])
+@extends('index')
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
@@ -26,25 +26,35 @@
 
     {{-- ── CARD GRID ── --}}
     <div class="row g-4">
-        @foreach($subEvents as $event)
+        @forelse($subEvents as $se)
         <div class="col-12 col-sm-6 col-xl-4">
             <div class="ec-card h-100">
                 <div class="ec-card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="ec-badge-tahun">{{ $event['tahun'] ?? '' }}</span>
+                        <span class="ec-badge-tahun">{{ $se->tahun }}</span>
                         <i class="bi bi-journal-text ec-card-icon"></i>
                     </div>
-                    <h5 class="ec-card-title">{{ $event['nama'] }}</h5>
+                    {{-- Nama Event parent --}}
+                    <p class="ec-card-parent-label mb-0">{{ $se->event->nama_event ?? '-' }}</p>
+                    {{-- Nama Sub Event — bold tebal seperti penilaian --}}
+                    <h5 class="ec-card-title">{{ $se->sub_event }}</h5>
                     <div class="mt-3 mb-3">
-                        <span class="ec-progress-label">{{ $event['nama'] }}</span>
+                        <span class="ec-progress-label">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            {{ $se->mulai }} &ndash; {{ $se->berakhir }}
+                        </span>
                     </div>
-                    <a href="{{ url('/inovasi/usulan-riwayat/'.$event['id']) }}" class="btn btn-info">
-                        <i class="bi bi-arrow-right"></i>Lihat Usulan
+                    <a href="{{ url('/inovasi/usulan-riwayat/' . $se->id) }}" class="btn btn-info">
+                        <i class="bi bi-arrow-right me-1"></i> Lihat Usulan
                     </a>
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div class="col-12">
+            <p class="text-muted text-center py-5">Belum ada sub event tersedia.</p>
+        </div>
+        @endforelse
     </div>
 
 </div>

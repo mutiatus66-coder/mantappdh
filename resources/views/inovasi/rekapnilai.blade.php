@@ -1,4 +1,4 @@
-@extends('index', ['dummy' => true])
+@extends('index')
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
@@ -26,20 +26,23 @@
 
     {{-- ── CARD GRID ── --}}
     <div class="row g-4">
-        @foreach($subEvents as $event)
+        @forelse($subEvents as $se)
         @php
-            $total   = $event['total']   ?? 0;
-            $dinilai = $event['dinilai'] ?? 0;
+            $total   = $se->inovasi_count  ?? 0;
+            $dinilai = $se->dinilai_count  ?? 0;
             $pct     = $total > 0 ? round($dinilai / $total * 100) : 0;
         @endphp
         <div class="col-12 col-sm-6 col-xl-4">
             <div class="ec-card h-100">
                 <div class="ec-card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="ec-badge-tahun">{{ $event['tahun'] ?? '' }}</span>
+                        <span class="ec-badge-tahun">{{ $se->tahun }}</span>
                         <i class="bi bi-bar-chart-line ec-card-icon"></i>
                     </div>
-                    <h5 class="ec-card-title">{{ $event['nama'] }}</h5>
+                    {{-- Nama Event parent --}}
+                    <p class="ec-card-parent-label mb-0">{{ $se->event->nama_event ?? '-' }}</p>
+                    {{-- Nama Sub Event — bold tebal seperti penilaian --}}
+                    <h5 class="ec-card-title">{{ $se->sub_event }}</h5>
                     <div class="mt-3 mb-3">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="ec-progress-label">Progress Penilaian</span>
@@ -52,13 +55,17 @@
                             <span class="ec-progress-label">{{ $dinilai }} / {{ $total }} dinilai</span>
                         </div>
                     </div>
-                    <a href="{{ url('/inovasi/usulan-nilai/'.$event['id']) }}" class="btn btn-info">
-                        <i class="bi bi-bar-chart"></i>Lihat Nilai
+                    <a href="{{ url('/inovasi/usulan-nilai/' . $se->id) }}" class="btn btn-info">
+                        <i class="bi bi-bar-chart me-1"></i> Lihat Nilai
                     </a>
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div class="col-12">
+            <p class="text-muted text-center py-5">Belum ada sub event tersedia.</p>
+        </div>
+        @endforelse
     </div>
 
 </div>

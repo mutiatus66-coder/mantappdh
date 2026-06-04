@@ -1369,3 +1369,42 @@
         gap: 6px;
     }
 }
+/* ══════════════════════════════════════════
+   TAMBAHAN — samakan ketebalan rekap & riwayat
+   dengan penilaian tahap 1
+══════════════════════════════════════════ */
+
+/* Judul halaman (h3) — samakan dengan penilaian */
+.ec-title {
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    color: var(--ri-text-primary) !important;
+    letter-spacing: -0.01em;
+}
+
+/* Subtitle halaman */
+.ec-subtitle {
+    font-size: 0.875rem !important;
+    color: var(--ri-text-muted) !important;
+    margin-top: 4px !important;
+}
+
+/* Nama sub event di dalam card — bold tebal */
+.ec-card-title {
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    color: var(--ri-text-primary) !important;
+    line-height: 1.4 !important;
+    margin: 6px 0 4px !important;
+    letter-spacing: -0.01em;
+}
+
+/* Nama event parent (label di atas judul card) */
+.ec-card-parent-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ri-text-muted);
+    margin-bottom: 2px;
+}
