@@ -8,14 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Cek dan tambah kolom hak_akses jika belum ada (sebagai role)
+        // Tambah kolom hak_akses jika belum ada
         if (!Schema::hasColumn('users', 'hak_akses')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->enum('hak_akses', ['admin', 'penilai', 'peserta', 'admin_bapperida'])->default('peserta')->after('email');
+                $table->enum('hak_akses', ['admin', 'penilai', 'peserta', 'admin_bapperida'])
+                      ->default('peserta')
+                      ->after('email');
             });
         }
 
-        // Cek dan tambah kolom status untuk aktif/non aktif
+        // Tambah kolom status jika belum ada
         if (!Schema::hasColumn('users', 'status')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->enum('status', ['aktif', 'nonaktif'])->default('aktif')->after('hak_akses');
