@@ -22,6 +22,11 @@ class SubEvent extends Model
         return $this->belongsTo(Event::class);
     }
 
+    public function bidangs()
+    {
+        return $this->hasMany(Bidang::class);
+    }
+
     public function indikators()
     {
         return $this->hasMany(Indikator::class);
