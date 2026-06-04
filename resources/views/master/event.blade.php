@@ -2,10 +2,6 @@
 
 @section('content')
 
-{{-- ══════════════════════════════════════════════════
-     DATA EVENT — disimpan langsung di kode (tanpa database)
-     Format: ['id' => ..., 'nama_event' => '...', 'jenis' => '...']
-══════════════════════════════════════════════════ --}}
 <style>
 .sub-card {
     background: var(--ri-card-bg);
@@ -17,39 +13,6 @@
     border: none;
     overflow: hidden;
 }
-.btn-tambah-se {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white !important;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: .9rem;
-    box-shadow: 0 3px 12px rgba(245,158,11,.30);
-}
-.btn-tambah-se:hover {
-    opacity: 0.9;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-    color: white !important;
-}
-.btn-gold:hover { opacity: .88; color: white !important; }
-.btn-hapus {
-    background: #A32D2D;
-    color: #ffffff !important;
-    border: none;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background 0.15s;
-}
-.btn-hapus:hover { background: #8b2424; color: #ffffff !important; }
 .se-table {
     width: 100%;
     border-collapse: collapse;
@@ -85,6 +48,25 @@
     color: var(--ri-text-muted);
     background: var(--ri-table-row-bg);
 }
+
+/* ── Sama persis dengan sub event ── */
+.btn-aksi-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.btn-aksi {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.btn-aksi:hover { opacity: 0.88; }
 
 /* ── Hapus modal icon ── */
 .hapus-icon-circle {
@@ -139,24 +121,26 @@
                     <td>{{ $item->nama_event }}</td>
                     <td style="text-align:center;">{{ $item->jenis }}</td>
                     <td style="text-align:center;">
-                      <div class="d-flex align-items-center justify-content-center gap-1">
 
-                        {{-- Tombol Ubah — class btn-edit-event agar ditangkap JS --}}
-                        <button class="btn btn-warning btn-edit-event"
+                      {{-- ✅ Sama persis dengan sub event --}}
+                      <div class="btn-aksi-wrap">
+
+                        <button class="btn btn-warning btn-aksi btn-edit-event"
                                 data-id="{{ $item->id }}"
                                 data-nama-event="{{ $item->nama_event }}"
                                 data-jenis="{{ $item->jenis }}">
                           Ubah
                         </button>
 
-                        {{-- Tombol Hapus — class btn-hapus-event agar ditangkap JS --}}
-                        <button class="btn btn-danger btn-hapus-event"
+                        <button class="btn btn-danger btn-aksi btn-hapus-event"
                                 data-id="{{ $item->id }}"
-                                data-nama="{{ $item->nama_event }}">
+                                data-nama="{{ $item->nama_event }}"
+                                data-url="{{ route('event.destroy', $item->id) }}">
                           Hapus
                         </button>
 
                       </div>
+
                     </td>
                   </tr>
                 @empty
@@ -186,10 +170,7 @@
     <div class="modal-content rounded-3 shadow-lg">
       <form id="formEvent" method="POST" action="{{ route('event.store') }}">
         @csrf
-        {{-- _method diisi PUT saat edit, POST saat tambah --}}
-        <input type="hidden" name="_method"  id="formEventMethod" value="POST">
-        {{-- edit_id hanya terpakai saat mode edit --}}
-        <input type="hidden" name="edit_id"  id="formEventEditId" value="">
+        <input type="hidden" name="_method" id="formEventMethod" value="POST">
 
         <div class="modal-header px-5 py-4">
           <h5 class="modal-title fw-semibold" id="modalEventTitle">Tambah Event</h5>
@@ -201,13 +182,11 @@
 
         <div class="modal-body px-5 py-4">
           <div class="row">
-
             <div class="col-md-12 mb-4">
               <label class="form-label fw-semibold required">Nama Event</label>
               <input type="text" name="nama_event" id="inputNamaEvent"
                      class="form-control" placeholder="Masukkan nama event..." required>
             </div>
-
             <div class="col-md-12 mb-4">
               <label class="form-label fw-semibold required">Jenis</label>
               <select name="jenis" id="inputJenis" class="form-select" required>
@@ -216,13 +195,12 @@
                 <option value="INODA">INODA</option>
               </select>
             </div>
-
           </div>
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-warning px-4">Simpan</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success">Simpan</button>
         </div>
 
       </form>
@@ -240,7 +218,7 @@
 
       <div class="d-flex justify-content-center mb-3">
         <div class="hapus-icon-circle">
-          <i class="bi bi-trash3" style="font-size:1.6rem; color:#A32D2D;"></i>
+          <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-btn-danger);"></i>
         </div>
       </div>
 
@@ -252,14 +230,12 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
-        {{-- Form hapus: method DELETE dengan delete_id --}}
-        <form id="formHapusEvent" method="POST" action="{{ route('event.store') }}">
+        <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
+        <form id="formHapusEvent" method="POST">
           @csrf
-          <input type="hidden" name="_method"   value="DELETE">
-          <input type="hidden" name="delete_id" id="deleteEventId" value="">
-          <button type="submit" class="btn btn-danger btn-sm px-4">
-            <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger btn-aksi px-3">
+            <i class="bi bi-trash3 me-1"></i>Hapus
           </button>
         </form>
       </div>
@@ -268,26 +244,29 @@
   </div>
 </div>
 
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
+    const storeUrl = "{{ route('event.store') }}";
+
     // ── Reset modal ke mode Tambah saat ditutup ──
     document.getElementById('modalEvent').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formEventMethod').value  = 'POST';
-        document.getElementById('formEventEditId').value  = '';
+        document.getElementById('formEvent').action            = storeUrl;
+        document.getElementById('formEventMethod').value      = 'POST';
         document.getElementById('modalEventTitle').textContent = 'Tambah Event';
-        document.getElementById('inputNamaEvent').value   = '';
-        document.getElementById('inputJenis').value       = '';
+        document.getElementById('inputNamaEvent').value        = '';
+        document.getElementById('inputJenis').value            = '';
     });
 
     // ── Tombol Ubah ──
     document.querySelectorAll('.btn-edit-event').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('modalEventTitle').textContent = 'Ubah Event';
-            document.getElementById('formEvent').action           = `/event/${this.dataset.id}`;
-            document.getElementById('formEventMethod').value      = 'PUT';
-            document.getElementById('inputNamaEvent').value       = this.dataset.namaEvent;
-            document.getElementById('inputJenis').value           = this.dataset.jenis;
+            document.getElementById('formEvent').action            = `/event/${this.dataset.id}`;
+            document.getElementById('formEventMethod').value       = 'PUT';
+            document.getElementById('inputNamaEvent').value        = this.dataset.namaEvent;
+            document.getElementById('inputJenis').value            = this.dataset.jenis;
             new bootstrap.Modal(document.getElementById('modalEvent')).show();
         });
     });
@@ -296,12 +275,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-hapus-event').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaEventHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusEvent').action     = `/event/${this.dataset.id}`;
+            document.getElementById('formHapusEvent').action      = this.dataset.url;
             new bootstrap.Modal(document.getElementById('modalHapusEvent')).show();
         });
     });
 
 });
 </script>
+@endpush
 
 @endsection
