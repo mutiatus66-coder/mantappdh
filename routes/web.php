@@ -155,6 +155,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])->name('bidang.by-sub-event');
         });
 
-    }); // end indikator
+    });
 
-}); // end middleware authphp artisan config:clear
+});
