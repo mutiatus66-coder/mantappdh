@@ -129,7 +129,7 @@
               <input type="number" name="nilai_makalah" id="inputNilaiMakalah"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal1()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 
@@ -139,7 +139,7 @@
               <input type="number" name="nilai_substansi" id="inputNilaiSubstansi"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal1()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 

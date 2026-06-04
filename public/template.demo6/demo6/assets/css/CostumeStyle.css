@@ -644,6 +644,28 @@
     color: white !important;
 }
 
+/* ══════════════════════════════════════════
+   TOTAL PREVIEW (Form Modal)
+══════════════════════════════════════════ */
+.total-preview {
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.total-preview.total-ok {
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #15803d;
+}
+
+.total-preview.total-warn {
+    background-color: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    color: #991b1b;
+}
+
 .btn-hapus:hover {
     background: #8b2424;
     color: white !important;
