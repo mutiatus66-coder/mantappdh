@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--
 Author: Keenthemes
@@ -57,18 +56,31 @@ License: For each use you must have a valid license purchased only from above li
 									<table style="box-shadow: 0 4px 24px rgba(0,0,0,0.12); border-radius: 16px; border-collapse: separate; background: #fff; width: 100%;">
 										<tr>
 									<td style="padding: 32px;">
-								<form class="form w-100" novalidate="novalidate" id="kt_sign_up_form" data-kt-redirect-url="/sign-in" action="#">
-								<!--begin::Heading-->
+								<form method="POST" action="{{ route('register') }}" class="form w-100">
+									@csrf
+									<!--begin::Heading-->
 								<div class="text-center mb-11">
 									<!--begin::Title-->
 									<h1 class="text-gray-900 fw-bolder mb-3">Pendaftaran</h1>
 									<!--end::Title-->
+									<!-- validasi error -->
+									@if ($errors->any())
+										<div class="alert alert-danger">
+											<ul class="mb-0">
+												@foreach ($errors->all() as $error)
+													<li>{{ $error }}</li>
+												@endforeach
+											</ul>
+										</div>
+									@endif
 								</div>
 								<!--begin::Heading-->
 								<!--begin::Input group=-->
 								<div class="fv-row mb-8">
+    <input type="text" placeholder="Nama Lengkap" name="name" autocomplete="off" class="form-control bg-transparent" value="{{ old('name') }}" /></div>
+								<div class="fv-row mb-8">
 									<!--begin::Email-->
-									<input type="text" placeholder="Email" name="email" autocomplete="off" class="form-control bg-transparent" />
+									<input type="text" placeholder="Email" name="email" autocomplete="off" class="form-control bg-transparent" value="{{ old('email') }}"/>
 									<!--end::Email-->
 								</div>
 								<!--begin::Input group-->
@@ -102,7 +114,7 @@ License: For each use you must have a valid license purchased only from above li
 								<!--end::Input group=-->
 								<div class="fv-row mb-8">
 									<!--begin::Repeat Password-->
-									<input placeholder="Ulangi Password" name="confirm-password" type="password" autocomplete="off" class="form-control bg-transparent" />
+									<input placeholder="Ulangi Password" name="password_confirmation" type="password" autocomplete="off" class="form-control bg-transparent" />
 									<!--end::Repeat Password-->
 								</div>
 								<!--end::Input group=-->
@@ -146,7 +158,6 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="template.demo6/demo6/assets/js/scripts.bundle.js"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="template.demo6/demo6/assets/js/custom/authentication/sign-up/general.js"></script>
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->
 	</body>

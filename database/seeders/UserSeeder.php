@@ -13,9 +13,10 @@ class UserSeeder extends Seeder
      */
         public function run(): void
     {
-        User::create(['nama' => 'admin',           'email' => 'admin@gmail.com',          'status' => 'active', 'hak_akses' => 'admin',           'password' => bcrypt('admin')]);
-        User::create(['nama' => 'staff',           'email' => 'staff@gmail.com',          'status' => 'active', 'hak_akses' => 'staff',           'password' => bcrypt('staff')]);
-        User::create(['nama' => 'customer',        'email' => 'customer@gmail.com',       'status' => 'active', 'hak_akses' => 'customer',        'password' => bcrypt('customer')]);
-        User::create(['nama' => 'Admin Bapperida', 'email' => 'admin@bapperida.go.id',    'status' => 'active', 'hak_akses' => 'admin_bapperida', 'password' => bcrypt('password123')]);
+        User::create(['nama' => 'admin',           'email' => 'admin@gmail.com',          'status' => 'active', 'hak_akses' => 'admin_kecamatan',   'password' => bcrypt('kecamatan123')]);
+        User::create(['nama' => 'staff',           'email' => 'staff@gmail.com',          'status' => 'active', 'hak_akses' => 'penilai',           'password' => bcrypt('penilai123')]);
+        User::create(['nama' => 'customer',        'email' => 'customer@gmail.com',       'status' => 'active', 'hak_akses' => 'peserta',           'password' => bcrypt('peserta123')]);
+        User::create(['nama' => 'Admin Bapperida', 'email' => 'admin@bapperida.go.id',    'status' => 'active', 'hak_akses' => 'admin_bapperida',   'password' => bcrypt('bapperida123')]);
+        User::create(['nama' => 'Admin Bapperida', 'email' => 'admin@opd.go.id',          'status' => 'active', 'hak_akses' => 'admin_opd',         'password' => bcrypt('opd123')]);
     }
 }

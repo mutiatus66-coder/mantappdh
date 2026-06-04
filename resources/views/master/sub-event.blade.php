@@ -20,7 +20,7 @@
 
     @if(session('success'))
     <div class="alert alert-dismissible fade show mb-4" role="alert"
-         style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
+        style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
         <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
@@ -162,7 +162,7 @@
 
             <div class="d-flex justify-content-center mb-3">
                 <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#a32d2d;"></i>
+                    <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-btn-danger);"></i>
                 </div>
             </div>
 
@@ -174,12 +174,12 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusSE" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm px-4">
-                    <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+                    <button type="submit" class="btn btn-danger btn-aksi px-3">
+                        Hapus
                     </button>
                 </form>
             </div>
