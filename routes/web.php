@@ -27,6 +27,7 @@ Route::get('/new-password',   fn() => view('new-password'))    ->name('new-passw
 Route::get('/login',  fn() => view('sign-in'))                 ->name('login');
 Route::post('/login', [AuthController::class, 'login'])        ->name('login.post');
 Route::post('/logout',[AuthController::class, 'logout'])       ->name('logout')->middleware('auth');
+Route::post('/sign-up', [AuthController::class, 'register'])   ->name('register');
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PROTECTED — Wajib login
