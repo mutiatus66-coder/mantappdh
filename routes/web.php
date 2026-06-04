@@ -91,28 +91,25 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/login-as', [UserController::class, 'loginAs']) ->name('login-as');
     });
 
-    // ── Penilai ───────────────────────────────────────────────────────────────
-    Route::prefix('penilai')->name('penilai.')->group(function () {
-        Route::get('/',        [PenilaiController::class, 'index'])   ->name('index');
-        Route::post('/',       [PenilaiController::class, 'store'])   ->name('store');
-        Route::put('/{id}',    [PenilaiController::class, 'update'])  ->name('update');
-        Route::delete('/{id}', [PenilaiController::class, 'destroy']) ->name('destroy');
+    // Hanya admin_bapperida yang boleh kelola penilai
+    Route::middleware(['auth', 'role:admin_bapperida'])->group(function () {
+        Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
+        Route::post('/penilai/assign', [PenilaiController::class, 'assign'])->name('penilai.assign');
     });
 
-    // ── Pengumuman ────────────────────────────────────────────────────────────
-    Route::prefix('pengumuman')->name('pengumuman.')->group(function () {
-        Route::get('/',        [PengumumanController::class, 'index'])   ->name('index');
-        Route::post('/',       [PengumumanController::class, 'store'])   ->name('store');
-        Route::put('/{id}',    [PengumumanController::class, 'update'])  ->name('update');
-        Route::delete('/{id}', [PengumumanController::class, 'destroy']) ->name('destroy');
+    // Hanya admin_bapperida yang boleh CRUD pengumuman
+    Route::middleware(['auth', 'role:admin_bapperida'])->group(function () {
+        Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+        Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+        Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+        Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
     });
 
-    // ── Inovasi ───────────────────────────────────────────────────────────────
-    Route::prefix('inovasi')->name('inovasi.')->group(function () {
-        Route::get('/riwayat',                           [InovasiController::class, 'riwayat'])       ->name('riwayat');
-        Route::get('/rekap-nilai',                       [InovasiController::class, 'rekapNilai'])    ->name('rekapnilai');
-        Route::get('/usulan-riwayat/{subEventId}',       [InovasiController::class, 'usulanRiwayat'])->name('usulan-riwayat');
-        Route::get('/usulan-nilai/{subEventId}',         [InovasiController::class, 'usulanNilai'])  ->name('usulan-nilai');
+    // Riwayat & Rekap Nilai boleh diakses semua role yang sudah login (atau bahkan tamu)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/inovasi/riwayat', [InovasiController::class, 'riwayat'])->name('inovasi.riwayat');
+        Route::get('/inovasi/rekap-nilai', [InovasiController::class, 'rekapNilai'])->name('inovasi.rekapnilai');
+        Route::get('/inovasi/usulan/{subEventId}', [InovasiController::class, 'usulan'])->name('inovasi.usulan');
     });
 
     // ── Penilaian ─────────────────────────────────────────────────────────────
