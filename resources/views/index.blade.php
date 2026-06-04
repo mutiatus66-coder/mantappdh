@@ -18,9 +18,7 @@
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  @push('styles')
   <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
-  @endpush
 
   <script>if (window.top !== window.self) { window.top.location.replace(window.self.location.href); }</script>
   @stack('styles')
@@ -47,7 +45,9 @@
   <div class="d-flex flex-column flex-root">
     <div class="page d-flex flex-row flex-column-fluid">
 
-      <!-- sidebar -->
+      {{-- ══════════════════════════════════════════════════
+           SIDEBAR
+      ══════════════════════════════════════════════════ --}}
       <div id="kt_aside"
         class="aside pb-5 pt-5 pt-lg-0"
         data-kt-drawer="true"
@@ -58,7 +58,7 @@
         data-kt-drawer-direction="start"
         data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 
-        <!-- logo -->
+        {{-- Logo --}}
         <div class="aside-logo" id="kt_aside_logo">
           <a href="/" class="d-flex align-items-center gap-3">
             <img alt="Logo" src="{{ asset('img/bulb.png') }}" class="h-60px logo" />
@@ -69,183 +69,200 @@
           </a>
         </div>
 
-        <!--menu  scroll -->
+        {{-- Menu --}}
         <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
           <nav id="ri-sidebar-nav">
 
-            <a class="ri-menu-item" href="/">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="3" width="7" height="7" rx="1"/>
-                  <rect x="14" y="3" width="7" height="7" rx="1"/>
-                  <rect x="3" y="14" width="7" height="7" rx="1"/>
-                  <rect x="14" y="14" width="7" height="7" rx="1"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Dashboard</span>
-            </a>
+            @auth
+              @php $user = auth()->user(); @endphp
 
-            <div class="ri-divider"></div>
+              {{-- ── Dashboard: semua role ── --}}
+              <a class="ri-menu-item" href="/">
+                <span class="ri-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                  </svg>
+                </span>
+                <span class="ri-menu-label">Dashboard</span>
+              </a>
 
-            <span class="ri-section-label">Master</span>
+              {{-- ── Master: hanya Admin Bapperida ── --}}
+              @if($user->isAdminBapperida())
+                <div class="ri-divider"></div>
+                <span class="ri-section-label">Master</span>
 
-            <a class="ri-menu-item" href="/event">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="4" width="18" height="18" rx="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Event</span>
-            </a>
+                <a class="ri-menu-item" href="/event">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Event</span>
+                </a>
 
-            <a class="ri-menu-item" href="/sub-event">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Sub Event</span>
-            </a>
+                <a class="ri-menu-item" href="/sub-event">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <line x1="8" y1="6" x2="21" y2="6"/>
+                      <line x1="8" y1="12" x2="21" y2="12"/>
+                      <line x1="8" y1="18" x2="21" y2="18"/>
+                      <line x1="3" y1="6" x2="3.01" y2="6"/>
+                      <line x1="3" y1="12" x2="3.01" y2="12"/>
+                      <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Sub Event</span>
+                </a>
 
-            <a class="ri-menu-item" href="/bidang">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/>
-                  <line x1="3" y1="9" x2="21" y2="9"/>
-                  <line x1="3" y1="15" x2="21" y2="15"/>
-                  <line x1="9" y1="3" x2="9" y2="21"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Bidang</span>
-            </a>
+                <a class="ri-menu-item" href="/bidang">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <line x1="3" y1="9" x2="21" y2="9"/>
+                      <line x1="3" y1="15" x2="21" y2="15"/>
+                      <line x1="9" y1="3" x2="9" y2="21"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Bidang</span>
+                </a>
 
-            <a class="ri-menu-item" href="/user">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">User</span>
-            </a>
+                <a class="ri-menu-item" href="/user">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">User</span>
+                </a>
 
-            <a class="ri-menu-item" href="/penilai">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Penilai</span>
-            </a>
+                <a class="ri-menu-item" href="/penilai">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Penilai</span>
+                </a>
 
-            <a class="ri-menu-item" href="/pengumuman">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
-                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Pengumuman</span>
-            </a>
+                <a class="ri-menu-item" href="/pengumuman">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
+                      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Pengumuman</span>
+                </a>
+              @endif
 
-            <div class="ri-divider"></div>
+              {{-- ── Indikator: hanya Admin Bapperida ── --}}
+              @if($user->isAdminBapperida())
+                <div class="ri-divider"></div>
+                <span class="ri-section-label">Indikator</span>
 
-            <span class="ri-section-label">Indikator</span>
+                <a class="ri-menu-item" href="/indikator/tahap-1">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Indikator Tahap 1</span>
+                </a>
 
-            <a class="ri-menu-item" href="/indikator/tahap-1">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Indikator Tahap 1</span>
-            </a>
+                <a class="ri-menu-item" href="/indikator/tahap-2">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <line x1="8" y1="6" x2="21" y2="6"/>
+                      <line x1="8" y1="12" x2="21" y2="12"/>
+                      <line x1="8" y1="18" x2="21" y2="18"/>
+                      <line x1="3" y1="6" x2="3.01" y2="6"/>
+                      <line x1="3" y1="12" x2="3.01" y2="12"/>
+                      <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Indikator Tahap 2</span>
+                </a>
+              @endif
 
-            <a class="ri-menu-item" href="/indikator/tahap-2">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Indikator Tahap 2</span>
-            </a>
+              {{-- ── Inovasi: semua role yang login ── --}}
+              <div class="ri-divider"></div>
+              <span class="ri-section-label">Inovasi</span>
 
-            <div class="ri-divider"></div>
+              <a class="ri-menu-item" href="/inovasi/riwayat">
+                <span class="ri-icon">
+                  <svg viewBox="0 0 24 24">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 .49-4.44"/>
+                  </svg>
+                </span>
+                <span class="ri-menu-label">Riwayat</span>
+              </a>
 
-            <span class="ri-section-label">Inovasi</span>
+              {{-- Rekap Nilai: Admin Bapperida & Penilai --}}
+              @if($user->hasRole(['admin_bapperida', 'penilai']))
+                <a class="ri-menu-item" href="/inovasi/rekap-nilai">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Rekap Nilai</span>
+                </a>
+              @endif
 
-            <a class="ri-menu-item" href="/inovasi/riwayat">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <polyline points="1 4 1 10 7 10"/>
-                  <path d="M3.51 15a9 9 0 1 0 .49-4.44"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Riwayat</span>
-            </a>
+              {{-- ── Penilaian: Admin Bapperida & Penilai ── --}}
+              @if($user->hasRole(['admin_bapperida', 'penilai']))
+                <div class="ri-divider"></div>
+                <span class="ri-section-label">Penilaian</span>
 
-            <a class="ri-menu-item" href="/inovasi/rekap-nilai">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <line x1="18" y1="20" x2="18" y2="10"/>
-                  <line x1="12" y1="20" x2="12" y2="4"/>
-                  <line x1="6" y1="20" x2="6" y2="14"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Rekap Nilai</span>
-            </a>
+                <a class="ri-menu-item" href="/penilaian/tahap-1">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Penilaian Tahap 1</span>
+                </a>
 
-            <div class="ri-divider"></div>
+                <a class="ri-menu-item" href="/penilaian/tahap-2">
+                  <span class="ri-icon">
+                    <svg viewBox="0 0 24 24">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                  </span>
+                  <span class="ri-menu-label">Penilaian Tahap 2</span>
+                </a>
+              @endif
 
-            <span class="ri-section-label">Penilaian</span>
-
-            <a class="ri-menu-item" href="/penilaian/tahap-1">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Penilaian Tahap 1</span>
-            </a>
-
-            <a class="ri-menu-item" href="/penilaian/tahap-2">
-              <span class="ri-icon">
-                <svg viewBox="0 0 24 24">
-                  <line x1="18" y1="20" x2="18" y2="10"/>
-                  <line x1="12" y1="20" x2="12" y2="4"/>
-                  <line x1="6" y1="20" x2="6" y2="14"/>
-                </svg>
-              </span>
-              <span class="ri-menu-label">Penilaian Tahap 2</span>
-            </a>
+            @endauth
 
           </nav>
         </div>
 
       </div>
-      <!-- end sidebar -->
+      {{-- end sidebar --}}
 
-      <!-- wrapper main -->
+      {{-- ══════════════════════════════════════════════════
+           MAIN WRAPPER
+      ══════════════════════════════════════════════════ --}}
       <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-        <!-- header -->
+        {{-- ── Header ── --}}
         <div id="kt_header" class="header align-items-stretch">
           <div class="container-fluid d-flex align-items-stretch justify-content-between">
 
@@ -263,10 +280,10 @@
 
             <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
               <div class="d-flex align-items-stretch" id="kt_header_nav"></div>
-              <p class="mb-0 flex-grow-1 header-welcome-text">..... &nbsp;</p>
+
               <div class="d-flex align-items-stretch flex-shrink-0">
 
-                <!-- ubah tema -->
+                {{-- Ubah tema --}}
                 <div class="d-flex align-items-center ms-1 ms-lg-3">
                   <a href="#"
                     class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
@@ -277,7 +294,7 @@
                     <i class="ki-outline ki-moon theme-dark-show fs-1"></i>
                   </a>
                   <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
-                      data-kt-menu="true" data-kt-element="theme-mode-menu">
+                    data-kt-menu="true" data-kt-element="theme-mode-menu">
                     <div class="menu-item px-3 my-0">
                       <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
                         <span class="menu-icon" data-kt-element="icon"><i class="ki-outline ki-night-day fs-2"></i></span>
@@ -299,7 +316,7 @@
                   </div>
                 </div>
 
-                <!-- menu user -->
+                {{-- Menu user (avatar dropdown) --}}
                 <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                   <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
                     data-kt-menu-trigger="click"
@@ -314,10 +331,15 @@
                           <img alt="Avatar" src="{{ asset('template.demo6/demo6/assets/media/avatars/blank.png') }}" />
                         </div>
                         <div class="d-flex flex-column">
-                          <div class="fw-bold d-flex align-items-center fs-5">Max Smith
-                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
-                          </div>
-                          <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">max@kt.com</a>
+                          @auth
+                            <div class="fw-bold d-flex align-items-center fs-5">
+                              {{ auth()->user()->nama }}
+                              <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
+                                {{ auth()->user()->hak_akses }}
+                              </span>
+                            </div>
+                            <span class="fw-semibold text-muted fs-7">{{ auth()->user()->email }}</span>
+                          @endauth
                         </div>
                       </div>
                     </div>
@@ -330,7 +352,13 @@
                       <a href="#" class="menu-link px-5">Account Settings</a>
                     </div>
                     <div class="menu-item px-5">
-                      <a href="/" class="menu-link px-5">Sign Out</a>
+                      <a href="{{ route('login') }}" class="menu-link px-5"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Sign Out
+                      </a>
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -345,9 +373,9 @@
             </div>
           </div>
         </div>
-        <!-- end header -->
+        {{-- end header --}}
 
-        <!-- toolbar -->
+        {{-- ── Toolbar ── --}}
         <div class="toolbar py-2" id="kt_toolbar">
           <div id="kt_toolbar_container" class="container-fluid d-flex align-items-center">
             <div class="flex-grow-1 flex-shrink-0 me-5">
@@ -359,24 +387,34 @@
             </div>
           </div>
         </div>
-        <!-- end toolbar -->
+        {{-- end toolbar --}}
 
-        <!-- content -->
+        {{-- ── Content ── --}}
         <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
           <div id="kt_content_container" class="container-fluid">
-              @if(!isset($dummy))
-                  <div class="p-6">
-                      <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->nama }}</h2>
-                      <p>Panel Admin Rumah Inovasi Magetan</p>
-                  </div>
+
+            @auth
+              {{-- Tampilkan @yield jika child view punya section 'content', otherwise welcome --}}
+              @if($__env->hasSection('content'))
+                @yield('content')
               @else
-                  @yield('content')
+                <div class="p-6">
+                  <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->nama }}</h2>
+                  <p class="text-muted">Panel Admin Rumah Inovasi Magetan</p>
+                </div>
               @endif
+            @else
+              {{-- Fallback: harusnya tidak terjadi karena route sudah dilindungi auth --}}
+              <div class="p-6">
+                <p class="text-danger">Sesi Anda telah berakhir. <a href="{{ route('login') }}">Login kembali</a>.</p>
+              </div>
+            @endauth
+
           </div>
         </div>
-        <!-- end content -->
+        {{-- end content --}}
 
-        <!-- footer -->
+        {{-- ── Footer ── --}}
         <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
           <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
             <div class="text-gray-900 order-2 order-md-1">
@@ -389,15 +427,15 @@
             </ul>
           </div>
         </div>
-        <!-- end footer -->
+        {{-- end footer --}}
 
       </div>
-      <!-- end main wrapper -->
+      {{-- end main wrapper --}}
 
     </div>
   </div>
 
-  <!-- drawer -->
+  {{-- Drawer Activity Logs --}}
   <div id="kt_activities" class="bg-body"
     data-kt-drawer="true" data-kt-drawer-name="activities" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
@@ -431,7 +469,7 @@
     <i class="ki-outline ki-arrow-up"></i>
   </div>
 
-  <!-- JS bundles -->
+  {{-- JS Bundles --}}
   <script>var hostUrl = "{{ asset('template.demo6/demo6/assets/') }}";</script>
   <script src="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/scripts.bundle.js') }}"></script>
@@ -456,21 +494,21 @@
   <script src="{{ asset('template.demo6/demo6/assets/js/custom/utilities/modals/users-search.js') }}"></script>
 
   <script>
+    // ── Theme switcher highlight ──────────────────────────────────────────────
     (function () {
-  function updateThemeMenuHighlight() {
-    var stored = localStorage.getItem("data-bs-theme") || "light";
-    document.querySelectorAll('[data-kt-element="mode"]').forEach(function (el) {
-      var val = el.getAttribute("data-kt-value");
-      el.classList.toggle("active", val === stored);
-    });
-  }
-  document.addEventListener("DOMContentLoaded", updateThemeMenuHighlight);
-  document.addEventListener("click", function (e) {
-    var el = e.target.closest('[data-kt-element="mode"]');
-    if (!el) return;
-    setTimeout(updateThemeMenuHighlight, 50);
-  });
-})();
+      function updateThemeMenuHighlight() {
+        var stored = localStorage.getItem("data-bs-theme") || "light";
+        document.querySelectorAll('[data-kt-element="mode"]').forEach(function (el) {
+          el.classList.toggle("active", el.getAttribute("data-kt-value") === stored);
+        });
+      }
+      document.addEventListener("DOMContentLoaded", updateThemeMenuHighlight);
+      document.addEventListener("click", function (e) {
+        if (e.target.closest('[data-kt-element="mode"]')) setTimeout(updateThemeMenuHighlight, 50);
+      });
+    })();
+
+    // ── Sidebar active state ──────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
       var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
       document.querySelectorAll('#ri-sidebar-nav a.ri-menu-item').forEach(function (link) {
@@ -484,6 +522,7 @@
       });
     });
 
+    // ── Background warna per tema ─────────────────────────────────────────────
     (function () {
       var lightBg = '#F9FBFF';
       var darkBg  = '#1C2333';
@@ -497,8 +536,7 @@
       }
       applyBg();
       new MutationObserver(applyBg).observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-bs-theme']
+        attributes: true, attributeFilter: ['data-bs-theme']
       });
     })();
   </script>
