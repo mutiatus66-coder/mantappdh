@@ -135,7 +135,7 @@
               <input type="number" name="nilai_inovasi" id="inputNilaiInovasi"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 
@@ -146,7 +146,7 @@
               <input type="number" name="nilai_peragaan" id="inputNilaiPeragaan"
                      class="form-control" placeholder="0" min="1" max="100"
                      required oninput="hitungTotal()">
-              <span class="icon-badge" style="background:#16a34a;">%</span>
+              <span class="icon-badge" style="background:#dedede;">%</span>
             </div>
           </div>
 

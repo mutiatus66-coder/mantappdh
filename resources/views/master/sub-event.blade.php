@@ -174,11 +174,13 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Batal</button>
                 <form id="formHapusSE" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm px-4">Hapus</button>
+                    <button type="submit" class="btn btn-danger btn-sm px-4">
+                    <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+                    </button>
                 </form>
             </div>
 
