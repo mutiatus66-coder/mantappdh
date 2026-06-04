@@ -15,7 +15,7 @@ use App\Http\Controllers\IndikatorController;
 // ══════════════════════════════════════════════════════════════════════════════
 // PUBLIK — Tidak perlu login
 // ══════════════════════════════════════════════════════════════════════════════
-
+Route::get('/',           fn() => view('dashboard'))->name('landing');
 Route::get('/login',          fn() => view('sign-in'))->name('login');
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
 Route::get('/sign-in',        fn() => view('sign-in'))->name('sign-in');
@@ -46,7 +46,6 @@ Route::get('/dev-login-admin', function () {
 Route::middleware(['auth'])->group(function () {
 
     // ── Dashboard ─────────────────────────────────────────────────────────────
-    Route::get('/',      fn() => view('dashboard'))->name('dashboard');
     Route::get('/index', fn() => view('index'))->name('index');
 
     // ── Admin ─────────────────────────────────────────────────────────────────
