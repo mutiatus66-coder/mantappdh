@@ -26,14 +26,6 @@
     </div>
     @endif
 
-    @if(session('error'))
-    <div class="alert alert-dismissible fade show mb-4" role="alert"
-         style="background:rgba(163,45,45,0.1); border:1px solid rgba(163,45,45,0.3); color:#A32D2D;">
-        <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
     <div class="sub-event-stats">
         <div class="total-badge">
             Total Sub Event: <span id="totalSubEvent">{{ $subEvents->count() }}</span>
@@ -65,8 +57,8 @@
                     <td>{{ $item->event->nama_event ?? '-' }}</td>
                     <td>{{ $item->sub_event }}</td>
                     <td><span class="badge-kategori">{{ $item->kategori ?? '-' }}</span></td>
-                    <td>{{ $item->mulai ? $item->mulai->format('Y-m-d') : '-' }}</td>
-                    <td>{{ $item->berakhir ? $item->berakhir->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $item->mulai }}</td>
+                    <td>{{ $item->berakhir }}</td>
                     <td style="text-align:center;">
                         <div class="btn-aksi-wrap">
                             <button class="btn btn-warning btn-edit-se btn-aksi"
@@ -74,9 +66,9 @@
                                     data-tahun="{{ $item->tahun }}"
                                     data-event-id="{{ $item->event_id }}"
                                     data-sub-event="{{ $item->sub_event }}"
-                                    data-kategori="{{ $item->kategori ?? '' }}"
-                                    data-mulai="{{ $item->mulai ? $item->mulai->format('Y-m-d') : '' }}"
-                                    data-berakhir="{{ $item->berakhir ? $item->berakhir->format('Y-m-d') : '' }}">
+                                    data-kategori="{{ $item->kategori }}"
+                                    data-mulai="{{ $item->mulai }}"
+                                    data-berakhir="{{ $item->berakhir }}">
                                 Ubah
                             </button>
                             <button class="btn btn-danger btn-hapus-se btn-aksi"
@@ -170,7 +162,7 @@
 
             <div class="d-flex justify-content-center mb-3">
                 <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-btn-danger);"></i>
+                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#a32d2d;"></i>
                 </div>
             </div>
 
@@ -238,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-edit-se').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('modalSETitle').textContent  = 'Ubah Sub Event';
-            document.getElementById('formSubEvent').action       = `/master/sub-event/${this.dataset.id}`;
+            document.getElementById('formSubEvent').action       = `/sub-event/${this.dataset.id}`;
             document.getElementById('formSEMethod').value        = 'PUT';
             document.getElementById('seTahun').value             = this.dataset.tahun;
             document.getElementById('seSubEvent').value          = this.dataset.subEvent;

@@ -3,30 +3,42 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SubEvent extends Model
 {
     protected $table = 'sub_events';
 
     protected $fillable = [
-        'event_id', 'tahun', 'sub_event', 'kategori', 'mulai', 'berakhir',
+        'event_id',
+        'tahun',
+        'sub_event',
+        'kategori',
+        'mulai',
+        'berakhir',
     ];
 
-    protected $casts = [
-        'mulai'    => 'date',
-        'berakhir' => 'date',
-        'tahun'    => 'integer',
-    ];
-
-    public function event(): BelongsTo
+    public function event()
     {
         return $this->belongsTo(Event::class);
     }
 
-    public function bidangs(): HasMany
+    public function indikators()
     {
-        return $this->hasMany(Bidang::class);
+        return $this->hasMany(Indikator::class);
+    }
+
+    public function indikatorTahap2()
+    {
+        return $this->hasMany(IndikatorTahap2::class);
+    }
+
+    public function formulasiTahap1()
+    {
+        return $this->hasOne(FormulasiTahap1::class);
+    }
+
+    public function formulasiTahap2()
+    {
+        return $this->hasOne(FormulasiTahap2::class);
     }
 }

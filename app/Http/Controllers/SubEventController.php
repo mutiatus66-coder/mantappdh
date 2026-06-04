@@ -2,69 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\SubEvent;
-use Illuminate\Http\Request;
 
 class SubEventController extends Controller
 {
+    // ── INDEX ─────────────────────────────────────────────────
     public function index()
     {
-        $subEvents = SubEvent::with('event')
-            ->orderBy('tahun', 'desc')
-            ->orderBy('sub_event', 'asc')
-            ->get();
-        $events = Event::orderBy('nama_event', 'asc')->get();
-
+        $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
+        $events    = Event::all();
         return view('master.sub-event', compact('subEvents', 'events'));
     }
 
+    // ── STORE ─────────────────────────────────────────────────
     public function store(Request $request)
     {
         $request->validate([
-            'event_id'  => 'required|exists:events,id',
-            'tahun'     => 'required|digits:4|integer',
+            'event_id'  => 'required|integer|exists:events,id',
+            'tahun'     => 'required|digits:4',
             'sub_event' => 'required|string|max:255',
-            'kategori'  => 'nullable|string|max:255',
             'mulai'     => 'required|date',
             'berakhir'  => 'required|date|after_or_equal:mulai',
         ]);
 
-        SubEvent::create($request->only('event_id', 'tahun', 'sub_event', 'kategori', 'mulai', 'berakhir'));
+        SubEvent::create([
+            'event_id'  => $request->event_id,
+            'tahun'     => $request->tahun,
+            'sub_event' => $request->sub_event,
+            'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
+            'mulai'     => $request->mulai,
+            'berakhir'  => $request->berakhir,
+        ]);
 
         return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil ditambahkan.');
     }
 
-    public function edit(SubEvent $subEvent)
+    // ── EDIT (JSON untuk modal) ───────────────────────────────
+    public function edit(int $id)
     {
-        return response()->json($subEvent);
+        $item = SubEvent::findOrFail($id);
+        return response()->json($item);
     }
 
-    public function update(Request $request, SubEvent $subEvent)
+    // ── UPDATE ────────────────────────────────────────────────
+    public function update(Request $request, int $id)
     {
         $request->validate([
-            'event_id'  => 'required|exists:events,id',
-            'tahun'     => 'required|digits:4|integer',
+            'event_id'  => 'required|integer|exists:events,id',
+            'tahun'     => 'required|digits:4',
             'sub_event' => 'required|string|max:255',
-            'kategori'  => 'nullable|string|max:255',
             'mulai'     => 'required|date',
             'berakhir'  => 'required|date|after_or_equal:mulai',
         ]);
 
-        $subEvent->update($request->only('event_id', 'tahun', 'sub_event', 'kategori', 'mulai', 'berakhir'));
+        SubEvent::findOrFail($id)->update([
+            'event_id'  => $request->event_id,
+            'tahun'     => $request->tahun,
+            'sub_event' => $request->sub_event,
+            'kategori'  => $request->kategori ?? 'SEMUA BIDANG',
+            'mulai'     => $request->mulai,
+            'berakhir'  => $request->berakhir,
+        ]);
 
         return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil diperbarui.');
     }
 
-    public function destroy(SubEvent $subEvent)
+    // ── DESTROY ───────────────────────────────────────────────
+    public function destroy(int $id)
     {
-
-        if ($subEvent->bidangs()->exists()) {
-            return redirect()->back()->with('error', 'Sub Event tidak dapat dihapus karena masih memiliki Bidang.');
-        }
-
-        SubEvent::destroy($subEvent->id);
-
+        SubEvent::findOrFail($id)->delete();
         return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
     }
 }

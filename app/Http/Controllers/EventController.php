@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Event as EventModel;
-
+use App\Models\Event;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $events = EventModel::query()->orderBy('jenis', 'asc')->orderBy('nama_event', 'asc')->get();
+        $events = Event::all();
         return view('master.event', compact('events'));
     }
 
@@ -23,36 +20,32 @@ class EventController extends Controller
             'jenis'      => 'required|in:INOTEK,INODA',
         ]);
 
-        Event::create($request->only('nama_event', 'jenis'));
+        Event::create([
+            'nama_event' => $request->nama_event,
+            'jenis'      => $request->jenis,
+        ]);
 
         return redirect()->back()->with('success', 'Event berhasil ditambahkan!');
     }
 
-    public function edit(Event $event)
-    {
-        return response()->json($event);
-    }
-
-    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'nama_event' => 'required|string|max:255',
             'jenis'      => 'required|in:INOTEK,INODA',
         ]);
 
-        $event->update($request->only('nama_event', 'jenis'));
+        Event::findOrFail($id)->update([
+            'nama_event' => $request->nama_event,
+            'jenis'      => $request->jenis,
+        ]);
 
         return redirect()->back()->with('success', 'Event berhasil diperbarui!');
     }
 
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        if ($event->subEvents()->exists()) {
-            return redirect()->back()->with('error', 'Event tidak dapat dihapus karena masih memiliki Sub Event.');
-        }
-
-        Event::destroy($event->id);
-
+        Event::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Event berhasil dihapus.');
     }
 }
