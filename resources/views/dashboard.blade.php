@@ -282,11 +282,11 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
 
                     <div class="d-none d-lg-block" id="kt_header_nav_wrapper">
                         <div class="menu menu-lg-row fw-semibold fs-6" id="kt_landing_menu">
-                            <div class="menu-item"><a class="menu-link nav-link" href="#achievements">Kekayaan Intelektual</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="#team">KKN Award</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="#portfolio">Jurnal Inovasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="#dokumentasi">Dokumentasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="pengumuman">Pengumuman</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="achievements">Kekayaan Intelektual</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="team">KKN Award</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="portfolio">Jurnal Inovasi</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="dokumentasi">Dokumentasi</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="pengumuman-luar">Pengumuman</a></div>
                         </div>
                     </div>
 
