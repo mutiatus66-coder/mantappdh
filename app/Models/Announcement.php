@@ -4,21 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Announcement extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'slug', 'content', 'publish_date', 'is_active'];
+    protected $casts = ['publish_date' => 'date'];
 
-    protected $casts = [
-        'publish_date' => 'date',
-    ];
-
-    public static function boot()
+    protected static function booted()
     {
-        parent::boot();
         static::creating(function ($announcement) {
-            $announcement->slug = \Str::slug($announcement->title);
+            $announcement->slug = Str::slug($announcement->title);
         });
     }
 }

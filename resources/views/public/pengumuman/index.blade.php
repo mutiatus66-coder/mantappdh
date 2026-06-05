@@ -10,16 +10,18 @@
         </div>
     </div>
     <div class="row">
-        @forelse($announcements as $item)
+        @forelse($pengumuman as $item)
         <div class="col-md-4 mb-4">
             <div class="card h-100 border-0 shadow-sm rounded-0">
                 <div class="card-body">
                     <div class="text-muted small mb-2">
-                        <i class="ki-outline ki-calendar"></i> {{ $item->publish_date->format('d M Y') }}
+                        {{ $item->created_at->format('d M Y') }}
                     </div>
-                    <h5 class="card-title fw-bold">{{ $item->title }}</h5>
-                    <p class="card-text text-muted">{{ Str::limit(strip_tags($item->content), 100) }}</p>
-                    <a href="{{ route('public.announcements.show', $item->slug) }}" class="btn btn-link ps-0 text-primary fw-semibold text-decoration-none">
+                    <h5 class="card-title fw-bold">{{ $item->judul }}</h5>
+                    <p class="card-text text-muted">
+                        {{ Str::limit(strip_tags($item->deskripsi), 100) }}
+                    </p>
+                    <a href="{{ route('public.pengumuman.show', $item->id) }}" class="btn btn-link ps-0 text-primary fw-semibold text-decoration-none">
                         Read More →
                     </a>
                 </div>
@@ -33,7 +35,7 @@
     </div>
     <div class="row mt-4">
         <div class="col-12 d-flex justify-content-center">
-            {{ $announcements->links() }}
+            {{ $pengumuman->links() }}
         </div>
     </div>
 </div>
