@@ -12,8 +12,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
-use App\Http\Controllers\PublicAnnouncementController;
-use App\Http\Controllers\PublicPengumumanController;
+use App\Http\Controllers\PengumumanLuarController;
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PUBLIK — Tidak perlu login
@@ -99,9 +98,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
 
-    Route::get('/pengumuman-luar', [PublicPengumumanController::class, 'index'])->name('public.pengumuman.index');
-    Route::get('/pengumuman-luar/{id}', [PublicPengumumanController::class, 'show'])->name('public.pengumuman.show');
-    // Route::get('/pengumuman-luar', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
+    Route::get('/pengumuman-luar', [PengumumanLuarController::class, 'index'])->name('pengumuman_luar.index');
+    Route::get('/pengumuman-luar/{id}', [PengumumanLuarController::class, 'show'])->name('pengumuman_luar.show');    // Route::get('/pengumuman-luar', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
     // Route::get('/pengumuman-luar/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
 
     // ── Inovasi ───────────────────────────────────────────────────────────────

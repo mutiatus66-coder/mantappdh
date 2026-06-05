@@ -18,7 +18,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
     <link href="template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <style>
-        {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -260,7 +260,6 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
             color: #2563eb;
             display: block;
         }
-
     </style>
     <script>if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 </head>
@@ -282,11 +281,11 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
 
                     <div class="d-none d-lg-block" id="kt_header_nav_wrapper">
                         <div class="menu menu-lg-row fw-semibold fs-6" id="kt_landing_menu">
-                            <div class="menu-item"><a class="menu-link nav-link" href="achievements">Kekayaan Intelektual</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="team">KKN Award</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="portfolio">Jurnal Inovasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="dokumentasi">Dokumentasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="pengumuman-luar">Pengumuman</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="#">Kekayaan Intelektual</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="#">KKN Award</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="#">Jurnal Inovasi</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="#">Dokumentasi</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="/pengumuman">Pengumuman</a></div>
                         </div>
                     </div>
 
@@ -300,7 +299,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="#">KKN Award</a></div>
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Jurnal Inovasi</a></div>
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Dokumentasi</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Pengumuman</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="/pengumuman">Pengumuman</a></div>
                                 </div>
                             </div>
                         </div>
@@ -328,6 +327,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                 </div>
             </div>
         </div>
+
         <div class="footer">
             <div class="container">
                 <p>&copy; Copyright <strong>Dinas Kominfo.</strong> All rights reserved.</p>
