@@ -88,12 +88,15 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Hanya admin_bapperida yang boleh CRUD pengumuman
-    Route::middleware(['auth', 'role:admin_bapperida'])->group(function () {
-        Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
-        Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
-        Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
-        Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
-    });
+    Route::middleware(['hak_akses:admin_bapperida'])->group(function () {
+    Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
+    Route::post('/penilai/assign', [PenilaiController::class, 'assign'])->name('penilai.assign');
+
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+    Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+    Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+});
 
     // Riwayat & Rekap Nilai boleh diakses semua role yang sudah login (atau bahkan tamu)
     Route::middleware(['auth'])->group(function () {
@@ -161,5 +164,5 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-}); // end middleware auth
+});
 });
