@@ -1,4 +1,4 @@
-@extends('index', ['dummy' => true])
+@extends('index')
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
