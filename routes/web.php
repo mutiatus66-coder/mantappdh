@@ -28,6 +28,10 @@ Route::post('/login', [AuthController::class, 'login'])       ->name('login.post
 Route::post('/logout',[AuthController::class, 'logout'])      ->name('logout')->middleware('auth');
 Route::post('/sign-up', [AuthController::class, 'register'])  ->name('register');
 
+// pengumuman untuk publik
+Route::get('/pengumuman-luar', [BuletinController::class, 'index'])->name('public.pengumuman.index');
+Route::get('/pengumuman-luar/{id}', [BuletinController::class, 'show'])->name('public.pengumuman.show');
+
 // ══════════════════════════════════════════════════════════════════════════════
 // PROTECTED — Wajib login
 // ══════════════════════════════════════════════════════════════════════════════
@@ -97,9 +101,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
 
-    // pengumuman untuk publik
-    Route::get('/pengumuman-luar', [BuletinController::class, 'index'])->name('public.pengumuman.index');
-    Route::get('/pengumuman-luar/{id}', [BuletinController::class, 'show'])->name('public.pengumuman.show');
 
     // ── Inovasi ───────────────────────────────────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
@@ -151,4 +152,4 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-}); // end middleware auth
+});
