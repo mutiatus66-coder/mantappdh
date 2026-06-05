@@ -56,12 +56,6 @@
                                     data-status="{{ $item->status }}">
                                 Ubah
                             </button>
-                            <button class="btn btn-danger btn-aksi btn-hapus-user"
-                                    data-id="{{ $item->id }}"
-                                    data-nama="{{ $item->nama }}"
-                                    data-url="{{ route('user.destroy', $item->id) }}">
-                                Hapus
-                            </button>
                             <a href="{{ route('user.login-as', $item->id) }}"
                                class="btn btn-success btn-aksi">
                                 Login As
@@ -118,6 +112,7 @@
                                 <option value="" disabled selected>-- Pilih Hak Akses --</option>
                                 <option value="admin">Admin</option>
                                 <option value="user">User</option>
+                                <option value="penilai">Penilai</option>
                             </select>
                         </div>
                         <div class="col-md-12 mb-4">
@@ -147,38 +142,6 @@
                     <button type="submit" class="btn btn-success px-4">Simpan</button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-
-{{-- ══ MODAL — Konfirmasi Hapus User ══ --}}
-<div class="modal fade" id="modalHapusUser" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
-
-            <div class="d-flex justify-content-center mb-3">
-                <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#A32D2D;"></i>
-                </div>
-            </div>
-
-            <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
-            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:#6b7280;">
-                Tindakan ini tidak dapat dibatalkan. Data user
-                <strong id="namaUserHapus" class="hapus-nama-strong"></strong>
-                akan dihapus secara permanen.
-            </p>
-
-            <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                <form id="formHapusUser" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm px-4">Hapus</button>
-                </form>
-            </div>
-
         </div>
     </div>
 </div>
