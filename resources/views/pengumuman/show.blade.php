@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', $announcement->title)
+@section('title', $buletin->title)
 
 @section('content')
 <div class="container py-5">
@@ -11,16 +11,16 @@
                     <div class="text-uppercase small text-primary fw-bold mb-2">
                         BAPPERIDA KABUPATEN MAGETAN
                     </div>
-                    <h1 class="display-6 fw-bold">{{ $announcement->title }}</h1>
+                    <h1 class="display-6 fw-bold">{{ $buletin->title }}</h1>
                     <div class="text-muted mt-2">
-                        {{ $announcement->publish_date->translatedFormat('d F Y') }}
+                        {{ $buletin->publish_date->translatedFormat('d F Y') }}
                     </div>
                 </div>
                 <div class="content" style="font-size: 1.05rem; line-height: 1.7;">
-                    {!! $announcement->content !!}
+                    {!! $buletin->content !!}
                 </div>
                 <div class="mt-5">
-                    <a href="{{ route('public.announcements.index') }}" class="btn btn-outline-secondary rounded-0">
+                    <a href="{{ route('public.buletin.index') }}" class="btn btn-outline-secondary rounded-0">
                         ← Kembali
                     </a>
                 </div>

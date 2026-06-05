@@ -71,7 +71,7 @@
                             <div class="menu-item"><a class="menu-link nav-link" href="/#team">KKN Award</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="/#portfolio">Jurnal Inovasi</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="/#dokumentasi">Dokumentasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="{{ route('public.announcements.index') }}">Pengumuman</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="{{ route('public.pengumuman.index') }}">Pengumuman</a></div>
                         </div>
                     </div>
 
@@ -85,7 +85,7 @@
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="/#team">KKN Award</a></div>
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="/#portfolio">Jurnal Inovasi</a></div>
                                     <div class="menu-item"><a class="menu-link nav-link py-3" href="/#dokumentasi">Dokumentasi</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="{{ route('public.announcements.index') }}">Pengumuman</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="{{ route('public.pengumuman.index') }}">Pengumuman</a></div>
                                 </div>
                             </div>
                         </div>
