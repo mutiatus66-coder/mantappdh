@@ -123,7 +123,8 @@
                                                         data-nama="{{ $bidang->nama }}"
                                                         data-status="{{ $bidang->status }}"
                                                         data-sub-event-id="{{ $se->id }}"
-                                                        data-sub-event-nama="{{ $se->sub_event }}">
+                                                        data-sub-event-nama="{{ $se->sub_event }}"
+                                                        data-url="{{ route('bidang.update', $bidang->id) }}">
                                                     Ubah
                                                 </button>
                                                 <button class="btn btn-danger btn-hapus-bidang btn-aksi"
@@ -216,7 +217,7 @@
 
                 <div class="modal-footer px-5 py-3">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success px-4">Simpan</button>
+                    <button type="button" id="btnSimpanBidang" class="btn btn-success px-4">Simpan</button>
                 </div>
             </form>
         </div>
@@ -247,7 +248,7 @@
                 <form id="formHapusBidang" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Hapus</button>
+                    <button type="button" id="btnHapusBidang" class="btn btn-danger">Hapus</button>
                 </form>
             </div>
 
@@ -261,60 +262,225 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl  = "{{ route('bidang.store') }}";
-    const updateUrl = "{{ url('master/bidang') }}";
+    const storeUrl = "{{ route('bidang.store') }}";
+    const CSRF     = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // ── Reset modal ke state Tambah saat ditutup ──
-    document.getElementById('modalBidang').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formBidang').action              = storeUrl;
+    // ── Helper: kirim request AJAX ──
+    async function sendRequest(url, method, data) {
+        const res = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': CSRF,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        return res.json();
+    }
+
+    // ── Helper: toast notifikasi ──
+    function toast(msg, type = 'success') {
+        const el = document.createElement('div');
+        el.className = `alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4`;
+        el.style.cssText = `z-index:9999; min-width:280px; background:${type === 'success' ? 'rgba(0,172,193,0.15)' : 'rgba(163,45,45,0.12)'}; border:1px solid ${type === 'success' ? 'rgba(0,172,193,0.4)' : 'rgba(163,45,45,0.3)'}; color:${type === 'success' ? '#006064' : '#A32D2D'};`;
+        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>${msg}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+
+    // ── Helper: update baris tabel tanpa reload ──
+    function updateRow(id, nama, status) {
+        const rows = document.querySelectorAll('.btn-ubah-bidang');
+        rows.forEach(btn => {
+            if (btn.dataset.id == id) {
+                const tr = btn.closest('tr');
+                // Update nama
+                tr.cells[1].textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
+                // Update status badge
+                tr.cells[2].innerHTML = status === 'aktif'
+                    ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+                    : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
+                // Update data-attribute tombol
+                btn.dataset.nama   = nama;
+                btn.dataset.status = status;
+            }
+        });
+    }
+
+    // ── Helper: tambah baris baru ke tabel ──
+    function appendRow(bidang, subEventId) {
+        const tbody = document.querySelector(`#collapse-${subEventId} tbody`);
+        if (!tbody) return;
+
+        // Hapus baris "belum ada data" jika ada
+        const emptyRow = tbody.querySelector('.empty-row');
+        if (emptyRow) emptyRow.closest('tr').remove();
+
+        const rowCount = tbody.querySelectorAll('tr').length + 1;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="text-center">${rowCount}</td>
+            <td>${bidang.nama.charAt(0).toUpperCase() + bidang.nama.slice(1)}</td>
+            <td class="text-center">
+                ${bidang.status === 'aktif'
+                    ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+                    : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`}
+            </td>
+            <td class="text-center">
+                <div class="btn-aksi-wrap">
+                    <button class="btn btn-warning btn-ubah-bidang btn-aksi"
+                            data-id="${bidang.id}"
+                            data-nama="${bidang.nama}"
+                            data-status="${bidang.status}"
+                            data-sub-event-id="${subEventId}"
+                            data-sub-event-nama="${bidang.sub_event_nama ?? ''}"
+                            data-url="${bidang.update_url}">
+                        Ubah
+                    </button>
+                    <button class="btn btn-danger btn-hapus-bidang btn-aksi"
+                            data-id="${bidang.id}"
+                            data-nama="${bidang.nama}"
+                            data-url="${bidang.destroy_url}">
+                        Hapus
+                    </button>
+                </div>
+            </td>`;
+        tbody.appendChild(tr);
+
+        // Re-attach event listener pada tombol baru
+        tr.querySelector('.btn-ubah-bidang').addEventListener('click', handleUbah);
+        tr.querySelector('.btn-hapus-bidang').addEventListener('click', handleHapus);
+    }
+
+    // ── Reset modal ──
+    function resetModal() {
         document.getElementById('formBidangMethod').value         = 'POST';
         document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
         document.getElementById('bidangNama').value               = '';
         document.getElementById('bidangSubEventId').value         = '';
         document.getElementById('bidangSubEventNama').textContent = '';
         document.getElementById('statusAktifBidang').checked      = true;
-    });
+        document.getElementById('btnSimpanBidang').disabled       = false;
+        document.getElementById('btnSimpanBidang').textContent    = 'Simpan';
+    }
+
+    document.getElementById('modalBidang').addEventListener('hidden.bs.modal', resetModal);
 
     // ── Tambah Bidang ──
     document.querySelectorAll('.btn-tambah-bidang').forEach(btn => {
         btn.addEventListener('click', function () {
+            resetModal();
             document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
             document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
-            document.getElementById('formBidang').action              = storeUrl;
-            document.getElementById('formBidangMethod').value         = 'POST';
-            document.getElementById('bidangNama').value               = '';
-            document.getElementById('statusAktifBidang').checked      = true;
             new bootstrap.Modal(document.getElementById('modalBidang')).show();
         });
     });
 
-    // ── Ubah Bidang ──
+    // ── Handler Ubah (bisa dipanggil ulang untuk baris baru) ──
+    function handleUbah() {
+        resetModal();
+        document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
+        document.getElementById('formBidangMethod').value         = 'PUT';
+        document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
+        document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
+        document.getElementById('bidangNama').value               = this.dataset.nama;
+        document.getElementById('btnSimpanBidang').dataset.updateId  = this.dataset.id;
+        document.getElementById('btnSimpanBidang').dataset.updateUrl = this.dataset.url;
+
+        const radioId = this.dataset.status === 'tidak_aktif'
+            ? 'statusNonaktifBidang' : 'statusAktifBidang';
+        document.getElementById(radioId).checked = true;
+
+        new bootstrap.Modal(document.getElementById('modalBidang')).show();
+    }
+
     document.querySelectorAll('.btn-ubah-bidang').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
-            document.getElementById('formBidang').action              = `${updateUrl}/${this.dataset.id}`;
-            document.getElementById('formBidangMethod').value         = 'PUT';
-            document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
-            document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
-            document.getElementById('bidangNama').value               = this.dataset.nama;
-
-            const radioId = this.dataset.status === 'tidak_aktif'
-                ? 'statusNonaktifBidang'
-                : 'statusAktifBidang';
-            document.getElementById(radioId).checked = true;
-
-            new bootstrap.Modal(document.getElementById('modalBidang')).show();
-        });
+        btn.addEventListener('click', handleUbah);
     });
 
-    // ── Hapus Bidang ──
+    // ── Submit AJAX (Tambah & Ubah) ──
+    document.getElementById('btnSimpanBidang').addEventListener('click', async function () {
+        const method    = document.getElementById('formBidangMethod').value;
+        const nama      = document.getElementById('bidangNama').value.trim();
+        const status    = document.querySelector('input[name="status"]:checked').value;
+        const subEventId = document.getElementById('bidangSubEventId').value;
+
+        if (!nama) {
+            document.getElementById('bidangNama').focus();
+            return;
+        }
+
+        this.disabled     = true;
+        this.textContent  = 'Menyimpan...';
+
+        try {
+            const url  = method === 'PUT' ? this.dataset.updateUrl : storeUrl;
+            const data = { nama, status, sub_event_id: subEventId, _method: method };
+            const res  = await sendRequest(url, 'POST', data);
+
+            if (res.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalBidang')).hide();
+                toast(method === 'PUT' ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
+
+                if (method === 'PUT') {
+                    updateRow(this.dataset.updateId, nama, status);
+                } else {
+                    appendRow(res.bidang, subEventId);
+                }
+            } else {
+                toast(res.message ?? 'Gagal menyimpan data.', 'error');
+                this.disabled    = false;
+                this.textContent = 'Simpan';
+            }
+        } catch {
+            toast('Terjadi kesalahan.', 'error');
+            this.disabled    = false;
+            this.textContent = 'Simpan';
+        }
+    });
+
+    // ── Handler Hapus ──
+    function handleHapus() {
+        document.getElementById('namaBidangHapus').textContent  = this.dataset.nama;
+        document.getElementById('formHapusBidang').dataset.id   = this.dataset.id;
+        document.getElementById('formHapusBidang').dataset.url  = this.dataset.url;
+        document.getElementById('formHapusBidang').dataset.nama = this.dataset.nama;
+        new bootstrap.Modal(document.getElementById('modalHapusBidang')).show();
+    }
+
     document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('namaBidangHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusBidang').action      = this.dataset.url;
-            new bootstrap.Modal(document.getElementById('modalHapusBidang')).show();
-        });
+        btn.addEventListener('click', handleHapus);
+    });
+
+    // ── Submit Hapus AJAX ──
+    document.getElementById('btnHapusBidang').addEventListener('click', async function () {
+        const url  = document.getElementById('formHapusBidang').dataset.url;
+        const id   = document.getElementById('formHapusBidang').dataset.id;
+        const nama = document.getElementById('formHapusBidang').dataset.nama;
+
+        this.disabled    = true;
+        this.textContent = 'Menghapus...';
+
+        try {
+            const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
+            if (res.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalHapusBidang')).hide();
+                toast(`Bidang "${nama}" berhasil dihapus!`);
+                // Hapus baris dari tabel
+                document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
+                    if (btn.dataset.id == id) btn.closest('tr').remove();
+                });
+            } else {
+                toast(res.message ?? 'Gagal menghapus data.', 'error');
+            }
+        } catch {
+            toast('Terjadi kesalahan.', 'error');
+        }
+
+        this.disabled    = false;
+        this.textContent = 'Hapus';
     });
 
 });

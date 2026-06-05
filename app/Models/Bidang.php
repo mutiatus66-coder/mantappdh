@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bidang extends Model
 {
+    
     protected $table = 'bidangs';
 
     protected $fillable = ['sub_event_id', 'nama', 'status'];
@@ -14,5 +15,7 @@ class Bidang extends Model
     public function subEvent(): BelongsTo
     {
         return $this->belongsTo(SubEvent::class);
+        
     }
+    
 }

@@ -10,6 +10,7 @@
   <meta property="og:title" content="Rumah Inovasi Magetan - Panel Admin" />
   <meta property="og:url" content="https://rumahinovasi.com/admin" />
   <meta property="og:site_name" content="Rumah Inovasi Magetan" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="shortcut icon" href="{{ asset('template.demo6/demo6/assets/media/logos/mgt.png') }}" />
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
