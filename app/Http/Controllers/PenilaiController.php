@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Penilai;
+use App\Models\User;
 
 class PenilaiController extends Controller
 {
     public function index()
     {
-        $penilai = Penilai::orderBy('nama')->get();
+        $penilai = User::where('hak_akses', 'penilai')->orderBy('nama')->get();
         return view('master.penilai', compact('penilai'));
     }
 
@@ -17,27 +17,32 @@ class PenilaiController extends Controller
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email',
+            'email' => 'required|email|unique:users,email',
         ]);
 
-        Penilai::create([
-            'nama'  => $request->nama,
-            'email' => $request->email,
+        User::create([
+            'nama'      => $request->nama,
+            'name'      => $request->nama,
+            'email'     => $request->email,
+            'hak_akses' => 'penilai',
+            'status'    => 'active',
+            'password'  => bcrypt('password123'), // password default
         ]);
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil ditambahkan');
+                         ->with('success', 'Penilai berhasil ditambahkan. Password default: password123');
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
         ]);
 
-        Penilai::findOrFail($id)->update([
-            'nama'  => $request->nama,
+        User::findOrFail($id)->update([
+            'nama' => $request->nama,
+            'name' => $request->nama,
             'email' => $request->email,
         ]);
 
@@ -47,7 +52,7 @@ class PenilaiController extends Controller
 
     public function destroy($id)
     {
-        Penilai::findOrFail($id)->delete();
+        User::findOrFail($id)->delete();
 
         return redirect()->route('penilai.index')
                          ->with('success', 'Penilai berhasil dihapus');

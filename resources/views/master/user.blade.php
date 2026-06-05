@@ -118,6 +118,7 @@
                                 <option value="" disabled selected>-- Pilih Hak Akses --</option>
                                 <option value="admin">Admin</option>
                                 <option value="user">User</option>
+                                <option value="penilai">Penilai</option>
                             </select>
                         </div>
                         <div class="col-md-12 mb-4">
