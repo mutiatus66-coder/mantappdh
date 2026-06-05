@@ -31,7 +31,7 @@ class PengumumanController extends Controller
             'judul'    => 'required|string|max:255',
             'deskripsi'=> 'nullable|string',
             'status'   => 'required|in:Published,Draft',
-            'file'     => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
         ]);
         $data = $request->only('judul', 'deskripsi', 'status');
         if ($request->hasFile('file')) {
@@ -50,7 +50,7 @@ class PengumumanController extends Controller
             'judul'    => 'required|string|max:255',
             'deskripsi'=> 'nullable|string',
             'status'   => 'required|in:Published,Draft',
-            'file'     => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
         ]);
         $data = $request->only('judul', 'deskripsi', 'status');
         if ($request->hasFile('file')) {
