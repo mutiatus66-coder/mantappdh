@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Penilai;
 
 class PenilaiController extends Controller
 {
     public function index()
     {
-        $penilai = User::where('hak_akses', 'penilai')->orderBy('nama')->get();
+        $penilai = Penilai::orderBy('nama', 'asc')->get();
         return view('master.penilai', compact('penilai'));
     }
 
@@ -17,44 +17,39 @@ class PenilaiController extends Controller
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:penilais,email',
         ]);
 
-        User::create([
-            'nama'      => $request->nama,
-            'name'      => $request->nama,
-            'email'     => $request->email,
-            'hak_akses' => 'penilai',
-            'status'    => 'active',
-            'password'  => bcrypt('password123'), // password default
+        Penilai::create([
+            'nama'  => $request->nama,
+            'email' => $request->email,
         ]);
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil ditambahkan. Password default: password123');
+        ->with('success', 'Penilai berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:penilais,email,' . $id,
         ]);
 
-        User::findOrFail($id)->update([
-            'nama' => $request->nama,
-            'name' => $request->nama,
+        Penilai::findOrFail($id)->update([
+            'nama'  => $request->nama,
             'email' => $request->email,
         ]);
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil diperbarui');
+        ->with('success', 'Penilai berhasil diperbarui');
     }
 
     public function destroy($id)
     {
-        User::findOrFail($id)->delete();
+        Penilai::findOrFail($id)->delete();
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil dihapus');
+        ->with('success', 'Penilai berhasil dihapus');
     }
 }
