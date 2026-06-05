@@ -12,9 +12,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
-use App\Http\Controllers\PublicAnnouncementController;
-use App\Http\Controllers\PublicPengumumanController;
-
+use App\Http\Controllers\BuletinController;
 // ══════════════════════════════════════════════════════════════════════════════
 // PUBLIK — Tidak perlu login
 // ══════════════════════════════════════════════════════════════════════════════
@@ -29,6 +27,10 @@ Route::get('/login',  fn() => view('sign-in'))                ->name('login');
 Route::post('/login', [AuthController::class, 'login'])       ->name('login.post');
 Route::post('/logout',[AuthController::class, 'logout'])      ->name('logout')->middleware('auth');
 Route::post('/sign-up', [AuthController::class, 'register'])  ->name('register');
+
+// pengumuman untuk publik
+Route::get('/pengumuman-luar', [BuletinController::class, 'index'])->name('public.pengumuman.index');
+Route::get('/pengumuman-luar/{id}', [BuletinController::class, 'show'])->name('public.pengumuman.show');
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PROTECTED — Wajib login
@@ -99,10 +101,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
 
-    Route::get('/pengumuman-luar', [PublicPengumumanController::class, 'index'])->name('public.pengumuman.index');
-    Route::get('/pengumuman-luar/{id}', [PublicPengumumanController::class, 'show'])->name('public.pengumuman.show');
-    // Route::get('/pengumuman-luar', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
-    // Route::get('/pengumuman-luar/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
 
     // ── Inovasi ───────────────────────────────────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
@@ -154,4 +152,4 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-}); // end middleware auth
+});
