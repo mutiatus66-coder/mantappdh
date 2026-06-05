@@ -9,7 +9,7 @@ class PenilaiController extends Controller
 {
     public function index()
     {
-        $penilai = Penilai::orderBy('nama')->get();
+        $penilai = Penilai::orderBy('nama', 'asc')->get();
         return view('master.penilai', compact('penilai'));
     }
 
@@ -26,7 +26,7 @@ class PenilaiController extends Controller
         ]);
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil ditambahkan');
+        ->with('success', 'Penilai berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
@@ -42,7 +42,7 @@ class PenilaiController extends Controller
         ]);
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil diperbarui');
+        ->with('success', 'Penilai berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -50,6 +50,6 @@ class PenilaiController extends Controller
         Penilai::findOrFail($id)->delete();
 
         return redirect()->route('penilai.index')
-                         ->with('success', 'Penilai berhasil dihapus');
+        ->with('success', 'Penilai berhasil dihapus');
     }
 }

@@ -17,17 +17,16 @@ use App\Http\Controllers\IndikatorController;
 // PUBLIK — Tidak perlu login
 // ══════════════════════════════════════════════════════════════════════════════
 
-Route::get('/',               fn() => view('dashboard'))       ->name('landing');
-Route::get('/sign-in',        fn() => view('sign-in'))         ->name('sign-in');
-Route::get('/sign-up',        fn() => view('sign-up'))         ->name('sign-up');
-Route::get('/reset-password', fn() => view('reset-password'))  ->name('reset-password');
-Route::get('/new-password',   fn() => view('new-password'))    ->name('new-password');
+Route::get('/',               fn() => view('dashboard'))      ->name('landing');
+Route::get('/sign-in',        fn() => view('sign-in'))        ->name('sign-in');
+Route::get('/sign-up',        fn() => view('sign-up'))        ->name('sign-up');
+Route::get('/reset-password', fn() => view('reset-password')) ->name('reset-password');
+Route::get('/new-password',   fn() => view('new-password'))   ->name('new-password');
 
-// Fortify mendeteksi nama route 'login' — arahkan ke sign-in
-Route::get('/login',  fn() => view('sign-in'))                 ->name('login');
-Route::post('/login', [AuthController::class, 'login'])        ->name('login.post');
-Route::post('/logout',[AuthController::class, 'logout'])       ->name('logout')->middleware('auth');
-Route::post('/sign-up', [AuthController::class, 'register'])   ->name('register');
+Route::get('/login',  fn() => view('sign-in'))                ->name('login');
+Route::post('/login', [AuthController::class, 'login'])       ->name('login.post');
+Route::post('/logout',[AuthController::class, 'logout'])      ->name('logout')->middleware('auth');
+Route::post('/sign-up', [AuthController::class, 'register'])  ->name('register');
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PROTECTED — Wajib login
@@ -81,29 +80,28 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/login-as', [UserController::class, 'loginAs']) ->name('login-as');
     });
 
-    // Hanya admin_bapperida yang boleh kelola penilai
-    Route::middleware(['auth', 'role:admin_bapperida'])->group(function () {
-        Route::get('/penilai', [PenilaiController::class, 'index'])->name('penilai.index');
-        Route::post('/penilai/assign', [PenilaiController::class, 'assign'])->name('penilai.assign');
+    // ── Penilai — hanya admin_bapperida ──────────────────────────────────────
+    Route::middleware(['role:admin_bapperida'])->group(function () {
+        Route::get('/penilai',           [PenilaiController::class, 'index'])   ->name('penilai.index');
+        Route::post('/penilai',          [PenilaiController::class, 'store'])   ->name('penilai.store');
+        Route::put('/penilai/{id}',      [PenilaiController::class, 'update'])  ->name('penilai.update');
+        Route::delete('/penilai/{id}',   [PenilaiController::class, 'destroy']) ->name('penilai.destroy');
+        Route::post('/penilai/assign',   [PenilaiController::class, 'assign'])  ->name('penilai.assign');
     });
 
-    // Hanya admin_bapperida yang boleh CRUD pengumuman
-    Route::middleware(['auth', 'role:admin_bapperida'])->group(function () {
-        Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
-        Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
-        Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
-        Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+    // ── Pengumuman — hanya admin_bapperida ───────────────────────────────────
+    Route::middleware(['role:admin_bapperida'])->group(function () {
+        Route::get('/pengumuman',          [PengumumanController::class, 'index'])   ->name('pengumuman.index');
+        Route::post('/pengumuman',         [PengumumanController::class, 'store'])   ->name('pengumuman.store');
+        Route::put('/pengumuman/{id}',     [PengumumanController::class, 'update'])  ->name('pengumuman.update');
+        Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
 
-    // Riwayat & Rekap Nilai boleh diakses semua role yang sudah login (atau bahkan tamu)
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/inovasi/riwayat', [InovasiController::class, 'riwayat'])->name('inovasi.riwayat');
-        Route::get('/inovasi/rekap-nilai', [InovasiController::class, 'rekapNilai'])->name('inovasi.rekapnilai');
-        Route::get('/inovasi/usulan/{subEventId}', [InovasiController::class, 'usulan'])->name('inovasi.usulan');
     // ── Inovasi ───────────────────────────────────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
         Route::get('/riwayat',                     [InovasiController::class, 'riwayat'])      ->name('riwayat');
         Route::get('/rekap-nilai',                 [InovasiController::class, 'rekapNilai'])   ->name('rekapnilai');
+        Route::get('/usulan/{subEventId}',         [InovasiController::class, 'usulan'])       ->name('usulan');
         Route::get('/usulan-riwayat/{subEventId}', [InovasiController::class, 'usulanRiwayat'])->name('usulan-riwayat');
         Route::get('/usulan-nilai/{subEventId}',   [InovasiController::class, 'usulanNilai'])  ->name('usulan-nilai');
     });
@@ -123,17 +121,13 @@ Route::middleware(['auth'])->group(function () {
         // Tahap 1
         Route::get('/tahap-1', [IndikatorController::class, 'tahap1'])->name('tahap1');
 
-        Route::get('/tahap-1/{subEventId}/inovasi',           [IndikatorController::class, 'detailInovasi'])     ->name('tahap1.inovasi');
-        Route::get('/tahap-1/{subEventId}/inovasi/create',    [IndikatorController::class, 'inovasiCreate'])     ->name('tahap1.inovasi.create');
-        Route::post('/tahap-1/{subEventId}/inovasi',          [IndikatorController::class, 'inovasiStore'])      ->name('tahap1.inovasi.store');
-        Route::get('/tahap-1/{subEventId}/inovasi/{id}/edit', [IndikatorController::class, 'inovasiEdit'])       ->name('tahap1.inovasi.edit');
-        Route::put('/tahap-1/{subEventId}/inovasi/{id}',      [IndikatorController::class, 'inovasiUpdate'])     ->name('tahap1.inovasi.update');
-        Route::delete('/tahap-1/{subEventId}/inovasi/{id}',   [IndikatorController::class, 'inovasiDestroy'])    ->name('tahap1.inovasi.destroy');
+        Route::get('/tahap-1/{subEventId}/inovasi',           [IndikatorController::class, 'detailInovasi'])      ->name('tahap1.inovasi');
+        Route::post('/tahap-1/{subEventId}/inovasi',          [IndikatorController::class, 'inovasiStore'])       ->name('tahap1.inovasi.store');
+        Route::put('/tahap-1/{subEventId}/inovasi/{id}',      [IndikatorController::class, 'inovasiUpdate'])      ->name('tahap1.inovasi.update');
+        Route::delete('/tahap-1/{subEventId}/inovasi/{id}',   [IndikatorController::class, 'inovasiDestroy'])     ->name('tahap1.inovasi.destroy');
 
         Route::get('/tahap-1/{subEventId}/detail/{indikatorId}',           [IndikatorController::class, 'detailIndikator'])       ->name('tahap1.detail');
-        Route::get('/tahap-1/{subEventId}/detail/{indikatorId}/create',    [IndikatorController::class, 'detailIndikatorCreate']) ->name('tahap1.detail.create');
         Route::post('/tahap-1/{subEventId}/detail/{indikatorId}',          [IndikatorController::class, 'detailIndikatorStore'])  ->name('tahap1.detail.store');
-        Route::get('/tahap-1/{subEventId}/detail/{indikatorId}/{id}/edit', [IndikatorController::class, 'detailIndikatorEdit'])   ->name('tahap1.detail.edit');
         Route::put('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',      [IndikatorController::class, 'detailIndikatorUpdate']) ->name('tahap1.detail.update');
         Route::delete('/tahap-1/{subEventId}/detail/{indikatorId}/{id}',   [IndikatorController::class, 'detailIndikatorDestroy'])->name('tahap1.detail.destroy');
 
@@ -151,15 +145,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/tahap-2/{subEventId}/formulasi',    [IndikatorController::class, 'formulasiTahap2Store'])->name('tahap2.formulasi.store');
         Route::get('/tahap-2/{subEventId}/formulasi/get', [IndikatorController::class, 'formulasiTahap2Get'])  ->name('tahap2.formulasi.get');
 
-        // Master
-        Route::prefix('master')->name('master.')->group(function () {
-            Route::resource('event',     EventController::class)   ->except(['create', 'show']);
-            Route::resource('sub-event', SubEventController::class)->except(['create', 'show']);
-            Route::resource('bidang',    BidangController::class)  ->except(['create', 'show']);
-            Route::get('bidang/by-sub-event/{subEventId}', [BidangController::class, 'bySubEvent'])->name('bidang.by-sub-event');
-        });
-
     });
 
 }); // end middleware auth
-});
