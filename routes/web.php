@@ -12,6 +12,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\InovasiController;
 use App\Http\Controllers\IndikatorController;
+use App\Http\Controllers\PublicAnnouncementController;
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PUBLIK — Tidak perlu login
@@ -96,6 +97,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/pengumuman/{id}',     [PengumumanController::class, 'update'])  ->name('pengumuman.update');
         Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
+
+    Route::get('/pengumuman-luar', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
+    Route::get('/pengumuman-luar/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
 
     // ── Inovasi ───────────────────────────────────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
