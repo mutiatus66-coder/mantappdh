@@ -35,14 +35,8 @@
                     <td class="text-center">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
                     <td>{{ $nom['nama_inovasi'] }}</td>
-                    <td class="text-center">
-                        @if($nom['rangking'])
-                            <span class="rv-badge-rank">{{ $nom['rangking'] }}</span>
-                        @else
-                            <span style="color:var(--ri-text-muted)">—</span>
-                        @endif
-                    </td>
-                    <td class="text-center rv-nilai">
+                    <td class="text-center rv-rank-cell"></td>
+                    <td class="text-center rv-nilai" data-nilai="{{ $nom['total_nilai'] }}">
                         {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '—' }}
                     </td>
                     @foreach($penilai as $p)

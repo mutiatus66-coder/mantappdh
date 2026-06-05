@@ -54,7 +54,7 @@
                     <td class="text-center row-no">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
                     <td>{{ $nom['nama_inovasi'] }}</td>
-                    <td class="text-center rv-nilai">
+                    <td class="text-center rv-nilai" data-nilai="{{ $nom['total_nilai'] }}">
                         {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '0.00' }}
                     </td>
                     @foreach($penilai as $p)
