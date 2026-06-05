@@ -16,6 +16,6 @@ class FormulasiTahap1 extends Model
 
     public function subEvent()
     {
-        return $this->belongsTo(SubEvent::class);
+        return $this->belongsTo(SubEvent::class, 'sub_event_id');
     }
 }
