@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware
+class AksesMiddleware
 {
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
