@@ -65,12 +65,6 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User berhasil diperbarui!');
     }
 
-    public function destroy($id)
-    {
-        User::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'User berhasil dihapus.');
-    }
-
     public function loginAs($id)
     {
         $user = User::findOrFail($id);
