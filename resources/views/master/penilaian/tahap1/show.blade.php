@@ -148,16 +148,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Rangking
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const tbody = document.querySelector(`#${this.dataset.table} tbody`);
-            if (!tbody) return;
-            [...tbody.querySelectorAll('tr')]
-                .sort((a, b) => (parseFloat(b.cells[4]?.textContent) || 0) - (parseFloat(a.cells[4]?.textContent) || 0))
-                .forEach((row, i) => {
-                    const no = row.querySelector('.row-no');
-                    if (no) no.textContent = i + 1;
-                    tbody.appendChild(row);
-                });
+    btn.addEventListener('click', function () {
+        const tbody = document.querySelector(`#${this.dataset.table} tbody`);
+        if (!tbody) return;
+
+        [...tbody.querySelectorAll('tr')]
+            .filter(row => row.querySelector('.rv-nilai')) // skip baris "belum ada data"
+            .sort((a, b) => {
+                const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+                const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+                return nilaiB - nilaiA; // descending: nilai tertinggi di atas
+            })
+            .forEach((row, i) => {
+                const no = row.querySelector('.row-no');
+                if (no) no.textContent = i + 1; // update nomor urut
+                tbody.appendChild(row);
+            });
         });
     });
 

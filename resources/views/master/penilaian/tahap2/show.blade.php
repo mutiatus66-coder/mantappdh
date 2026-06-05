@@ -73,9 +73,38 @@ document.addEventListener('DOMContentLoaded', function () {
     function sortByTotal(tableId) {
         const tbody = document.querySelector('#' + tableId + ' tbody');
         if (!tbody) return;
-        [...tbody.querySelectorAll('tr')]
-            .sort((a, b) => (parseFloat(b.cells[4]?.textContent) || 0) - (parseFloat(a.cells[4]?.textContent) || 0))
-            .forEach((row, i) => { row.cells[0].textContent = i + 1; tbody.appendChild(row); });
+
+        const rows = [...tbody.querySelectorAll('tr')]
+            .filter(row => row.querySelector('.rv-nilai')); // skip baris kosong
+
+        // Sort descending total nilai
+        rows.sort((a, b) => {
+            const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+            const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+            return nilaiB - nilaiA;
+        });
+
+        // nomor urut + kolom Rangking
+        rows.forEach((row, i) => {
+            const rank = i + 1;
+
+            // kolom NO (cells[0])
+            row.cells[0].textContent = rank;
+
+            // kolom RANGKING (cells[3])
+            const rankCell = row.cells[3];
+            if (rankCell) {
+                if (rank <= 3) {
+                    // Tampilkan badge untuk rank 1-3
+                    rankCell.innerHTML = `<span class="rv-badge-rank">${rank}</span>`;
+                } else {
+                    // Tampilkan angka biasa untuk rank 4+
+                    rankCell.innerHTML = `<span style="color:var(--ri-text-muted)">${rank}</span>`;
+                }
+            }
+
+            tbody.appendChild(row);
+        });
     }
 
     function exportCSV(tableId, filename) {

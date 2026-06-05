@@ -159,13 +159,17 @@ class PenilaianController extends Controller
 
         ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getNominasiSplit($id);
 
+        // urutkan A-Z berdasarkan nama inovator
+        usort($nominasiUmum,    fn($a, $b) => strcmp($a['inovator'], $b['inovator']));
+        usort($nominasiPelajar, fn($a, $b) => strcmp($a['inovator'], $b['inovator']));
+
         return view('master.penilaian.tahap1.show', [
             'subEvent'        => $subEvent,
             'nominasiUmum'    => $nominasiUmum,
             'nominasiPelajar' => $nominasiPelajar,
             'penilai'         => self::$penilai,
         ]);
-    }
+}
 
     public function tahap1Simpan(Request $request, int $id)
     {
