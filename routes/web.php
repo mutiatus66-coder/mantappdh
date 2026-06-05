@@ -97,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/pengumuman/{id}',  [PengumumanController::class, 'destroy']) ->name('pengumuman.destroy');
     });
 
-    // pengumuman
+    // pengumuman untuk publik
     Route::get('/pengumuman-luar', [BuletinController::class, 'index'])->name('public.pengumuman.index');
     Route::get('/pengumuman-luar/{id}', [BuletinController::class, 'show'])->name('public.pengumuman.show');
 
