@@ -1,5 +1,4 @@
 <div class="rv-card">
-
     <div class="rv-card-header">
         <h6 class="rv-card-title">{{ $title }}</h6>
         <div class="d-flex gap-2">
@@ -32,15 +31,20 @@
             <tbody>
                 @forelse($nominasi as $i => $nom)
                 <tr>
-                    <td class="text-center">{{ $i + 1 }}</td>
+                    <td class="text-center row-no">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
                     <td>{{ $nom['nama_inovasi'] }}</td>
-                    <td class="text-center rv-rank-cell"></td>
+                    <td class="text-center rv-rank-cell">
+                        {{-- Diisi oleh JS saat klik Rangking --}}
+                        <span style="color:var(--ri-text-muted)">—</span>
+                    </td>
                     <td class="text-center rv-nilai" data-nilai="{{ $nom['total_nilai'] }}">
                         {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 1) : '—' }}
                     </td>
                     @foreach($penilai as $p)
-                    <td class="text-center">{{ $nom['nilai'][$p['id']] ?? '—' }}</td>
+                    <td class="text-center">
+                        {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '—' }}
+                    </td>
                     @endforeach
                 </tr>
                 @empty

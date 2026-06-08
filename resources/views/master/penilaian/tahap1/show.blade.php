@@ -6,10 +6,10 @@
 
 @section('content')
 
-{{-- warning/message --}}
+{{-- ── Flash message ── --}}
 @if(session('success'))
 <div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); color:#1e40af; margin: 0 24px;">
+     style="background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); color:#1e40af; margin:0 24px;">
     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
@@ -17,7 +17,7 @@
 
 <div class="all-container">
 
-    {{-- ── header ── --}}
+    {{-- ── Header ── --}}
     <div class="rv-page-header">
         <div>
             <p class="rv-sub-label">Sub Event</p>
@@ -28,7 +28,7 @@
         </a>
     </div>
 
-    {{-- ── tab ── --}}
+    {{-- ── Tabs ── --}}
     <div class="rv-tabs-wrap">
         <ul class="nav rv-tabs" id="tabNominator" role="tablist">
             <li class="nav-item" role="presentation">
@@ -46,7 +46,7 @@
 
     <div class="tab-content" id="tabNominatorContent">
 
-        {{-- ── bagian umum ── --}}
+        {{-- ── Tab Umum ── --}}
         <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
             @include('master.penilaian.tahap1.panel', [
                 'group'    => 'umum',
@@ -58,7 +58,7 @@
             ])
         </div>
 
-        {{-- ── bagian pelajar ── --}}
+        {{-- ── Tab Pelajar ── --}}
         <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
             @include('master.penilaian.tahap1.panel', [
                 'group'    => 'pelajar',
@@ -82,8 +82,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const SIMPAN_URL = '{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}';
     const CSRF       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
+    // ── Helper: capitalize first letter ──
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+    // ── Build group helper ──
     function buildGroup(name) {
-        const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
         return {
             name,
             get rows()    { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]`)] },
@@ -94,31 +97,47 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    const groups = { umum: buildGroup('umum'), pelajar: buildGroup('pelajar') };
+    const groups = {
+        umum    : buildGroup('umum'),
+        pelajar : buildGroup('pelajar'),
+    };
 
-    function syncUI(g, fromInit = false) {
+    // ── Sync UI state (checkmarks, highlight rows, simpan bar) ──
+    function syncUI(g) {
         const total = g.rows.length;
         const n     = g.checked.length;
 
+        // Highlight lolos rows
         g.rows.forEach(chk => {
             chk.closest('tr').classList.toggle('row-lolos', chk.checked);
         });
 
+        // Check-all state
         if (g.checkAll) {
             g.checkAll.indeterminate = n > 0 && n < total;
             g.checkAll.checked       = total > 0 && n === total;
         }
 
-        if (!fromInit) g.bar.style.display = n > 0 ? 'flex' : 'none';
-        g.count.textContent = n;
+        // Simpan bar: always show/hide based on selection count
+        if (g.bar) {
+            g.bar.style.display = n > 0 ? 'flex' : 'none';
+        }
+        if (g.count) {
+            g.count.textContent = n;
+        }
     }
 
-    Object.values(groups).forEach(g => syncUI(g, true));
+    // ── Init: sync all groups on page load ──
+    Object.values(groups).forEach(g => syncUI(g));
 
+    // ── Row checkbox change ──
     document.querySelectorAll('.chk-row').forEach(chk => {
-        chk.addEventListener('change', function () { syncUI(groups[this.dataset.group]); });
+        chk.addEventListener('change', function () {
+            syncUI(groups[this.dataset.group]);
+        });
     });
 
+    // ── Check-all change ──
     document.querySelectorAll('.chk-all').forEach(chkAll => {
         chkAll.addEventListener('change', function () {
             const g = groups[this.dataset.group];
@@ -127,56 +146,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── Simpan button ──
     document.querySelectorAll('.btn-rv-simpan').forEach(btn => {
         btn.addEventListener('click', function () {
             const g   = groups[this.dataset.group];
             const ids = g.checked.map(c => c.dataset.id);
 
+            if (ids.length === 0) {
+                toast('Pilih minimal 1 inovasi terlebih dahulu.', 'error');
+                return;
+            }
+
+            // Disable button saat request
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
             fetch(SIMPAN_URL, {
                 method : 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF },
-                body   : JSON.stringify({ kategori: g.name, ids }),
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Accept'       : 'application/json',
+                    'X-CSRF-TOKEN' : CSRF,
+                },
+                body: JSON.stringify({ kategori: g.name, ids }),
             })
             .then(r => r.json())
-            .then(data => toast(
-                data.success ? 'Data berhasil disimpan!' : 'Gagal menyimpan data.',
-                data.success ? 'success' : 'error'
-            ))
-            .catch(() => toast('Terjadi kesalahan.', 'error'));
+            .then(data => {
+                if (data.success) {
+                    toast('Data berhasil disimpan!', 'success');
+                } else {
+                    toast(data.message ?? 'Gagal menyimpan data.', 'error');
+                }
+            })
+            .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan';
+            });
         });
     });
 
-    // Rangking
+    // ── Rangking: sort descending by nilai ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const tbody = document.querySelector(`#${this.dataset.table} tbody`);
-        if (!tbody) return;
+        btn.addEventListener('click', function () {
+            const tbody = document.querySelector(`#${this.dataset.table} tbody`);
+            if (!tbody) return;
 
-        [...tbody.querySelectorAll('tr')]
-            .filter(row => row.querySelector('.rv-nilai')) // skip baris "belum ada data"
-            .sort((a, b) => {
+            const rows = [...tbody.querySelectorAll('tr')]
+                .filter(row => row.querySelector('.rv-nilai')); // skip empty-state row
+
+            rows.sort((a, b) => {
                 const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
                 const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-                return nilaiB - nilaiA; // descending: nilai tertinggi di atas
-            })
-            .forEach((row, i) => {
+                return nilaiB - nilaiA; // descending
+            });
+
+            rows.forEach((row, i) => {
                 const no = row.querySelector('.row-no');
-                if (no) no.textContent = i + 1; // update nomor urut
+                if (no) no.textContent = i + 1;
                 tbody.appendChild(row);
             });
         });
     });
 
-    // Expor
+    // ── Export CSV ──
     document.querySelectorAll('.btn-rv-excel').forEach(btn => {
         btn.addEventListener('click', function () {
             const table = document.getElementById(this.dataset.table);
             if (!table) return;
+
             const csv = [...table.querySelectorAll('tr')].map(row =>
-                [...row.querySelectorAll('th, td')].slice(1)
+                [...row.querySelectorAll('th, td')]
+                    .slice(1) // skip checkbox column
                     .map(c => `"${c.innerText.trim().replace(/"/g, '""')}"`)
                     .join(',')
             ).join('\n');
+
             const a = document.createElement('a');
             a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
             a.download = `${this.dataset.filename}.csv`;
@@ -184,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── Toast notification ──
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = `rv-toast ${type}`;

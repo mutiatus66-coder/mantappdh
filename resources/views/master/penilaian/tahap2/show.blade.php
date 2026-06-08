@@ -8,7 +8,7 @@
 
 <div class="all-container">
 
-    {{-- ── HEADER ── --}}
+    {{-- ── Header ── --}}
     <div class="rv-page-header">
         <div>
             <p class="rv-sub-label">Sub Event</p>
@@ -19,7 +19,7 @@
         </a>
     </div>
 
-    {{-- ── TABS ── --}}
+    {{-- ── Tabs ── --}}
     <div class="rv-tabs-wrap">
         <ul class="nav rv-tabs" id="tabNominator" role="tablist">
             <li class="nav-item" role="presentation">
@@ -37,7 +37,7 @@
 
     <div class="tab-content" id="tabNominatorContent">
 
-        {{-- ── TAB UMUM ── --}}
+        {{-- ── Tab Umum ── --}}
         <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
             @include('master.penilaian.tahap2.panel', [
                 'group'    => 'umum',
@@ -49,7 +49,7 @@
             ])
         </div>
 
-        {{-- ── TAB PELAJAR ── --}}
+        {{-- ── Tab Pelajar ── --}}
         <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
             @include('master.penilaian.tahap2.panel', [
                 'group'    => 'pelajar',
@@ -70,35 +70,38 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
+    // ── Sort tabel by Total Nilai descending, isi kolom Rangking ──
     function sortByTotal(tableId) {
         const tbody = document.querySelector('#' + tableId + ' tbody');
         if (!tbody) return;
 
+        // Hanya ambil baris data (skip baris "belum ada data")
         const rows = [...tbody.querySelectorAll('tr')]
-            .filter(row => row.querySelector('.rv-nilai')); // skip baris kosong
+            .filter(row => row.querySelector('.rv-nilai'));
 
-        // Sort descending total nilai
+        if (rows.length === 0) return;
+
+        // Sort descending
         rows.sort((a, b) => {
             const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
             const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
             return nilaiB - nilaiA;
         });
 
-        // nomor urut + kolom Rangking
+        // Update nomor, kolom rangking, dan append ke tbody
         rows.forEach((row, i) => {
             const rank = i + 1;
 
-            // kolom NO (cells[0])
-            row.cells[0].textContent = rank;
+            // Kolom NO
+            const noCell = row.querySelector('.row-no');
+            if (noCell) noCell.textContent = rank;
 
-            // kolom RANGKING (cells[3])
-            const rankCell = row.cells[3];
+            // Kolom RANGKING (via class, bukan cells[index] yang rawan salah)
+            const rankCell = row.querySelector('.rv-rank-cell');
             if (rankCell) {
                 if (rank <= 3) {
-                    // Tampilkan badge untuk rank 1-3
-                    rankCell.innerHTML = `<span class="rv-badge-rank">${rank}</span>`;
+                    rankCell.innerHTML = `<span class="rv-badge-rank rv-badge-rank--${rank}">${rank}</span>`;
                 } else {
-                    // Tampilkan angka biasa untuk rank 4+
                     rankCell.innerHTML = `<span style="color:var(--ri-text-muted)">${rank}</span>`;
                 }
             }
@@ -107,26 +110,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ── Export CSV ──
     function exportCSV(tableId, filename) {
         const table = document.getElementById(tableId);
         if (!table) return;
+
         const csv = [...table.querySelectorAll('tr')].map(row =>
             [...row.querySelectorAll('th, td')]
                 .map(c => `"${c.innerText.trim().replace(/"/g, '""')}"`)
                 .join(',')
         ).join('\n');
+
         const a = document.createElement('a');
         a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
         a.download = filename + '.csv';
         a.click();
     }
 
+    // ── Event listeners ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
-        btn.addEventListener('click', function () { sortByTotal(this.dataset.table); });
+        btn.addEventListener('click', function () {
+            sortByTotal(this.dataset.table);
+        });
     });
 
     document.querySelectorAll('.btn-rv-excel').forEach(btn => {
-        btn.addEventListener('click', function () { exportCSV(this.dataset.table, this.dataset.filename); });
+        btn.addEventListener('click', function () {
+            exportCSV(this.dataset.table, this.dataset.filename);
+        });
     });
 
 });
