@@ -1,5 +1,4 @@
 <div class="rv-card">
-
     <div class="rv-card-header">
         <h6 class="rv-card-title">{{ $title }}</h6>
         <div class="d-flex gap-2">
@@ -15,13 +14,13 @@
         </div>
     </div>
 
-    {{-- Simpan bar --}}
+    {{-- ── Simpan bar (hidden by default, shown via JS) ── --}}
     <div class="rv-simpan-bar" id="simpanBar{{ ucfirst($group) }}" style="display:none;">
         <span class="rv-simpan-info">
             <i class="bi bi-check2-circle me-1"></i>
             <span class="simpan-count">0</span> inovasi dipilih untuk lolos ke Tahap 2
         </span>
-        <button class="btn-success" data-group="{{ $group }}">
+        <button class="btn-rv-simpan btn btn-success" data-group="{{ $group }}">
             <i class="bi bi-save me-1"></i>Simpan
         </button>
     </div>
@@ -47,19 +46,20 @@
                 <tr data-id="{{ $nom['id'] }}">
                     <td class="text-center">
                         <input type="checkbox"
-                            class="rv-checkbox chk-row"
-                            data-group="{{ $group }}"
-                            data-id="{{ $nom['id'] }}">
+                               class="rv-checkbox chk-row"
+                               data-group="{{ $group }}"
+                               data-id="{{ $nom['id'] }}"
+                               {{ !empty($nom['lolos']) ? 'checked' : '' }}>
                     </td>
                     <td class="text-center row-no">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
                     <td>{{ $nom['nama_inovasi'] }}</td>
                     <td class="text-center rv-nilai" data-nilai="{{ $nom['total_nilai'] }}">
-                        {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '0.00' }}
+                        {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '—' }}
                     </td>
                     @foreach($penilai as $p)
                     <td class="text-center">
-                        {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '' }}
+                        {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '—' }}
                     </td>
                     @endforeach
                 </tr>
