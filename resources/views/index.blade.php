@@ -57,7 +57,7 @@
         data-kt-drawer-overlay="true"
         data-kt-drawer-width="{default:'260px', '300px': '260px'}"
         data-kt-drawer-direction="start"
-        data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+        data-kt-dr awer-toggle="#kt_aside_mobile_toggle">
 
         {{-- Logo --}}
         <div class="aside-logo" id="kt_aside_logo">

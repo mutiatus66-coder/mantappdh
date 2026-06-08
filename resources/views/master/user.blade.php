@@ -26,6 +26,15 @@
     </div>
     @endif
 
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+        <div class="total-badge">
+            Total User: <span id="totalUser">{{ $users->count() }}</span>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchUser" class="form-control" placeholder="Cari nama atau email...">
+        </div>
+    </div>
+
     <div style="overflow-x: auto;">
         <table class="se-table">
             <thead>
@@ -55,6 +64,11 @@
                                     data-hak-akses="{{ $item->hak_akses }}"
                                     data-status="{{ $item->status }}">
                                 Ubah
+                            </button>
+                            <button type="button" class="btn btn-danger btn-aksi btn-hapus-user"
+                                    data-url="{{ route('user.destroy', $item->id) }}"
+                                    data-nama="{{ $item->nama }}">
+                                Hapus
                             </button>
                             <a href="{{ route('user.login-as', $item->id) }}"
                                class="btn btn-success btn-aksi">
@@ -93,8 +107,7 @@
                         <i class="bi bi-x-lg fs-5"></i>
                     </button>
                 </div>
-
-                <div class="modal-body px-5 py-4">
+                    <div class="modal-body px-5 py-4">
                     <div class="row">
                         <div class="col-md-12 mb-4">
                             <label class="form-label fw-semibold required">Nama</label>
@@ -110,7 +123,7 @@
                             <label class="form-label fw-semibold required">Hak Akses</label>
                             <select name="hak_akses" id="inputHakAkses" class="form-select" required>
                                 <option value="" disabled selected>-- Pilih Hak Akses --</option>
-                                <option value="admin">Admin</option>
+                                <option value="admin">Admin_bapperida</option>
                                 <option value="user">User</option>
                                 <option value="penilai">Penilai</option>
                             </select>
@@ -146,6 +159,39 @@
     </div>
 </div>
 
+{{-- ══ MODAL — Konfirmasi Hapus User ══ --}}
+<div class="modal fade" id="modalHapusUser" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
+
+            <div class="d-flex justify-content-center mb-3">
+                <div class="hapus-icon-circle">
+                    <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-btn-danger);"></i>
+                </div>
+            </div>
+
+            <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus User Ini?</h5>
+            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem; line-height:1.6; color:#6b7280;">
+                Tindakan ini tidak dapat dibatalkan. User
+                <strong id="namaUserHapus" class="hapus-nama-strong"></strong>
+                akan dihapus secara permanen.
+            </p>
+
+            <div class="d-flex gap-2 justify-content-center">
+                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
+                <form id="formHapusUser" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-aksi px-3">
+                        Hapus
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -153,6 +199,42 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const storeUrl = "{{ route('user.store') }}";
+    const searchInput = document.getElementById('searchUser');
+    const totalUserBadge = document.getElementById('totalUser');
+    const userRows = Array.from(document.querySelectorAll('.se-table tbody tr'));
+
+    const updateUserCount = () => {
+        const visibleRows = userRows.filter(row => row.style.display !== 'none');
+        totalUserBadge.textContent = visibleRows.length;
+    };
+
+    const filterUsers = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        userRows.forEach(row => {
+            const nameCell = row.querySelector('td:nth-child(2)');
+            const emailCell = row.querySelector('td:nth-child(3)');
+            if (!nameCell || !emailCell) {
+                return;
+            }
+
+            const nameText = nameCell.textContent.trim().toLowerCase();
+            const emailText = emailCell.textContent.trim().toLowerCase();
+            const matches = nameText.includes(query) || emailText.includes(query);
+
+            row.style.display = matches ? '' : 'none';
+            if (matches) {
+                visibleCount += 1;
+            }
+        });
+
+        totalUserBadge.textContent = visibleCount;
+    };
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterUsers);
+    }
 
     // Reset modal on close
     document.getElementById('modalUser').addEventListener('hidden.bs.modal', function () {
@@ -167,6 +249,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('inputPassword').required   = true;
         document.getElementById('passwordHint').style.display = 'none';
         document.getElementById('labelPassword').textContent  = 'Password';
+        if (searchInput) {
+            searchInput.value = '';
+            filterUsers();
+        }
     });
 
     // Edit

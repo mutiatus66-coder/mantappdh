@@ -72,4 +72,12 @@ class UserController extends Controller
         Auth::login($user);
         return redirect('/')->with('success', 'Login sebagai ' . $user->nama);
     }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User berhasil dihapus!');
+    }
 }

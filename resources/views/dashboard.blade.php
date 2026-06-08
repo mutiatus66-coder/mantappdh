@@ -296,11 +296,11 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                         <div class="d-lg-none">
                             <div data-kt-drawer="true" data-kt-drawer-name="landing-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="280px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_landing_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav_wrapper'}">
                                 <div class="menu menu-column p-4">
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Kekayaan Intelektual</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">KKN Award</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Jurnal Inovasi</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Dokumentasi</a></div>
-                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="#">Pengumuman</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="achievements">Kekayaan Intelektual</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="team">KKN Award</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="portfolio">Jurnal Inovasi</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="dokumentasi">Dokumentasi</a></div>
+                                    <div class="menu-item"><a class="menu-link nav-link py-3" href="pengumuman-luar">Pengumuman</a></div>
                                 </div>
                             </div>
                         </div>

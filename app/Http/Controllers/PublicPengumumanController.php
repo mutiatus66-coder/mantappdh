@@ -6,9 +6,6 @@ use App\Models\Pengumuman;
 
 class PublicPengumumanController extends Controller
 {
-    /**
-     * Daftar semua pengumuman yang dipublikasi
-     */
     public function index()
     {
         $pengumuman = Pengumuman::where('status', 'Published')
@@ -18,9 +15,6 @@ class PublicPengumumanController extends Controller
         return view('public.pengumuman.index', compact('pengumuman'));
     }
 
-    /**
-     * Detail pengumuman berdasarkan ID
-     */
     public function show($id)
     {
         $pengumuman = Pengumuman::where('id', $id)
