@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 
 class PenilaianController extends Controller
 {
-    // ── Default Sub Events (fallback jika session kosong) ─────────────────
+    // ── Default Sub Events ────────────────────────────────────────────────
     private static array $defaultSubEvents = [
-    ['id' => 1, 'tahun' => 2022, 'sub_event' => 'LOMBA INOTEK 2022'],
-    ['id' => 2, 'tahun' => 2023, 'sub_event' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
-    ['id' => 3, 'tahun' => 2023, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2023'],
-    ['id' => 4, 'tahun' => 2024, 'sub_event' => 'LOMBA INOVASI DAN TEKNOLOGI 2024'],
-    ['id' => 5, 'tahun' => 2024, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
-    ['id' => 6, 'tahun' => 2025, 'sub_event' => 'PAMERAN INOTEK 2025'],
-    ['id' => 7, 'tahun' => 2025, 'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025'],
-];
+        ['id' => 1, 'tahun' => 2022, 'sub_event' => 'LOMBA INOTEK 2022'],
+        ['id' => 2, 'tahun' => 2023, 'sub_event' => 'LOMBA INOTEK (INOTEK AWARD) 2023'],
+        ['id' => 3, 'tahun' => 2023, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2023'],
+        ['id' => 4, 'tahun' => 2024, 'sub_event' => 'LOMBA INOVASI DAN TEKNOLOGI 2024'],
+        ['id' => 5, 'tahun' => 2024, 'sub_event' => 'PELAPORAN INOVASI DAERAH 2024 & INODA AWARD 2025'],
+        ['id' => 6, 'tahun' => 2025, 'sub_event' => 'PAMERAN INOTEK 2025'],
+        ['id' => 7, 'tahun' => 2025, 'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025'],
+    ];
 
     // ── Penilai ───────────────────────────────────────────────────────────
     private static array $penilai = [
@@ -115,13 +115,13 @@ class PenilaianController extends Controller
         ],
     ];
 
-    // ── Helper: ambil sub events dari session, fallback ke default ────────
+    // ── Helper: ambil sub events ──────────────────────────────────────────
     private function getSubEvents(): array
     {
         return session('sub_events', self::$defaultSubEvents);
     }
 
-    // ── Helper: split nominasi per kategori ───────────────────────────────
+    // ── Helper: split semua nominasi per kategori (Tahap 1) ───────────────
     private function getNominasiSplit(int $id): array
     {
         $all = self::$nominasi[$id] ?? [];
@@ -129,6 +129,41 @@ class PenilaianController extends Controller
         return [
             'umum'    => array_values(array_filter($all, fn($n) => $n['kategori'] === 'umum')),
             'pelajar' => array_values(array_filter($all, fn($n) => $n['kategori'] === 'pelajar')),
+        ];
+    }
+
+    /**
+     * Helper: split nominasi yang LOLOS saja per kategori (Tahap 2).
+     *
+     * Prioritas sumber lolos:
+     *   1. Session (hasil simpan Tahap 1 oleh admin)
+     *   2. Field 'lolos' di data statis (fallback / seed awal)
+     */
+    private function getNominasiLolosSplit(int $id): array
+    {
+        $all = self::$nominasi[$id] ?? [];
+
+        // Cek apakah admin sudah pernah simpan via Tahap 1
+        $lolosUmum    = session('tahap1_lolos_' . $id . '_umum');
+        $lolosPelajar = session('tahap1_lolos_' . $id . '_pelajar');
+
+        $filterLolos = function (array $items, string $kategori, ?array $sessionIds): array {
+            return array_values(array_filter($items, function ($n) use ($kategori, $sessionIds) {
+                if ($n['kategori'] !== $kategori) return false;
+
+                // Jika admin sudah simpan via session, gunakan session sebagai sumber kebenaran
+                if ($sessionIds !== null) {
+                    return in_array($n['id'], $sessionIds, true);
+                }
+
+                // Fallback ke field 'lolos' di data statis
+                return !empty($n['lolos']);
+            }));
+        };
+
+        return [
+            'umum'    => $filterLolos($all, 'umum',    $lolosUmum),
+            'pelajar' => $filterLolos($all, 'pelajar', $lolosPelajar),
         ];
     }
 
@@ -159,7 +194,25 @@ class PenilaianController extends Controller
 
         ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getNominasiSplit($id);
 
-        // urutkan A-Z berdasarkan nama inovator
+        // Tandai lolos dari session jika ada, supaya checkbox tampil tercentang
+        $lolosUmum    = session('tahap1_lolos_' . $id . '_umum');
+        $lolosPelajar = session('tahap1_lolos_' . $id . '_pelajar');
+
+        if ($lolosUmum !== null) {
+            foreach ($nominasiUmum as &$n) {
+                $n['lolos'] = in_array($n['id'], $lolosUmum, true);
+            }
+            unset($n);
+        }
+
+        if ($lolosPelajar !== null) {
+            foreach ($nominasiPelajar as &$n) {
+                $n['lolos'] = in_array($n['id'], $lolosPelajar, true);
+            }
+            unset($n);
+        }
+
+        // Urutkan A-Z berdasarkan nama inovator
         usort($nominasiUmum,    fn($a, $b) => strcmp($a['inovator'], $b['inovator']));
         usort($nominasiPelajar, fn($a, $b) => strcmp($a['inovator'], $b['inovator']));
 
@@ -169,7 +222,7 @@ class PenilaianController extends Controller
             'nominasiPelajar' => $nominasiPelajar,
             'penilai'         => self::$penilai,
         ]);
-}
+    }
 
     public function tahap1Simpan(Request $request, int $id)
     {
@@ -179,6 +232,7 @@ class PenilaianController extends Controller
             'ids.*'    => 'integer',
         ]);
 
+        // Simpan ID yang lolos ke session
         session(['tahap1_lolos_' . $id . '_' . $request->kategori => $request->ids ?? []]);
 
         return response()->json(['success' => true]);
@@ -199,7 +253,8 @@ class PenilaianController extends Controller
         $subEvent = collect($this->getSubEvents())->firstWhere('id', $id);
         abort_unless($subEvent, 404);
 
-        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getNominasiSplit($id);
+        // ✅ Hanya tampilkan yang lolos dari Tahap 1
+        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getNominasiLolosSplit($id);
 
         return view('master.penilaian.tahap2.show', [
             'subEvent'        => $subEvent,
