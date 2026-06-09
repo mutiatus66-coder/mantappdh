@@ -1,4 +1,4 @@
-@extends('index', ['dummy' => true])
+@extends('index')
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
@@ -17,14 +17,6 @@
             Tambah Event
         </button>
     </div>
-
-    @if(session('success'))
-    <div class="alert alert-dismissible fade show mb-4" role="alert"
-        style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
 
     <div class="sub-event-stats">
         <div class="total-badge">
@@ -56,7 +48,8 @@
                             <button class="btn btn-warning btn-edit-event btn-aksi"
                                     data-id="{{ $item->id }}"
                                     data-nama-event="{{ $item->nama_event }}"
-                                    data-jenis="{{ $item->jenis }}">
+                                    data-jenis="{{ $item->jenis }}"
+                                    data-url="{{ route('event.update', $item->id) }}">
                                 Ubah
                             </button>
                             <button class="btn btn-danger btn-hapus-event btn-aksi"
@@ -69,7 +62,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
+                <tr id="emptyRow">
                     <td colspan="4" class="empty-row">
                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                         Belum ada data event
@@ -84,51 +77,46 @@
 
 
 {{-- ══ MODAL — Tambah / Ubah Event ══ --}}
-<div class="modal fade" id="modalEvent" tabindex="-1">
+<div class="modal fade" id="modalEvent" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formEvent" method="POST" action="{{ route('event.store') }}">
-                @csrf
-                <input type="hidden" name="_method" id="formEventMethod" value="POST">
+            <div class="modal-header px-5 py-4">
+                <h5 class="modal-title fw-semibold" id="modalEventTitle">Tambah Event</h5>
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
+                        id="btnTutupModalEvent" aria-label="Close">
+                    <i class="bi bi-x-lg fs-5"></i>
+                </button>
+            </div>
 
-                <div class="modal-header px-5 py-4">
-                    <h5 class="modal-title fw-semibold" id="modalEventTitle">Tambah Event</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                            data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg fs-5"></i>
-                    </button>
-                </div>
-
-                <div class="modal-body px-5 py-4">
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Nama Event</label>
-                            <input type="text" name="nama_event" id="inputNamaEvent"
-                                   class="form-control" placeholder="Masukkan nama event..." required>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Jenis</label>
-                            <select name="jenis" id="inputJenis" class="form-select" required>
-                                <option value="" disabled selected>-- Pilih Jenis --</option>
-                                <option value="INOTEK">INOTEK</option>
-                                <option value="INODA">INODA</option>
-                            </select>
-                        </div>
+            <div class="modal-body px-5 py-4">
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Nama Event</label>
+                        <input type="text" id="inputNamaEvent"
+                               class="form-control" placeholder="Masukkan nama event...">
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Jenis</label>
+                        <select id="inputJenis" class="form-select">
+                            <option value="" disabled selected>-- Pilih Jenis --</option>
+                            <option value="INOTEK">INOTEK</option>
+                            <option value="INODA">INODA</option>
+                        </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan</button>
-                </div>
-            </form>
+            <div class="modal-footer px-5 py-3">
+                <button type="button" class="btn btn-dark" id="btnBatalEvent">Batal</button>
+                <button type="button" id="btnSimpanEvent" class="btn btn-success px-4">Simpan</button>
+            </div>
         </div>
     </div>
 </div>
 
 
 {{-- ══ MODAL — Konfirmasi Hapus Event ══ --}}
-<div class="modal fade" id="modalHapusEvent" tabindex="-1">
+<div class="modal fade" id="modalHapusEvent" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
 
@@ -146,14 +134,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
-                <form id="formHapusEvent" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-aksi px-3">
-                        Hapus
-                    </button>
-                </form>
+                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapus">Batal</button>
+                <button type="button" id="btnHapusEvent" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
         </div>
@@ -166,57 +148,307 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl    = "{{ route('event.store') }}";
-    const searchInput = document.getElementById('searchEvent');
-    const rows        = document.querySelectorAll('#tabelEventBody tr');
-    const totalSpan   = document.getElementById('totalEvent');
+    // ── Konstanta ──
+    const STORE_URL = "{{ route('event.store') }}";
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // Search
-    searchInput.addEventListener('keyup', function () {
+    // ── Elemen ──
+    const tbody       = document.getElementById('tabelEventBody');
+    const totalSpan   = document.getElementById('totalEvent');
+    const searchInput = document.getElementById('searchEvent');
+
+    // ── Modal: singleton, pakai data-bs-backdrop="static" agar tidak tutup sendiri ──
+    const modalEventEl = document.getElementById('modalEvent');
+    const modalHapusEl = document.getElementById('modalHapusEvent');
+    const modalEvent   = new bootstrap.Modal(modalEventEl);
+    const modalHapus   = new bootstrap.Modal(modalHapusEl);
+
+    // ── State penyimpan konteks operasi aktif ──
+    let activeMode      = 'store';   // 'store' | 'update'
+    let activeUpdateId  = null;
+    let activeUpdateUrl = null;
+    let activeHapusId   = null;
+    let activeHapusUrl  = null;
+    let activeHapusNama = null;
+    let isSaving        = false;
+    let isDeleting      = false;
+
+    // ────────────────────────────────────────────
+    // HELPER: AJAX request pakai FormData
+    // Laravel hanya membaca _method spoofing dari form-data, bukan JSON body
+    // ────────────────────────────────────────────
+    async function sendRequest(url, data) {
+        const form = new FormData();
+        Object.entries(data).forEach(([k, v]) => form.append(k, v));
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': CSRF,
+                'Accept': 'application/json',
+            },
+            body: form,
+        });
+        if (!res.ok) {
+            // Coba baca pesan error dari Laravel (misal: 422 validation)
+            const err = await res.json().catch(() => ({}));
+            const msg = err.message ?? `HTTP ${res.status}`;
+            throw new Error(msg);
+        }
+        return res.json();
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Toast notifikasi
+    // ────────────────────────────────────────────
+    function toast(msg, type = 'success') {
+        const el = document.createElement('div');
+        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
+        el.style.cssText = [
+            'z-index:9999',
+            'min-width:280px',
+            `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
+            `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
+            `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
+        ].join(';');
+        el.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
+            ${msg}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Update baris yang sudah ada
+    // ────────────────────────────────────────────
+    function updateRow(id, namaEvent, jenis) {
+        const editBtn = tbody.querySelector(`.btn-edit-event[data-id="${id}"]`);
+        if (!editBtn) return;
+        const tr = editBtn.closest('tr');
+        tr.cells[1].textContent = namaEvent;
+        tr.cells[2].innerHTML   = `<span class="badge-kategori">${jenis}</span>`;
+        editBtn.dataset.namaEvent = namaEvent;
+        editBtn.dataset.jenis     = jenis;
+        const hapusBtn = tr.querySelector('.btn-hapus-event');
+        if (hapusBtn) hapusBtn.dataset.nama = namaEvent;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Tambah baris baru ke tabel
+    // ────────────────────────────────────────────
+    function appendRow(event) {
+        const emptyRow = tbody.querySelector('#emptyRow');
+        if (emptyRow) emptyRow.remove();
+
+        const rowCount = tbody.querySelectorAll('tr').length + 1;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${rowCount}</td>
+            <td>${event.nama_event}</td>
+            <td style="text-align:center;"><span class="badge-kategori">${event.jenis}</span></td>
+            <td style="text-align:center;">
+                <div class="btn-aksi-wrap">
+                    <button class="btn btn-warning btn-edit-event btn-aksi"
+                            data-id="${event.id}"
+                            data-nama-event="${event.nama_event}"
+                            data-jenis="${event.jenis}"
+                            data-url="${event.update_url}">
+                        Ubah
+                    </button>
+                    <button class="btn btn-danger btn-hapus-event btn-aksi"
+                            data-id="${event.id}"
+                            data-nama="${event.nama_event}"
+                            data-url="${event.destroy_url}">
+                        Hapus
+                    </button>
+                </div>
+            </td>`;
+        tbody.appendChild(tr);
+        totalSpan.textContent = tbody.querySelectorAll('tr').length;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Renumber baris
+    // ────────────────────────────────────────────
+    function renumberRows() {
+        let n = 0;
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (!tr.querySelector('.empty-row')) {
+                tr.cells[0].textContent = ++n;
+            }
+        });
+        totalSpan.textContent = n;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Set state tombol Simpan
+    // ────────────────────────────────────────────
+    function setSimpanLoading(loading) {
+        const btn = document.getElementById('btnSimpanEvent');
+        btn.disabled    = loading;
+        btn.textContent = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalEvent').disabled    = loading;
+        document.getElementById('btnTutupModalEvent').disabled = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Set state tombol Hapus
+    // ────────────────────────────────────────────
+    function setHapusLoading(loading) {
+        const btn = document.getElementById('btnHapusEvent');
+        btn.disabled    = loading;
+        btn.textContent = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapus').disabled = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // MODAL EVENT: buka untuk Tambah
+    // ────────────────────────────────────────────
+    document.getElementById('btnTambahEvent').addEventListener('click', function () {
+        activeMode      = 'store';
+        activeUpdateId  = null;
+        activeUpdateUrl = null;
+        document.getElementById('modalEventTitle').textContent = 'Tambah Event';
+        document.getElementById('inputNamaEvent').value        = '';
+        document.getElementById('inputJenis').value            = '';
+        setSimpanLoading(false);
+        modalEvent.show();
+    });
+
+    // ────────────────────────────────────────────
+    // MODAL EVENT: buka untuk Ubah (event delegation)
+    // ────────────────────────────────────────────
+    tbody.addEventListener('click', function (e) {
+        const editBtn = e.target.closest('.btn-edit-event');
+        if (editBtn) {
+            activeMode      = 'update';
+            activeUpdateId  = editBtn.dataset.id;
+            activeUpdateUrl = editBtn.dataset.url;
+            document.getElementById('modalEventTitle').textContent = 'Ubah Event';
+            document.getElementById('inputNamaEvent').value        = editBtn.dataset.namaEvent;
+            document.getElementById('inputJenis').value            = editBtn.dataset.jenis;
+            setSimpanLoading(false);
+            modalEvent.show();
+            return;
+        }
+
+        const hapusBtn = e.target.closest('.btn-hapus-event');
+        if (hapusBtn) {
+            activeHapusId   = hapusBtn.dataset.id;
+            activeHapusUrl  = hapusBtn.dataset.url;
+            activeHapusNama = hapusBtn.dataset.nama;
+            document.getElementById('namaEventHapus').textContent = activeHapusNama;
+            setHapusLoading(false);
+            modalHapus.show();
+        }
+    });
+
+    // ────────────────────────────────────────────
+    // MODAL EVENT: tutup manual
+    // ────────────────────────────────────────────
+    document.getElementById('btnTutupModalEvent').addEventListener('click', function () {
+        if (isSaving) return; // blok penutupan saat request berjalan
+        modalEvent.hide();
+    });
+    document.getElementById('btnBatalEvent').addEventListener('click', function () {
+        if (isSaving) return;
+        modalEvent.hide();
+    });
+
+    // ────────────────────────────────────────────
+    // MODAL HAPUS: tutup manual
+    // ────────────────────────────────────────────
+    document.getElementById('btnBatalHapus').addEventListener('click', function () {
+        if (isDeleting) return;
+        modalHapus.hide();
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Tambah / Ubah
+    // ────────────────────────────────────────────
+    document.getElementById('btnSimpanEvent').addEventListener('click', async function () {
+        if (isSaving) return;
+
+        const namaEvent = document.getElementById('inputNamaEvent').value.trim();
+        const jenis     = document.getElementById('inputJenis').value;
+
+        if (!namaEvent) { document.getElementById('inputNamaEvent').focus(); return; }
+        if (!jenis)     { document.getElementById('inputJenis').focus(); return; }
+
+        isSaving = true;
+        setSimpanLoading(true);
+
+        try {
+            const isUpdate = activeMode === 'update';
+            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
+            const res      = await sendRequest(url, {
+                nama_event: namaEvent,
+                jenis,
+                _method: isUpdate ? 'PUT' : 'POST',
+            });
+
+            if (res.success) {
+                modalEvent.hide();
+                toast(isUpdate ? 'Event berhasil diubah!' : 'Event berhasil ditambahkan!');
+                if (isUpdate) {
+                    updateRow(activeUpdateId, namaEvent, jenis);
+                } else {
+                    appendRow(res.event);
+                }
+            } else {
+                toast(res.message ?? 'Gagal menyimpan data.', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            toast('Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isSaving = false;
+            setSimpanLoading(false);
+        }
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Hapus
+    // ────────────────────────────────────────────
+    document.getElementById('btnHapusEvent').addEventListener('click', async function () {
+        if (isDeleting) return;
+
+        isDeleting = true;
+        setHapusLoading(true);
+
+        try {
+            const res = await sendRequest(activeHapusUrl, { _method: 'DELETE' });
+            if (res.success) {
+                modalHapus.hide();
+                toast(`Event "${activeHapusNama}" berhasil dihapus!`);
+                const hapusBtn = tbody.querySelector(`.btn-hapus-event[data-id="${activeHapusId}"]`);
+                if (hapusBtn) hapusBtn.closest('tr').remove();
+                renumberRows();
+            } else {
+                toast(res.message ?? 'Gagal menghapus data.', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            toast('Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isDeleting = false;
+            setHapusLoading(false);
+        }
+    });
+
+    // ────────────────────────────────────────────
+    // SEARCH
+    // ────────────────────────────────────────────
+    searchInput.addEventListener('input', function () {
         const kw = this.value.toLowerCase().trim();
         let n = 0;
-        rows.forEach(r => {
-            if (r.querySelector('.empty-row')) return;
-            const show = r.textContent.toLowerCase().includes(kw);
-            r.style.display = show ? '' : 'none';
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (tr.querySelector('.empty-row')) return;
+            const show = tr.textContent.toLowerCase().includes(kw);
+            tr.style.display = show ? '' : 'none';
             if (show) n++;
         });
         totalSpan.textContent = n;
-    });
-
-    // Reset modal on close
-    document.getElementById('modalEvent').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formEvent').action        = storeUrl;
-        document.getElementById('formEventMethod').value   = 'POST';
-        document.getElementById('modalEventTitle').textContent = 'Tambah Event';
-        document.getElementById('inputNamaEvent').value    = '';
-        document.getElementById('inputJenis').value        = '';
-    });
-
-    // Tambah
-    document.getElementById('btnTambahEvent').addEventListener('click', function () {
-        new bootstrap.Modal(document.getElementById('modalEvent')).show();
-    });
-
-    // Edit
-    document.querySelectorAll('.btn-edit-event').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalEventTitle').textContent  = 'Ubah Event';
-            document.getElementById('formEvent').action             = `/event/${this.dataset.id}`;
-            document.getElementById('formEventMethod').value        = 'PUT';
-            document.getElementById('inputNamaEvent').value         = this.dataset.namaEvent;
-            document.getElementById('inputJenis').value             = this.dataset.jenis;
-            new bootstrap.Modal(document.getElementById('modalEvent')).show();
-        });
-    });
-
-    // Hapus
-    document.querySelectorAll('.btn-hapus-event').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('namaEventHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusEvent').action      = this.dataset.url;
-            new bootstrap.Modal(document.getElementById('modalHapusEvent')).show();
-        });
     });
 
 });

@@ -265,7 +265,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const storeUrl = "{{ route('bidang.store') }}";
     const CSRF     = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // ── Helper: kirim request AJAX ──
+    // ── Singleton modal ──
+    const modalBidang      = new bootstrap.Modal(document.getElementById('modalBidang'));
+    const modalHapusBidang = new bootstrap.Modal(document.getElementById('modalHapusBidang'));
+
     async function sendRequest(url, method, data) {
         const res = await fetch(url, {
             method,
@@ -279,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return res.json();
     }
 
-    // ── Helper: toast notifikasi ──
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = `alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4`;
@@ -289,31 +291,24 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => el.remove(), 3000);
     }
 
-    // ── Helper: update baris tabel tanpa reload ──
     function updateRow(id, nama, status) {
-        const rows = document.querySelectorAll('.btn-ubah-bidang');
-        rows.forEach(btn => {
+        document.querySelectorAll('.btn-ubah-bidang').forEach(btn => {
             if (btn.dataset.id == id) {
                 const tr = btn.closest('tr');
-                // Update nama
                 tr.cells[1].textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
-                // Update status badge
                 tr.cells[2].innerHTML = status === 'aktif'
                     ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
                     : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
-                // Update data-attribute tombol
                 btn.dataset.nama   = nama;
                 btn.dataset.status = status;
             }
         });
     }
 
-    // ── Helper: tambah baris baru ke tabel ──
     function appendRow(bidang, subEventId) {
         const tbody = document.querySelector(`#collapse-${subEventId} tbody`);
         if (!tbody) return;
 
-        // Hapus baris "belum ada data" jika ada
         const emptyRow = tbody.querySelector('.empty-row');
         if (emptyRow) emptyRow.closest('tr').remove();
 
@@ -348,12 +343,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>`;
         tbody.appendChild(tr);
 
-        // Re-attach event listener pada tombol baru
         tr.querySelector('.btn-ubah-bidang').addEventListener('click', handleUbah);
         tr.querySelector('.btn-hapus-bidang').addEventListener('click', handleHapus);
     }
 
-    // ── Reset modal ──
     function resetModal() {
         document.getElementById('formBidangMethod').value         = 'POST';
         document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
@@ -361,24 +354,25 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('bidangSubEventId').value         = '';
         document.getElementById('bidangSubEventNama').textContent = '';
         document.getElementById('statusAktifBidang').checked      = true;
-        document.getElementById('btnSimpanBidang').disabled       = false;
-        document.getElementById('btnSimpanBidang').textContent    = 'Simpan';
+        const btn = document.getElementById('btnSimpanBidang');
+        btn.disabled         = false;
+        btn.textContent      = 'Simpan';
+        btn.dataset.mode     = 'store';   // ← WAJIB
+        delete btn.dataset.updateId;
+        delete btn.dataset.updateUrl;
     }
 
-    document.getElementById('modalBidang').addEventListener('hidden.bs.modal', resetModal);
-
-    // ── Tambah Bidang ──
+    // ── Tambah ──
     document.querySelectorAll('.btn-tambah-bidang').forEach(btn => {
         btn.addEventListener('click', function () {
             resetModal();
             document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
             document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
-            document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
-            new bootstrap.Modal(document.getElementById('modalBidang')).show();
+            modalBidang.show();
         });
     });
 
-    // ── Handler Ubah (bisa dipanggil ulang untuk baris baru) ──
+    // ── Handler Ubah ──
     function handleUbah() {
         resetModal();
         document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
@@ -386,25 +380,27 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
         document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
         document.getElementById('bidangNama').value               = this.dataset.nama;
-        document.getElementById('btnSimpanBidang').dataset.updateId  = this.dataset.id;
-        document.getElementById('btnSimpanBidang').dataset.updateUrl = this.dataset.url;
 
         const radioId = this.dataset.status === 'tidak_aktif'
             ? 'statusNonaktifBidang' : 'statusAktifBidang';
         document.getElementById(radioId).checked = true;
 
-        new bootstrap.Modal(document.getElementById('modalBidang')).show();
+        const btn = document.getElementById('btnSimpanBidang');
+        btn.dataset.mode      = 'update';
+        btn.dataset.updateId  = this.dataset.id;
+        btn.dataset.updateUrl = this.dataset.url;
+
+        modalBidang.show();
     }
 
     document.querySelectorAll('.btn-ubah-bidang').forEach(btn => {
         btn.addEventListener('click', handleUbah);
     });
 
-    // ── Submit AJAX (Tambah & Ubah) ──
+    // ── Submit AJAX ──
     document.getElementById('btnSimpanBidang').addEventListener('click', async function () {
-        const method    = document.getElementById('formBidangMethod').value;
-        const nama      = document.getElementById('bidangNama').value.trim();
-        const status    = document.querySelector('input[name="status"]:checked').value;
+        const nama       = document.getElementById('bidangNama').value.trim();
+        const status     = document.querySelector('input[name="status"]:checked').value;
         const subEventId = document.getElementById('bidangSubEventId').value;
 
         if (!nama) {
@@ -412,19 +408,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        this.disabled     = true;
-        this.textContent  = 'Menyimpan...';
+        this.disabled    = true;
+        this.textContent = 'Menyimpan...';
 
         try {
-            const url  = method === 'PUT' ? this.dataset.updateUrl : storeUrl;
-            const data = { nama, status, sub_event_id: subEventId, _method: method };
-            const res  = await sendRequest(url, 'POST', data);
+            const isUpdate = this.dataset.mode === 'update';
+            const url      = isUpdate ? this.dataset.updateUrl : storeUrl;
+            const res      = await sendRequest(url, 'POST', {
+                nama, status,
+                sub_event_id: subEventId,
+                _method: isUpdate ? 'PUT' : 'POST',
+            });
 
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalBidang')).hide();
-                toast(method === 'PUT' ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
-
-                if (method === 'PUT') {
+                modalBidang.hide();
+                toast(isUpdate ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
+                if (isUpdate) {
                     updateRow(this.dataset.updateId, nama, status);
                 } else {
                     appendRow(res.bidang, subEventId);
@@ -434,7 +433,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.disabled    = false;
                 this.textContent = 'Simpan';
             }
-        } catch {
+        } catch (e) {
+            console.error(e);
             toast('Terjadi kesalahan.', 'error');
             this.disabled    = false;
             this.textContent = 'Simpan';
@@ -443,11 +443,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Handler Hapus ──
     function handleHapus() {
-        document.getElementById('namaBidangHapus').textContent  = this.dataset.nama;
-        document.getElementById('formHapusBidang').dataset.id   = this.dataset.id;
-        document.getElementById('formHapusBidang').dataset.url  = this.dataset.url;
-        document.getElementById('formHapusBidang').dataset.nama = this.dataset.nama;
-        new bootstrap.Modal(document.getElementById('modalHapusBidang')).show();
+        document.getElementById('namaBidangHapus').textContent = this.dataset.nama;
+        const btn = document.getElementById('btnHapusBidang');
+        btn.dataset.id   = this.dataset.id;
+        btn.dataset.url  = this.dataset.url;
+        btn.dataset.nama = this.dataset.nama;
+        modalHapusBidang.show();
     }
 
     document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
@@ -456,9 +457,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Submit Hapus AJAX ──
     document.getElementById('btnHapusBidang').addEventListener('click', async function () {
-        const url  = document.getElementById('formHapusBidang').dataset.url;
-        const id   = document.getElementById('formHapusBidang').dataset.id;
-        const nama = document.getElementById('formHapusBidang').dataset.nama;
+        const url  = this.dataset.url;
+        const id   = this.dataset.id;
+        const nama = this.dataset.nama;
 
         this.disabled    = true;
         this.textContent = 'Menghapus...';
@@ -466,16 +467,16 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalHapusBidang')).hide();
+                modalHapusBidang.hide();
                 toast(`Bidang "${nama}" berhasil dihapus!`);
-                // Hapus baris dari tabel
                 document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
                     if (btn.dataset.id == id) btn.closest('tr').remove();
                 });
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }
-        } catch {
+        } catch (e) {
+            console.error(e);
             toast('Terjadi kesalahan.', 'error');
         }
 

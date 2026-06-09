@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\SubEvent;
 
 class SubEventController extends Controller
 {
-    // ── INDEX ─────────────────────────────────────────────────
     public function index()
     {
         $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
@@ -16,7 +13,6 @@ class SubEventController extends Controller
         return view('master.sub-event', compact('subEvents', 'events'));
     }
 
-    // ── STORE ─────────────────────────────────────────────────
     public function store(Request $request)
     {
         $request->validate([
@@ -27,7 +23,7 @@ class SubEventController extends Controller
             'berakhir'  => 'required|date|after_or_equal:mulai',
         ]);
 
-        SubEvent::create([
+        $subEvent = SubEvent::create([
             'event_id'  => $request->event_id,
             'tahun'     => $request->tahun,
             'sub_event' => $request->sub_event,
@@ -36,17 +32,18 @@ class SubEventController extends Controller
             'berakhir'  => $request->berakhir,
         ]);
 
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil ditambahkan.');
+        $subEvent->load('event');
+
+        return response()->json([
+            'success'   => true,
+            'subEvent'  => array_merge($subEvent->toArray(), [
+                'event_nama'  => $subEvent->event->nama_event ?? '-',
+                'update_url'  => route('sub-event.update', $subEvent->id),
+                'destroy_url' => route('sub-event.destroy', $subEvent->id),
+            ]),
+        ]);
     }
 
-    // ── EDIT (JSON untuk modal) ───────────────────────────────
-    public function edit(int $id)
-    {
-        $item = SubEvent::findOrFail($id);
-        return response()->json($item);
-    }
-
-    // ── UPDATE ────────────────────────────────────────────────
     public function update(Request $request, int $id)
     {
         $request->validate([
@@ -57,7 +54,8 @@ class SubEventController extends Controller
             'berakhir'  => 'required|date|after_or_equal:mulai',
         ]);
 
-        SubEvent::findOrFail($id)->update([
+        $subEvent = SubEvent::findOrFail($id);
+        $subEvent->update([
             'event_id'  => $request->event_id,
             'tahun'     => $request->tahun,
             'sub_event' => $request->sub_event,
@@ -66,13 +64,17 @@ class SubEventController extends Controller
             'berakhir'  => $request->berakhir,
         ]);
 
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil diperbarui.');
+        $subEvent->load('event');
+
+        return response()->json([
+            'success'    => true,
+            'event_nama' => $subEvent->event->nama_event ?? '-',
+        ]);
     }
 
-    // ── DESTROY ───────────────────────────────────────────────
     public function destroy(int $id)
     {
         SubEvent::findOrFail($id)->delete();
-        return redirect()->route('sub-event.index')->with('success', 'Sub Event berhasil dihapus.');
+        return response()->json(['success' => true]);
     }
 }

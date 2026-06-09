@@ -13,18 +13,10 @@
             <h3>Data User</h3>
             <p>Kelola semua user yang terdaftar</p>
         </div>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUser">
+        <button class="btn btn-primary" id="btnTambahUser">
             Tambah User
         </button>
     </div>
-
-    @if(session('success'))
-    <div class="alert alert-dismissible fade show mb-4" role="alert"
-         style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
 
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div class="total-badge">
@@ -47,7 +39,7 @@
                     <th width="320" style="text-align:center;">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tabelUserBody">
                 @forelse($users ?? [] as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
@@ -62,12 +54,14 @@
                                     data-nama="{{ $item->nama }}"
                                     data-email="{{ $item->email }}"
                                     data-hak-akses="{{ $item->hak_akses }}"
-                                    data-status="{{ $item->status }}">
+                                    data-status="{{ $item->status }}"
+                                    data-url="{{ route('user.update', $item->id) }}">
                                 Ubah
                             </button>
-                            <button type="button" class="btn btn-danger btn-aksi btn-hapus-user"
-                                    data-url="{{ route('user.destroy', $item->id) }}"
-                                    data-nama="{{ $item->nama }}">
+                            <button class="btn btn-danger btn-aksi btn-hapus-user"
+                                    data-id="{{ $item->id }}"
+                                    data-nama="{{ $item->nama }}"
+                                    data-url="{{ route('user.destroy', $item->id) }}">
                                 Hapus
                             </button>
                             <a href="{{ route('user.login-as', $item->id) }}"
@@ -96,68 +90,69 @@
 <div class="modal fade" id="modalUser" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formUser" method="POST" action="{{ route('user.store') }}">
-                @csrf
-                <input type="hidden" name="_method" id="formUserMethod" value="POST">
 
-                <div class="modal-header px-5 py-4">
-                    <h5 class="modal-title fw-semibold" id="modalUserTitle">Tambah User</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                            data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg fs-5"></i>
-                    </button>
-                </div>
-                    <div class="modal-body px-5 py-4">
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Nama</label>
-                            <input type="text" name="nama" id="inputNama"
-                                   class="form-control" placeholder="Masukkan nama..." required>
+            <div class="modal-header px-5 py-4">
+                <h5 class="modal-title fw-semibold" id="modalUserTitle">Tambah User</h5>
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg fs-5"></i>
+                </button>
+            </div>
+
+            <div class="modal-body px-5 py-4">
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Nama</label>
+                        <input type="text" id="inputNama"
+                               class="form-control" placeholder="Masukkan nama...">
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Email</label>
+                        <input type="email" id="inputEmail"
+                               class="form-control" placeholder="Masukkan email...">
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Hak Akses</label>
+                        <select id="inputHakAkses" class="form-select">
+                            <option value="" disabled selected>-- Pilih Hak Akses --</option>
+                            <option value="admin_bapperida">Admin Bapperida</option>
+                            <option value="admin_kecamatan">Admin Kecamatan</option>
+                            <option value="admin_opd">Admin OPD</option>
+                            <option value="peserta">Peserta</option>
+                            <option value="penilai">Penilai</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold">Status</label>
+                        <div class="d-flex gap-4 mt-1">
+                            <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                                <input type="radio" name="statusUser" id="statusAktif" value="aktif" checked> Aktif
+                            </label>
+                            <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                                <input type="radio" name="statusUser" id="statusNonaktif" value="nonaktif"> Nonaktif
+                            </label>
                         </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Email</label>
-                            <input type="email" name="email" id="inputEmail"
-                                   class="form-control" placeholder="Masukkan email..." required>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Hak Akses</label>
-                            <select name="hak_akses" id="inputHakAkses" class="form-select" required>
-                                <option value="" disabled selected>-- Pilih Hak Akses --</option>
-                                <option value="admin">Admin_bapperida</option>
-                                <option value="user">User</option>
-                                <option value="penilai">Penilai</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold">Status</label>
-                            <div class="d-flex gap-4 mt-1">
-                                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                    <input type="radio" name="status" id="statusAktif" value="aktif" checked> Aktif
-                                </label>
-                                <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                    <input type="radio" name="status" id="statusNonaktif" value="nonaktif"> Nonaktif
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-2" id="wrapPassword">
-                            <label class="form-label fw-semibold required" id="labelPassword">Password</label>
-                            <input type="password" name="password" id="inputPassword"
-                                   class="form-control" placeholder="Masukkan password..." required>
-                            <div id="passwordHint" style="display:none; font-size:0.78rem; color:var(--ri-text-muted); margin-top:4px;">
-                                Kosongkan jika tidak ingin mengubah password
-                            </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label fw-semibold" id="labelPassword">Password</label>
+                        <input type="password" id="inputPassword"
+                               class="form-control" placeholder="Masukkan password...">
+                        <div id="passwordHint" style="display:none; font-size:0.78rem; color:var(--ri-text-muted); margin-top:4px;">
+                            Kosongkan jika tidak ingin mengubah password
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success px-4">Simpan</button>
-                </div>
-            </form>
+            <div class="modal-footer px-5 py-3">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                <button type="button" id="btnSimpanUser" class="btn btn-success px-4">Simpan</button>
+            </div>
+
         </div>
     </div>
 </div>
+
 
 {{-- ══ MODAL — Konfirmasi Hapus User ══ --}}
 <div class="modal fade" id="modalHapusUser" tabindex="-1">
@@ -179,13 +174,7 @@
 
             <div class="d-flex gap-2 justify-content-center">
                 <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
-                <form id="formHapusUser" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-aksi px-3">
-                        Hapus
-                    </button>
-                </form>
+                <button type="button" id="btnHapusUser" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
         </div>
@@ -198,94 +187,253 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('user.store') }}";
-    const searchInput = document.getElementById('searchUser');
-    const totalUserBadge = document.getElementById('totalUser');
-    const userRows = Array.from(document.querySelectorAll('.se-table tbody tr'));
+    const storeUrl  = "{{ route('user.store') }}";
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+    const tbody     = document.getElementById('tabelUserBody');
+    const totalSpan = document.getElementById('totalUser');
 
-    const updateUserCount = () => {
-        const visibleRows = userRows.filter(row => row.style.display !== 'none');
-        totalUserBadge.textContent = visibleRows.length;
-    };
-
-    const filterUsers = () => {
-        const query = searchInput.value.trim().toLowerCase();
-        let visibleCount = 0;
-
-        userRows.forEach(row => {
-            const nameCell = row.querySelector('td:nth-child(2)');
-            const emailCell = row.querySelector('td:nth-child(3)');
-            if (!nameCell || !emailCell) {
-                return;
-            }
-
-            const nameText = nameCell.textContent.trim().toLowerCase();
-            const emailText = emailCell.textContent.trim().toLowerCase();
-            const matches = nameText.includes(query) || emailText.includes(query);
-
-            row.style.display = matches ? '' : 'none';
-            if (matches) {
-                visibleCount += 1;
-            }
+    // ── Helper: AJAX ──
+    async function sendRequest(url, method, data) {
+        const res = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': CSRF,
+                'Accept':       'application/json',
+            },
+            body: JSON.stringify(data),
         });
-
-        totalUserBadge.textContent = visibleCount;
-    };
-
-    if (searchInput) {
-        searchInput.addEventListener('input', filterUsers);
+    const modalUser      = new bootstrap.Modal(document.getElementById('modalUser'));
+    const modalHapusUser = new bootstrap.Modal(document.getElementById('modalHapusUser'));
+        return res.json();
+    }
+    // ── Helper: toast ──
+    function toast(msg, type = 'success') {
+        const el = document.createElement('div');
+        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
+        el.style.cssText = `z-index:9999; min-width:280px;
+            background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'};
+            border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'};
+            color:${type === 'success' ? '#92400e' : '#A32D2D'};`;
+        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>${msg}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
     }
 
-    // Reset modal on close
-    document.getElementById('modalUser').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formUser').action          = storeUrl;
-        document.getElementById('formUserMethod').value     = 'POST';
+    // ── Helper: update baris ──
+    function updateRow(id, nama, email, hakAkses, status) {
+        document.querySelectorAll('.btn-edit-user').forEach(btn => {
+            if (btn.dataset.id == id) {
+                const tr = btn.closest('tr');
+                tr.cells[1].textContent = nama;
+                tr.cells[2].textContent = email;
+                tr.cells[3].textContent = hakAkses;
+                tr.cells[4].textContent = status;
+                btn.dataset.nama      = nama;
+                btn.dataset.email     = email;
+                btn.dataset.hakAkses  = hakAkses;
+                btn.dataset.status    = status;
+            }
+        });
+    }
+
+    // ── Helper: tambah baris baru ──
+    function appendRow(user) {
+        const emptyRow = tbody.querySelector('.empty-row');
+        if (emptyRow) emptyRow.closest('tr').remove();
+
+        const rowCount = tbody.querySelectorAll('tr').length + 1;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${rowCount}</td>
+            <td>${user.nama}</td>
+            <td>${user.email}</td>
+            <td style="text-align:center;">${user.hak_akses}</td>
+            <td style="text-align:center;">${user.status}</td>
+            <td style="text-align:center;">
+                <div class="btn-aksi-wrap">
+                    <button class="btn btn-warning btn-aksi btn-edit-user"
+                            data-id="${user.id}"
+                            data-nama="${user.nama}"
+                            data-email="${user.email}"
+                            data-hak-akses="${user.hak_akses}"
+                            data-status="${user.status}"
+                            data-url="${user.update_url}">
+                        Ubah
+                    </button>
+                    <button class="btn btn-danger btn-aksi btn-hapus-user"
+                            data-id="${user.id}"
+                            data-nama="${user.nama}"
+                            data-url="${user.destroy_url}">
+                        Hapus
+                    </button>
+                    <a href="${user.login_url}" class="btn btn-success btn-aksi">Login As</a>
+                </div>
+            </td>`;
+        tbody.appendChild(tr);
+
+        tr.querySelector('.btn-edit-user').addEventListener('click', handleEdit);
+        tr.querySelector('.btn-hapus-user').addEventListener('click', handleHapus);
+
+        totalSpan.textContent = tbody.querySelectorAll('tr').length;
+    }
+
+    // ── Reset modal ──
+    function resetModal() {
         document.getElementById('modalUserTitle').textContent = 'Tambah User';
-        document.getElementById('inputNama').value          = '';
-        document.getElementById('inputEmail').value         = '';
-        document.getElementById('inputHakAkses').value      = '';
-        document.getElementById('statusAktif').checked      = true;
-        document.getElementById('inputPassword').value      = '';
-        document.getElementById('inputPassword').required   = true;
+        document.getElementById('inputNama').value            = '';
+        document.getElementById('inputEmail').value           = '';
+        document.getElementById('inputHakAkses').value        = '';
+        document.getElementById('inputPassword').value        = '';
+        document.getElementById('statusAktif').checked        = true;
         document.getElementById('passwordHint').style.display = 'none';
         document.getElementById('labelPassword').textContent  = 'Password';
-        if (searchInput) {
-            searchInput.value = '';
-            filterUsers();
+        const btn = document.getElementById('btnSimpanUser');
+        btn.disabled    = false;
+        btn.textContent = 'Simpan';
+        delete btn.dataset.updateId;
+        delete btn.dataset.updateUrl;
+        btn.dataset.mode = 'store';
+    }
+
+    document.getElementById('modalUser').addEventListener('hidden.bs.modal', resetModal);
+
+    // ── Tambah ──
+    document.getElementById('btnTambahUser').addEventListener('click', function () {
+        resetModal();
+        new bootstrap.Modal(document.getElementById('modalUser')).show();
+    });
+
+    // ── Handler Edit ──
+    function handleEdit() {
+        resetModal();
+        document.getElementById('modalUserTitle').textContent  = 'Ubah User';
+        document.getElementById('inputNama').value             = this.dataset.nama;
+        document.getElementById('inputEmail').value            = this.dataset.email;
+        document.getElementById('inputHakAkses').value         = this.dataset.hakAkses;
+        document.getElementById('passwordHint').style.display  = 'block';
+        document.getElementById('labelPassword').textContent   = 'Password (opsional)';
+        if (this.dataset.status === 'nonaktif') {
+            document.getElementById('statusNonaktif').checked = true;
+        } else {
+            document.getElementById('statusAktif').checked = true;
+        }
+        const btn = document.getElementById('btnSimpanUser');
+        btn.dataset.mode      = 'update';
+        btn.dataset.updateId  = this.dataset.id;
+        btn.dataset.updateUrl = this.dataset.url;
+        new bootstrap.Modal(document.getElementById('modalUser')).show();
+    }
+
+    document.querySelectorAll('.btn-edit-user').forEach(btn => {
+        btn.addEventListener('click', handleEdit);
+    });
+
+    // ── Submit AJAX (Tambah & Ubah) ──
+    document.getElementById('btnSimpanUser').addEventListener('click', async function () {
+        const nama     = document.getElementById('inputNama').value.trim();
+        const email    = document.getElementById('inputEmail').value.trim();
+        const hakAkses = document.getElementById('inputHakAkses').value;
+        const status   = document.querySelector('input[name="statusUser"]:checked').value;
+        const password = document.getElementById('inputPassword').value;
+        const isUpdate = this.dataset.mode === 'update';
+
+        if (!nama || !email || !hakAkses) {
+            toast('Harap isi semua field yang wajib.', 'error');
+            return;
+        }
+        if (!isUpdate && !password) {
+            toast('Password wajib diisi untuk user baru.', 'error');
+            return;
+        }
+
+        this.disabled    = true;
+        this.textContent = 'Menyimpan...';
+
+        try {
+            const url  = isUpdate ? this.dataset.updateUrl : storeUrl;
+            const data = { _method: isUpdate ? 'PUT' : 'POST', nama, email, hak_akses: hakAkses, status };
+            if (password) data.password = password;
+
+            const res = await sendRequest(url, 'POST', data);
+
+            if (res.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalUser')).hide();
+                toast(isUpdate ? 'User berhasil diubah!' : 'User berhasil ditambahkan!');
+                if (isUpdate) {
+                    updateRow(this.dataset.updateId, nama, email, hakAkses, status);
+                } else {
+                    appendRow(res.user);
+                }
+            } else {
+                toast(res.message ?? 'Gagal menyimpan data.', 'error');
+                this.disabled    = false;
+                this.textContent = 'Simpan';
+            }
+        } catch {
+            toast('Terjadi kesalahan.', 'error');
+            this.disabled    = false;
+            this.textContent = 'Simpan';
         }
     });
 
-    // Edit
-    document.querySelectorAll('.btn-edit-user').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalUserTitle').textContent   = 'Ubah User';
-            document.getElementById('formUser').action              = `/user/${this.dataset.id}`;
-            document.getElementById('formUserMethod').value         = 'PUT';
-            document.getElementById('inputNama').value              = this.dataset.nama;
-            document.getElementById('inputEmail').value             = this.dataset.email;
-            document.getElementById('inputHakAkses').value          = this.dataset.hakAkses;
-            document.getElementById('inputPassword').required       = false;
-            document.getElementById('inputPassword').value          = '';
-            document.getElementById('passwordHint').style.display   = 'block';
-            document.getElementById('labelPassword').textContent     = 'Password (opsional)';
+    // ── Handler Hapus ──
+    function handleHapus() {
+        document.getElementById('namaUserHapus').textContent    = this.dataset.nama;
+        document.getElementById('btnHapusUser').dataset.id      = this.dataset.id;
+        document.getElementById('btnHapusUser').dataset.url     = this.dataset.url;
+        document.getElementById('btnHapusUser').dataset.nama    = this.dataset.nama;
+        new bootstrap.Modal(document.getElementById('modalHapusUser')).show();
+    }
 
-            if (this.dataset.status === 'nonaktif') {
-                document.getElementById('statusNonaktif').checked = true;
-            } else {
-                document.getElementById('statusAktif').checked = true;
-            }
-
-            new bootstrap.Modal(document.getElementById('modalUser')).show();
-        });
+    document.querySelectorAll('.btn-hapus-user').forEach(btn => {
+        btn.addEventListener('click', handleHapus);
     });
 
-    // Hapus
-    document.querySelectorAll('.btn-hapus-user').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('namaUserHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusUser').action      = this.dataset.url;
-            new bootstrap.Modal(document.getElementById('modalHapusUser')).show();
+    // ── Submit Hapus AJAX ──
+    document.getElementById('btnHapusUser').addEventListener('click', async function () {
+        const url  = this.dataset.url;
+        const id   = this.dataset.id;
+        const nama = this.dataset.nama;
+
+        this.disabled    = true;
+        this.textContent = 'Menghapus...';
+
+        try {
+            const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
+            if (res.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalHapusUser')).hide();
+                toast(`User "${nama}" berhasil dihapus!`);
+                document.querySelectorAll('.btn-hapus-user').forEach(btn => {
+                    if (btn.dataset.id == id) btn.closest('tr').remove();
+                });
+                tbody.querySelectorAll('tr').forEach((tr, i) => {
+                    if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = i + 1;
+                });
+                totalSpan.textContent = tbody.querySelectorAll('tr:not(:has(.empty-row))').length;
+            } else {
+                toast(res.message ?? 'Gagal menghapus data.', 'error');
+            }
+        } catch {
+            toast('Terjadi kesalahan.', 'error');
+        }
+
+        this.disabled    = false;
+        this.textContent = 'Hapus';
+    });
+
+    // ── Search ──
+    document.getElementById('searchUser').addEventListener('input', function () {
+        const kw = this.value.toLowerCase().trim();
+        let n = 0;
+        tbody.querySelectorAll('tr').forEach(r => {
+            if (r.querySelector('.empty-row')) return;
+            const show = r.textContent.toLowerCase().includes(kw);
+            r.style.display = show ? '' : 'none';
+            if (show) n++;
         });
+        totalSpan.textContent = n;
     });
 
 });
