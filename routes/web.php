@@ -106,6 +106,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengumuman-luar', [PengumumanLuarController::class, 'index'])->name('pengumuman_luar.index');
     Route::get('/pengumuman-luar/{id}', [PengumumanLuarController::class, 'show'])->name('pengumuman_luar.show');
 
+    Route::get('/pengumuman-luar', [PengumumanLuarController::class, 'index'])->name('pengumuman_luar.index');
+    Route::get('/pengumuman-luar/{id}', [PengumumanLuarController::class, 'show'])->name('pengumuman_luar.show');    // Route::get('/pengumuman-luar', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
+    // Route::get('/pengumuman-luar/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
+
     // ── Inovasi ───────────────────────────────────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
         Route::get('/riwayat',                     [InovasiController::class, 'riwayat'])      ->name('riwayat');
