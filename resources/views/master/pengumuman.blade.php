@@ -271,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-}); // ← penutup DOMContentLoaded
+});
+
 </script>
 @endpush

@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Hapus
+    // hapus
     document.querySelectorAll('.btn-hapus-se').forEach(btn => {
         btn.addEventListener('click', function () {
             document.getElementById('namaSEHapus').textContent = this.dataset.nama;
