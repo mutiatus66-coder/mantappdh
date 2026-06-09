@@ -124,6 +124,80 @@
         });
         
     </script>
+    <script>
+    (function () {
+        const CONTENT_ID = 'kt_content_container';
+
+        function navigate(url, push) {
+            const el = document.getElementById(CONTENT_ID);
+            el.style.opacity = '0.4';
+
+            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc    = parser.parseFromString(html, 'text/html');
+                const newEl  = doc.getElementById(CONTENT_ID);
+
+                if (newEl) {
+                    el.innerHTML = newEl.innerHTML;
+                    el.style.opacity = '1';
+
+                    // ← Eksekusi ulang <script> di konten baru
+                    el.querySelectorAll('script').forEach(oldScript => {
+                        const s = document.createElement('script');
+                        [...oldScript.attributes].forEach(a => s.setAttribute(a.name, a.value));
+                        s.textContent = oldScript.textContent;
+                        oldScript.replaceWith(s);
+                    });
+                } else {
+                    window.location.href = url;
+                    return;
+                }
+
+                if (push) history.pushState({ url }, '', url);
+                highlightMenu(url);
+
+                const title = doc.querySelector('title');
+                if (title) document.title = title.textContent;
+            })
+            .catch(() => { window.location.href = url; });
+        }
+
+        function highlightMenu(url) {
+            const currentPath = new URL(url, location.origin).pathname.replace(/\/+$/, '') || '/';
+            document.querySelectorAll('#ri-sidebar-nav .ri-menu-item').forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href) return;
+                const linkPath = href.replace(/\/+$/, '') || '/';
+                link.classList.toggle('active',
+                    linkPath === '/' ? currentPath === '/' : currentPath.startsWith(linkPath)
+                );
+            });
+        }
+
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a[href]');
+            if (!a) return;
+            const href = a.getAttribute('href');
+            if (!href
+                || (href.startsWith('http') && !href.startsWith(location.origin))
+                || href.startsWith('#')
+                || href.startsWith('javascript')
+                || a.target === '_blank'
+                || a.hasAttribute('download')
+            ) return;
+            e.preventDefault();
+            navigate(href, true);
+        });
+
+        window.addEventListener('popstate', function (e) {
+            navigate(e.state?.url || location.href, false);
+        });
+
+        history.replaceState({ url: location.href }, '', location.href);
+    })();
+    </script>
 
     @stack('scripts')
 </body>
