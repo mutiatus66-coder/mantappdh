@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', $pengumuman->judul)
+@section('title', $buletin->judul)
 
 @section('content')
 <div class="container py-5">
@@ -12,43 +12,43 @@
                     <div class="text-uppercase small text-primary fw-bold mb-2">
                         BAPPERIDA KABUPATEN MAGETAN
                     </div>
-                    <h1 class="display-6 fw-bold">{{ $pengumuman->judul }}</h1>
+                    <h1 class="display-6 fw-bold">{{ $buletin->judul }}</h1>
                     <div class="text-muted mt-2">
-                        {{ $pengumuman->created_at->format('d F Y') }}
+                        {{ $buletin->created_at->format('d F Y') }}
                     </div>
                 </div>
 
                 {{-- Deskripsi --}}
                 <div class="mb-4" style="font-size: 1.05rem; line-height: 1.7;">
-                    {!! nl2br(e($pengumuman->deskripsi)) !!}
+                    {!! nl2br(e($buletin->deskripsi)) !!}
                 </div>
 
                 {{-- Lampiran Gambar --}}
-                @if($pengumuman->file_path)
+                @if($buletin->file_path)
                     <div class="mt-4 p-3 border rounded">
                         <p class="fw-semibold mb-2">
                             <i class="bi bi-paperclip me-1"></i> Lampiran
                         </p>
 
                         @php
-                            $ext = strtolower(pathinfo($pengumuman->file_path, PATHINFO_EXTENSION));
+                            $ext = strtolower(pathinfo($buletin->file_path, PATHINFO_EXTENSION));
                             $imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
                         @endphp
 
                         @if(in_array($ext, $imageExts))
                             {{-- Tampilkan gambar langsung --}}
-                            <img src="{{ asset('storage/' . $pengumuman->file_path) }}"
-                                 alt="Lampiran {{ $pengumuman->judul }}"
+                            <img src="{{ asset('storage/' . $buletin->file_path) }}"
+                                 alt="Lampiran {{ $buletin->judul }}"
                                  class="img-fluid rounded mb-3"
                                  style="max-height: 500px; object-fit: contain;">
                             <br>
-                            <a href="{{ asset('storage/' . $pengumuman->file_path) }}"
+                            <a href="{{ asset('storage/' . $buletin->file_path) }}"
                                download class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-download me-1"></i> Unduh Gambar
                             </a>
                         @else
                             {{-- File bukan gambar (PDF, dll) --}}
-                            <a href="{{ asset('storage/' . $pengumuman->file_path) }}"
+                            <a href="{{ asset('storage/' . $buletin->file_path) }}"
                                target="_blank" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Lampiran
                             </a>
@@ -57,7 +57,7 @@
                 @endif
 
                 <div class="mt-5">
-                    <a href="{{ route('public.pengumuman.index') }}"
+                    <a href="{{ route('public.buletin.index') }}"
                        class="btn btn-outline-secondary">
                         ← Kembali
                     </a>

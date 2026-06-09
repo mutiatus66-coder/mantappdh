@@ -285,7 +285,7 @@ Style: Modern + Menarik, Tombol Kotak, Latar Putih
                             <div class="menu-item"><a class="menu-link nav-link" href="#">KKN Award</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="#">Jurnal Inovasi</a></div>
                             <div class="menu-item"><a class="menu-link nav-link" href="#">Dokumentasi</a></div>
-                            <div class="menu-item"><a class="menu-link nav-link" href="/pengumuman">Pengumuman</a></div>
+                            <div class="menu-item"><a class="menu-link nav-link" href="/buletin">Pengumuman</a></div>
                         </div>
                     </div>
 

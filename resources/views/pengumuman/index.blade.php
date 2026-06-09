@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="row">
-        @forelse($pengumuman as $item)
+        @forelse($buletin as $item)
         <div class="col-md-4 mb-4">
             <div class="card h-100 border-0 shadow-sm">
                 <div class="card-body">
@@ -21,7 +21,7 @@
                     <p class="card-text text-muted">
                         {{ Str::limit(strip_tags($item->deskripsi), 100) }}
                     </p>
-                    <a href="{{ route('public.pengumuman.show', $item->id) }}"
+                    <a href="{{ route('public.buletin.show', $item->id) }}"
                        class="btn btn-link ps-0 text-primary fw-semibold">
                         Selengkapnya →
                     </a>
@@ -32,6 +32,6 @@
         <div class="col-12 text-muted">Belum ada pengumuman.</div>
         @endforelse
     </div>
-    {{ $pengumuman->links() }}
+    {{ $buletin->links() }}
 </div>
 @endsection
