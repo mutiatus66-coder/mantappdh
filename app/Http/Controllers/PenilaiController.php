@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Penilai;
 
@@ -17,23 +15,28 @@ class PenilaiController extends Controller
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email',
+            'email' => 'required|email|unique:penilai,email',
         ]);
 
-        Penilai::create([
+        $penilai = Penilai::create([
             'nama'  => $request->nama,
             'email' => $request->email,
         ]);
 
-        return redirect()->route('penilai.index')
-        ->with('success', 'Penilai berhasil ditambahkan');
+        return response()->json([
+            'success' => true,
+            'penilai' => array_merge($penilai->toArray(), [
+                'update_url'  => route('penilai.update', $penilai->id),
+                'destroy_url' => route('penilai.destroy', $penilai->id),
+            ]),
+        ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email,' . $id,
+            'email' => 'required|email|unique:penilai,email,' . $id,
         ]);
 
         Penilai::findOrFail($id)->update([
@@ -41,15 +44,12 @@ class PenilaiController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->route('penilai.index')
-        ->with('success', 'Penilai berhasil diperbarui');
+        return response()->json(['success' => true]);
     }
 
     public function destroy($id)
     {
         Penilai::findOrFail($id)->delete();
-
-        return redirect()->route('penilai.index')
-        ->with('success', 'Penilai berhasil dihapus');
+        return response()->json(['success' => true]);
     }
 }

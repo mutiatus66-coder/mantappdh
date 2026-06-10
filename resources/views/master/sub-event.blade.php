@@ -18,14 +18,6 @@
         </button>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-dismissible fade show mb-4" role="alert"
-        style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
     <div class="sub-event-stats">
         <div class="total-badge">
             Total Sub Event: <span id="totalSubEvent">{{ $subEvents->count() }}</span>
@@ -68,7 +60,8 @@
                                     data-sub-event="{{ $item->sub_event }}"
                                     data-kategori="{{ $item->kategori }}"
                                     data-mulai="{{ $item->mulai }}"
-                                    data-berakhir="{{ $item->berakhir }}">
+                                    data-berakhir="{{ $item->berakhir }}"
+                                    data-url="{{ route('sub-event.update', $item->id) }}">
                                 Ubah
                             </button>
                             <button class="btn btn-danger btn-hapus-se btn-aksi"
@@ -81,7 +74,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
+                <tr id="emptyRow">
                     <td colspan="8" class="empty-row">
                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                         Belum ada data sub event
@@ -96,67 +89,64 @@
 
 
 {{-- ══ MODAL — Tambah / Ubah Sub Event ══ --}}
-<div class="modal fade" id="modalSubEvent" tabindex="-1">
+<div class="modal fade" id="modalSubEvent" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formSubEvent" method="POST" action="{{ route('sub-event.store') }}">
-                @csrf
-                <input type="hidden" name="_method" id="formSEMethod" value="POST">
 
-                <div class="modal-header px-5 py-4">
-                    <h5 class="modal-title fw-semibold" id="modalSETitle">Tambah Sub Event</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                            data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg fs-5"></i>
-                    </button>
-                </div>
+            <div class="modal-header px-5 py-4">
+                <h5 class="modal-title fw-semibold" id="modalSETitle">Tambah Sub Event</h5>
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
+                        id="btnTutupModalSE" aria-label="Close">
+                    <i class="bi bi-x-lg fs-5"></i>
+                </button>
+            </div>
 
-                <div class="modal-body px-5 py-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <label class="form-label fw-semibold required">Tahun</label>
-                            <input type="number" name="tahun" id="seTahun" class="form-control" placeholder="cth. 2025" required>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <label class="form-label fw-semibold required">Event</label>
-                            <select name="event_id" id="seEvent" class="form-select" required>
-                                <option value="">-- Pilih Event --</option>
-                                @foreach($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold required">Sub Event</label>
-                            <input type="text" name="sub_event" id="seSubEvent" class="form-control" placeholder="Nama sub event" required>
-                        </div>
-                        <div class="col-md-12 mb-4">
-                            <label class="form-label fw-semibold">Kategori</label>
-                            <input type="text" name="kategori" id="seKategori" class="form-control" placeholder="Opsional">
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <label class="form-label fw-semibold required">Tanggal Mulai</label>
-                            <input type="date" name="mulai" id="seMulai" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <label class="form-label fw-semibold required">Tanggal Berakhir</label>
-                            <input type="date" name="berakhir" id="seBerakhir" class="form-control" required>
-                        </div>
+            <div class="modal-body px-5 py-4">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold required">Tahun</label>
+                        <input type="number" id="seTahun" class="form-control" placeholder="cth. 2025">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold required">Event</label>
+                        <select id="seEvent" class="form-select">
+                            <option value="">-- Pilih Event --</option>
+                            @foreach($events as $event)
+                            <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold required">Sub Event</label>
+                        <input type="text" id="seSubEvent" class="form-control" placeholder="Nama sub event">
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold">Kategori</label>
+                        <input type="text" id="seKategori" class="form-control" placeholder="Opsional">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold required">Tanggal Mulai</label>
+                        <input type="date" id="seMulai" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold required">Tanggal Berakhir</label>
+                        <input type="date" id="seBerakhir" class="form-control">
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan</button>
-                </div>
-            </form>
+            <div class="modal-footer px-5 py-3">
+                <button type="button" class="btn btn-dark" id="btnBatalSE">Batal</button>
+                <button type="button" id="btnSimpanSE" class="btn btn-success px-4">Simpan</button>
+            </div>
+
         </div>
     </div>
 </div>
 
 
 {{-- ══ MODAL — Konfirmasi Hapus Sub Event ══ --}}
-<div class="modal fade" id="modalHapusSE" tabindex="-1">
+<div class="modal fade" id="modalHapusSE" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
 
@@ -174,14 +164,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
-                <form id="formHapusSE" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-aksi px-3">
-                        Hapus
-                    </button>
-                </form>
+                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapusSE">Batal</button>
+                <button type="button" id="btnHapusSE" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
         </div>
@@ -194,63 +178,330 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl    = "{{ route('sub-event.store') }}";
-    const searchInput = document.getElementById('searchSubEvent');
-    const rows        = document.querySelectorAll('#tabelSubEventBody tr');
-    const totalSpan   = document.getElementById('totalSubEvent');
+    // ── Konstanta ──
+    const STORE_URL = "{{ route('sub-event.store') }}";
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // Search
-    searchInput.addEventListener('keyup', function () {
-        const kw = this.value.toLowerCase().trim();
+    // ── Elemen ──
+    const tbody       = document.getElementById('tabelSubEventBody');
+    const totalSpan   = document.getElementById('totalSubEvent');
+    const searchInput = document.getElementById('searchSubEvent');
+
+    // ── Modal: singleton + static backdrop ──
+    const modalSEEl    = document.getElementById('modalSubEvent');
+    const modalHapusEl = document.getElementById('modalHapusSE');
+    const modalSE      = new bootstrap.Modal(modalSEEl);
+    const modalHapus   = new bootstrap.Modal(modalHapusEl);
+
+    // ── State ──
+    let activeMode      = 'store';
+    let activeUpdateId  = null;
+    let activeUpdateUrl = null;
+    let activeHapusId   = null;
+    let activeHapusUrl  = null;
+    let activeHapusNama = null;
+    let isSaving        = false;
+    let isDeleting      = false;
+
+    // ────────────────────────────────────────────
+    // HELPER: AJAX pakai FormData agar _method terbaca Laravel
+    // ────────────────────────────────────────────
+    async function sendRequest(url, data) {
+        const form = new FormData();
+        Object.entries(data).forEach(([k, v]) => form.append(k, v));
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': CSRF,
+                'Accept': 'application/json',
+            },
+            body: form,
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message ?? `HTTP ${res.status}`);
+        }
+        return res.json();
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Toast
+    // ────────────────────────────────────────────
+    function toast(msg, type = 'success') {
+        const el = document.createElement('div');
+        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
+        el.style.cssText = [
+            'z-index:9999',
+            'min-width:280px',
+            `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
+            `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
+            `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
+        ].join(';');
+        el.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
+            ${msg}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Update baris yang sudah ada
+    // ────────────────────────────────────────────
+    function updateRow(id, data, eventNama) {
+        const editBtn = tbody.querySelector(`.btn-edit-se[data-id="${id}"]`);
+        if (!editBtn) return;
+        const tr = editBtn.closest('tr');
+        tr.cells[1].textContent = data.tahun;
+        tr.cells[2].textContent = eventNama;
+        tr.cells[3].textContent = data.sub_event;
+        tr.cells[4].innerHTML   = `<span class="badge-kategori">${data.kategori || '-'}</span>`;
+        tr.cells[5].textContent = data.mulai;
+        tr.cells[6].textContent = data.berakhir;
+        editBtn.dataset.tahun    = data.tahun;
+        editBtn.dataset.eventId  = data.event_id;
+        editBtn.dataset.subEvent = data.sub_event;
+        editBtn.dataset.kategori = data.kategori ?? '';
+        editBtn.dataset.mulai    = data.mulai;
+        editBtn.dataset.berakhir = data.berakhir;
+        const hapusBtn = tr.querySelector('.btn-hapus-se');
+        if (hapusBtn) hapusBtn.dataset.nama = data.sub_event;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Tambah baris baru
+    // ────────────────────────────────────────────
+    function appendRow(se) {
+        const emptyRow = tbody.querySelector('#emptyRow');
+        if (emptyRow) emptyRow.remove();
+
+        const rowCount = tbody.querySelectorAll('tr').length + 1;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${rowCount}</td>
+            <td>${se.tahun}</td>
+            <td>${se.event_nama}</td>
+            <td>${se.sub_event}</td>
+            <td><span class="badge-kategori">${se.kategori || '-'}</span></td>
+            <td>${se.mulai}</td>
+            <td>${se.berakhir}</td>
+            <td style="text-align:center;">
+                <div class="btn-aksi-wrap">
+                    <button class="btn btn-warning btn-edit-se btn-aksi"
+                            data-id="${se.id}"
+                            data-tahun="${se.tahun}"
+                            data-event-id="${se.event_id}"
+                            data-sub-event="${se.sub_event}"
+                            data-kategori="${se.kategori ?? ''}"
+                            data-mulai="${se.mulai}"
+                            data-berakhir="${se.berakhir}"
+                            data-url="${se.update_url}">
+                        Ubah
+                    </button>
+                    <button class="btn btn-danger btn-hapus-se btn-aksi"
+                            data-id="${se.id}"
+                            data-nama="${se.sub_event}"
+                            data-url="${se.destroy_url}">
+                        Hapus
+                    </button>
+                </div>
+            </td>`;
+        tbody.appendChild(tr);
+        totalSpan.textContent = tbody.querySelectorAll('tr').length;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Renumber baris
+    // ────────────────────────────────────────────
+    function renumberRows() {
         let n = 0;
-        rows.forEach(r => {
-            if (r.querySelector('.empty-row')) return;
-            const show = r.textContent.toLowerCase().includes(kw);
-            r.style.display = show ? '' : 'none';
-            if (show) n++;
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = ++n;
         });
         totalSpan.textContent = n;
-    });
+    }
 
-    // Reset modal on close
-    document.getElementById('modalSubEvent').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formSubEvent').action      = storeUrl;
-        document.getElementById('formSEMethod').value       = 'POST';
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Simpan
+    // ────────────────────────────────────────────
+    function setSimpanLoading(loading) {
+        document.getElementById('btnSimpanSE').disabled      = loading;
+        document.getElementById('btnSimpanSE').textContent   = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalSE').disabled       = loading;
+        document.getElementById('btnTutupModalSE').disabled  = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Hapus
+    // ────────────────────────────────────────────
+    function setHapusLoading(loading) {
+        document.getElementById('btnHapusSE').disabled       = loading;
+        document.getElementById('btnHapusSE').textContent    = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapusSE').disabled  = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // MODAL: buka untuk Tambah
+    // ────────────────────────────────────────────
+    document.getElementById('btnTambahSubEvent').addEventListener('click', function () {
+        activeMode      = 'store';
+        activeUpdateId  = null;
+        activeUpdateUrl = null;
         document.getElementById('modalSETitle').textContent = 'Tambah Sub Event';
         ['seTahun', 'seSubEvent', 'seKategori', 'seMulai', 'seBerakhir'].forEach(id => {
             document.getElementById(id).value = '';
         });
         document.getElementById('seEvent').value = '';
+        setSimpanLoading(false);
+        modalSE.show();
     });
 
-    // Tambah
-    document.getElementById('btnTambahSubEvent').addEventListener('click', function () {
-        new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
+    // ────────────────────────────────────────────
+    // MODAL: buka Ubah / Hapus via event delegation
+    // ────────────────────────────────────────────
+    tbody.addEventListener('click', function (e) {
+        const editBtn = e.target.closest('.btn-edit-se');
+        if (editBtn) {
+            activeMode      = 'update';
+            activeUpdateId  = editBtn.dataset.id;
+            activeUpdateUrl = editBtn.dataset.url;
+            document.getElementById('modalSETitle').textContent = 'Ubah Sub Event';
+            document.getElementById('seTahun').value            = editBtn.dataset.tahun;
+            document.getElementById('seEvent').value            = editBtn.dataset.eventId;
+            document.getElementById('seSubEvent').value         = editBtn.dataset.subEvent;
+            document.getElementById('seKategori').value         = editBtn.dataset.kategori;
+            document.getElementById('seMulai').value            = editBtn.dataset.mulai;
+            document.getElementById('seBerakhir').value         = editBtn.dataset.berakhir;
+            setSimpanLoading(false);
+            modalSE.show();
+            return;
+        }
+
+        const hapusBtn = e.target.closest('.btn-hapus-se');
+        if (hapusBtn) {
+            activeHapusId   = hapusBtn.dataset.id;
+            activeHapusUrl  = hapusBtn.dataset.url;
+            activeHapusNama = hapusBtn.dataset.nama;
+            document.getElementById('namaSEHapus').textContent = activeHapusNama;
+            setHapusLoading(false);
+            modalHapus.show();
+        }
     });
 
-    // Edit
-    document.querySelectorAll('.btn-edit-se').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modalSETitle').textContent  = 'Ubah Sub Event';
-            document.getElementById('formSubEvent').action       = `/sub-event/${this.dataset.id}`;
-            document.getElementById('formSEMethod').value        = 'PUT';
-            document.getElementById('seTahun').value             = this.dataset.tahun;
-            document.getElementById('seSubEvent').value          = this.dataset.subEvent;
-            document.getElementById('seKategori').value          = this.dataset.kategori;
-            document.getElementById('seMulai').value             = this.dataset.mulai;
-            document.getElementById('seBerakhir').value          = this.dataset.berakhir;
-            document.getElementById('seEvent').value             = this.dataset.eventId;
-            new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
+    // ────────────────────────────────────────────
+    // MODAL: tutup manual (guard saat loading)
+    // ────────────────────────────────────────────
+    document.getElementById('btnTutupModalSE').addEventListener('click', function () {
+        if (isSaving) return;
+        modalSE.hide();
+    });
+    document.getElementById('btnBatalSE').addEventListener('click', function () {
+        if (isSaving) return;
+        modalSE.hide();
+    });
+    document.getElementById('btnBatalHapusSE').addEventListener('click', function () {
+        if (isDeleting) return;
+        modalHapus.hide();
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Tambah / Ubah
+    // ────────────────────────────────────────────
+    document.getElementById('btnSimpanSE').addEventListener('click', async function () {
+        if (isSaving) return;
+
+        const tahun    = document.getElementById('seTahun').value.trim();
+        const eventId  = document.getElementById('seEvent').value;
+        const subEvent = document.getElementById('seSubEvent').value.trim();
+        const kategori = document.getElementById('seKategori').value.trim();
+        const mulai    = document.getElementById('seMulai').value;
+        const berakhir = document.getElementById('seBerakhir').value;
+
+        if (!tahun || !eventId || !subEvent || !mulai || !berakhir) {
+            toast('Harap isi semua field yang wajib.', 'error');
+            return;
+        }
+
+        isSaving = true;
+        setSimpanLoading(true);
+
+        try {
+            const isUpdate = activeMode === 'update';
+            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
+            const res      = await sendRequest(url, {
+                _method:   isUpdate ? 'PUT' : 'POST',
+                event_id:  eventId,
+                tahun,
+                sub_event: subEvent,
+                kategori,
+                mulai,
+                berakhir,
+            });
+
+            if (res.success) {
+                modalSE.hide();
+                toast(isUpdate ? 'Sub Event berhasil diubah!' : 'Sub Event berhasil ditambahkan!');
+                if (isUpdate) {
+                    updateRow(activeUpdateId,
+                        { tahun, event_id: eventId, sub_event: subEvent, kategori, mulai, berakhir },
+                        res.event_nama);
+                } else {
+                    appendRow(res.subEvent);
+                }
+            } else {
+                toast(res.message ?? 'Gagal menyimpan data.', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isSaving = false;
+            setSimpanLoading(false);
+        }
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Hapus
+    // ────────────────────────────────────────────
+    document.getElementById('btnHapusSE').addEventListener('click', async function () {
+        if (isDeleting) return;
+
+        isDeleting = true;
+        setHapusLoading(true);
+
+        try {
+            const res = await sendRequest(activeHapusUrl, { _method: 'DELETE' });
+            if (res.success) {
+                modalHapus.hide();
+                toast(`Sub Event "${activeHapusNama}" berhasil dihapus!`);
+                const hapusBtn = tbody.querySelector(`.btn-hapus-se[data-id="${activeHapusId}"]`);
+                if (hapusBtn) hapusBtn.closest('tr').remove();
+                renumberRows();
+            } else {
+                toast(res.message ?? 'Gagal menghapus data.', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isDeleting = false;
+            setHapusLoading(false);
+        }
+    });
+
+    // ────────────────────────────────────────────
+    // SEARCH
+    // ────────────────────────────────────────────
+    searchInput.addEventListener('input', function () {
+        const kw = this.value.toLowerCase().trim();
+        let n = 0;
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (tr.querySelector('.empty-row')) return;
+            const show = tr.textContent.toLowerCase().includes(kw);
+            tr.style.display = show ? '' : 'none';
+            if (show) n++;
         });
-    });
-
-    // Hapus
-    document.querySelectorAll('.btn-hapus-se').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('namaSEHapus').textContent = this.dataset.nama;
-            document.getElementById('formHapusSE').action      = this.dataset.url;
-            new bootstrap.Modal(document.getElementById('modalHapusSE')).show();
-        });
+        totalSpan.textContent = n;
     });
 
 });

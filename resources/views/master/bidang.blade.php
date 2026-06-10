@@ -104,7 +104,7 @@
                                         <th width="280" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tbody-se-{{ $se->id }}">
                                     @forelse($se->bidangs as $bidang)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
@@ -137,7 +137,7 @@
                                         </td>
                                     </tr>
                                     @empty
-                                    <tr>
+                                    <tr class="empty-row-wrapper">
                                         <td colspan="4" class="text-center py-5 empty-row">
                                             <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                                             Belum ada bidang untuk sub event ini.
@@ -173,60 +173,56 @@
 
 
 {{-- ══ MODAL — Tambah / Ubah Bidang ══ --}}
-<div class="modal fade" id="modalBidang" tabindex="-1">
+<div class="modal fade" id="modalBidang" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
-            <form id="formBidang" method="POST" action="{{ route('bidang.store') }}">
-                @csrf
-                <input type="hidden" name="_method"      id="formBidangMethod" value="POST">
-                <input type="hidden" name="sub_event_id" id="bidangSubEventId">
 
-                <div class="modal-header px-5 py-4">
-                    <h5 class="modal-title fw-semibold" id="modalBidangTitle">Tambah Bidang</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                            data-bs-dismiss="modal" aria-label="Close">
-                        <i class="bi bi-x-lg fs-5"></i>
-                    </button>
+            <div class="modal-header px-5 py-4">
+                <h5 class="modal-title fw-semibold" id="modalBidangTitle">Tambah Bidang</h5>
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
+                        id="btnTutupModalBidang" aria-label="Close">
+                    <i class="bi bi-x-lg fs-5"></i>
+                </button>
+            </div>
+
+            <div class="modal-body px-5 py-4">
+
+                <p class="mb-3" style="font-size:0.85rem; color:var(--ri-text-muted);">
+                    Sub Event: <strong id="bidangSubEventNama" style="color:var(--ri-text-primary);"></strong>
+                </p>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold required">Nama Bidang</label>
+                    <input type="text" id="bidangNama"
+                           class="form-control" placeholder="Masukkan nama bidang...">
                 </div>
 
-                <div class="modal-body px-5 py-4">
-
-                    <p class="mb-3" style="font-size:0.85rem; color:var(--ri-text-muted);">
-                        Sub Event: <strong id="bidangSubEventNama" style="color:var(--ri-text-primary);"></strong>
-                    </p>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold required">Nama Bidang</label>
-                        <input type="text" name="nama" id="bidangNama"
-                               class="form-control" placeholder="Masukkan nama bidang..." required>
+                <div class="mb-2">
+                    <label class="form-label fw-semibold">Status</label>
+                    <div class="d-flex gap-4 mt-1">
+                        <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                            <input type="radio" name="statusBidang" id="statusAktifBidang" value="aktif" checked> Aktif
+                        </label>
+                        <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
+                            <input type="radio" name="statusBidang" id="statusNonaktifBidang" value="tidak_aktif"> Tidak Aktif
+                        </label>
                     </div>
-
-                    <div class="mb-2">
-                        <label class="form-label fw-semibold">Status</label>
-                        <div class="d-flex gap-4 mt-1">
-                            <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                <input type="radio" name="status" id="statusAktifBidang" value="aktif" checked> Aktif
-                            </label>
-                            <label class="d-flex align-items-center gap-2" style="font-size:.875rem; cursor:pointer;">
-                                <input type="radio" name="status" id="statusNonaktifBidang" value="tidak_aktif"> Tidak Aktif
-                            </label>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="modal-footer px-5 py-3">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="btnSimpanBidang" class="btn btn-success px-4">Simpan</button>
-                </div>
-            </form>
+            </div>
+
+            <div class="modal-footer px-5 py-3">
+                <button type="button" class="btn btn-dark" id="btnBatalBidang">Batal</button>
+                <button type="button" id="btnSimpanBidang" class="btn btn-success px-4">Simpan</button>
+            </div>
+
         </div>
     </div>
 </div>
 
 
 {{-- ══ MODAL — Konfirmasi Hapus Bidang ══ --}}
-<div class="modal fade" id="modalHapusBidang" tabindex="-1">
+<div class="modal fade" id="modalHapusBidang" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
 
@@ -244,12 +240,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
-                <form id="formHapusBidang" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" id="btnHapusBidang" class="btn btn-danger">Hapus</button>
-                </form>
+                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapusBidang">Batal</button>
+                <button type="button" id="btnHapusBidang" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
         </div>
@@ -262,60 +254,96 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl = "{{ route('bidang.store') }}";
-    const CSRF     = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+    // ── Konstanta ──
+    const STORE_URL = "{{ route('bidang.store') }}";
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // ── Helper: kirim request AJAX ──
-    async function sendRequest(url, method, data) {
+    // ── Modal: singleton + static backdrop ──
+    const modalBidangEl = document.getElementById('modalBidang');
+    const modalHapusEl  = document.getElementById('modalHapusBidang');
+    const modalBidang   = new bootstrap.Modal(modalBidangEl);
+    const modalHapus    = new bootstrap.Modal(modalHapusEl);
+
+    // ── State ──
+    let activeMode         = 'store';
+    let activeUpdateId     = null;
+    let activeUpdateUrl    = null;
+    let activeSubEventId   = null;
+    let activeSubEventNama = null;
+    let activeHapusId      = null;
+    let activeHapusUrl     = null;
+    let activeHapusNama    = null;
+    let isSaving           = false;
+    let isDeleting         = false;
+
+    // ────────────────────────────────────────────
+    // HELPER: AJAX pakai FormData agar _method terbaca Laravel
+    // ────────────────────────────────────────────
+    async function sendRequest(url, data) {
+        const form = new FormData();
+        Object.entries(data).forEach(([k, v]) => form.append(k, v));
         const res = await fetch(url, {
-            method,
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': CSRF,
                 'Accept': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: form,
         });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message ?? `HTTP ${res.status}`);
+        }
         return res.json();
     }
 
-    // ── Helper: toast notifikasi ──
+    // ────────────────────────────────────────────
+    // HELPER: Toast
+    // ────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
-        el.className = `alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4`;
-        el.style.cssText = `z-index:9999; min-width:280px; background:${type === 'success' ? 'rgba(0,172,193,0.15)' : 'rgba(163,45,45,0.12)'}; border:1px solid ${type === 'success' ? 'rgba(0,172,193,0.4)' : 'rgba(163,45,45,0.3)'}; color:${type === 'success' ? '#006064' : '#A32D2D'};`;
-        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>${msg}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
+        el.style.cssText = [
+            'z-index:9999',
+            'min-width:280px',
+            `background:${type === 'success' ? 'rgba(0,172,193,0.15)' : 'rgba(163,45,45,0.12)'}`,
+            `border:1px solid ${type === 'success' ? 'rgba(0,172,193,0.4)' : 'rgba(163,45,45,0.3)'}`,
+            `color:${type === 'success' ? '#006064' : '#A32D2D'}`,
+        ].join(';');
+        el.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
+            ${msg}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 3000);
     }
 
-    // ── Helper: update baris tabel tanpa reload ──
+    // ────────────────────────────────────────────
+    // HELPER: Update baris yang sudah ada
+    // ────────────────────────────────────────────
     function updateRow(id, nama, status) {
-        const rows = document.querySelectorAll('.btn-ubah-bidang');
-        rows.forEach(btn => {
-            if (btn.dataset.id == id) {
-                const tr = btn.closest('tr');
-                // Update nama
-                tr.cells[1].textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
-                // Update status badge
-                tr.cells[2].innerHTML = status === 'aktif'
-                    ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
-                    : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
-                // Update data-attribute tombol
-                btn.dataset.nama   = nama;
-                btn.dataset.status = status;
-            }
-        });
+        const ubahBtn = document.querySelector(`.btn-ubah-bidang[data-id="${id}"]`);
+        if (!ubahBtn) return;
+        const tr = ubahBtn.closest('tr');
+        tr.cells[1].textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
+        tr.cells[2].innerHTML   = status === 'aktif'
+            ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+            : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
+        ubahBtn.dataset.nama   = nama;
+        ubahBtn.dataset.status = status;
+        const hapusBtn = tr.querySelector('.btn-hapus-bidang');
+        if (hapusBtn) hapusBtn.dataset.nama = nama;
     }
 
-    // ── Helper: tambah baris baru ke tabel ──
+    // ────────────────────────────────────────────
+    // HELPER: Tambah baris baru ke tbody sub event
+    // ────────────────────────────────────────────
     function appendRow(bidang, subEventId) {
-        const tbody = document.querySelector(`#collapse-${subEventId} tbody`);
+        const tbody = document.getElementById(`tbody-se-${subEventId}`);
         if (!tbody) return;
 
-        // Hapus baris "belum ada data" jika ada
-        const emptyRow = tbody.querySelector('.empty-row');
-        if (emptyRow) emptyRow.closest('tr').remove();
+        const emptyRow = tbody.querySelector('.empty-row-wrapper');
+        if (emptyRow) emptyRow.remove();
 
         const rowCount = tbody.querySelectorAll('tr').length + 1;
         const tr = document.createElement('tr');
@@ -347,140 +375,172 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </td>`;
         tbody.appendChild(tr);
-
-        // Re-attach event listener pada tombol baru
-        tr.querySelector('.btn-ubah-bidang').addEventListener('click', handleUbah);
-        tr.querySelector('.btn-hapus-bidang').addEventListener('click', handleHapus);
+        // Tidak perlu re-attach listener — pakai event delegation di bawah
     }
 
-    // ── Reset modal ──
-    function resetModal() {
-        document.getElementById('formBidangMethod').value         = 'POST';
-        document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
-        document.getElementById('bidangNama').value               = '';
-        document.getElementById('bidangSubEventId').value         = '';
-        document.getElementById('bidangSubEventNama').textContent = '';
-        document.getElementById('statusAktifBidang').checked      = true;
-        document.getElementById('btnSimpanBidang').disabled       = false;
-        document.getElementById('btnSimpanBidang').textContent    = 'Simpan';
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Simpan
+    // ────────────────────────────────────────────
+    function setSimpanLoading(loading) {
+        document.getElementById('btnSimpanBidang').disabled     = loading;
+        document.getElementById('btnSimpanBidang').textContent  = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalBidang').disabled      = loading;
+        document.getElementById('btnTutupModalBidang').disabled = loading;
     }
 
-    document.getElementById('modalBidang').addEventListener('hidden.bs.modal', resetModal);
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Hapus
+    // ────────────────────────────────────────────
+    function setHapusLoading(loading) {
+        document.getElementById('btnHapusBidang').disabled      = loading;
+        document.getElementById('btnHapusBidang').textContent   = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapusBidang').disabled = loading;
+    }
 
-    // ── Tambah Bidang ──
-    document.querySelectorAll('.btn-tambah-bidang').forEach(btn => {
-        btn.addEventListener('click', function () {
-            resetModal();
-            document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
-            document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
+    // ────────────────────────────────────────────
+    // EVENT DELEGATION: Tambah, Ubah, Hapus
+    // Satu listener di document body — menangkap semua tombol
+    // termasuk baris yang baru di-append
+    // ────────────────────────────────────────────
+    document.body.addEventListener('click', function (e) {
+
+        // ── Tambah Bidang ──
+        const tambahBtn = e.target.closest('.btn-tambah-bidang');
+        if (tambahBtn) {
+            activeMode         = 'store';
+            activeUpdateId     = null;
+            activeUpdateUrl    = null;
+            activeSubEventId   = tambahBtn.dataset.subEventId;
+            activeSubEventNama = tambahBtn.dataset.subEventNama;
             document.getElementById('modalBidangTitle').textContent   = 'Tambah Bidang';
-            new bootstrap.Modal(document.getElementById('modalBidang')).show();
-        });
+            document.getElementById('bidangSubEventNama').textContent = activeSubEventNama;
+            document.getElementById('bidangNama').value               = '';
+            document.getElementById('statusAktifBidang').checked      = true;
+            setSimpanLoading(false);
+            modalBidang.show();
+            return;
+        }
+
+        // ── Ubah Bidang ──
+        const ubahBtn = e.target.closest('.btn-ubah-bidang');
+        if (ubahBtn) {
+            activeMode         = 'update';
+            activeUpdateId     = ubahBtn.dataset.id;
+            activeUpdateUrl    = ubahBtn.dataset.url;
+            activeSubEventId   = ubahBtn.dataset.subEventId;
+            activeSubEventNama = ubahBtn.dataset.subEventNama;
+            document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
+            document.getElementById('bidangSubEventNama').textContent = activeSubEventNama;
+            document.getElementById('bidangNama').value               = ubahBtn.dataset.nama;
+            const radioId = ubahBtn.dataset.status === 'tidak_aktif'
+                ? 'statusNonaktifBidang' : 'statusAktifBidang';
+            document.getElementById(radioId).checked = true;
+            setSimpanLoading(false);
+            modalBidang.show();
+            return;
+        }
+
+        // ── Hapus Bidang ──
+        const hapusBtn = e.target.closest('.btn-hapus-bidang');
+        if (hapusBtn) {
+            activeHapusId   = hapusBtn.dataset.id;
+            activeHapusUrl  = hapusBtn.dataset.url;
+            activeHapusNama = hapusBtn.dataset.nama;
+            document.getElementById('namaBidangHapus').textContent = activeHapusNama;
+            setHapusLoading(false);
+            modalHapus.show();
+        }
     });
 
-    // ── Handler Ubah (bisa dipanggil ulang untuk baris baru) ──
-    function handleUbah() {
-        resetModal();
-        document.getElementById('modalBidangTitle').textContent   = 'Ubah Bidang';
-        document.getElementById('formBidangMethod').value         = 'PUT';
-        document.getElementById('bidangSubEventId').value         = this.dataset.subEventId;
-        document.getElementById('bidangSubEventNama').textContent = this.dataset.subEventNama;
-        document.getElementById('bidangNama').value               = this.dataset.nama;
-        document.getElementById('btnSimpanBidang').dataset.updateId  = this.dataset.id;
-        document.getElementById('btnSimpanBidang').dataset.updateUrl = this.dataset.url;
-
-        const radioId = this.dataset.status === 'tidak_aktif'
-            ? 'statusNonaktifBidang' : 'statusAktifBidang';
-        document.getElementById(radioId).checked = true;
-
-        new bootstrap.Modal(document.getElementById('modalBidang')).show();
-    }
-
-    document.querySelectorAll('.btn-ubah-bidang').forEach(btn => {
-        btn.addEventListener('click', handleUbah);
+    // ────────────────────────────────────────────
+    // MODAL: tutup manual (guard saat loading)
+    // ────────────────────────────────────────────
+    document.getElementById('btnTutupModalBidang').addEventListener('click', function () {
+        if (isSaving) return;
+        modalBidang.hide();
+    });
+    document.getElementById('btnBatalBidang').addEventListener('click', function () {
+        if (isSaving) return;
+        modalBidang.hide();
+    });
+    document.getElementById('btnBatalHapusBidang').addEventListener('click', function () {
+        if (isDeleting) return;
+        modalHapus.hide();
     });
 
-    // ── Submit AJAX (Tambah & Ubah) ──
+    // ────────────────────────────────────────────
+    // SUBMIT: Tambah / Ubah
+    // ────────────────────────────────────────────
     document.getElementById('btnSimpanBidang').addEventListener('click', async function () {
-        const method    = document.getElementById('formBidangMethod').value;
-        const nama      = document.getElementById('bidangNama').value.trim();
-        const status    = document.querySelector('input[name="status"]:checked').value;
-        const subEventId = document.getElementById('bidangSubEventId').value;
+        if (isSaving) return;
+
+        const nama   = document.getElementById('bidangNama').value.trim();
+        const status = document.querySelector('input[name="statusBidang"]:checked').value;
 
         if (!nama) {
             document.getElementById('bidangNama').focus();
             return;
         }
 
-        this.disabled     = true;
-        this.textContent  = 'Menyimpan...';
+        isSaving = true;
+        setSimpanLoading(true);
 
         try {
-            const url  = method === 'PUT' ? this.dataset.updateUrl : storeUrl;
-            const data = { nama, status, sub_event_id: subEventId, _method: method };
-            const res  = await sendRequest(url, 'POST', data);
+            const isUpdate = activeMode === 'update';
+            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
+            const res      = await sendRequest(url, {
+                _method:      isUpdate ? 'PUT' : 'POST',
+                nama,
+                status,
+                sub_event_id: activeSubEventId,
+            });
 
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalBidang')).hide();
-                toast(method === 'PUT' ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
-
-                if (method === 'PUT') {
-                    updateRow(this.dataset.updateId, nama, status);
+                modalBidang.hide();
+                toast(isUpdate ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
+                if (isUpdate) {
+                    updateRow(activeUpdateId, nama, status);
                 } else {
-                    appendRow(res.bidang, subEventId);
+                    appendRow(res.bidang, activeSubEventId);
                 }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
-                this.disabled    = false;
-                this.textContent = 'Simpan';
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
-            this.disabled    = false;
-            this.textContent = 'Simpan';
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isSaving = false;
+            setSimpanLoading(false);
         }
     });
 
-    // ── Handler Hapus ──
-    function handleHapus() {
-        document.getElementById('namaBidangHapus').textContent  = this.dataset.nama;
-        document.getElementById('formHapusBidang').dataset.id   = this.dataset.id;
-        document.getElementById('formHapusBidang').dataset.url  = this.dataset.url;
-        document.getElementById('formHapusBidang').dataset.nama = this.dataset.nama;
-        new bootstrap.Modal(document.getElementById('modalHapusBidang')).show();
-    }
-
-    document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
-        btn.addEventListener('click', handleHapus);
-    });
-
-    // ── Submit Hapus AJAX ──
+    // ────────────────────────────────────────────
+    // SUBMIT: Hapus
+    // ────────────────────────────────────────────
     document.getElementById('btnHapusBidang').addEventListener('click', async function () {
-        const url  = document.getElementById('formHapusBidang').dataset.url;
-        const id   = document.getElementById('formHapusBidang').dataset.id;
-        const nama = document.getElementById('formHapusBidang').dataset.nama;
+        if (isDeleting) return;
 
-        this.disabled    = true;
-        this.textContent = 'Menghapus...';
+        isDeleting = true;
+        setHapusLoading(true);
 
         try {
-            const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
+            const res = await sendRequest(activeHapusUrl, { _method: 'DELETE' });
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalHapusBidang')).hide();
-                toast(`Bidang "${nama}" berhasil dihapus!`);
-                // Hapus baris dari tabel
-                document.querySelectorAll('.btn-hapus-bidang').forEach(btn => {
-                    if (btn.dataset.id == id) btn.closest('tr').remove();
-                });
+                modalHapus.hide();
+                toast(`Bidang "${activeHapusNama}" berhasil dihapus!`);
+                const hapusBtn = document.querySelector(`.btn-hapus-bidang[data-id="${activeHapusId}"]`);
+                if (hapusBtn) hapusBtn.closest('tr').remove();
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isDeleting = false;
+            setHapusLoading(false);
         }
-
-        this.disabled    = false;
-        this.textContent = 'Hapus';
     });
 
 });

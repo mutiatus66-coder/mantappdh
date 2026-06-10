@@ -12,8 +12,8 @@ return new class extends Migration
         if (!Schema::hasColumn('users', 'hak_akses')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->enum('hak_akses', ['admin', 'penilai', 'peserta', 'admin_bapperida'])
-                      ->default('peserta')
-                      ->after('email');
+                    ->default('peserta')
+                    ->after('email');
             });
         }
 

@@ -8,14 +8,13 @@ use Illuminate\Support\Facades\Auth;
 class PengumumanController extends Controller
 {
     private function authorizeAdmin(): void
-{
-    /** @var \App\Models\User|null $user */
-    $user = Auth::user();
-
-    if (!$user || !$user->isAdminBapperida()) {
-        abort(403, 'Akses ditolak.');
+    {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+        if (!$user || !$user->isAdminBapperida()) {
+            abort(403, 'Akses ditolak.');
+        }
     }
-}   
 
     public function index()
     {
@@ -28,30 +27,43 @@ class PengumumanController extends Controller
     {
         $this->authorizeAdmin();
         $request->validate([
-            'judul'    => 'required|string|max:255',
-            'deskripsi'=> 'nullable|string',
-            'status'   => 'required|in:Published,Draft',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
+            'judul'     => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status'    => 'required|in:Published,Draft',
+            'file'      => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
         ]);
+
         $data = $request->only('judul', 'deskripsi', 'status');
         if ($request->hasFile('file')) {
             $data['file_path'] = $request->file('file')->store('pengumuman', 'public');
         }
-        Pengumuman::create($data);
-        return redirect()->route('pengumuman.index')
-        ->with('success', 'Pengumuman berhasil ditambahkan.');
+
+        $pengumuman = Pengumuman::create($data);
+
+        return response()->json([
+            'success'    => true,
+            'pengumuman' => array_merge($pengumuman->toArray(), [
+                'file_url'    => $pengumuman->file_path
+                                    ? asset('storage/' . $pengumuman->file_path)
+                                    : null,
+                'update_url'  => route('pengumuman.update', $pengumuman->id),
+                'destroy_url' => route('pengumuman.destroy', $pengumuman->id),
+            ]),
+        ]);
     }
 
     public function update(Request $request, $id)
     {
         $this->authorizeAdmin();
         $pengumuman = Pengumuman::findOrFail($id);
+
         $request->validate([
-            'judul'    => 'required|string|max:255',
-            'deskripsi'=> 'nullable|string',
-            'status'   => 'required|in:Published,Draft',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
+            'judul'     => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status'    => 'required|in:Published,Draft',
+            'file'      => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,webp,svg|max:2048',
         ]);
+
         $data = $request->only('judul', 'deskripsi', 'status');
         if ($request->hasFile('file')) {
             if ($pengumuman->file_path) {
@@ -59,9 +71,16 @@ class PengumumanController extends Controller
             }
             $data['file_path'] = $request->file('file')->store('pengumuman', 'public');
         }
+
         $pengumuman->update($data);
-        return redirect()->route('pengumuman.index')
-        ->with('success', 'Pengumuman berhasil diupdate.');
+        $pengumuman->refresh();
+
+        return response()->json([
+            'success'  => true,
+            'file_url' => $pengumuman->file_path
+                            ? asset('storage/' . $pengumuman->file_path)
+                            : null,
+        ]);
     }
 
     public function destroy($id)
@@ -72,7 +91,6 @@ class PengumumanController extends Controller
             Storage::disk('public')->delete($pengumuman->file_path);
         }
         $pengumuman->delete();
-        return redirect()->route('pengumuman.index')
-        ->with('success', 'Pengumuman berhasil dihapus.');
+        return response()->json(['success' => true]);
     }
 }

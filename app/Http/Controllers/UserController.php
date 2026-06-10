@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +23,7 @@ class UserController extends Controller
             'password'  => 'required|min:6',
         ]);
 
-        User::create([
+        $user = User::create([
             'nama'      => $request->nama,
             'name'      => $request->nama,
             'email'     => $request->email,
@@ -34,7 +32,14 @@ class UserController extends Controller
             'password'  => Hash::make($request->password),
         ]);
 
-        return redirect()->back()->with('success', 'User berhasil ditambahkan!');
+        return response()->json([
+            'success' => true,
+            'user'    => array_merge($user->toArray(), [
+                'update_url'  => route('user.update', $user->id),
+                'destroy_url' => route('user.destroy', $user->id),
+                'login_url'   => route('user.login-as', $user->id),
+            ]),
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -44,13 +49,14 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email,' . $id,
-            'hak_akses' => 'required|in:admin,user',
+            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'nullable|min:6',
         ]);
 
         $data = [
             'nama'      => $request->nama,
+            'name'      => $request->nama,
             'email'     => $request->email,
             'hak_akses' => $request->hak_akses,
             'status'    => $request->status,
@@ -61,8 +67,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
-
-        return redirect()->back()->with('success', 'User berhasil diperbarui!');
+        return response()->json(['success' => true]);
     }
 
     public function loginAs($id)
@@ -71,5 +76,11 @@ class UserController extends Controller
         session(['admin_original_id' => Auth::id()]);
         Auth::login($user);
         return redirect('/')->with('success', 'Login sebagai ' . $user->nama);
+    }
+
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+        return response()->json(['success' => true]);
     }
 }
