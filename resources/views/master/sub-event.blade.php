@@ -74,7 +74,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
+                <tr id="emptyRow">
                     <td colspan="8" class="empty-row">
                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                         Belum ada data sub event
@@ -89,14 +89,14 @@
 
 
 {{-- ══ MODAL — Tambah / Ubah Sub Event ══ --}}
-<div class="modal fade" id="modalSubEvent" tabindex="-1">
+<div class="modal fade" id="modalSubEvent" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-3 shadow-lg">
 
             <div class="modal-header px-5 py-4">
                 <h5 class="modal-title fw-semibold" id="modalSETitle">Tambah Sub Event</h5>
                 <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                        data-bs-dismiss="modal" aria-label="Close">
+                        id="btnTutupModalSE" aria-label="Close">
                     <i class="bi bi-x-lg fs-5"></i>
                 </button>
             </div>
@@ -136,7 +136,7 @@
             </div>
 
             <div class="modal-footer px-5 py-3">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark" id="btnBatalSE">Batal</button>
                 <button type="button" id="btnSimpanSE" class="btn btn-success px-4">Simpan</button>
             </div>
 
@@ -146,7 +146,7 @@
 
 
 {{-- ══ MODAL — Konfirmasi Hapus Sub Event ══ --}}
-<div class="modal fade" id="modalHapusSE" tabindex="-1">
+<div class="modal fade" id="modalHapusSE" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
 
@@ -164,7 +164,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapusSE">Batal</button>
                 <button type="button" id="btnHapusSE" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
@@ -178,68 +178,102 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl    = "{{ route('sub-event.store') }}";
-    const CSRF        = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+    // ── Konstanta ──
+    const STORE_URL = "{{ route('sub-event.store') }}";
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+    // ── Elemen ──
     const tbody       = document.getElementById('tabelSubEventBody');
     const totalSpan   = document.getElementById('totalSubEvent');
     const searchInput = document.getElementById('searchSubEvent');
 
-    // ── Helper: AJAX ──
-    async function sendRequest(url, method, data) {
+    // ── Modal: singleton + static backdrop ──
+    const modalSEEl    = document.getElementById('modalSubEvent');
+    const modalHapusEl = document.getElementById('modalHapusSE');
+    const modalSE      = new bootstrap.Modal(modalSEEl);
+    const modalHapus   = new bootstrap.Modal(modalHapusEl);
+
+    // ── State ──
+    let activeMode      = 'store';
+    let activeUpdateId  = null;
+    let activeUpdateUrl = null;
+    let activeHapusId   = null;
+    let activeHapusUrl  = null;
+    let activeHapusNama = null;
+    let isSaving        = false;
+    let isDeleting      = false;
+
+    // ────────────────────────────────────────────
+    // HELPER: AJAX pakai FormData agar _method terbaca Laravel
+    // ────────────────────────────────────────────
+    async function sendRequest(url, data) {
+        const form = new FormData();
+        Object.entries(data).forEach(([k, v]) => form.append(k, v));
         const res = await fetch(url, {
-            method,
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': CSRF,
-                'Accept':       'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: form,
         });
-        const modalSubEvent = new bootstrap.Modal(document.getElementById('modalSubEvent'));
-        const modalHapusSE  = new bootstrap.Modal(document.getElementById('modalHapusSE'));
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message ?? `HTTP ${res.status}`);
+        }
         return res.json();
     }
 
-    // ── Helper: toast ──
+    // ────────────────────────────────────────────
+    // HELPER: Toast
+    // ────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
-        el.style.cssText = `z-index:9999; min-width:280px;
-            background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'};
-            border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'};
-            color:${type === 'success' ? '#92400e' : '#A32D2D'};`;
-        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>${msg}
+        el.style.cssText = [
+            'z-index:9999',
+            'min-width:280px',
+            `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
+            `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
+            `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
+        ].join(';');
+        el.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
+            ${msg}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 3000);
     }
 
-    // ── Helper: update baris ──
+    // ────────────────────────────────────────────
+    // HELPER: Update baris yang sudah ada
+    // ────────────────────────────────────────────
     function updateRow(id, data, eventNama) {
-        document.querySelectorAll('.btn-edit-se').forEach(btn => {
-            if (btn.dataset.id == id) {
-                const tr = btn.closest('tr');
-                tr.cells[1].textContent = data.tahun;
-                tr.cells[2].textContent = eventNama;
-                tr.cells[3].textContent = data.sub_event;
-                tr.cells[4].innerHTML   = `<span class="badge-kategori">${data.kategori || '-'}</span>`;
-                tr.cells[5].textContent = data.mulai;
-                tr.cells[6].textContent = data.berakhir;
-                // Update dataset tombol
-                btn.dataset.tahun     = data.tahun;
-                btn.dataset.eventId   = data.event_id;
-                btn.dataset.subEvent  = data.sub_event;
-                btn.dataset.kategori  = data.kategori ?? '';
-                btn.dataset.mulai     = data.mulai;
-                btn.dataset.berakhir  = data.berakhir;
-            }
-        });
+        const editBtn = tbody.querySelector(`.btn-edit-se[data-id="${id}"]`);
+        if (!editBtn) return;
+        const tr = editBtn.closest('tr');
+        tr.cells[1].textContent = data.tahun;
+        tr.cells[2].textContent = eventNama;
+        tr.cells[3].textContent = data.sub_event;
+        tr.cells[4].innerHTML   = `<span class="badge-kategori">${data.kategori || '-'}</span>`;
+        tr.cells[5].textContent = data.mulai;
+        tr.cells[6].textContent = data.berakhir;
+        editBtn.dataset.tahun    = data.tahun;
+        editBtn.dataset.eventId  = data.event_id;
+        editBtn.dataset.subEvent = data.sub_event;
+        editBtn.dataset.kategori = data.kategori ?? '';
+        editBtn.dataset.mulai    = data.mulai;
+        editBtn.dataset.berakhir = data.berakhir;
+        const hapusBtn = tr.querySelector('.btn-hapus-se');
+        if (hapusBtn) hapusBtn.dataset.nama = data.sub_event;
     }
 
-    // ── Helper: tambah baris baru ──
+    // ────────────────────────────────────────────
+    // HELPER: Tambah baris baru
+    // ────────────────────────────────────────────
     function appendRow(se) {
-        const emptyRow = tbody.querySelector('.empty-row');
-        if (emptyRow) emptyRow.closest('tr').remove();
+        const emptyRow = tbody.querySelector('#emptyRow');
+        if (emptyRow) emptyRow.remove();
 
         const rowCount = tbody.querySelectorAll('tr').length + 1;
         const tr = document.createElement('tr');
@@ -273,59 +307,109 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </td>`;
         tbody.appendChild(tr);
-
-        tr.querySelector('.btn-edit-se').addEventListener('click', handleEdit);
-        tr.querySelector('.btn-hapus-se').addEventListener('click', handleHapus);
-
         totalSpan.textContent = tbody.querySelectorAll('tr').length;
     }
 
-    // ── Reset modal ──
-    function resetModal() {
+    // ────────────────────────────────────────────
+    // HELPER: Renumber baris
+    // ────────────────────────────────────────────
+    function renumberRows() {
+        let n = 0;
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = ++n;
+        });
+        totalSpan.textContent = n;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Simpan
+    // ────────────────────────────────────────────
+    function setSimpanLoading(loading) {
+        document.getElementById('btnSimpanSE').disabled      = loading;
+        document.getElementById('btnSimpanSE').textContent   = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalSE').disabled       = loading;
+        document.getElementById('btnTutupModalSE').disabled  = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Hapus
+    // ────────────────────────────────────────────
+    function setHapusLoading(loading) {
+        document.getElementById('btnHapusSE').disabled       = loading;
+        document.getElementById('btnHapusSE').textContent    = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapusSE').disabled  = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // MODAL: buka untuk Tambah
+    // ────────────────────────────────────────────
+    document.getElementById('btnTambahSubEvent').addEventListener('click', function () {
+        activeMode      = 'store';
+        activeUpdateId  = null;
+        activeUpdateUrl = null;
         document.getElementById('modalSETitle').textContent = 'Tambah Sub Event';
-        ['seTahun','seSubEvent','seKategori','seMulai','seBerakhir'].forEach(id => {
+        ['seTahun', 'seSubEvent', 'seKategori', 'seMulai', 'seBerakhir'].forEach(id => {
             document.getElementById(id).value = '';
         });
         document.getElementById('seEvent').value = '';
-        const btn = document.getElementById('btnSimpanSE');
-        btn.disabled    = false;
-        btn.textContent = 'Simpan';
-        delete btn.dataset.updateId;
-        delete btn.dataset.updateUrl;
-        btn.dataset.mode = 'store';
-    }
-
-    document.getElementById('modalSubEvent').addEventListener('hidden.bs.modal', resetModal);
-
-    // ── Tambah ──
-    document.getElementById('btnTambahSubEvent').addEventListener('click', function () {
-        resetModal();
-        new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
+        setSimpanLoading(false);
+        modalSE.show();
     });
 
-    // ── Handler Edit ──
-    function handleEdit() {
-        resetModal();
-        document.getElementById('modalSETitle').textContent = 'Ubah Sub Event';
-        document.getElementById('seTahun').value            = this.dataset.tahun;
-        document.getElementById('seEvent').value            = this.dataset.eventId;
-        document.getElementById('seSubEvent').value         = this.dataset.subEvent;
-        document.getElementById('seKategori').value         = this.dataset.kategori;
-        document.getElementById('seMulai').value            = this.dataset.mulai;
-        document.getElementById('seBerakhir').value         = this.dataset.berakhir;
-        const btn = document.getElementById('btnSimpanSE');
-        btn.dataset.mode      = 'update';
-        btn.dataset.updateId  = this.dataset.id;
-        btn.dataset.updateUrl = this.dataset.url;
-        new bootstrap.Modal(document.getElementById('modalSubEvent')).show();
-    }
+    // ────────────────────────────────────────────
+    // MODAL: buka Ubah / Hapus via event delegation
+    // ────────────────────────────────────────────
+    tbody.addEventListener('click', function (e) {
+        const editBtn = e.target.closest('.btn-edit-se');
+        if (editBtn) {
+            activeMode      = 'update';
+            activeUpdateId  = editBtn.dataset.id;
+            activeUpdateUrl = editBtn.dataset.url;
+            document.getElementById('modalSETitle').textContent = 'Ubah Sub Event';
+            document.getElementById('seTahun').value            = editBtn.dataset.tahun;
+            document.getElementById('seEvent').value            = editBtn.dataset.eventId;
+            document.getElementById('seSubEvent').value         = editBtn.dataset.subEvent;
+            document.getElementById('seKategori').value         = editBtn.dataset.kategori;
+            document.getElementById('seMulai').value            = editBtn.dataset.mulai;
+            document.getElementById('seBerakhir').value         = editBtn.dataset.berakhir;
+            setSimpanLoading(false);
+            modalSE.show();
+            return;
+        }
 
-    document.querySelectorAll('.btn-edit-se').forEach(btn => {
-        btn.addEventListener('click', handleEdit);
+        const hapusBtn = e.target.closest('.btn-hapus-se');
+        if (hapusBtn) {
+            activeHapusId   = hapusBtn.dataset.id;
+            activeHapusUrl  = hapusBtn.dataset.url;
+            activeHapusNama = hapusBtn.dataset.nama;
+            document.getElementById('namaSEHapus').textContent = activeHapusNama;
+            setHapusLoading(false);
+            modalHapus.show();
+        }
     });
 
-    // ── Submit AJAX (Tambah & Ubah) ──
+    // ────────────────────────────────────────────
+    // MODAL: tutup manual (guard saat loading)
+    // ────────────────────────────────────────────
+    document.getElementById('btnTutupModalSE').addEventListener('click', function () {
+        if (isSaving) return;
+        modalSE.hide();
+    });
+    document.getElementById('btnBatalSE').addEventListener('click', function () {
+        if (isSaving) return;
+        modalSE.hide();
+    });
+    document.getElementById('btnBatalHapusSE').addEventListener('click', function () {
+        if (isDeleting) return;
+        modalHapus.hide();
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Tambah / Ubah
+    // ────────────────────────────────────────────
     document.getElementById('btnSimpanSE').addEventListener('click', async function () {
+        if (isSaving) return;
+
         const tahun    = document.getElementById('seTahun').value.trim();
         const eventId  = document.getElementById('seEvent').value;
         const subEvent = document.getElementById('seSubEvent').value.trim();
@@ -338,24 +422,27 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        this.disabled    = true;
-        this.textContent = 'Menyimpan...';
+        isSaving = true;
+        setSimpanLoading(true);
 
         try {
-            const isUpdate = this.dataset.mode === 'update';
-            const url      = isUpdate ? this.dataset.updateUrl : storeUrl;
-            const res      = await sendRequest(url, 'POST', {
-                _method: isUpdate ? 'PUT' : 'POST',
-                event_id: eventId, tahun, sub_event: subEvent,
-                kategori, mulai, berakhir,
+            const isUpdate = activeMode === 'update';
+            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
+            const res      = await sendRequest(url, {
+                _method:   isUpdate ? 'PUT' : 'POST',
+                event_id:  eventId,
+                tahun,
+                sub_event: subEvent,
+                kategori,
+                mulai,
+                berakhir,
             });
 
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalSubEvent')).hide();
+                modalSE.hide();
                 toast(isUpdate ? 'Sub Event berhasil diubah!' : 'Sub Event berhasil ditambahkan!');
-
                 if (isUpdate) {
-                    updateRow(this.dataset.updateId,
+                    updateRow(activeUpdateId,
                         { tahun, event_id: eventId, sub_event: subEvent, kategori, mulai, berakhir },
                         res.event_nama);
                 } else {
@@ -363,71 +450,55 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
-                this.disabled    = false;
-                this.textContent = 'Simpan';
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
-            this.disabled    = false;
-            this.textContent = 'Simpan';
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isSaving = false;
+            setSimpanLoading(false);
         }
     });
 
-    // ── Handler Hapus ──
-    function handleHapus() {
-        document.getElementById('namaSEHapus').textContent    = this.dataset.nama;
-        document.getElementById('btnHapusSE').dataset.id      = this.dataset.id;
-        document.getElementById('btnHapusSE').dataset.url     = this.dataset.url;
-        document.getElementById('btnHapusSE').dataset.nama    = this.dataset.nama;
-        new bootstrap.Modal(document.getElementById('modalHapusSE')).show();
-    }
-
-    document.querySelectorAll('.btn-hapus-se').forEach(btn => {
-        btn.addEventListener('click', handleHapus);
-    });
-
-    // ── Submit Hapus AJAX ──
+    // ────────────────────────────────────────────
+    // SUBMIT: Hapus
+    // ────────────────────────────────────────────
     document.getElementById('btnHapusSE').addEventListener('click', async function () {
-        const url  = this.dataset.url;
-        const id   = this.dataset.id;
-        const nama = this.dataset.nama;
+        if (isDeleting) return;
 
-        this.disabled    = true;
-        this.textContent = 'Menghapus...';
+        isDeleting = true;
+        setHapusLoading(true);
 
         try {
-            const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
+            const res = await sendRequest(activeHapusUrl, { _method: 'DELETE' });
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalHapusSE')).hide();
-                toast(`Sub Event "${nama}" berhasil dihapus!`);
-
-                document.querySelectorAll('.btn-hapus-se').forEach(btn => {
-                    if (btn.dataset.id == id) btn.closest('tr').remove();
-                });
-
-                tbody.querySelectorAll('tr').forEach((tr, i) => {
-                    if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = i + 1;
-                });
-                totalSpan.textContent = tbody.querySelectorAll('tr:not(:has(.empty-row))').length;
+                modalHapus.hide();
+                toast(`Sub Event "${activeHapusNama}" berhasil dihapus!`);
+                const hapusBtn = tbody.querySelector(`.btn-hapus-se[data-id="${activeHapusId}"]`);
+                if (hapusBtn) hapusBtn.closest('tr').remove();
+                renumberRows();
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isDeleting = false;
+            setHapusLoading(false);
         }
-
-        this.disabled    = false;
-        this.textContent = 'Hapus';
     });
 
-    // ── Search ──
-    searchInput.addEventListener('keyup', function () {
+    // ────────────────────────────────────────────
+    // SEARCH
+    // ────────────────────────────────────────────
+    searchInput.addEventListener('input', function () {
         const kw = this.value.toLowerCase().trim();
         let n = 0;
-        tbody.querySelectorAll('tr').forEach(r => {
-            if (r.querySelector('.empty-row')) return;
-            const show = r.textContent.toLowerCase().includes(kw);
-            r.style.display = show ? '' : 'none';
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (tr.querySelector('.empty-row')) return;
+            const show = tr.textContent.toLowerCase().includes(kw);
+            tr.style.display = show ? '' : 'none';
             if (show) n++;
         });
         totalSpan.textContent = n;

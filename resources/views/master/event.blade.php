@@ -146,7 +146,7 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
 
     // ── Konstanta ──
     const STORE_URL = "{{ route('event.store') }}";
@@ -157,14 +157,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalSpan   = document.getElementById('totalEvent');
     const searchInput = document.getElementById('searchEvent');
 
-    // ── Modal: singleton, pakai data-bs-backdrop="static" agar tidak tutup sendiri ──
-    const modalEventEl = document.getElementById('modalEvent');
-    const modalHapusEl = document.getElementById('modalHapusEvent');
-    const modalEvent   = new bootstrap.Modal(modalEventEl);
-    const modalHapus   = new bootstrap.Modal(modalHapusEl);
+    // ── Modal ──
+    const modalEvent = new bootstrap.Modal(document.getElementById('modalEvent'));
+    const modalHapus = new bootstrap.Modal(document.getElementById('modalHapusEvent'));
 
-    // ── State penyimpan konteks operasi aktif ──
-    let activeMode      = 'store';   // 'store' | 'update'
+    // ── State ──
+    let activeMode      = 'store';
     let activeUpdateId  = null;
     let activeUpdateUrl = null;
     let activeHapusId   = null;
@@ -174,38 +172,31 @@ document.addEventListener('DOMContentLoaded', function () {
     let isDeleting      = false;
 
     // ────────────────────────────────────────────
-    // HELPER: AJAX request pakai FormData
-    // Laravel hanya membaca _method spoofing dari form-data, bukan JSON body
+    // HELPER: AJAX
     // ────────────────────────────────────────────
     async function sendRequest(url, data) {
         const form = new FormData();
         Object.entries(data).forEach(([k, v]) => form.append(k, v));
         const res = await fetch(url, {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': CSRF,
-                'Accept': 'application/json',
-            },
+            headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
             body: form,
         });
         if (!res.ok) {
-            // Coba baca pesan error dari Laravel (misal: 422 validation)
             const err = await res.json().catch(() => ({}));
-            const msg = err.message ?? `HTTP ${res.status}`;
-            throw new Error(msg);
+            throw new Error(err.message ?? `HTTP ${res.status}`);
         }
         return res.json();
     }
 
     // ────────────────────────────────────────────
-    // HELPER: Toast notifikasi
+    // HELPER: Toast
     // ────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
         el.style.cssText = [
-            'z-index:9999',
-            'min-width:280px',
+            'z-index:9999', 'min-width:280px',
             `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
             `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
             `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
@@ -219,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ────────────────────────────────────────────
-    // HELPER: Update baris yang sudah ada
+    // HELPER: Update baris
     // ────────────────────────────────────────────
     function updateRow(id, namaEvent, jenis) {
         const editBtn = tbody.querySelector(`.btn-edit-event[data-id="${id}"]`);
@@ -234,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ────────────────────────────────────────────
-    // HELPER: Tambah baris baru ke tabel
+    // HELPER: Tambah baris baru
     // ────────────────────────────────────────────
     function appendRow(event) {
         const emptyRow = tbody.querySelector('#emptyRow');
@@ -268,41 +259,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ────────────────────────────────────────────
-    // HELPER: Renumber baris
+    // HELPER: Renumber
     // ────────────────────────────────────────────
     function renumberRows() {
         let n = 0;
         tbody.querySelectorAll('tr').forEach(tr => {
-            if (!tr.querySelector('.empty-row')) {
-                tr.cells[0].textContent = ++n;
-            }
+            if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = ++n;
         });
         totalSpan.textContent = n;
     }
 
     // ────────────────────────────────────────────
-    // HELPER: Set state tombol Simpan
+    // HELPER: Loading state
     // ────────────────────────────────────────────
     function setSimpanLoading(loading) {
-        const btn = document.getElementById('btnSimpanEvent');
-        btn.disabled    = loading;
-        btn.textContent = loading ? 'Menyimpan...' : 'Simpan';
-        document.getElementById('btnBatalEvent').disabled    = loading;
-        document.getElementById('btnTutupModalEvent').disabled = loading;
+        document.getElementById('btnSimpanEvent').disabled      = loading;
+        document.getElementById('btnSimpanEvent').textContent   = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalEvent').disabled       = loading;
+        document.getElementById('btnTutupModalEvent').disabled  = loading;
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Set state tombol Hapus
-    // ────────────────────────────────────────────
     function setHapusLoading(loading) {
-        const btn = document.getElementById('btnHapusEvent');
-        btn.disabled    = loading;
-        btn.textContent = loading ? 'Menghapus...' : 'Hapus';
-        document.getElementById('btnBatalHapus').disabled = loading;
+        document.getElementById('btnHapusEvent').disabled   = loading;
+        document.getElementById('btnHapusEvent').textContent = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapus').disabled   = loading;
     }
 
     // ────────────────────────────────────────────
-    // MODAL EVENT: buka untuk Tambah
+    // MODAL: buka Tambah
     // ────────────────────────────────────────────
     document.getElementById('btnTambahEvent').addEventListener('click', function () {
         activeMode      = 'store';
@@ -316,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ────────────────────────────────────────────
-    // MODAL EVENT: buka untuk Ubah (event delegation)
+    // MODAL: buka Ubah / Hapus via event delegation
     // ────────────────────────────────────────────
     tbody.addEventListener('click', function (e) {
         const editBtn = e.target.closest('.btn-edit-event');
@@ -344,20 +328,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ────────────────────────────────────────────
-    // MODAL EVENT: tutup manual
+    // MODAL: tutup manual
     // ────────────────────────────────────────────
     document.getElementById('btnTutupModalEvent').addEventListener('click', function () {
-        if (isSaving) return; // blok penutupan saat request berjalan
+        if (isSaving) return;
         modalEvent.hide();
     });
     document.getElementById('btnBatalEvent').addEventListener('click', function () {
         if (isSaving) return;
         modalEvent.hide();
     });
-
-    // ────────────────────────────────────────────
-    // MODAL HAPUS: tutup manual
-    // ────────────────────────────────────────────
     document.getElementById('btnBatalHapus').addEventListener('click', function () {
         if (isDeleting) return;
         modalHapus.hide();
@@ -390,11 +370,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.success) {
                 modalEvent.hide();
                 toast(isUpdate ? 'Event berhasil diubah!' : 'Event berhasil ditambahkan!');
-                if (isUpdate) {
-                    updateRow(activeUpdateId, namaEvent, jenis);
-                } else {
-                    appendRow(res.event);
-                }
+                isUpdate ? updateRow(activeUpdateId, namaEvent, jenis) : appendRow(res.event);
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }
@@ -451,6 +427,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalSpan.textContent = n;
     });
 
-});
+})();
 </script>
 @endpush

@@ -15,7 +15,7 @@ class PenilaiController extends Controller
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email',
+            'email' => 'required|email|unique:penilai,email',
         ]);
 
         $penilai = Penilai::create([
@@ -36,7 +36,7 @@ class PenilaiController extends Controller
     {
         $request->validate([
             'nama'  => 'required|string|max:255',
-            'email' => 'required|email|unique:penilais,email,' . $id,
+            'email' => 'required|email|unique:penilai,email,' . $id,
         ]);
 
         Penilai::findOrFail($id)->update([

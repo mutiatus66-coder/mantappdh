@@ -6,6 +6,16 @@
 
 @section('content')
 
+@php
+$hakAksesLabel = [
+    'admin_bapperida' => 'Admin Bapperida',
+    'admin_kecamatan' => 'Admin Kecamatan',
+    'admin_opd'       => 'Admin OPD',
+    'peserta'         => 'Peserta',
+    'penilai'         => 'Penilai',
+];
+@endphp
+
 <div class="page-container">
 
     <div class="sub-event-header">
@@ -45,8 +55,16 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->nama }}</td>
                     <td>{{ $item->email }}</td>
-                    <td style="text-align:center;">{{ $item->hak_akses }}</td>
-                    <td style="text-align:center;">{{ $item->status }}</td>
+                    <td style="text-align:center;">
+                        <span class="badge-kategori">{{ $hakAksesLabel[$item->hak_akses] ?? $item->hak_akses }}</span>
+                    </td>
+                    <td style="text-align:center;">
+                        @if($item->status === 'aktif')
+                            <span class="badge-aktif px-3 py-2">Aktif</span>
+                        @else
+                            <span class="badge-nonaktif px-3 py-2">Nonaktif</span>
+                        @endif
+                    </td>
                     <td style="text-align:center;">
                         <div class="btn-aksi-wrap">
                             <button class="btn btn-warning btn-aksi btn-edit-user"
@@ -72,7 +90,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
+                <tr id="emptyRow">
                     <td colspan="6" class="empty-row">
                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                         Belum ada data user
@@ -87,14 +105,14 @@
 
 
 {{-- ══ MODAL — Tambah / Edit User ══ --}}
-<div class="modal fade" id="modalUser" tabindex="-1">
+<div class="modal fade" id="modalUser" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
 
             <div class="modal-header px-5 py-4">
                 <h5 class="modal-title fw-semibold" id="modalUserTitle">Tambah User</h5>
                 <button type="button" class="btn btn-sm btn-icon btn-active-light-primary"
-                        data-bs-dismiss="modal" aria-label="Close">
+                        id="btnTutupModalUser" aria-label="Close">
                     <i class="bi bi-x-lg fs-5"></i>
                 </button>
             </div>
@@ -145,7 +163,7 @@
             </div>
 
             <div class="modal-footer px-5 py-3">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark" id="btnBatalUser">Batal</button>
                 <button type="button" id="btnSimpanUser" class="btn btn-success px-4">Simpan</button>
             </div>
 
@@ -155,7 +173,7 @@
 
 
 {{-- ══ MODAL — Konfirmasi Hapus User ══ --}}
-<div class="modal fade" id="modalHapusUser" tabindex="-1">
+<div class="modal fade" id="modalHapusUser" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content rounded-4 shadow-lg text-center px-4 py-4">
 
@@ -173,7 +191,7 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark btn-aksi px-3" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapusUser">Batal</button>
                 <button type="button" id="btnHapusUser" class="btn btn-danger btn-aksi px-3">Hapus</button>
             </div>
 
@@ -187,61 +205,121 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl  = "{{ route('user.store') }}";
+    // ── Konstanta ──
+    const STORE_URL = "{{ route('user.store') }}";
     const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
-    const tbody     = document.getElementById('tabelUserBody');
-    const totalSpan = document.getElementById('totalUser');
 
-    // ── Helper: AJAX ──
-    async function sendRequest(url, method, data) {
-        const res = await fetch(url, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': CSRF,
-                'Accept':       'application/json',
-            },
-            body: JSON.stringify(data),
+    // ── Mapping hak akses → label ──
+    const HAK_AKSES_LABEL = {
+        'admin_bapperida': 'Admin Bapperida',
+        'admin_kecamatan': 'Admin Kecamatan',
+        'admin_opd':       'Admin OPD',
+        'peserta':         'Peserta',
+        'penilai':         'Penilai',
+    };
+    function labelHakAkses(val) {
+        return HAK_AKSES_LABEL[val] ?? val;
+    }
+
+    // ── Elemen ──
+    const tbody       = document.getElementById('tabelUserBody');
+    const totalSpan   = document.getElementById('totalUser');
+    const searchInput = document.getElementById('searchUser');
+
+    // ── Modal: singleton + static backdrop ──
+    const modalUserEl  = document.getElementById('modalUser');
+    const modalHapusEl = document.getElementById('modalHapusUser');
+    const modalUser    = new bootstrap.Modal(modalUserEl);
+    const modalHapus   = new bootstrap.Modal(modalHapusEl);
+
+    // ── State ──
+    let activeMode      = 'store';
+    let activeUpdateId  = null;
+    let activeUpdateUrl = null;
+    let activeHapusId   = null;
+    let activeHapusUrl  = null;
+    let activeHapusNama = null;
+    let isSaving        = false;
+    let isDeleting      = false;
+
+    // ────────────────────────────────────────────
+    // HELPER: AJAX pakai FormData agar _method terbaca Laravel
+    // ────────────────────────────────────────────
+    async function sendRequest(url, data) {
+        const form = new FormData();
+        Object.entries(data).forEach(([k, v]) => {
+            if (v !== null && v !== undefined && v !== '') form.append(k, v);
         });
-    const modalUser      = new bootstrap.Modal(document.getElementById('modalUser'));
-    const modalHapusUser = new bootstrap.Modal(document.getElementById('modalHapusUser'));
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': CSRF,
+                'Accept': 'application/json',
+            },
+            body: form,
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message ?? `HTTP ${res.status}`);
+        }
         return res.json();
     }
-    // ── Helper: toast ──
+
+    // ────────────────────────────────────────────
+    // HELPER: Badge status
+    // ────────────────────────────────────────────
+    function badgeStatus(status) {
+        return status === 'aktif'
+            ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+            : `<span class="badge-nonaktif px-3 py-2">Nonaktif</span>`;
+    }
+
+    // ────────────────────────────────────────────
+    // HELPER: Toast
+    // ────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
-        el.style.cssText = `z-index:9999; min-width:280px;
-            background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'};
-            border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'};
-            color:${type === 'success' ? '#92400e' : '#A32D2D'};`;
-        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>${msg}
+        el.style.cssText = [
+            'z-index:9999',
+            'min-width:280px',
+            `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
+            `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
+            `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
+        ].join(';');
+        el.innerHTML = `
+            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
+            ${msg}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
         document.body.appendChild(el);
         setTimeout(() => el.remove(), 3000);
     }
 
-    // ── Helper: update baris ──
+    // ────────────────────────────────────────────
+    // HELPER: Update baris yang sudah ada
+    // ────────────────────────────────────────────
     function updateRow(id, nama, email, hakAkses, status) {
-        document.querySelectorAll('.btn-edit-user').forEach(btn => {
-            if (btn.dataset.id == id) {
-                const tr = btn.closest('tr');
-                tr.cells[1].textContent = nama;
-                tr.cells[2].textContent = email;
-                tr.cells[3].textContent = hakAkses;
-                tr.cells[4].textContent = status;
-                btn.dataset.nama      = nama;
-                btn.dataset.email     = email;
-                btn.dataset.hakAkses  = hakAkses;
-                btn.dataset.status    = status;
-            }
-        });
+        const editBtn = tbody.querySelector(`.btn-edit-user[data-id="${id}"]`);
+        if (!editBtn) return;
+        const tr = editBtn.closest('tr');
+        tr.cells[1].textContent = nama;
+        tr.cells[2].textContent = email;
+        tr.cells[3].innerHTML   = `<span class="badge-kategori">${labelHakAkses(hakAkses)}</span>`;
+        tr.cells[4].innerHTML   = badgeStatus(status);
+        editBtn.dataset.nama     = nama;
+        editBtn.dataset.email    = email;
+        editBtn.dataset.hakAkses = hakAkses;
+        editBtn.dataset.status   = status;
+        const hapusBtn = tr.querySelector('.btn-hapus-user');
+        if (hapusBtn) hapusBtn.dataset.nama = nama;
     }
 
-    // ── Helper: tambah baris baru ──
+    // ────────────────────────────────────────────
+    // HELPER: Tambah baris baru
+    // ────────────────────────────────────────────
     function appendRow(user) {
-        const emptyRow = tbody.querySelector('.empty-row');
-        if (emptyRow) emptyRow.closest('tr').remove();
+        const emptyRow = tbody.querySelector('#emptyRow');
+        if (emptyRow) emptyRow.remove();
 
         const rowCount = tbody.querySelectorAll('tr').length + 1;
         const tr = document.createElement('tr');
@@ -249,8 +327,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <td>${rowCount}</td>
             <td>${user.nama}</td>
             <td>${user.email}</td>
-            <td style="text-align:center;">${user.hak_akses}</td>
-            <td style="text-align:center;">${user.status}</td>
+            <td style="text-align:center;"><span class="badge-kategori">${labelHakAkses(user.hak_akses)}</span></td>
+            <td style="text-align:center;">${badgeStatus(user.status)}</td>
             <td style="text-align:center;">
                 <div class="btn-aksi-wrap">
                     <button class="btn btn-warning btn-aksi btn-edit-user"
@@ -272,72 +350,120 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </td>`;
         tbody.appendChild(tr);
-
-        tr.querySelector('.btn-edit-user').addEventListener('click', handleEdit);
-        tr.querySelector('.btn-hapus-user').addEventListener('click', handleHapus);
-
         totalSpan.textContent = tbody.querySelectorAll('tr').length;
     }
 
-    // ── Reset modal ──
-    function resetModal() {
-        document.getElementById('modalUserTitle').textContent = 'Tambah User';
-        document.getElementById('inputNama').value            = '';
-        document.getElementById('inputEmail').value           = '';
-        document.getElementById('inputHakAkses').value        = '';
-        document.getElementById('inputPassword').value        = '';
-        document.getElementById('statusAktif').checked        = true;
-        document.getElementById('passwordHint').style.display = 'none';
-        document.getElementById('labelPassword').textContent  = 'Password';
-        const btn = document.getElementById('btnSimpanUser');
-        btn.disabled    = false;
-        btn.textContent = 'Simpan';
-        delete btn.dataset.updateId;
-        delete btn.dataset.updateUrl;
-        btn.dataset.mode = 'store';
+    // ────────────────────────────────────────────
+    // HELPER: Renumber baris
+    // ────────────────────────────────────────────
+    function renumberRows() {
+        let n = 0;
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = ++n;
+        });
+        totalSpan.textContent = n;
     }
 
-    document.getElementById('modalUser').addEventListener('hidden.bs.modal', resetModal);
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Simpan
+    // ────────────────────────────────────────────
+    function setSimpanLoading(loading) {
+        document.getElementById('btnSimpanUser').disabled      = loading;
+        document.getElementById('btnSimpanUser').textContent   = loading ? 'Menyimpan...' : 'Simpan';
+        document.getElementById('btnBatalUser').disabled       = loading;
+        document.getElementById('btnTutupModalUser').disabled  = loading;
+    }
 
-    // ── Tambah ──
+    // ────────────────────────────────────────────
+    // HELPER: Loading state tombol Hapus
+    // ────────────────────────────────────────────
+    function setHapusLoading(loading) {
+        document.getElementById('btnHapusUser').disabled       = loading;
+        document.getElementById('btnHapusUser').textContent    = loading ? 'Menghapus...' : 'Hapus';
+        document.getElementById('btnBatalHapusUser').disabled  = loading;
+    }
+
+    // ────────────────────────────────────────────
+    // MODAL: buka untuk Tambah
+    // ────────────────────────────────────────────
     document.getElementById('btnTambahUser').addEventListener('click', function () {
-        resetModal();
-        new bootstrap.Modal(document.getElementById('modalUser')).show();
+        activeMode      = 'store';
+        activeUpdateId  = null;
+        activeUpdateUrl = null;
+        document.getElementById('modalUserTitle').textContent  = 'Tambah User';
+        document.getElementById('inputNama').value             = '';
+        document.getElementById('inputEmail').value            = '';
+        document.getElementById('inputHakAkses').value         = '';
+        document.getElementById('inputPassword').value         = '';
+        document.getElementById('statusAktif').checked         = true;
+        document.getElementById('passwordHint').style.display  = 'none';
+        document.getElementById('labelPassword').textContent   = 'Password';
+        setSimpanLoading(false);
+        modalUser.show();
     });
 
-    // ── Handler Edit ──
-    function handleEdit() {
-        resetModal();
-        document.getElementById('modalUserTitle').textContent  = 'Ubah User';
-        document.getElementById('inputNama').value             = this.dataset.nama;
-        document.getElementById('inputEmail').value            = this.dataset.email;
-        document.getElementById('inputHakAkses').value         = this.dataset.hakAkses;
-        document.getElementById('passwordHint').style.display  = 'block';
-        document.getElementById('labelPassword').textContent   = 'Password (opsional)';
-        if (this.dataset.status === 'nonaktif') {
-            document.getElementById('statusNonaktif').checked = true;
-        } else {
-            document.getElementById('statusAktif').checked = true;
+    // ────────────────────────────────────────────
+    // MODAL: buka Ubah / Hapus via event delegation
+    // ────────────────────────────────────────────
+    tbody.addEventListener('click', function (e) {
+        const editBtn = e.target.closest('.btn-edit-user');
+        if (editBtn) {
+            activeMode      = 'update';
+            activeUpdateId  = editBtn.dataset.id;
+            activeUpdateUrl = editBtn.dataset.url;
+            document.getElementById('modalUserTitle').textContent  = 'Ubah User';
+            document.getElementById('inputNama').value             = editBtn.dataset.nama;
+            document.getElementById('inputEmail').value            = editBtn.dataset.email;
+            document.getElementById('inputHakAkses').value         = editBtn.dataset.hakAkses;
+            document.getElementById('inputPassword').value         = '';
+            document.getElementById('passwordHint').style.display  = 'block';
+            document.getElementById('labelPassword').textContent   = 'Password (opsional)';
+            const radioId = editBtn.dataset.status === 'nonaktif' ? 'statusNonaktif' : 'statusAktif';
+            document.getElementById(radioId).checked = true;
+            setSimpanLoading(false);
+            modalUser.show();
+            return;
         }
-        const btn = document.getElementById('btnSimpanUser');
-        btn.dataset.mode      = 'update';
-        btn.dataset.updateId  = this.dataset.id;
-        btn.dataset.updateUrl = this.dataset.url;
-        new bootstrap.Modal(document.getElementById('modalUser')).show();
-    }
 
-    document.querySelectorAll('.btn-edit-user').forEach(btn => {
-        btn.addEventListener('click', handleEdit);
+        const hapusBtn = e.target.closest('.btn-hapus-user');
+        if (hapusBtn) {
+            activeHapusId   = hapusBtn.dataset.id;
+            activeHapusUrl  = hapusBtn.dataset.url;
+            activeHapusNama = hapusBtn.dataset.nama;
+            document.getElementById('namaUserHapus').textContent = activeHapusNama;
+            setHapusLoading(false);
+            modalHapus.show();
+        }
     });
 
-    // ── Submit AJAX (Tambah & Ubah) ──
+    // ────────────────────────────────────────────
+    // MODAL: tutup manual (guard saat loading)
+    // ────────────────────────────────────────────
+    document.getElementById('btnTutupModalUser').addEventListener('click', function () {
+        if (isSaving) return;
+        modalUser.hide();
+    });
+    document.getElementById('btnBatalUser').addEventListener('click', function () {
+        if (isSaving) return;
+        modalUser.hide();
+    });
+    document.getElementById('btnBatalHapusUser').addEventListener('click', function () {
+        if (isDeleting) return;
+        modalHapus.hide();
+    });
+
+    // ────────────────────────────────────────────
+    // SUBMIT: Tambah / Ubah
+    // ────────────────────────────────────────────
     document.getElementById('btnSimpanUser').addEventListener('click', async function () {
+        if (isSaving) return;
+
         const nama     = document.getElementById('inputNama').value.trim();
         const email    = document.getElementById('inputEmail').value.trim();
         const hakAkses = document.getElementById('inputHakAkses').value;
         const status   = document.querySelector('input[name="statusUser"]:checked').value;
         const password = document.getElementById('inputPassword').value;
-        const isUpdate = this.dataset.mode === 'update';
+        const isUpdate = activeMode === 'update';
 
         if (!nama || !email || !hakAkses) {
             toast('Harap isi semua field yang wajib.', 'error');
@@ -348,89 +474,79 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        this.disabled    = true;
-        this.textContent = 'Menyimpan...';
+        isSaving = true;
+        setSimpanLoading(true);
 
         try {
-            const url  = isUpdate ? this.dataset.updateUrl : storeUrl;
-            const data = { _method: isUpdate ? 'PUT' : 'POST', nama, email, hak_akses: hakAkses, status };
-            if (password) data.password = password;
-
-            const res = await sendRequest(url, 'POST', data);
+            const url  = isUpdate ? activeUpdateUrl : STORE_URL;
+            const data = {
+                _method:    isUpdate ? 'PUT' : 'POST',
+                nama, email,
+                hak_akses:  hakAkses,
+                status,
+                ...(password ? { password } : {}),
+            };
+            const res = await sendRequest(url, data);
 
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalUser')).hide();
+                modalUser.hide();
                 toast(isUpdate ? 'User berhasil diubah!' : 'User berhasil ditambahkan!');
                 if (isUpdate) {
-                    updateRow(this.dataset.updateId, nama, email, hakAkses, status);
+                    updateRow(activeUpdateId, nama, email, hakAkses, status);
                 } else {
                     appendRow(res.user);
                 }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
-                this.disabled    = false;
-                this.textContent = 'Simpan';
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
-            this.disabled    = false;
-            this.textContent = 'Simpan';
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isSaving = false;
+            setSimpanLoading(false);
         }
     });
 
-    // ── Handler Hapus ──
-    function handleHapus() {
-        document.getElementById('namaUserHapus').textContent    = this.dataset.nama;
-        document.getElementById('btnHapusUser').dataset.id      = this.dataset.id;
-        document.getElementById('btnHapusUser').dataset.url     = this.dataset.url;
-        document.getElementById('btnHapusUser').dataset.nama    = this.dataset.nama;
-        new bootstrap.Modal(document.getElementById('modalHapusUser')).show();
-    }
-
-    document.querySelectorAll('.btn-hapus-user').forEach(btn => {
-        btn.addEventListener('click', handleHapus);
-    });
-
-    // ── Submit Hapus AJAX ──
+    // ────────────────────────────────────────────
+    // SUBMIT: Hapus
+    // ────────────────────────────────────────────
     document.getElementById('btnHapusUser').addEventListener('click', async function () {
-        const url  = this.dataset.url;
-        const id   = this.dataset.id;
-        const nama = this.dataset.nama;
+        if (isDeleting) return;
 
-        this.disabled    = true;
-        this.textContent = 'Menghapus...';
+        isDeleting = true;
+        setHapusLoading(true);
 
         try {
-            const res = await sendRequest(url, 'POST', { _method: 'DELETE' });
+            const res = await sendRequest(activeHapusUrl, { _method: 'DELETE' });
             if (res.success) {
-                bootstrap.Modal.getInstance(document.getElementById('modalHapusUser')).hide();
-                toast(`User "${nama}" berhasil dihapus!`);
-                document.querySelectorAll('.btn-hapus-user').forEach(btn => {
-                    if (btn.dataset.id == id) btn.closest('tr').remove();
-                });
-                tbody.querySelectorAll('tr').forEach((tr, i) => {
-                    if (!tr.querySelector('.empty-row')) tr.cells[0].textContent = i + 1;
-                });
-                totalSpan.textContent = tbody.querySelectorAll('tr:not(:has(.empty-row))').length;
+                modalHapus.hide();
+                toast(`User "${activeHapusNama}" berhasil dihapus!`);
+                const hapusBtn = tbody.querySelector(`.btn-hapus-user[data-id="${activeHapusId}"]`);
+                if (hapusBtn) hapusBtn.closest('tr').remove();
+                renumberRows();
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }
-        } catch {
-            toast('Terjadi kesalahan.', 'error');
+        } catch (e) {
+            console.error(e);
+            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } finally {
+            isDeleting = false;
+            setHapusLoading(false);
         }
-
-        this.disabled    = false;
-        this.textContent = 'Hapus';
     });
 
-    // ── Search ──
-    document.getElementById('searchUser').addEventListener('input', function () {
+    // ────────────────────────────────────────────
+    // SEARCH
+    // ────────────────────────────────────────────
+    searchInput.addEventListener('input', function () {
         const kw = this.value.toLowerCase().trim();
         let n = 0;
-        tbody.querySelectorAll('tr').forEach(r => {
-            if (r.querySelector('.empty-row')) return;
-            const show = r.textContent.toLowerCase().includes(kw);
-            r.style.display = show ? '' : 'none';
+        tbody.querySelectorAll('tr').forEach(tr => {
+            if (tr.querySelector('.empty-row')) return;
+            const show = tr.textContent.toLowerCase().includes(kw);
+            tr.style.display = show ? '' : 'none';
             if (show) n++;
         });
         totalSpan.textContent = n;

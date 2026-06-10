@@ -11,9 +11,13 @@ class EventFactory extends Factory
         return [
             'nama_event' => fake()->sentence(3),
             'jenis_event' => fake()->randomElement([
-                 'INOTEK',
-                 'INODA',
-               ]),
+                'INOTEK',
+                'INODA',
+                'INOVASI',
+                'INOVASI DAERAH',
+                'INOVASI TEKNOLOGI',
+                'INOVASI DIGITAL',
+                'INOVASI SOSIAL',]),
         ];
     }
 }
