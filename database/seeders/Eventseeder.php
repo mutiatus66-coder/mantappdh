@@ -9,6 +9,10 @@ class EventSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('bidangs')->truncate();
+        DB::table('sub_events')->truncate();
+        DB::table('events')->truncate();
+
         $events = [
             ['id' => 1, 'nama_event' => 'LOMBA INOVASI DAN TEKNOLOGI (INOTEK AWARD)', 'jenis' => 'INOTEK'],
             ['id' => 2, 'nama_event' => 'INOVASI DAERAH KAB. MAGETAN',                'jenis' => 'INODA'],
@@ -16,7 +20,6 @@ class EventSeeder extends Seeder
             ['id' => 4, 'nama_event' => 'KOMPETISI INOVASI DIGITAL',                   'jenis' => 'INOTEK'],
         ];
 
-        DB::table('events')->insert($events);
 
         $subEvents = [
             ['id' => 1, 'event_id' => 1, 'tahun' => 2022, 'sub_event' => 'LOMBA INOTEK 2022',                                'kategori' => 'SEMUA BIDANG', 'mulai' => '2022-08-12', 'berakhir' => '2022-10-03'],
@@ -28,7 +31,6 @@ class EventSeeder extends Seeder
             ['id' => 7, 'event_id' => 4, 'tahun' => 2025, 'sub_event' => 'KOMPETISI INOVASI DIGITAL 2025',                   'kategori' => null,           'mulai' => '2025-01-01', 'berakhir' => '2025-12-31'],
         ];
 
-        DB::table('sub_events')->insert($subEvents);
 
         $bidangs = [
             // Sub Event 1
@@ -48,6 +50,5 @@ class EventSeeder extends Seeder
             ['sub_event_id' => 4, 'nama' => 'Lingkungan Hidup',    'status' => 'aktif'],
         ];
 
-        DB::table('bidangs')->insert($bidangs);
     }
 }
