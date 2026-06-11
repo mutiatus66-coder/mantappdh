@@ -87,12 +87,12 @@ Route::middleware(['auth'])->group(function () {
 
     // ── Penilai — hanya admin_bapperida ──────────────────────────────────────
     Route::middleware(['role:admin_bapperida'])->group(function () {
-        Route::get('/penilai',           [PenilaiController::class, 'index'])   ->name('penilai.index');
-        Route::post('/penilai',          [PenilaiController::class, 'store'])   ->name('penilai.store');
-        Route::put('/penilai/{id}',      [PenilaiController::class, 'update'])  ->name('penilai.update');
-        Route::delete('/penilai/{id}',   [PenilaiController::class, 'destroy']) ->name('penilai.destroy');
-        Route::post('/penilai/assign',   [PenilaiController::class, 'assign'])  ->name('penilai.assign');
-    });
+    Route::get('/penilai',                  [PenilaiController::class, 'index'])   ->name('penilai.index');
+    Route::get('/penilai/{subEventId}',     [PenilaiController::class, 'detail'])  ->name('penilai.detail');
+    Route::post('/penilai',                 [PenilaiController::class, 'store'])   ->name('penilai.store');
+    Route::put('/penilai/{id}',             [PenilaiController::class, 'update'])  ->name('penilai.update');
+    Route::delete('/penilai/{id}',          [PenilaiController::class, 'destroy']) ->name('penilai.destroy');
+});
 
     // ── Pengumuman — hanya admin_bapperida ───────────────────────────────────
     Route::middleware(['role:admin_bapperida'])->group(function () {
