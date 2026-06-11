@@ -31,7 +31,7 @@ class PenilaianController extends Controller
     // ── Helper: ambil inovator dari DB, split per kategori ────────────────
     private function getInovatorSplit(int $subEventId): array
     {
-        $all = Inovator::where('sub_event_id', $subEventId)
+        $all = Inovator::query()->where('sub_event_id', $subEventId)
             ->orderBy('inovator')
             ->get()
             ->map(fn($i) => [
@@ -63,7 +63,7 @@ class PenilaianController extends Controller
         $lolosUmum    = session('tahap1_lolos_' . $subEventId . '_umum');
         $lolosPelajar = session('tahap1_lolos_' . $subEventId . '_pelajar');
 
-        $query = Inovator::where('sub_event_id', $subEventId)->orderBy('inovator');
+        $query = Inovator::query()->where('sub_event_id', $subEventId)->orderBy('inovator');
 
         $all = $query->get()->map(fn($i) => [
             'id'           => $i->id,
