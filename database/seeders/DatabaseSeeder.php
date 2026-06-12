@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             InovatorSeeder::class,
             PengumumanSeeder::class,
             UsulanSeeder::class,
-            IndikatorSeeder::class,        // juga seed FormulasiTahap1
+            IndikatorSeeder::class,  
         ]);
 
 }
