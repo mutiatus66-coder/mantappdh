@@ -27,9 +27,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            'name'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users,email',
+            'password'        => 'required|min:8|confirmed',
+            'captcha_verified' => 'accepted',
+        ], [
+            'captcha_verified.accepted' => 'Silakan centang captcha untuk melanjutkan.',
         ]);
 
         User::create([

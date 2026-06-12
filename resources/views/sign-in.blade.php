@@ -46,6 +46,12 @@
                                             <h1 class="text-gray-900 fw-bolder mb-3">Masuk</h1>
                                         </div>
 
+                                        @if(session('success'))
+                                            <div class="alert alert-success mb-4 text-center">
+                                                {{ session('success') }}
+                                            </div>
+                                        @endif
+
                                         {{-- ✅ FIX 3: tampilkan error login --}}
                                         @if(session('error'))
                                             <div class="alert alert-danger mb-4 text-center">
