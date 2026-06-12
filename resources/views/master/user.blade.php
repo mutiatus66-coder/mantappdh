@@ -18,6 +18,22 @@ $hakAksesLabel = [
 
 <div class="page-container">
 
+    {{-- Banner Login As --}}
+    @if(session()->has('admin_original_id'))
+    <div class="alert mb-4 d-flex align-items-center justify-content-between"
+         style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; color:#856404;">
+        <div>
+            <i class="bi bi-person-fill-gear me-2"></i>
+            Anda sedang login sebagai <strong>{{ Auth::user()->nama }}</strong>
+            ({{ Auth::user()->hak_akses }})
+        </div>
+        <a href="{{ route('user.login-back') }}"
+           class="btn btn-sm btn-warning ms-3">
+            <i class="bi bi-arrow-return-left me-1"></i> Kembali ke Akun Admin
+        </a>
+    </div>
+    @endif
+
     <div class="sub-event-header">
         <div class="sub-event-title">
             <h3>Data User</h3>
