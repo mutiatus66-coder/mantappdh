@@ -157,11 +157,11 @@
                                                 <div class="position-relative mb-3">
                                                     <input class="form-control bg-transparent" type="password"
                                                            placeholder="Password" name="password" autocomplete="off" />
-                                                    <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
-                                                          data-kt-password-meter-control="visibility">
+                                                    <button id="kt_password_toggle" type="button" class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
+                                                            onclick="togglePasswordVisibility(this)" aria-label="Toggle password visibility">
                                                         <i class="ki-outline ki-eye-slash fs-2"></i>
                                                         <i class="ki-outline ki-eye fs-2 d-none"></i>
-                                                    </span>
+                                                    </button>
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
                                                     <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
@@ -269,23 +269,21 @@
             }
 
             // Toggle visibility password
-            document.querySelectorAll('[data-kt-password-meter-control="visibility"]').forEach(btn => {
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const input = this.closest('.position-relative').querySelector('input');
-                    const slash = this.querySelector('.ki-eye-slash');
-                    const eye   = this.querySelector('.ki-eye');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        slash.classList.add('d-none');
-                        eye.classList.remove('d-none');
-                    } else {
-                        input.type = 'password';
-                        slash.classList.remove('d-none');
-                        eye.classList.add('d-none');
-                    }
-                });
-            });
+            window.togglePasswordVisibility = function (button) {
+                const input = document.querySelector('input[name="password"]');
+                if (!input) return;
+                const slash = button.querySelector('.ki-eye-slash');
+                const eye   = button.querySelector('.ki-eye');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    slash?.classList.add('d-none');
+                    eye?.classList.remove('d-none');
+                } else {
+                    input.type = 'password';
+                    slash?.classList.remove('d-none');
+                    eye?.classList.add('d-none');
+                }
+            };
 
         });
     </script>
