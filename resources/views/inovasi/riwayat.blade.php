@@ -44,8 +44,8 @@
                             {{ $se->mulai }} &ndash; {{ $se->berakhir }}
                         </span>
                     </div>
-                    <a href="{{ url('/inovasi/usulan-riwayat/' . $se->id) }}" class="btn btn-info">
-                        <i class="bi bi-arrow-right me-1"></i> Lihat Usulan
+                    <a href="{{ url('/inovasi/usulan/' . $se->id) }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right me-1"></i> Kelola Usulan
                     </a>
                 </div>
             </div>
