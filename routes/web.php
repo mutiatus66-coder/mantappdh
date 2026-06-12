@@ -124,6 +124,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}',       [InovasiController::class, 'update']) ->name('update');
         Route::delete('/{id}',    [InovasiController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/kirim',[InovasiController::class, 'kirim'])  ->name('kirim');
+
+        Route::get('/inovasi/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar']);
     });
 
     // ── Penilaian ─────────────────────────────────────────────────────────────

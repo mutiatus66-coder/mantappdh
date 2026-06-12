@@ -14,8 +14,8 @@
             <h3 class="ec-title">Data Riwayat Usulan</h3>
             <p class="ec-subtitle">
                 {{ $eventNama ?? '' }}
-                @if(!empty($eventNama) && !empty($subEventNama)) &mdash; @endif
-                {{ $subEventNama ?? '' }}
+                @if(!empty($eventNama) && !empty($subEvent)) &mdash; @endif
+                {{ $subEvent ?? '' }}
             </p>
         </div>
         <a href="{{ url('/inovasi/riwayat') }}" class="btn btn-dark">

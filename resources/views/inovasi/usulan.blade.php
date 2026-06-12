@@ -28,7 +28,7 @@
     <div class="usulan-header">
         <div class="usulan-title">
             <h3>DATA REKAP PENDAFTAR</h3>
-            <p>Sub Event: <strong>{{ $subEventNama }}</strong></p>
+            <p>Sub Event: <strong>{{ $sub_event }}</strong></p>
         </div>
         <div>
             <a href="/inovasi/rekap-nilai" class="btn-kembali"><i class="bi bi-arrow-left"></i> Kembali</a>

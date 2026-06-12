@@ -25,16 +25,52 @@ class InovasiController extends Controller
 
     // ── Form tambah / edit usulan (milik peserta) ─────────────────────────
 
-    public function usulan($subEventId)
+   public function usulan($subEventId)
+{
+    $subEvent  = SubEvent::with('event', 'bidangs')->findOrFail($subEventId);
+    $sub_event = $subEvent->sub_event;
+
+    $usulan = Usulan::where('sub_event_id', $subEventId)
+        ->get()
+        ->map(function ($u) {
+            return [
+                'judul'        => $u->judul ?? '',
+                'instansi'     => $u->inovator ?? '',
+                'link_youtube' => $u->link_youtube ?? '',
+                'no_hp'        => $u->ketua_wa ?? '',
+                'kategori'     => $u->kategori ?? '',
+                'nilai_t1'     => $u->nilai_t1 ?? '-',
+                'nilai_t2'     => $u->nilai_t2 ?? '-',
+                'nilai_total'  => $u->nilai_total ?? '-',
+            ];
+        });
+
+    return view('inovasi.usulan', compact('sub_event', 'usulan'));
+}
+
+    // ── Rekap semua pendaftar per sub event (admin) ───────────────────────
+
+    public function rekapPendaftar($subEventId)
     {
-        $subEvent = SubEvent::with('event', 'bidangs')->findOrFail($subEventId);
+        $subEvent  = SubEvent::with('event')->findOrFail($subEventId);
+        $sub_event = $subEvent->sub_event;
 
-        // Usulan milik user yang sedang login untuk sub event ini
-        $usulan = Usulan::where('user_id', Auth::id())
-            ->where('sub_event_id', $subEventId)
-            ->first();
+        $usulan = Usulan::where('sub_event_id', $subEventId)
+            ->get()
+            ->map(function ($u) {
+                return [
+                    'judul'        => $u->judul ?? '',
+                    'instansi'     => $u->inovator ?? '',
+                    'link_youtube' => $u->link_youtube ?? '',
+                    'no_hp'        => $u->ketua_wa ?? '',
+                    'kategori'     => $u->kategori ?? '',
+                    'nilai_t1'     => $u->nilai_t1 ?? '-',
+                    'nilai_t2'     => $u->nilai_t2 ?? '-',
+                    'nilai_total'  => $u->nilai_total ?? '-',
+                ];
+            });
 
-        return view('inovasi.usulan', compact('subEvent', 'usulan'));
+        return view('inovasi.rekap_pendaftar', compact('sub_event', 'usulan'));
     }
 
     // ── Riwayat usulan milik peserta ──────────────────────────────────────
@@ -103,7 +139,6 @@ class InovasiController extends Controller
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        // Tidak boleh edit setelah dikirim
         if ($usulan->is_submitted) {
             return response()->json([
                 'success' => false,
@@ -149,7 +184,6 @@ class InovasiController extends Controller
         return response()->json(['success' => true, 'message' => 'Usulan berhasil dihapus.']);
     }
 
-    /** Kirim usulan — ubah status menjadi "Sedang Dinilai" */
     public function kirim($id)
     {
         $usulan = Usulan::where('id', $id)
