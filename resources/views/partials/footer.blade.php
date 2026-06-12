@@ -7,7 +7,7 @@
         {{-- Copyright --}}
         <div class="order-2 order-md-1">
             <span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
-            <a href="#" class="text-hover-primary">Rumah Inovasi Magetan</a>
+            <a href="#" class="menu-link px-1">Rumah Inovasi Magetan</a>
         </div>
 
         {{-- Links --}}

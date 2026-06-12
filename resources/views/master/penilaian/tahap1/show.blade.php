@@ -55,6 +55,9 @@
                 'filename' => 'verifikasi-umum',
                 'nominasi' => $nominasiUmum,
                 'penilai'  => $penilai,
+                'indikators'            => $indikators,
+                'penilaiLogin'          => $penilaiLogin,
+                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
             ])
         </div>
 
@@ -67,6 +70,9 @@
                 'filename' => 'verifikasi-pelajar',
                 'nominasi' => $nominasiPelajar,
                 'penilai'  => $penilai,
+                'indikators'            => $indikators,
+                'penilaiLogin'          => $penilaiLogin,
+                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
             ])
         </div>
 
@@ -80,7 +86,77 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const SIMPAN_URL = '{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}';
+    const NILAI_URL  = '{{ route("penilaian.tahap1.simpan.nilai", $subEvent["id"]) }}';
     const CSRF       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+    // Nilai per inovator milik penilai yang sedang login (untuk pre-fill)
+    const nilaiDb = @json($nilaiLoginPerInovator ?? []);
+
+    // ── Modal Input Nilai ─────────────────────────────────────────────────
+    let activeInovatorId = null;
+
+    document.querySelectorAll('.btn-input-nilai').forEach(btn => {
+        btn.addEventListener('click', function () {
+            activeInovatorId = this.dataset.inovatorId;
+
+            // Isi header modal
+            document.querySelectorAll('.modal-inovator-nama').forEach(el => el.textContent = this.dataset.inovator);
+            document.querySelectorAll('.modal-inovasi-nama').forEach(el => el.textContent = this.dataset.namaInovasi);
+
+            // Pre-fill dari nilaiDb
+            const savedNilai = nilaiDb[activeInovatorId] ?? {};
+            document.querySelectorAll('.input-nilai-item').forEach(inp => {
+                const kid = inp.dataset.keteranganId;
+                inp.value = savedNilai[kid] !== undefined ? savedNilai[kid] : '';
+            });
+
+            // Tentukan group berdasarkan tombol yang diklik
+            const group   = this.closest('.rv-card')
+                            ?.querySelector('.btn-simpan-nilai-modal')?.dataset.group ?? 'umum';
+            const modalId = 'modalNilaiTahap1' + cap(group);
+            bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).show();
+        });
+    });
+
+    document.querySelectorAll('.btn-simpan-nilai-modal').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (!activeInovatorId) return;
+
+            const group = this.dataset.group;
+            const nilai = {};
+            document.querySelectorAll('.input-nilai-item[data-group="' + group + '"]').forEach(inp => {
+                if (inp.value !== '') nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
+            });
+
+            if (Object.keys(nilai).length === 0) {
+                toast('Isi minimal satu nilai terlebih dahulu.', 'error');
+                return;
+            }
+
+            const orig    = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
+            fetch(NILAI_URL, {
+                method : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                body   : JSON.stringify({ inovator_id: activeInovatorId, nilai }),
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    toast('Nilai berhasil disimpan!', 'success');
+                    nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
+                    const modalId = 'modalNilaiTahap1' + cap(group);
+                    bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();
+                } else {
+                    toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
+                }
+            })
+            .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+            .finally(() => { this.disabled = false; this.innerHTML = orig; });
+        });
+    });
 
     // ── Helper: capitalize first letter ──
     const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -89,11 +165,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildGroup(name) {
         return {
             name,
-            get rows()    { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]`)] },
-            get checked() { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]:checked`)] },
-            get checkAll(){ return document.querySelector(`.chk-all[data-group="${name}"]`) },
-            get bar()     { return document.getElementById(`simpanBar${cap(name)}`) },
-            get count()   { return document.querySelector(`#simpanBar${cap(name)} .simpan-count`) },
+            get rows()    { return [...document.querySelectorAll('.chk-row[data-group="' + name + '"]')] },
+            get checked() { return [...document.querySelectorAll('.chk-row[data-group="' + name + '"]:checked')] },
+            get checkAll(){ return document.querySelector('.chk-all[data-group="' + name + '"]') },
+            get bar()     { return document.getElementById('simpanBar' + cap(name)) },
+            get count()   { return document.querySelector('#simpanBar' + cap(name) + ' .simpan-count') },
         };
     }
 
@@ -102,42 +178,30 @@ document.addEventListener('DOMContentLoaded', function () {
         pelajar : buildGroup('pelajar'),
     };
 
-    // ── Sync UI state (checkmarks, highlight rows, simpan bar) ──
+    // ── Sync UI state ──
     function syncUI(g) {
         const total = g.rows.length;
         const n     = g.checked.length;
 
-        // Highlight lolos rows
         g.rows.forEach(chk => {
             chk.closest('tr').classList.toggle('row-lolos', chk.checked);
         });
 
-        // Check-all state
         if (g.checkAll) {
             g.checkAll.indeterminate = n > 0 && n < total;
             g.checkAll.checked       = total > 0 && n === total;
         }
 
-        // Simpan bar: always show/hide based on selection count
-        if (g.bar) {
-            g.bar.style.display = n > 0 ? 'flex' : 'none';
-        }
-        if (g.count) {
-            g.count.textContent = n;
-        }
+        if (g.bar) g.bar.style.display = n > 0 ? 'flex' : 'none';
+        if (g.count) g.count.textContent = n;
     }
 
-    // ── Init: sync all groups on page load ──
     Object.values(groups).forEach(g => syncUI(g));
 
-    // ── Row checkbox change ──
     document.querySelectorAll('.chk-row').forEach(chk => {
-        chk.addEventListener('change', function () {
-            syncUI(groups[this.dataset.group]);
-        });
+        chk.addEventListener('change', function () { syncUI(groups[this.dataset.group]); });
     });
 
-    // ── Check-all change ──
     document.querySelectorAll('.chk-all').forEach(chkAll => {
         chkAll.addEventListener('change', function () {
             const g = groups[this.dataset.group];
@@ -146,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Simpan button ──
+    // ── Simpan lolos (session) ──
     document.querySelectorAll('.btn-rv-simpan').forEach(btn => {
         btn.addEventListener('click', function () {
             const g   = groups[this.dataset.group];
@@ -157,50 +221,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Disable button saat request
             btn.disabled = true;
             btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
 
             fetch(SIMPAN_URL, {
                 method : 'POST',
-                headers: {
-                    'Content-Type' : 'application/json',
-                    'Accept'       : 'application/json',
-                    'X-CSRF-TOKEN' : CSRF,
-                },
-                body: JSON.stringify({ kategori: g.name, ids }),
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                body   : JSON.stringify({ kategori: g.name, ids }),
             })
             .then(r => r.json())
             .then(data => {
-                if (data.success) {
-                    toast('Data berhasil disimpan!', 'success');
-                } else {
-                    toast(data.message ?? 'Gagal menyimpan data.', 'error');
-                }
+                if (data.success) toast('Data berhasil disimpan!', 'success');
+                else toast(data.message ?? 'Gagal menyimpan data.', 'error');
             })
             .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan';
-            });
+            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan'; });
         });
     });
 
-    // ── Rangking: sort descending by nilai ──
+    // ── Rangking ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {
-            const tbody = document.querySelector(`#${this.dataset.table} tbody`);
+            const tbody = document.querySelector('#' + this.dataset.table + ' tbody');
             if (!tbody) return;
 
-            const rows = [...tbody.querySelectorAll('tr')]
-                .filter(row => row.querySelector('.rv-nilai')); // skip empty-state row
-
+            const rows = [...tbody.querySelectorAll('tr')].filter(row => row.querySelector('.rv-nilai'));
             rows.sort((a, b) => {
                 const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
                 const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-                return nilaiB - nilaiA; // descending
+                return nilaiB - nilaiA;
             });
-
             rows.forEach((row, i) => {
                 const no = row.querySelector('.row-no');
                 if (no) no.textContent = i + 1;
@@ -217,23 +267,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const csv = [...table.querySelectorAll('tr')].map(row =>
                 [...row.querySelectorAll('th, td')]
-                    .slice(1) // skip checkbox column
-                    .map(c => `"${c.innerText.trim().replace(/"/g, '""')}"`)
+                    .slice(1)
+                    .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"')
                     .join(',')
             ).join('\n');
 
             const a = document.createElement('a');
             a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-            a.download = `${this.dataset.filename}.csv`;
+            a.download = this.dataset.filename + '.csv';
             a.click();
         });
     });
 
-    // ── Toast notification ──
+    // ── Toast ──
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
-        el.className = `rv-toast ${type}`;
-        el.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>${msg}`;
+        el.className = 'rv-toast ' + type;
+        el.innerHTML = '<i class="bi bi-' + (type === 'success' ? 'check-circle-fill' : 'x-circle-fill') + '"></i>' + msg;
         document.body.appendChild(el);
         requestAnimationFrame(() => el.classList.add('show'));
         setTimeout(() => {

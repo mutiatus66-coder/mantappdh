@@ -30,6 +30,17 @@
             {{-- Kanan: theme toggle + user menu --}}
             <div class="d-flex align-items-stretch flex-shrink-0">
 
+                {{-- History --}}
+                <div class="d-flex align-items-center ms-1 ms-lg-3">
+                    <a href="#"
+                       id="historyToggleBtn"
+                       onclick="toggleHistoryPanel()"
+                       class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
+                       title="Riwayat Halaman">
+                        <i class="bi bi-clock-history fs-1"></i>
+                    </a>
+                </div>
+
                 {{-- Theme Mode --}}
                 <div class="d-flex align-items-center ms-1 ms-lg-3">
                     <a href="#"

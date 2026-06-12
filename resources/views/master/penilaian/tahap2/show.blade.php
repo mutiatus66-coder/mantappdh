@@ -46,6 +46,9 @@
                 'filename' => 'nominasi-umum',
                 'nominasi' => $nominasiUmum,
                 'penilai'  => $penilai,
+                'indikators'            => $indikators,
+                'penilaiLogin'          => $penilaiLogin,
+                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
             ])
         </div>
 
@@ -58,6 +61,9 @@
                 'filename' => 'nominasi-pelajar',
                 'nominasi' => $nominasiPelajar,
                 'penilai'  => $penilai,
+                'indikators'            => $indikators,
+                'penilaiLogin'          => $penilaiLogin,
+                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
             ])
         </div>
 
@@ -70,75 +76,130 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Sort tabel by Total Nilai descending, isi kolom Rangking ──
-    function sortByTotal(tableId) {
-        const tbody = document.querySelector('#' + tableId + ' tbody');
-        if (!tbody) return;
+    const NILAI_URL = '{{ route("penilaian.tahap2.simpan.nilai", $subEvent["id"]) }}';
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-        // Hanya ambil baris data (skip baris "belum ada data")
-        const rows = [...tbody.querySelectorAll('tr')]
-            .filter(row => row.querySelector('.rv-nilai'));
+    const nilaiDb = @json($nilaiLoginPerInovator ?? []);
 
-        if (rows.length === 0) return;
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-        // Sort descending
-        rows.sort((a, b) => {
-            const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-            const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-            return nilaiB - nilaiA;
+    // ── Modal Input Nilai Tahap 2 ─────────────────────────────────────────
+    let activeInovatorId = null;
+
+    document.querySelectorAll('.btn-input-nilai-t2').forEach(btn => {
+        btn.addEventListener('click', function () {
+            activeInovatorId = this.dataset.inovatorId;
+
+            document.querySelectorAll('.modal-inovator-nama-t2').forEach(el => el.textContent = this.dataset.inovator);
+            document.querySelectorAll('.modal-inovasi-nama-t2').forEach(el => el.textContent = this.dataset.namaInovasi);
+
+            const savedNilai = nilaiDb[activeInovatorId] ?? {};
+            document.querySelectorAll('.input-nilai-item-t2').forEach(inp => {
+                const kid = inp.dataset.keteranganId;
+                inp.value = savedNilai[kid] !== undefined ? savedNilai[kid] : '';
+            });
+
+            const group   = this.closest('.rv-card')
+                            ?.querySelector('.btn-simpan-nilai-modal-t2')?.dataset.group ?? 'umum';
+            const modalId = 'modalNilaiTahap2' + cap(group);
+            bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).show();
         });
+    });
 
-        // Update nomor, kolom rangking, dan append ke tbody
-        rows.forEach((row, i) => {
-            const rank = i + 1;
+    document.querySelectorAll('.btn-simpan-nilai-modal-t2').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (!activeInovatorId) return;
 
-            // Kolom NO
-            const noCell = row.querySelector('.row-no');
-            if (noCell) noCell.textContent = rank;
+            const group = this.dataset.group;
+            const nilai = {};
+            document.querySelectorAll('.input-nilai-item-t2[data-group="' + group + '"]').forEach(inp => {
+                if (inp.value !== '') nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
+            });
 
-            // Kolom RANGKING (via class, bukan cells[index] yang rawan salah)
-            const rankCell = row.querySelector('.rv-rank-cell');
-            if (rankCell) {
-                if (rank <= 3) {
-                    rankCell.innerHTML = `<span class="rv-badge-rank rv-badge-rank--${rank}">${rank}</span>`;
-                } else {
-                    rankCell.innerHTML = `<span style="color:var(--ri-text-muted)">${rank}</span>`;
-                }
+            if (Object.keys(nilai).length === 0) {
+                toast('Isi minimal satu nilai terlebih dahulu.', 'error');
+                return;
             }
 
-            tbody.appendChild(row);
+            const orig    = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
+            fetch(NILAI_URL, {
+                method : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                body   : JSON.stringify({ inovator_id: activeInovatorId, nilai }),
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    toast('Nilai berhasil disimpan!', 'success');
+                    nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
+                    const modalId = 'modalNilaiTahap2' + cap(group);
+                    bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();
+                } else {
+                    toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
+                }
+            })
+            .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+            .finally(() => { this.disabled = false; this.innerHTML = orig; });
         });
-    }
+    });
 
-    // ── Export CSV ──
-    function exportCSV(tableId, filename) {
-        const table = document.getElementById(tableId);
-        if (!table) return;
-
-        const csv = [...table.querySelectorAll('tr')].map(row =>
-            [...row.querySelectorAll('th, td')]
-                .map(c => `"${c.innerText.trim().replace(/"/g, '""')}"`)
-                .join(',')
-        ).join('\n');
-
-        const a = document.createElement('a');
-        a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-        a.download = filename + '.csv';
-        a.click();
-    }
-
-    // ── Event listeners ──
+    // ── Rangking ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {
-            sortByTotal(this.dataset.table);
+            const tbody = document.querySelector('#' + this.dataset.table + ' tbody');
+            if (!tbody) return;
+
+            const rows = [...tbody.querySelectorAll('tr')].filter(row => row.querySelector('.rv-nilai'));
+            rows.sort((a, b) => {
+                const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+                const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
+                return nilaiB - nilaiA;
+            });
+
+            rows.forEach((row, i) => {
+                const rankCell = row.querySelector('.rv-rank-cell');
+                if (rankCell) rankCell.textContent = i + 1;
+                const no = row.querySelector('.row-no');
+                if (no) no.textContent = i + 1;
+                tbody.appendChild(row);
+            });
         });
     });
 
+    // ── Export CSV ──
     document.querySelectorAll('.btn-rv-excel').forEach(btn => {
         btn.addEventListener('click', function () {
-            exportCSV(this.dataset.table, this.dataset.filename);
+            const table = document.getElementById(this.dataset.table);
+            if (!table) return;
+
+            const csv = [...table.querySelectorAll('tr')].map(row =>
+                [...row.querySelectorAll('th, td')]
+                    .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"')
+                    .join(',')
+            ).join('\n');
+
+            const a = document.createElement('a');
+            a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+            a.download = this.dataset.filename + '.csv';
+            a.click();
         });
     });
+
+    // ── Toast ──
+    function toast(msg, type = 'success') {
+        const el = document.createElement('div');
+        el.className = 'rv-toast ' + type;
+        el.innerHTML = '<i class="bi bi-' + (type === 'success' ? 'check-circle-fill' : 'x-circle-fill') + '"></i>' + msg;
+        document.body.appendChild(el);
+        requestAnimationFrame(() => el.classList.add('show'));
+        setTimeout(() => {
+            el.classList.remove('show');
+            el.addEventListener('transitionend', () => el.remove(), { once: true });
+        }, 2800);
+    }
 
 });
 </script>

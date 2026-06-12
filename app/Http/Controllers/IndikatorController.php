@@ -23,7 +23,7 @@ class IndikatorController extends Controller
 
         $detailValid1 = [];
         foreach ($subEvents as $se) {
-            $f = FormulasiTahap1::where('sub_event_id', $se->id)->first();
+            $f = FormulasiTahap1::query()->where('sub_event_id', $se->id)->first();
             $detailValid1[$se->id] = $f
                 ? (($f->nilai_makalah + $f->nilai_substansi) == 100)
                 : false;
@@ -58,7 +58,7 @@ class IndikatorController extends Controller
 
     public function formulasiTahap1Get($subEventId)
     {
-        $f = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+        $f = FormulasiTahap1::query()->where('sub_event_id', $subEventId)->first();
         return response()->json($f ?? ['nilai_makalah' => 0, 'nilai_substansi' => 0]);
     }
 
@@ -69,7 +69,7 @@ class IndikatorController extends Controller
     {
         $subEvent     = SubEvent::findOrFail($subEventId);
         $subEventName = $subEvent->sub_event;
-        $indikators   = Indikator::where('sub_event_id', $subEventId)->get();
+        $indikators   = Indikator::query()->where('sub_event_id', $subEventId)->get();
         return view('indikator.detail_inovasi', compact('subEventId', 'subEventName', 'indikators'));
     }
 
@@ -84,13 +84,13 @@ class IndikatorController extends Controller
     public function inovasiUpdate(Request $request, $subEventId, $id)
     {
         $request->validate(['nama_indikator' => 'required|string|max:255']);
-        Indikator::where('sub_event_id', $subEventId)->findOrFail($id)->update(['nama_indikator' => $request->nama_indikator]);
+        Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($id)->update(['nama_indikator' => $request->nama_indikator]);
         return redirect()->route('indikator.tahap1.inovasi', $subEventId)->with('success', 'Indikator berhasil diperbarui.');
     }
 
     public function inovasiDestroy($subEventId, $id)
     {
-        Indikator::where('sub_event_id', $subEventId)->findOrFail($id)->delete();
+        Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($id)->delete();
         return redirect()->route('indikator.tahap1.inovasi', $subEventId)->with('success', 'Indikator berhasil dihapus.');
     }
 
@@ -100,16 +100,16 @@ class IndikatorController extends Controller
     public function detailIndikator($subEventId, $indikatorId)
     {
         SubEvent::findOrFail($subEventId);
-        $indikator     = Indikator::findOrFail($indikatorId);
+        $indikator     = Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($indikatorId);
         $indikatorName = $indikator->nama_indikator;
-        $keterangans   = KeteranganIndikator::where('indikator_id', $indikatorId)->get();
+        $keterangans   = KeteranganIndikator::query()->where('indikator_id', $indikatorId)->get();
         return view('indikator.detail_indikator', compact('subEventId', 'indikatorId', 'indikatorName', 'keterangans'));
     }
 
     public function detailIndikatorStore(Request $request, $subEventId, $indikatorId)
     {
         $request->validate(['keterangan' => 'required|string|max:255', 'nilai_minimal' => 'required|integer|min:0', 'nilai_maksimal' => 'required|integer|min:0|gte:nilai_minimal']);
-        Indikator::findOrFail($indikatorId);
+        Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($indikatorId);
         KeteranganIndikator::create(['indikator_id' => $indikatorId, 'keterangan' => $request->keterangan, 'nilai_minimal' => $request->nilai_minimal, 'nilai_maksimal' => $request->nilai_maksimal]);
         return redirect()->route('indikator.tahap1.detail', [$subEventId, $indikatorId])->with('success', 'Keterangan berhasil ditambahkan.');
     }
@@ -117,13 +117,13 @@ class IndikatorController extends Controller
     public function detailIndikatorUpdate(Request $request, $subEventId, $indikatorId, $id)
     {
         $request->validate(['keterangan' => 'required|string|max:255', 'nilai_minimal' => 'required|integer|min:0', 'nilai_maksimal' => 'required|integer|min:0|gte:nilai_minimal']);
-        KeteranganIndikator::where('indikator_id', $indikatorId)->findOrFail($id)->update(['keterangan' => $request->keterangan, 'nilai_minimal' => $request->nilai_minimal, 'nilai_maksimal' => $request->nilai_maksimal]);
+        KeteranganIndikator::query()->where('indikator_id', $indikatorId)->findOrFail($id)->update(['keterangan' => $request->keterangan, 'nilai_minimal' => $request->nilai_minimal, 'nilai_maksimal' => $request->nilai_maksimal]);
         return redirect()->route('indikator.tahap1.detail', [$subEventId, $indikatorId])->with('success', 'Keterangan berhasil diperbarui.');
     }
 
     public function detailIndikatorDestroy($subEventId, $indikatorId, $id)
     {
-        KeteranganIndikator::where('indikator_id', $indikatorId)->findOrFail($id)->delete();
+        KeteranganIndikator::query()->where('indikator_id', $indikatorId)->findOrFail($id)->delete();
         return redirect()->route('indikator.tahap1.detail', [$subEventId, $indikatorId])->with('success', 'Keterangan berhasil dihapus.');
     }
 
@@ -136,7 +136,7 @@ class IndikatorController extends Controller
         $formulasis  = FormulasiTahap2::pluck('sub_event_id')->toArray();
         $detailValid = [];
         foreach ($subEvents as $se) {
-            $f = FormulasiTahap2::where('sub_event_id', $se->id)->first();
+            $f = FormulasiTahap2::query()->where('sub_event_id', $se->id)->first();
             $detailValid[$se->id] = $f ? (($f->nilai_inovasi + $f->nilai_peragaan) == 100) : false;
         }
         return view('indikator.tahap-2', compact('subEvents', 'formulasis', 'detailValid'));
@@ -155,7 +155,7 @@ class IndikatorController extends Controller
 
     public function formulasiTahap2Get($subEventId)
     {
-        $f = FormulasiTahap2::where('sub_event_id', $subEventId)->first();
+        $f = FormulasiTahap2::query()->where('sub_event_id', $subEventId)->first();
         return response()->json($f ?? ['nilai_inovasi' => 0, 'nilai_peragaan' => 0]);
     }
 

@@ -18,7 +18,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
+            'hak_akses' => 'required|in:admin_bapperida,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'required|min:6',
         ]);
@@ -49,7 +49,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email,' . $id,
-            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
+            'hak_akses' => 'required|in:admin_bapperida,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'nullable|min:6',
         ]);
@@ -72,10 +72,34 @@ class UserController extends Controller
 
     public function loginAs($id)
     {
+        // Simpan ID admin asli di session (hanya jika belum login-as sebelumnya)
+        if (!session()->has('admin_original_id')) {
+            session(['admin_original_id' => Auth::id()]);
+        }
+
         $user = User::findOrFail($id);
-        session(['admin_original_id' => Auth::id()]);
         Auth::login($user);
-        return redirect('/')->with('success', 'Login sebagai ' . $user->nama);
+
+        // Tetap di halaman user
+        return redirect()->route('user.index')
+                         ->with('success', 'Sedang login sebagai ' . $user->nama . ' (' . $user->hak_akses . ')');
+    }
+
+    public function loginBack()
+    {
+        $originalId = session('admin_original_id');
+
+        if (!$originalId) {
+            return redirect()->route('user.index')
+                             ->with('error', 'Tidak ada sesi admin yang tersimpan.');
+        }
+
+        $admin = User::findOrFail($originalId);
+        Auth::login($admin);
+        session()->forget('admin_original_id');
+
+        return redirect()->route('user.index')
+                         ->with('success', 'Kembali ke akun ' . $admin->nama);
     }
 
     public function destroy($id)

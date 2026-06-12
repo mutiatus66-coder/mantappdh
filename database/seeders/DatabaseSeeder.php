@@ -25,10 +25,16 @@ class DatabaseSeeder extends Seeder
         'status'    => 'aktif',
     ]);
 
-    $this->call([
-        UserSeeder::class,
-        EventSeeder::class,
-        InovatorSeeder::class,
-    ]);
+            $this->call([
+            EventSeeder::class,
+            SubEventSeeder::class,
+            BidangSeeder::class,
+            UserSeeder::class,
+            PenilaiSeeder::class,
+            PengumumanSeeder::class,
+            UsulanSeeder::class,
+            IndikatorSeeder::class,  
+        ]);
+
 }
 }
