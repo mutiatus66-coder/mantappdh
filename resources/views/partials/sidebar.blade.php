@@ -42,7 +42,7 @@
 
                     {{-- Beranda --}}
                     <div class="menu-item py-2">
-                        <a href="/" class="menu-link menu-center ri-menu-item">
+                        <a href="#" class="menu-link menu-center ri-menu-item">
                             <span class="menu-icon me-0">
                                 <i class="ki-outline ki-home-2 fs-2x"></i>
                             </span>
