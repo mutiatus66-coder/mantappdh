@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PenilaianUsulan extends Model
+class Penilaian extends Model
 {
     protected $table = 'penilaian_usulan';
 
@@ -17,12 +17,12 @@ class PenilaianUsulan extends Model
 
     public function usulan()
     {
-        return $this->belongsTo(Usulan::class, 'usulan_id');
+        return $this->belongsTo(Usulan::class);
     }
 
     public function penilai()
     {
-        return $this->belongsTo(Penilai::class);
+        return $this->belongsTo(User::class, 'penilai_id');
     }
 
     public function keteranganIndikator()

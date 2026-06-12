@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pemenang extends Model
 {
-    protected $table = 'pemenang';
+    protected $table = 'penilaian_pemenang';
 
     protected $fillable = [
         'usulan_id',
@@ -17,12 +17,12 @@ class Pemenang extends Model
 
     public function usulan()
     {
-        return $this->belongsTo(Usulan::class, 'usulan_id');
+        return $this->belongsTo(Usulan::class);
     }
 
     public function penilai()
     {
-        return $this->belongsTo(Penilai::class);
+        return $this->belongsTo(User::class, 'penilai_id');
     }
 
     public function keteranganTahap2()
