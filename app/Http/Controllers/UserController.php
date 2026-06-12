@@ -18,7 +18,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
+            'hak_akses' => 'required|in:admin_bapperida,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'required|min:6',
         ]);
@@ -49,7 +49,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email,' . $id,
-            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
+            'hak_akses' => 'required|in:admin_bapperida,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'nullable|min:6',
         ]);

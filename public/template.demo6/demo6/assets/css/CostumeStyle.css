@@ -119,12 +119,12 @@
     overflow-y: auto;
     overflow-x: visible !important;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.249) transparent;
 }
 #kt_aside_menu::-webkit-scrollbar       { width: 4px; }
 #kt_aside_menu::-webkit-scrollbar-track { background: transparent; }
 #kt_aside_menu::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.265);
     border-radius: 4px;
 }
 #kt_aside_menu::-webkit-scrollbar-thumb:hover {
