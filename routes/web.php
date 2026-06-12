@@ -83,7 +83,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/',             [UserController::class, 'store'])   ->name('store');
         Route::put('/{id}',          [UserController::class, 'update'])  ->name('update');
         Route::delete('/{id}',       [UserController::class, 'destroy']) ->name('destroy');
-        Route::get('/{id}/login-as', [UserController::class, 'loginAs']) ->name('login-as');
+        Route::get('/{id}/login-as', [UserController::class, 'loginAs'])  ->name('login-as');
+        Route::get('/login-back',     [UserController::class, 'loginBack']) ->name('login-back');
     });
 
     // ── Penilai — hanya admin_bapperida ──────────────────────────────────────
