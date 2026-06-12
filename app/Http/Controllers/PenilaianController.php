@@ -1,29 +1,24 @@
 <?php
-// app/Http/Controllers/PenilaianController.php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Penilai;
-use App\Models\Inovator;
+use App\Models\User;
+use App\Models\Usulan;
+use App\Models\SubEvent;
 use App\Models\Indikator;
 use App\Models\KeteranganIndikator;
 use App\Models\IndikatorTahap2;
-use App\Models\PenilaianUsulan;
-use App\Models\PenilaianPemenang;
+use App\Models\Penilaian;
+use App\Models\Pemenang;
 
 class PenilaianController extends Controller
 {
-    // ── Helper: ambil sub events ──────────────────────────────────────────
-    private function getSubEvents(): array
-    {
-        return session('sub_events', []);
-    }
-
-    // ── Helper: ambil penilai dari DB ─────────────────────────────────────
+    // ── Helper: ambil penilai (user dengan hak_akses = penilai) ──────────
     private function getPenilai(): array
     {
-        return Penilai::orderBy('nama')
+        return User::where('hak_akses', 'penilai')
+            ->orderBy('nama')
             ->get()
             ->map(fn($p) => [
                 'id'           => $p->id,
@@ -33,41 +28,61 @@ class PenilaianController extends Controller
             ->toArray();
     }
 
-    // ── Helper: ambil penilai_id milik user yang sedang login ─────────────
+    // ── Helper: user penilai yang sedang login ────────────────────────────
     private function getPenilaiLogin(): ?object
     {
-        return Penilai::where('user_id', auth()->id())->first();
+        $user = auth()->user();
+        if ($user && $user->hak_akses === 'penilai') {
+            return $user;
+        }
+        return null;
     }
 
-    // ── Helper: ambil inovator dari DB, split per kategori, sertakan nilai ─
-    private function getInovatorSplit(int $subEventId): array
+    // ── Helper: build nominasiData untuk index views ──────────────────────
+    private function buildNominasiData($subEvents): array
     {
-        $all = Inovator::query()->where('sub_event_id', $subEventId)
+        $nominasiData = [];
+        foreach ($subEvents as $se) {
+            $nominasiData[$se->id] = Usulan::where('sub_event_id', $se->id)
+                ->orderBy('inovator')
+                ->get()
+                ->map(fn($u) => [
+                    'id'           => $u->id,
+                    'inovator'     => $u->inovator,
+                    'nama_inovasi' => $u->nama_inovasi,
+                    'kategori'     => $u->kategori ?? 'umum',
+                ])
+                ->toArray();
+        }
+        return $nominasiData;
+    }
+
+    // ── Helper: split usulan per kategori + sertakan nilai ────────────────
+    private function getUsulanSplit(int $subEventId): array
+    {
+        $all = Usulan::where('sub_event_id', $subEventId)
             ->orderBy('inovator')
             ->get()
-            ->map(fn($i) => [
-                'id'           => $i->id,
-                'inovator'     => $i->inovator,
-                'nama_inovasi' => $i->nama_inovasi,
-                'kategori'     => $i->kategori,
-                'lolos'        => false,
+            ->map(fn($u) => [
+                'id'           => $u->id,
+                'inovator'     => $u->inovator,
+                'nama_inovasi' => $u->nama_inovasi,
+                'kategori'     => $u->kategori ?? 'umum',
+                'status'       => $u->status,
+                'lolos'        => $u->status === 'Lolos Tahap 1',
                 'total_nilai'  => 0,
                 'nilai'        => [],
             ])
             ->toArray();
 
-        // Load semua nilai Tahap 1 untuk sub event ini
-        $inovatorIds = array_column($all, 'id');
-        if (!empty($inovatorIds)) {
-            $nilaiRows = PenilaianUsulan::whereIn('inovator_id', $inovatorIds)->get();
-
-            // Hitung total nilai per inovator per penilai (avg seluruh indikator)
-            // Struktur: [inovator_id][penilai_id] => [nilai...]
-            $grouped = [];
+        // Load nilai tahap 1
+        $usulanIds = array_column($all, 'id');
+        if (!empty($usulanIds)) {
+            $nilaiRows = Penilaian::whereIn('usulan_id', $usulanIds)->get();
+            $grouped   = [];
             foreach ($nilaiRows as $row) {
-                $grouped[$row->inovator_id][$row->penilai_id][] = $row->nilai;
+                $grouped[$row->usulan_id][$row->penilai_id][] = $row->nilai;
             }
-
             foreach ($all as &$n) {
                 if (isset($grouped[$n['id']])) {
                     $totalAll = [];
@@ -90,32 +105,31 @@ class PenilaianController extends Controller
         ];
     }
 
-    // ── Helper: split inovator yang LOLOS saja per kategori (Tahap 2) ─────
-    private function getInovatorLolosSplit(int $subEventId): array
+    // ── Helper: split usulan yang LOLOS saja (Tahap 2) ───────────────────
+    private function getUsulanLolosSplit(int $subEventId): array
     {
-        $lolosUmum    = session('tahap1_lolos_' . $subEventId . '_umum');
-        $lolosPelajar = session('tahap1_lolos_' . $subEventId . '_pelajar');
+        $all = Usulan::where('sub_event_id', $subEventId)
+            ->where('status', 'Lolos Tahap 1')
+            ->orderBy('inovator')
+            ->get()
+            ->map(fn($u) => [
+                'id'           => $u->id,
+                'inovator'     => $u->inovator,
+                'nama_inovasi' => $u->nama_inovasi,
+                'kategori'     => $u->kategori ?? 'umum',
+                'total_nilai'  => 0,
+                'nilai'        => [],
+            ])
+            ->toArray();
 
-        $query = Inovator::query()->where('sub_event_id', $subEventId)->orderBy('inovator');
-
-        $all = $query->get()->map(fn($i) => [
-            'id'           => $i->id,
-            'inovator'     => $i->inovator,
-            'nama_inovasi' => $i->nama_inovasi,
-            'kategori'     => $i->kategori,
-            'total_nilai'  => 0,
-            'nilai'        => [],
-        ])->toArray();
-
-        // Load nilai Tahap 2
-        $inovatorIds = array_column($all, 'id');
-        if (!empty($inovatorIds)) {
-            $nilaiRows = PenilaianPemenang::whereIn('inovator_id', $inovatorIds)->get();
-            $grouped = [];
+        // Load nilai tahap 2
+        $usulanIds = array_column($all, 'id');
+        if (!empty($usulanIds)) {
+            $nilaiRows = Pemenang::whereIn('usulan_id', $usulanIds)->get();
+            $grouped   = [];
             foreach ($nilaiRows as $row) {
-                $grouped[$row->inovator_id][$row->penilai_id][] = $row->nilai;
+                $grouped[$row->usulan_id][$row->penilai_id][] = $row->nilai;
             }
-
             foreach ($all as &$n) {
                 if (isset($grouped[$n['id']])) {
                     $totalAll = [];
@@ -132,48 +146,19 @@ class PenilaianController extends Controller
             unset($n);
         }
 
-        $filter = fn(array $items, string $kat, ?array $ids): array =>
-            array_values(array_filter($items, function ($n) use ($kat, $ids) {
-                if ($n['kategori'] !== $kat) return false;
-                return $ids !== null ? in_array($n['id'], $ids, true) : true;
-            }));
-
         return [
-            'umum'    => $filter($all, 'umum',    $lolosUmum),
-            'pelajar' => $filter($all, 'pelajar', $lolosPelajar),
+            'umum'    => array_values(array_filter($all, fn($n) => $n['kategori'] === 'umum')),
+            'pelajar' => array_values(array_filter($all, fn($n) => $n['kategori'] === 'pelajar')),
         ];
     }
 
-    // ── Helper: build nominasiData untuk index views ──────────────────────
-    private function buildNominasiData(array $subEvents): array
-    {
-        $subEventIds  = array_column($subEvents, 'id');
-        $allInovators = Inovator::whereIn('sub_event_id', $subEventIds)
-            ->orderBy('inovator')
-            ->get();
-
-        $nominasiData = [];
-        foreach ($subEvents as $se) {
-            $nominasiData[$se['id']] = $allInovators
-                ->where('sub_event_id', $se['id'])
-                ->map(fn($i) => [
-                    'id'           => $i->id,
-                    'inovator'     => $i->inovator,
-                    'nama_inovasi' => $i->nama_inovasi,
-                    'kategori'     => $i->kategori,
-                ])
-                ->values()
-                ->toArray();
-        }
-
-        return $nominasiData;
-    }
-
-    // ==================== TAHAP 1 ====================
+    // ══════════════════════════════════════════════════════════
+    // TAHAP 1
+    // ══════════════════════════════════════════════════════════
 
     public function tahap1()
     {
-        $subEvents    = $this->getSubEvents();
+        $subEvents    = SubEvent::orderBy('tahun', 'desc')->get();
         $nominasiData = $this->buildNominasiData($subEvents);
 
         return view('master.penilaian.tahap1.index', compact('subEvents', 'nominasiData'));
@@ -181,32 +166,11 @@ class PenilaianController extends Controller
 
     public function tahap1Show(int $id)
     {
-        $subEvent = collect($this->getSubEvents())->firstWhere('id', $id);
-        abort_unless($subEvent, 404);
+        $subEvent = SubEvent::findOrFail($id);
 
-        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getInovatorSplit($id);
+        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getUsulanSplit($id);
 
-        // Terapkan status lolos dari session
-        $lolosUmum    = session('tahap1_lolos_' . $id . '_umum');
-        $lolosPelajar = session('tahap1_lolos_' . $id . '_pelajar');
-
-        if ($lolosUmum !== null) {
-            foreach ($nominasiUmum as &$n) {
-                $n['lolos'] = in_array($n['id'], $lolosUmum, true);
-            }
-            unset($n);
-        }
-
-        if ($lolosPelajar !== null) {
-            foreach ($nominasiPelajar as &$n) {
-                $n['lolos'] = in_array($n['id'], $lolosPelajar, true);
-            }
-            unset($n);
-        }
-
-        // Ambil indikator + keterangan Tahap 1 untuk sub event ini
-        $indikators = Indikator::with('subEvent')
-            ->where('sub_event_id', $id)
+        $indikators = Indikator::where('sub_event_id', $id)
             ->orderBy('id')
             ->get()
             ->map(fn($ind) => [
@@ -216,43 +180,42 @@ class PenilaianController extends Controller
                     ->orderBy('nilai_minimal')
                     ->get()
                     ->map(fn($k) => [
-                        'id'            => $k->id,
-                        'keterangan'    => $k->keterangan,
-                        'nilai_minimal' => $k->nilai_minimal,
-                        'nilai_maksimal'=> $k->nilai_maksimal,
+                        'id'             => $k->id,
+                        'keterangan'     => $k->keterangan,
+                        'nilai_minimal'  => $k->nilai_minimal,
+                        'nilai_maksimal' => $k->nilai_maksimal,
                     ])
                     ->toArray(),
             ])
             ->toArray();
 
-        // Nilai input penilai yang sedang login (untuk pre-fill form)
-        $penilaiLogin      = $this->getPenilaiLogin();
-        $nilaiLoginPerInovator = [];
+        $penilaiLogin          = $this->getPenilaiLogin();
+        $nilaiLoginPerUsulan   = [];
         if ($penilaiLogin) {
-            $inovatorIds = array_merge(
+            $usulanIds = array_merge(
                 array_column($nominasiUmum, 'id'),
                 array_column($nominasiPelajar, 'id')
             );
-            $rows = PenilaianUsulan::where('penilai_id', $penilaiLogin->id)
-                ->whereIn('inovator_id', $inovatorIds)
+            $rows = Penilaian::where('penilai_id', $penilaiLogin->id)
+                ->whereIn('usulan_id', $usulanIds)
                 ->get();
             foreach ($rows as $row) {
-                $nilaiLoginPerInovator[$row->inovator_id][$row->keterangan_indikator_id] = $row->nilai;
+                $nilaiLoginPerUsulan[$row->usulan_id][$row->keterangan_indikator_id] = $row->nilai;
             }
         }
 
         return view('master.penilaian.tahap1.show', [
-            'subEvent'              => $subEvent,
-            'nominasiUmum'          => $nominasiUmum,
-            'nominasiPelajar'       => $nominasiPelajar,
-            'penilai'               => $this->getPenilai(),
-            'indikators'            => $indikators,
-            'penilaiLogin'          => $penilaiLogin,
-            'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
+            'subEvent'               => $subEvent,
+            'nominasiUmum'           => $nominasiUmum,
+            'nominasiPelajar'        => $nominasiPelajar,
+            'penilai'                => $this->getPenilai(),
+            'indikators'             => $indikators,
+            'penilaiLogin'           => $penilaiLogin,
+            'nilaiLoginPerUsulan'    => $nilaiLoginPerUsulan,
+            'nilaiLoginPerInovator'  => $nilaiLoginPerUsulan, // alias untuk kompatibilitas blade lama
         ]);
     }
 
-    /** Simpan lolos ke session (tetap dipertahankan) */
     public function tahap1Simpan(Request $request, int $id)
     {
         $request->validate([
@@ -261,37 +224,44 @@ class PenilaianController extends Controller
             'ids.*'    => 'integer',
         ]);
 
-        session(['tahap1_lolos_' . $id . '_' . $request->kategori => $request->ids ?? []]);
+        $lolosIds = $request->ids ?? [];
+
+        // Reset semua di sub event + kategori ini
+        Usulan::where('sub_event_id', $id)
+              ->where('kategori', $request->kategori)
+              ->update(['status' => 'Tidak Lolos Tahap 1']);
+
+        // Set yang terpilih jadi lolos
+        if (!empty($lolosIds)) {
+            Usulan::whereIn('id', $lolosIds)
+                  ->where('sub_event_id', $id)
+                  ->update(['status' => 'Lolos Tahap 1']);
+        }
 
         return response()->json(['success' => true]);
     }
 
-    /** Simpan nilai per indikator ke database (penilaian_usulan) */
     public function tahap1SimpanNilai(Request $request, int $id)
     {
         $penilaiLogin = $this->getPenilaiLogin();
         abort_unless($penilaiLogin, 403, 'Anda tidak terdaftar sebagai penilai.');
 
         $request->validate([
-            'inovator_id' => 'required|integer|exists:inovator,id',
-            'nilai'       => 'required|array',
-            'nilai.*'     => 'integer|min:0|max:100',
+            'usulan_id' => 'required|integer|exists:usulans,id',
+            'nilai'     => 'required|array',
+            'nilai.*'   => 'integer|min:0|max:100',
         ]);
 
-        $inovatorId = $request->inovator_id;
-
-        // Verifikasi inovator memang milik sub event ini
-        $inovator = Inovator::where('id', $inovatorId)
+        $usulan = Usulan::where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->firstOrFail();
 
-        // upsert tiap keterangan_indikator_id → nilai
         foreach ($request->nilai as $keteranganId => $nilai) {
-            PenilaianUsulan::updateOrCreate(
+            Penilaian::updateOrCreate(
                 [
-                    'inovator_id'              => $inovator->id,
-                    'penilai_id'               => $penilaiLogin->id,
-                    'keterangan_indikator_id'  => (int) $keteranganId,
+                    'usulan_id'               => $usulan->id,
+                    'penilai_id'              => $penilaiLogin->id,
+                    'keterangan_indikator_id' => (int) $keteranganId,
                 ],
                 ['nilai' => (int) $nilai]
             );
@@ -300,24 +270,29 @@ class PenilaianController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // ==================== TAHAP 2 ====================
+    // ══════════════════════════════════════════════════════════
+    // TAHAP 2
+    // ══════════════════════════════════════════════════════════
 
     public function tahap2()
     {
-        $subEvents    = $this->getSubEvents();
-        $nominasiData = $this->buildNominasiData($subEvents);
+        $subEvents    = SubEvent::orderBy('tahun', 'desc')->get();
+        $nominasiData = [];
+        foreach ($subEvents as $se) {
+            $nominasiData[$se->id] = Usulan::where('sub_event_id', $se->id)
+                ->where('status', 'Lolos Tahap 1')
+                ->get()->toArray();
+        }
 
         return view('master.penilaian.tahap2.index', compact('subEvents', 'nominasiData'));
     }
 
     public function tahap2Show(int $id)
     {
-        $subEvent = collect($this->getSubEvents())->firstWhere('id', $id);
-        abort_unless($subEvent, 404);
+        $subEvent = SubEvent::findOrFail($id);
 
-        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getInovatorLolosSplit($id);
+        ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getUsulanLolosSplit($id);
 
-        // Ambil indikator Tahap 2 beserta keterangan
         $indikators = IndikatorTahap2::with('keterangans')
             ->where('sub_event_id', $id)
             ->orderBy('jenis')
@@ -340,55 +315,52 @@ class PenilaianController extends Controller
             ])
             ->toArray();
 
-        // Nilai input penilai yang sedang login
         $penilaiLogin          = $this->getPenilaiLogin();
-        $nilaiLoginPerInovator = [];
+        $nilaiLoginPerUsulan   = [];
         if ($penilaiLogin) {
-            $inovatorIds = array_merge(
+            $usulanIds = array_merge(
                 array_column($nominasiUmum, 'id'),
                 array_column($nominasiPelajar, 'id')
             );
-            $rows = PenilaianPemenang::where('penilai_id', $penilaiLogin->id)
-                ->whereIn('inovator_id', $inovatorIds)
+            $rows = Pemenang::where('penilai_id', $penilaiLogin->id)
+                ->whereIn('usulan_id', $usulanIds)
                 ->get();
             foreach ($rows as $row) {
-                $nilaiLoginPerInovator[$row->inovator_id][$row->keterangan_tahap2_id] = $row->nilai;
+                $nilaiLoginPerUsulan[$row->usulan_id][$row->keterangan_tahap2_id] = $row->nilai;
             }
         }
 
         return view('master.penilaian.tahap2.show', [
-            'subEvent'              => $subEvent,
-            'nominasiUmum'          => $nominasiUmum,
-            'nominasiPelajar'       => $nominasiPelajar,
-            'penilai'               => $this->getPenilai(),
-            'indikators'            => $indikators,
-            'penilaiLogin'          => $penilaiLogin,
-            'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
+            'subEvent'               => $subEvent,
+            'nominasiUmum'           => $nominasiUmum,
+            'nominasiPelajar'        => $nominasiPelajar,
+            'penilai'                => $this->getPenilai(),
+            'indikators'             => $indikators,
+            'penilaiLogin'           => $penilaiLogin,
+            'nilaiLoginPerUsulan'    => $nilaiLoginPerUsulan,
+            'nilaiLoginPerInovator'  => $nilaiLoginPerUsulan, // alias untuk kompatibilitas blade lama
         ]);
     }
 
-    /** Simpan nilai Tahap 2 per indikator ke penilaian_pemenang */
     public function tahap2Simpan(Request $request, int $id)
     {
         $penilaiLogin = $this->getPenilaiLogin();
         abort_unless($penilaiLogin, 403, 'Anda tidak terdaftar sebagai penilai.');
 
         $request->validate([
-            'inovator_id' => 'required|integer|exists:inovator,id',
-            'nilai'       => 'required|array',
-            'nilai.*'     => 'integer|min:0|max:100',
+            'usulan_id' => 'required|integer|exists:usulans,id',
+            'nilai'     => 'required|array',
+            'nilai.*'   => 'integer|min:0|max:100',
         ]);
 
-        $inovatorId = $request->inovator_id;
-
-        $inovator = Inovator::where('id', $inovatorId)
+        $usulan = Usulan::where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->firstOrFail();
 
         foreach ($request->nilai as $keteranganId => $nilai) {
-            PenilaianPemenang::updateOrCreate(
+            Pemenang::updateOrCreate(
                 [
-                    'inovator_id'          => $inovator->id,
+                    'usulan_id'            => $usulan->id,
                     'penilai_id'           => $penilaiLogin->id,
                     'keterangan_tahap2_id' => (int) $keteranganId,
                 ],

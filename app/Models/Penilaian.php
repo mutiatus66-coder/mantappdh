@@ -4,25 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PenilaianUsulan extends Model
+class Penilaian extends Model
 {
     protected $table = 'penilaian_usulan';
 
     protected $fillable = [
-        'inovator_id',
+        'usulan_id',
         'penilai_id',
         'keterangan_indikator_id',
         'nilai',
     ];
 
-    public function inovator()
+    public function usulan()
     {
-        return $this->belongsTo(Inovator::class);
+        return $this->belongsTo(Usulan::class);
     }
 
     public function penilai()
     {
-        return $this->belongsTo(Penilai::class);
+        return $this->belongsTo(User::class, 'penilai_id');
     }
 
     public function keteranganIndikator()
