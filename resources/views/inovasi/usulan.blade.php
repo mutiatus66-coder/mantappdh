@@ -237,8 +237,9 @@
                                 <div class="us-error-msg" id="e-ketua_email"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="us-label">No. WA / HP Ketua</label>
-                                <input type="text" class="us-input" name="ketua_wa" id="fKetuaWa" placeholder="08xxxxxxxxxx">
+                                <label class="us-label">No. WA / HP Ketua <span class="us-required">*</span></label>
+                                <input type="text" class="us-input" name="ketua_wa" id="fKetuaWa" placeholder="08xxxxxxxxxx" maxlength="15">
+                                <div class="us-error-msg" id="e-ketua_wa"></div>
                             </div>
                             <div class="col-md-8">
                                 <label class="us-label">Alamat Ketua <span class="us-required">*</span></label>
@@ -457,23 +458,131 @@
         document.getElementById('btnSimpan').style.display = n === 3 ? '' : 'none';
     }
 
-    document.getElementById('btnNext').onclick = () => { if (step < 3) goStep(step + 1); };
+    document.getElementById('btnNext').onclick = () => {
+        if (step === 1 && !validateStep1()) {
+            toast('Mohon lengkapi semua field wajib di langkah ini.', false);
+            return;
+        }
+        if (step < 3) goStep(step + 1);
+    };
     document.getElementById('btnPrev').onclick = () => { if (step > 1) goStep(step - 1); };
 
-    // ── Toast ─────────────────────────────────────────────────────────
+    // ── Toast — muncul di bawah navbar, kanan atas (atas tombol Tambah) ──
+    let _toastTimer = null;
     function toast(msg, ok = true) {
+        // Hapus toast lama jika masih ada
+        document.getElementById('ri-toast')?.remove();
+        clearTimeout(_toastTimer);
+
         const el = document.createElement('div');
-        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
+        el.id = 'ri-toast';
         el.style.cssText = [
-            'z-index:9999','min-width:280px',
-            `background:${ok ? 'rgba(16,185,129,.12)' : 'rgba(220,53,69,.12)'}`,
-            `border:1px solid ${ok ? 'rgba(16,185,129,.4)' : 'rgba(220,53,69,.3)'}`,
-            `color:${ok ? '#064e3b' : '#7f1d1d'}`,
+            'position:fixed',
+            'top:72px',          /* tepat di bawah navbar */
+            'right:20px',
+            'z-index:9999',
+            'min-width:280px',
+            'max-width:360px',
+            'padding:10px 14px',
+            'border-radius:10px',
+            'font-size:.85rem',
+            'font-weight:500',
+            'display:flex',
+            'align-items:center',
+            'gap:8px',
+            'box-shadow:0 4px 16px rgba(0,0,0,.12)',
+            'animation:toastIn .2s ease',
+            `background:${ok ? 'rgba(16,185,129,.13)' : 'rgba(220,53,69,.11)'}`,
+            `border:1px solid ${ok ? 'rgba(16,185,129,.45)' : 'rgba(220,53,69,.35)'}`,
+            `color:${ok ? '#065f46' : '#7f1d1d'}`,
         ].join(';');
-        el.innerHTML = `<i class="bi bi-${ok?'check-circle-fill':'x-circle-fill'} me-2"></i>${msg}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        el.innerHTML = `<i class="bi bi-${ok ? 'check-circle-fill' : 'x-circle-fill'}" style="font-size:1rem;flex-shrink:0"></i>
+            <span style="flex:1">${msg}</span>
+            <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;opacity:.6;font-size:1rem;line-height:1;color:inherit">&times;</button>`;
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3500);
+        _toastTimer = setTimeout(() => el?.remove(), 4000);
+    }
+
+    // Inject animasi toast sekali saja
+    if (!document.getElementById('ri-toast-style')) {
+        const s = document.createElement('style');
+        s.id = 'ri-toast-style';
+        s.textContent = `@keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}`;
+        document.head.appendChild(s);
+    }
+
+    // ── Validasi email & nomor telepon (client-side) ──────────────────
+    function isValidEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+    }
+    function isValidPhone(v) {
+        // Format: diawali 08, 628, atau +628; panjang 9–14 digit
+        return /^(\+62|62|0)[0-9]{8,13}$/.test(v.trim().replace(/[\s\-]/g, ''));
+    }
+
+    function validateStep1() {
+        let ok = true;
+        clearErrors();
+
+        const required1 = [
+            'fNamaInovasi','fJudul','fBidangId','fInteraksi','fKategori',
+            'fInovator','fKetuaNama','fAlamatKetua','fKtp'
+        ];
+        required1.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.value.trim()) {
+                el.classList.add('is-invalid');
+                const errEl = document.getElementById('e-' + el.name);
+                if (errEl) { errEl.textContent = 'Field ini wajib diisi.'; errEl.style.display = 'block'; }
+                ok = false;
+            }
+        });
+
+        // Validasi email
+        const emailEl = document.getElementById('fKetuaEmail');
+        if (emailEl) {
+            if (!emailEl.value.trim()) {
+                emailEl.classList.add('is-invalid');
+                const e = document.getElementById('e-ketua_email');
+                if (e) { e.textContent = 'Email wajib diisi.'; e.style.display = 'block'; }
+                ok = false;
+            } else if (!isValidEmail(emailEl.value)) {
+                emailEl.classList.add('is-invalid');
+                const e = document.getElementById('e-ketua_email');
+                if (e) { e.textContent = 'Format email tidak valid. Contoh: nama@email.com'; e.style.display = 'block'; }
+                ok = false;
+            }
+        }
+
+        // Validasi no. WA
+        const waEl = document.getElementById('fKetuaWa');
+        if (waEl) {
+            if (!waEl.value.trim()) {
+                waEl.classList.add('is-invalid');
+                const e = document.getElementById('e-ketua_wa');
+                if (e) { e.textContent = 'No. WA / HP wajib diisi.'; e.style.display = 'block'; }
+                ok = false;
+            } else if (!isValidPhone(waEl.value)) {
+                waEl.classList.add('is-invalid');
+                const e = document.getElementById('e-ketua_wa');
+                if (e) { e.textContent = 'Format tidak valid. Gunakan format: 08xxxxxxxxxx atau +628xxxxxxxxx'; e.style.display = 'block'; }
+                ok = false;
+            }
+        }
+
+        // Jika pelajar, asal_sekolah wajib
+        if (document.getElementById('fKategori')?.value === 'pelajar') {
+            const sekolahEl = document.getElementById('fAsalSekolah');
+            if (sekolahEl && !sekolahEl.value.trim()) {
+                sekolahEl.classList.add('is-invalid');
+                const e = document.getElementById('e-asal_sekolah');
+                if (e) { e.textContent = 'Asal sekolah wajib diisi untuk kategori pelajar.'; e.style.display = 'block'; }
+                ok = false;
+            }
+        }
+
+        return ok;
     }
 
     // ── Error helpers ─────────────────────────────────────────────────
@@ -603,6 +712,13 @@
 
     // ── Simpan ────────────────────────────────────────────────────────
     document.getElementById('btnSimpan').onclick = async () => {
+        // Validasi ulang step 1 (jika user langsung klik Simpan tanpa lewat Next)
+        if (!validateStep1()) {
+            goStep(1);
+            toast('Ada kesalahan di langkah 1. Mohon periksa kembali.', false);
+            return;
+        }
+
         clearErrors();
         const btn = document.getElementById('btnSimpan');
         btn.disabled = true;
@@ -620,7 +736,7 @@
             });
             const data = await res.json();
             if (!res.ok) {
-                if (data.errors) showErrors(data.errors);
+                if (data.errors) { showErrors(data.errors); goStep(1); }
                 else toast(data.message ?? 'Terjadi kesalahan.', false);
                 return;
             }

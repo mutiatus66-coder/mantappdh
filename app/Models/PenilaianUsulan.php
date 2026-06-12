@@ -9,15 +9,15 @@ class PenilaianUsulan extends Model
     protected $table = 'penilaian_usulan';
 
     protected $fillable = [
-        'inovator_id',
+        'usulan_id',
         'penilai_id',
         'keterangan_indikator_id',
         'nilai',
     ];
 
-    public function inovator()
+    public function usulan()
     {
-        return $this->belongsTo(Inovator::class);
+        return $this->belongsTo(Usulan::class, 'usulan_id');
     }
 
     public function penilai()
