@@ -1,178 +1,207 @@
-{{-- partials/sidebar.blade.php --}}
 <div id="kt_aside"
-     class="aside overflow-visible pb-5 pt-5 pt-lg-0"
-     data-kt-drawer="true"
-     data-kt-drawer-name="aside"
-     data-kt-drawer-activate="{default: true, lg: false}"
-     data-kt-drawer-overlay="true"
-     data-kt-drawer-width="{default:'260px', '300px': '260px'}"
-     data-kt-drawer-direction="start"
-     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+  class="aside pb-5 pt-5 pt-lg-0"
+  data-kt-drawer="true"
+  data-kt-drawer-name="aside"
+  data-kt-drawer-activate="{default: true, lg: false}"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'260px', '300px': '260px'}"
+  data-kt-drawer-direction="start"
+  data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 
-    {{-- Logo --}}
-    <div class="aside-logo py-8" id="kt_aside_logo">
-        <a href="/" class="d-flex align-items-center gap-3 px-6 text-white text-decoration-none">
-            <img alt="Logo Rumah Inovasi Magetan"
-                 src="{{ asset('template.demo6/demo6/assets/media/logos/rmh.png') }}"
-                 class="h-55px logo" />
-            <div>
-                <div class="fw-bold fs-3">Rumah Inovasi</div>
-                <div class="fs-7 opacity-75">Magetan</div>
-            </div>
+  {{-- Logo --}}
+  <div class="aside-logo" id="kt_aside_logo">
+    <a href="/" class="d-flex align-items-center gap-3">
+      <img alt="Logo" src="{{ asset('img/bulb.png') }}" class="h-60px logo" />
+      <div class="aside-logo-text">
+        <div class="aside-logo-title">Rumah Inovasi</div>
+        <div class="aside-logo-subtitle">Magetan</div>
+      </div>
+    </a>
+  </div>
+
+  {{-- Menu --}}
+  <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
+    <nav id="ri-sidebar-nav">
+
+      @auth
+        @php $user = auth()->user(); @endphp
+
+        {{-- ── Dashboard: semua role ── --}}
+        <a class="ri-menu-item" href="/">
+          <span class="ri-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </span>
+          <span class="ri-menu-label">Dashboard</span>
         </a>
-    </div>
 
-    {{-- Menu --}}
-    <div class="aside-menu flex-column-fluid" id="kt_aside_menu">
-        <div class="hover-scroll-y my-2 my-lg-5 scroll-ms px-3"
-            id="kt_aside_menu_wrapper"
-             data-kt-scroll="true"
-             data-kt-scroll-height="auto"
-             data-kt-scroll-dependencies="#kt_aside_logo"
-             data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu"
-             data-kt-scroll-offset="5px">
+        {{-- ── Master: hanya Admin Bapperida ── --}}
+        @if($user->isAdminBapperida())
+          <div class="ri-divider"></div>
+          <span class="ri-section-label">Master</span>
 
-            <div class="menu menu-column menu-title-gray-400 menu-state-title-primary
-                        menu-state-icon-primary menu-state-bullet-primary fw-semibold"
-                 data-kt-menu="true"
-                 id="ri-aside-menu">
+          <a class="ri-menu-item" href="/event">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Event</span>
+          </a>
 
-                @auth
-                    @php $user = auth()->user(); @endphp
+          <a class="ri-menu-item" href="/sub-event">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Sub Event</span>
+          </a>
 
-                    {{-- Beranda --}}
-                    <div class="menu-item py-2">
-                        <a href="#" class="menu-link menu-center ri-menu-item">
-                            <span class="menu-icon me-0">
-                                <i class="ki-outline ki-home-2 fs-2x"></i>
-                            </span>
-                            <span class="menu-title fw-bold">Beranda</span>
-                        </a>
-                    </div>
+          <a class="ri-menu-item" href="/bidang">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="3" y1="15" x2="21" y2="15"/>
+                <line x1="9" y1="3" x2="9" y2="21"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Bidang</span>
+          </a>
 
-                    {{-- Master (flyout) --}}
-                    @if ($user->isAdminBapperida())
-                        <div class="menu-item py-2 ri-flyout-item"
-                             data-kt-menu-trigger="click"
-                             data-kt-menu-placement="right-start">
-                            <span class="menu-link menu-center">
-                                <span class="menu-icon me-0">
-                                    <i class="ki-outline ki-notification-status fs-2x"></i>
-                                </span>
-                                <span class="menu-title">Master</span>
-                            </span>
-                            <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                                <div class="menu-item">
-                                    <div class="menu-content">
-                                        <span class="menu-section fs-5 fw-bolder ps-1 py-1">Master</span>
-                                    </div>
-                                </div>
-                                <a href="/event"       class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Event</span></a>
-                                <a href="/sub-event"   class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Sub Event</span></a>
-                                <a href="/bidang"      class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Bidang</span></a>
-                                <a href="/user"        class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">User</span></a>
-                                <a href="/penilai"     class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Penilai</span></a>
-                                <a href="/pengumuman"  class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Pengumuman</span></a>
-                            </div>
-                        </div>
-                    @endif
+          <a class="ri-menu-item" href="/user">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">User</span>
+          </a>
 
-                    {{-- Indikator (flyout) --}}
-                    @if ($user->isAdminBapperida())
-                        <div class="menu-item py-2 ri-flyout-item"
-                            data-kt-menu-trigger="click"
-                            data-kt-menu-placement="right-start">
-                            <span class="menu-link menu-center">
-                                <span class="menu-icon me-0">
-                                    <i class="ki-outline ki-abstract-35 fs-2x"></i>
-                                </span>
-                                <span class="menu-title">Indikator</span>
-                            </span>
-                            <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                                <div class="menu-item">
-                                    <div class="menu-content">
-                                        <span class="menu-section fs-5 fw-bolder ps-1 py-1">Indikator</span>
-                                    </div>
-                                </div>
-                                <a href="/indikator/tahap-1" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Indikator Tahap 1</span></a>
-                                <a href="/indikator/tahap-2" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Indikator Tahap 2</span></a>
-                            </div>
-                        </div>
-                    @endif
+          <a class="ri-menu-item" href="/penilai">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Penilai</span>
+          </a>
 
-                    {{-- Inovasi (flyout) --}}
-                    <div class="menu-item py-2 ri-flyout-item"
-                        data-kt-menu-trigger="click"
-                        data-kt-menu-placement="right-start">
-                        <span class="menu-link menu-center">
-                            <span class="menu-icon me-0">
-                                <i class="ki-outline ki-abstract-26 fs-2x"></i>
-                            </span>
-                            <span class="menu-title">Inovasi</span>
-                        </span>
-                        <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                            <div class="menu-item">
-                                <div class="menu-content">
-                                    <span class="menu-section fs-5 fw-bolder ps-1 py-1">Inovasi</span>
-                                </div>
-                            </div>
-                            <a href="/inovasi/riwayat" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Riwayat</span></a>
-                            @if ($user->hasRole(['admin_bapperida', 'penilai']))
-                                <a href="/inovasi/rekap-nilai" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Rekap Nilai</span></a>
-                            @endif
-                        </div>
-                    </div>
+          <a class="ri-menu-item" href="/pengumuman">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Pengumuman</span>
+          </a>
+        @endif
 
-                    {{-- Penilaian (flyout) --}}
-                    @if ($user->hasRole(['admin_bapperida', 'penilai']))
-                        <div class="menu-item py-2 ri-flyout-item"
-                            data-kt-menu-trigger="click"
-                            data-kt-menu-placement="right-start">
-                            <span class="menu-link menu-center">
-                                <span class="menu-icon me-0">
-                                    <i class="ki-outline ki-briefcase fs-2x"></i>
-                                </span>
-                                <span class="menu-title">Penilaian</span>
-                            </span>
-                            <div class="menu-sub menu-sub-dropdown px-2 py-4 w-250px mh-75 overflow-auto">
-                                <div class="menu-item">
-                                    <div class="menu-content">
-                                        <span class="menu-section fs-5 fw-bolder ps-1 py-1">Penilaian</span>
-                                    </div>
-                                </div>
-                                <a href="/penilaian/tahap-1" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Penilaian Tahap 1</span></a>
-                                <a href="/penilaian/tahap-2" class="menu-link ri-menu-item"><span class="menu-bullet"><span class="bullet bullet-dot"></span></span><span class="menu-title">Penilaian Tahap 2</span></a>
-                            </div>
-                        </div>
-                    @endif
+        {{-- ── Indikator: hanya Admin Bapperida ── --}}
+        @if($user->isAdminBapperida())
+          <div class="ri-divider"></div>
+          <span class="ri-section-label">Indikator</span>
 
-                @endauth
-            </div>
-        </div>
-    </div>
+          <a class="ri-menu-item" href="/indikator/tahap-1">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Indikator Tahap 1</span>
+          </a>
 
-    {{-- Toggle script: klik tombol aktif = tutup flyout --}}
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('#ri-aside-menu .ri-flyout-item').forEach(function (item) {
-            var trigger = item.querySelector(':scope > .menu-link');
-            if (!trigger) return;
+          <a class="ri-menu-item" href="/indikator/tahap-2">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Indikator Tahap 2</span>
+          </a>
+        @endif
 
-            trigger.addEventListener('click', function (e) {
-                var isOpen = item.classList.contains('show');
-                if (isOpen) {
-                    item.classList.remove('show', 'menu-dropdown');
-                    var sub = item.querySelector(':scope > .menu-sub');
-                    if (sub) {
-                        sub.classList.remove('show');
-                        sub.style.display = '';
-                    }
-                    e.stopPropagation();
-                    e.preventDefault();
-                }
-            }, true);
-        });
-    });
-    </script>
+        {{-- ── Inovasi: semua role yang login ── --}}
+        <div class="ri-divider"></div>
+        <span class="ri-section-label">Inovasi</span>
+
+        <a class="ri-menu-item" href="/inovasi/riwayat">
+          <span class="ri-icon">
+            <svg viewBox="0 0 24 24">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-4.44"/>
+            </svg>
+          </span>
+          <span class="ri-menu-label">Riwayat</span>
+        </a>
+
+        {{-- Rekap Nilai: Admin Bapperida & Penilai --}}
+        @if($user->hasRole(['admin_bapperida', 'penilai']))
+          <a class="ri-menu-item" href="/inovasi/rekap-nilai">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Rekap Nilai</span>
+          </a>
+        @endif
+
+        {{-- ── Penilaian: Admin Bapperida & Penilai ── --}}
+        @if($user->hasRole(['admin_bapperida', 'penilai']))
+          <div class="ri-divider"></div>
+          <span class="ri-section-label">Penilaian</span>
+
+          <a class="ri-menu-item" href="/penilaian/tahap-1">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Penilaian Tahap 1</span>
+          </a>
+
+          <a class="ri-menu-item" href="/penilaian/tahap-2">
+            <span class="ri-icon">
+              <svg viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </span>
+            <span class="ri-menu-label">Penilaian Tahap 2</span>
+          </a>
+        @endif
+
+      @endauth
+
+    </nav>
+  </div>
 
 </div>

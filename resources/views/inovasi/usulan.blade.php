@@ -712,13 +712,6 @@
 
     // ── Simpan ────────────────────────────────────────────────────────
     document.getElementById('btnSimpan').onclick = async () => {
-        // Validasi ulang step 1 (jika user langsung klik Simpan tanpa lewat Next)
-        if (!validateStep1()) {
-            goStep(1);
-            toast('Ada kesalahan di langkah 1. Mohon periksa kembali.', false);
-            return;
-        }
-
         clearErrors();
         const btn = document.getElementById('btnSimpan');
         btn.disabled = true;
@@ -729,27 +722,34 @@
         if (editId) fd.append('_method', 'PUT');
 
         try {
-            const res  = await fetch(url, {
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
-                body: fd,
+                body: fd
             });
+
             const data = await res.json();
-            if (!res.ok) {
-                if (data.errors) { showErrors(data.errors); goStep(1); }
-                else toast(data.message ?? 'Terjadi kesalahan.', false);
+
+            if (!res.ok || !data.success) {
+                // Tampilkan error validasi Laravel (422)
+                if (data.errors) showErrors(data.errors);
+                toast(data.message || 'Gagal menyimpan.', false);
                 return;
             }
-            modal.hide();
+
             toast(data.message);
-            setTimeout(() => location.reload(), 700);
-        } catch {
-            toast('Gagal terhubung ke server.', false);
+            modal.hide();
+            // Reload halaman agar card baru/editan muncul
+            setTimeout(() => location.reload(), 500);
+
+        } catch (err) {
+            console.error(err);
+            toast('Terjadi kesalahan. Coba lagi.', false);
         } finally {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-check2 me-1"></i> Simpan Usulan';
         }
-    };
+};
 
     // ── Tutup modal ───────────────────────────────────────────────────
     document.getElementById('btnBatal').onclick = () => modal.hide();
