@@ -876,7 +876,7 @@
    HEADER
 ══════════════════════════════════════════ */
 #kt_header {
-    background: linear-gradient(90deg, #3C678E 0%, #6DADD8 100%) !important;
+    background: #3C678E !important;
 }
 #kt_header .header-welcome-text {
     font-size: 20px !important;
