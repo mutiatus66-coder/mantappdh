@@ -34,6 +34,25 @@ Route::post('/sign-up', [AuthController::class, 'register'])  ->name('register')
 Route::get('/buletin',      [BuletinController::class, 'index'])->name('public.pengumuman.index');
 Route::get('/buletin/{id}', [BuletinController::class, 'show']) ->name('public.pengumuman.show');
 
+// ── DEBUG (hapus setelah selesai debug) ───────────────────────────────────────
+Route::get('/debug-usulan', function () {
+    $users   = \App\Models\User::select('id','nama','email','hak_akses')->get();
+    $usulans = \App\Models\Usulan::select('id','user_id','sub_event_id','nama_inovasi')->get();
+    $authId  = Auth::check() ? Auth::id() : null;
+    return response()->json([
+        'auth_user_id'  => $authId,
+        'db_file'       => DB::connection()->getDatabaseName(),
+        'users'         => $users,
+        'usulans'       => $usulans,
+    ], 200, [], JSON_PRETTY_PRINT);
+});
+
+Route::get('/dev-login/{email}', function ($email) {
+    $user = \App\Models\User::where('email', $email)->firstOrFail();
+    Auth::login($user);
+    return redirect('/inovasi/riwayat');
+});
+
 // ══════════════════════════════════════════════════════════════════════════════
 // PROTECTED — Wajib login
 // ══════════════════════════════════════════════════════════════════════════════

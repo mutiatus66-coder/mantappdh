@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ketua_nama');
             $table->string('ketua_email');
             $table->string('ketua_wa')->nullable();
+            $table->string('kategori')->default('umum');
             $table->enum('status', ['Melengkapi Data', 'Sedang Dinilai', 'Selesai'])->default('Melengkapi Data');
             $table->boolean('is_submitted')->default(false);
             $table->timestamps();
