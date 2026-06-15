@@ -10,13 +10,16 @@ return new class extends Migration
     {
         Schema::create('pemenang', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inovator_id')->constrained('inovator')->onDelete('cascade');
+            $table->foreignId('usulan_id')->constrained('usulans')->onDelete('cascade');
             $table->foreignId('penilai_id')->constrained('penilai')->onDelete('cascade');
             $table->foreignId('keterangan_tahap2_id')->constrained('keterangan_tahap2')->onDelete('cascade');
             $table->integer('nilai');
             $table->timestamps();
 
-            $table->unique(['inovator_id', 'penilai_id', 'keterangan_tahap2_id'], 'unique_penilaian_pemenang');
+            $table->unique(
+                ['usulan_id', 'penilai_id', 'keterangan_tahap2_id'],
+                'unique_penilaian_pemenang'
+            );
         });
     }
 

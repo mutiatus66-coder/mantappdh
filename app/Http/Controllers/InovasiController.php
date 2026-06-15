@@ -157,6 +157,17 @@ class InovasiController extends Controller
 
         $usulan = Usulan::create($data);
 
+        \App\Models\Inovator::firstOrCreate(
+            [
+                'sub_event_id' => $data['sub_event_id'],
+                'inovator'     => $data['inovator'],
+                'nama_inovasi' => $data['nama_inovasi'],
+            ],
+            [
+                'kategori' => $data['kategori'],
+            ]
+        );
+
         if (!empty($validated['anggota'])) {
             foreach ($validated['anggota'] as $nama) {
                 if (!empty(trim($nama))) {
@@ -235,6 +246,17 @@ class InovasiController extends Controller
         }
 
         $usulan->update($data);
+
+        \App\Models\Inovator::updateOrCreate(
+            [
+                'sub_event_id' => $usulan->sub_event_id,
+                'inovator'     => $validated['inovator'],
+                'nama_inovasi' => $validated['nama_inovasi'],
+            ],
+            [
+                'kategori' => $validated['kategori'],
+            ]
+        );
 
         $usulan->anggotaTim()->delete();
         if (!empty($validated['anggota'])) {
