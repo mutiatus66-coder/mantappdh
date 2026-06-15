@@ -91,7 +91,7 @@
     width: 200px !important;
     min-width: 200px !important;
     max-width: 200px !important;
-    background: var(--ri-primary) !important;
+    background: #3C678E !important;
     display: flex;
     flex-direction: column;
     overflow: visible !important;
@@ -100,7 +100,7 @@
 
 /* Logo area */
 #kt_aside_logo {
-    background: var(--ri-primary-dark) !important;
+    background: #2f5478 !important;
 }
 #kt_aside_logo a {
     padding-left: 1px !important;
@@ -298,7 +298,7 @@
    4. HEADER
 ══════════════════════════════════════════ */
 #kt_header {
-    background: var(--ri-primary) !important;
+    background: linear-gradient(90deg, #3C678E 100% ) !important;
 }
 #kt_header .header-welcome-text {
     font-size: 20px !important;
@@ -317,7 +317,7 @@
    5. FOOTER
 ══════════════════════════════════════════ */
 #kt_footer {
-    background: var(--ri-primary-dark) !important;
+    background: #2f5478 !important;
     border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 #kt_footer .text-gray-900,
