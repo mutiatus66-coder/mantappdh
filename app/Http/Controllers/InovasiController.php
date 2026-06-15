@@ -89,7 +89,8 @@ class InovasiController extends Controller
         $subEventNama = $subEvent->sub_event;
         $eventNama    = $subEvent->event->nama_event ?? '-';
 
-        $usulan = Usulan::where('user_id', Auth::id())
+        $usulan = Usulan::query()
+            ->where('user_id', Auth::id())
             ->where('sub_event_id', $subEventId)
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -173,7 +174,8 @@ class InovasiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $usulan = Usulan::where('id', $id)
+        $usulan = Usulan::query()
+            ->where('id', $id)
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
@@ -252,7 +254,8 @@ class InovasiController extends Controller
 
     public function destroy($id)
     {
-        $usulan = Usulan::where('id', $id)
+        $usulan = Usulan::query()
+            ->where('id', $id)
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
@@ -276,7 +279,8 @@ class InovasiController extends Controller
 
     public function kirim($id)
     {
-        $usulan = Usulan::where('id', $id)
+        $usulan = Usulan::query()
+            ->where('id', $id)
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
