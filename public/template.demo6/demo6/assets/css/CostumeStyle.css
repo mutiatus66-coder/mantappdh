@@ -875,6 +875,26 @@
 /* ══════════════════════════════════════════
    HEADER
 ══════════════════════════════════════════ */
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:240px;
+}
+.history-url {
+    font-size:0.72rem;
+    color:var(--ri-text-muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:240px;
+}
+.history-time {
+    font-size:0.7rem;
+    color:var(--ri-text-muted);
+    white-space:nowrap;
+    flex-shrink:0;
+    margin-left:auto;
+    padding-top:2px;
+}
 #kt_header {
     background: #3C678E !important;
 }
