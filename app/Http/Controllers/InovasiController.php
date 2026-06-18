@@ -39,10 +39,25 @@ class InovasiController extends Controller
     }
 
     public function rekapNilai()
-    {
-        $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
-        return view('inovasi.rekapnilai', compact('subEvents'));
+{
+    $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
+
+    foreach ($subEvents as $se) {
+        // Total usulan pada sub event ini (samakan dengan daftar di Rekap Pendaftar)
+        $usulanIds = Usulan::where('sub_event_id', $se->id)->pluck('id');
+
+        $se->inovasi_count = $usulanIds->count();
+
+        // Jumlah usulan yang sudah punya minimal 1 nilai (Tahap 1)
+        $se->dinilai_count = $usulanIds->isEmpty()
+            ? 0
+            : PenilaianUsulan::whereIn('usulan_id', $usulanIds)
+                ->distinct('usulan_id')
+                ->count('usulan_id');
     }
+
+    return view('inovasi.rekapnilai', compact('subEvents'));
+}
 
     // ── Halaman kelola usulan (form modal + daftar) per sub event ─────────
     // UC-07: KHUSUS PESERTA. Admin Bapperida diarahkan ke halaman Riwayat (UC-09).
@@ -414,7 +429,7 @@ class InovasiController extends Controller
         $usulan = Usulan::findOrFail($id);
 
         if ($request->status === 'Melengkapi Data') {
-            $sudahDinilai = PenilaianUsulan::where('usulan_id', $usulan->id)->exists();
+            $sudahDinilai = PenilaianUsulan::query()->where('usulan_id', $usulan->id)->exists();
             if ($sudahDinilai) {
                 return response()->json([
                     'success' => false,
