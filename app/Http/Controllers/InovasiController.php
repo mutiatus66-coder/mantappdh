@@ -8,9 +8,31 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\SubEvent;
 use App\Models\Usulan;
 use App\Models\AnggotaTim;
+use App\Models\PenilaianUsulan;
+use App\Models\Pemenang;
 
 class InovasiController extends Controller
 {
+    // ── Helper: hitung nilai akhir dari rows nilai ────────────────────────
+    // Logika sama dengan PenilaianController::getUsulanSplit():
+    // avg nilai per penilai → avg semua penilai
+    private function hitungNilaiAkhir($rows): float|string
+    {
+        if ($rows->isEmpty()) return '-';
+
+        $grouped = [];
+        foreach ($rows as $row) {
+            $grouped[$row->penilai_id][] = $row->nilai;
+        }
+
+        $avgPerPenilai = [];
+        foreach ($grouped as $nilaiArr) {
+            $avgPerPenilai[] = array_sum($nilaiArr) / count($nilaiArr);
+        }
+
+        return round(array_sum($avgPerPenilai) / count($avgPerPenilai), 2);
+    }
+
     // ── Halaman pintu masuk peserta ───────────────────────────────────────
 
     public function riwayat()
@@ -40,26 +62,44 @@ class InovasiController extends Controller
         return view('inovasi.usulan', compact('subEvent', 'usulans'));
     }
 
-    // ── Rekap semua pendaftar per sub event (admin) ───────────────────────
-
+    // ── BUG FIX 3: Rekap semua pendaftar per sub event (admin) ───────────
+    // Sebelumnya: nilai_t1/t2/total hardcode '-'
+    // Sesudahnya: load dari penilaian_usulan (t1) dan pemenang (t2),
+    //             logika avg konsisten dengan PenilaianController
     public function rekapPendaftar($subEventId)
     {
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
         $subEventNama = $subEvent->sub_event;
 
-        $usulan = Usulan::with('bidang')
+        $usulans = Usulan::with('bidang')
             ->where('sub_event_id', $subEventId)
-            ->get()
-            ->map(fn ($u) => [
+            ->get();
+
+        $usulanIds = $usulans->pluck('id')->toArray();
+
+        // Load semua baris nilai t1 & t2 sekaligus, group by usulan_id
+        $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+        $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+
+        $usulan = $usulans->map(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
+            $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
+            $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
+
+            $total = ($t1 !== '-' && $t2 !== '-')
+                ? round(((float)$t1 + (float)$t2) / 2, 2)
+                : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
+
+            return [
                 'judul'        => $u->judul ?? '',
                 'instansi'     => $u->inovator ?? '',
                 'link_youtube' => $u->link_video ?? '',
                 'no_hp'        => $u->ketua_wa ?? '',
                 'kategori'     => $u->kategori ?? '',
-                'nilai_t1'     => '-',
-                'nilai_t2'     => '-',
-                'nilai_total'  => '-',
-            ]);
+                'nilai_t1'     => $t1,
+                'nilai_t2'     => $t2,
+                'nilai_total'  => $total,
+            ];
+        });
 
         return view('inovasi.rekap_pendaftar', compact('subEventNama', 'usulan'));
     }
@@ -81,8 +121,9 @@ class InovasiController extends Controller
         return view('inovasi.usulan_riwayat', compact('usulan', 'subEventNama', 'eventNama'));
     }
 
-    // ── Rekap nilai usulan milik peserta ──────────────────────────────────
-
+    // ── BUG FIX 4: Rekap nilai usulan milik peserta ───────────────────────
+    // Sebelumnya: tidak load nilai sama sekali dari DB
+    // Sesudahnya: load dari penilaian_usulan (t1) dan pemenang (t2)
     public function usulanNilai($subEventId)
     {
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
@@ -94,6 +135,22 @@ class InovasiController extends Controller
             ->where('sub_event_id', $subEventId)
             ->orderBy('updated_at', 'desc')
             ->get();
+
+        $usulanIds = $usulan->pluck('id')->toArray();
+
+        $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+        $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+
+        $usulan->each(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
+            $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
+            $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
+
+            $u->nilai_t1    = $t1;
+            $u->nilai_t2    = $t2;
+            $u->nilai_total = ($t1 !== '-' && $t2 !== '-')
+                ? round(((float)$t1 + (float)$t2) / 2, 2)
+                : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
+        });
 
         return view('inovasi.usulan_nilai', compact('usulan', 'subEventNama', 'eventNama'));
     }

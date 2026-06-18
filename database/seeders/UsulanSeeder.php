@@ -20,7 +20,7 @@ class UsulanSeeder extends Seeder
             return;
         }
 
-        $bidang = Bidang::where('sub_event_id', $subEvent->id)
+        $bidang = Bidang::query()->where('sub_event_id', $subEvent->id)
             ->where('status', 'aktif')
             ->first();
 
@@ -29,21 +29,28 @@ class UsulanSeeder extends Seeder
             return;
         }
 
-        // Buat dummy user peserta jika belum ada
-        $user = User::firstOrCreate(
-            ['email' => 'peserta.dummy@example.com'],
-            [
-                'name'      => 'pesertadummy',
-                'nama'      => 'Peserta Dummy',
-                'email'     => 'peserta.dummy@example.com',
-                'password'  => Hash::make('password'),
-                'hak_akses' => 'peserta',
-                'status'    => 'aktif',
-            ]
-        );
+        // Ambil user peserta pertama yang ada di DB (prioritas peserta real, bukan dummy).
+        // Kalau belum ada sama sekali, buat satu dummy sebagai fallback.
+        $peserta = User::query()->where('hak_akses', 'peserta')
+            ->where('status', 'aktif')
+            ->orderBy('id')
+            ->first();
+
+        if (!$peserta) {
+            $peserta = User::firstOrCreate(
+                ['email' => 'peserta.dummy@example.com'],
+                [
+                    'name'      => 'pesertadummy',
+                    'nama'      => 'Peserta Dummy',
+                    'email'     => 'peserta.dummy@example.com',
+                    'password'  => Hash::make('password'),
+                    'hak_akses' => 'peserta',
+                    'status'    => 'aktif',
+                ]
+            );
+        }
 
         $base = [
-            'user_id'      => $user->id,
             'sub_event_id' => $subEvent->id,
             'bidang_id'    => $bidang->id,
             'interaksi'    => 'Teknologi Tepat Guna',
@@ -176,6 +183,8 @@ class UsulanSeeder extends Seeder
         ];
 
         foreach ($usulans as $item) {
+            $item['user_id'] = $peserta->id;
+
             Usulan::firstOrCreate(
                 [
                     'sub_event_id' => $item['sub_event_id'],
@@ -186,5 +195,6 @@ class UsulanSeeder extends Seeder
         }
 
         $this->command->info('UsulanSeeder: ' . count($usulans) . ' usulan berhasil di-seed untuk SubEvent "' . $subEvent->sub_event . '" (' . $subEvent->tahun . ').');
+        $this->command->info('Semua usulan di-assign ke user: ' . $peserta->nama . ' (id=' . $peserta->id . ', email=' . $peserta->email . ')');
     }
 }

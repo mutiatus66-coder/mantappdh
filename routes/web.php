@@ -145,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}',    [InovasiController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/kirim',[InovasiController::class, 'kirim'])  ->name('kirim');
 
-        Route::get('/inovasi/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar']);
+        Route::get('/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar'])->name('rekap-pendaftar');
     });
 
     // ── Penilaian ─────────────────────────────────────────────────────────────

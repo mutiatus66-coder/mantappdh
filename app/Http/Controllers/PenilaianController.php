@@ -121,7 +121,7 @@ class PenilaianController extends Controller
         // Load nilai Tahap 2
         $usulanIds = array_column($all, 'id');
         if (!empty($usulanIds)) {
-            $nilaiRows = Pemenang::whereIn('usulan_id', $usulanIds)->get();
+            $nilaiRows = Pemenang::query()->whereIn('usulan_id', $usulanIds)->get();
             $grouped = [];
             foreach ($nilaiRows as $row) {
                 $grouped[$row->usulan_id][$row->penilai_id][] = $row->nilai;
@@ -345,7 +345,7 @@ class PenilaianController extends Controller
                 array_column($nominasiUmum, 'id'),
                 array_column($nominasiPelajar, 'id')
             );
-            $rows = Pemenang::where('penilai_id', $penilaiLogin->id)
+            $rows = Pemenang::query()->where('penilai_id', $penilaiLogin->id)
                 ->whereIn('usulan_id', $usulanIds)
                 ->get();
             foreach ($rows as $row) {
