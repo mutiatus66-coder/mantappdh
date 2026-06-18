@@ -34,6 +34,9 @@ class DatabaseSeeder extends Seeder
             PengumumanSeeder::class,
             UsulanSeeder::class,
             IndikatorSeeder::class,  
+            InovatorSeeder::class,
+            UsulanSeeder::class, 
+            PenilaianUsulanSeeder::class,
         ]);
 
 }
