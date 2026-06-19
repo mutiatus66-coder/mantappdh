@@ -1,4 +1,4 @@
-@extends('index')
+@extends('index', ['dummy' => true])
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
@@ -194,19 +194,21 @@
     // ────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
-        el.className = 'alert alert-dismissible fade show position-fixed bottom-0 end-0 m-4';
-        el.style.cssText = [
-            'z-index:9999', 'min-width:280px',
-            `background:${type === 'success' ? 'rgba(245,158,11,0.12)' : 'rgba(163,45,45,0.12)'}`,
-            `border:1px solid ${type === 'success' ? 'rgba(245,158,11,0.4)' : 'rgba(163,45,45,0.3)'}`,
-            `color:${type === 'success' ? '#92400e' : '#A32D2D'}`,
-        ].join(';');
+        el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
         el.innerHTML = `
-            <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'} me-2"></i>
-            ${msg}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+            <span class="ri-toast-icon">
+              <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+            </span>
+            <span class="ri-toast-msg">${msg}</span>
+            <button class="ri-toast-close" onclick="this.parentElement.remove()">
+              <i class="bi bi-x-lg"></i>
+            </button>`;
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3000);
+        requestAnimationFrame(() => el.classList.add('ri-toast-show'));
+        setTimeout(() => {
+            el.classList.remove('ri-toast-show');
+            setTimeout(() => el.remove(), 300);
+        }, 3500);
     }
 
     // ────────────────────────────────────────────

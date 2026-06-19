@@ -80,8 +80,8 @@
           <div id="kt_content_container" class="container-fluid">
 
             @auth
-              {{-- Tampilkan @yield jika child view punya section 'content', otherwise welcome --}}
-              @if($__env->hasSection('content'))
+              {{-- Tampilkan @yield jika child view punya section 'content' (ditandai $dummy), otherwise welcome --}}
+              @if(!empty($dummy))
               {{-- Banner Login As --}}
                 @if(session()->has('admin_original_id'))
                 <div class="d-flex align-items-center justify-content-between px-4 py-2 mb-3"

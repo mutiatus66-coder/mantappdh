@@ -1,4 +1,4 @@
-@extends('index')
+@extends('index', ['dummy' => true])
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
@@ -206,14 +206,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Toast ──
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
-        el.className = 'rv-toast ' + type;
-        el.innerHTML = '<i class="bi bi-' + (type === 'success' ? 'check-circle-fill' : 'x-circle-fill') + '"></i>' + msg;
+        el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
+        el.innerHTML = `
+            <span class="ri-toast-icon">
+              <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+            </span>
+            <span class="ri-toast-msg">${msg}</span>
+            <button class="ri-toast-close" onclick="this.parentElement.remove()">
+              <i class="bi bi-x-lg"></i>
+            </button>`;
         document.body.appendChild(el);
-        requestAnimationFrame(() => el.classList.add('show'));
+        requestAnimationFrame(() => el.classList.add('ri-toast-show'));
         setTimeout(() => {
-            el.classList.remove('show');
-            el.addEventListener('transitionend', () => el.remove(), { once: true });
-        }, 2800);
+            el.classList.remove('ri-toast-show');
+            setTimeout(() => el.remove(), 300);
+        }, 3500);
     }
 
 });
