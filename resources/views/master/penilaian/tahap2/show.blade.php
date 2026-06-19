@@ -19,6 +19,21 @@
         </a>
     </div>
 
+    {{-- ── Warning jika tidak ada data lolos ── --}}
+    @if(empty($nominasiUmum) && empty($nominasiPelajar))
+    <div class="alert mb-4 d-flex align-items-center gap-3"
+         style="background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); color:#854d0e; border-radius:10px; padding:16px 20px;">
+        <i class="bi bi-exclamation-triangle-fill fs-5" style="color:#ca8a04;"></i>
+        <div>
+            <div class="fw-semibold">Belum ada data yang lolos Tahap 1</div>
+            <div class="small mt-1">Silakan tentukan kelulusan peserta di
+                <a href="{{ route('penilaian.tahap1.show', $subEvent['id']) }}" class="fw-semibold" style="color:#92400e;">Penilaian Tahap 1</a>
+                terlebih dahulu.
+            </div>
+        </div>
+    </div>
+    @endif
+
     {{-- ── Tabs ── --}}
     <div class="rv-tabs-wrap">
         <ul class="nav rv-tabs" id="tabNominator" role="tablist">
@@ -128,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(NILAI_URL, {
                 method : 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
-                body   : JSON.stringify({ inovator_id: activeInovatorId, nilai }),
+                body   : JSON.stringify({ usulan_id: activeInovatorId, nilai }),
             })
             .then(r => r.json())
             .then(data => {

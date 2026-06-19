@@ -218,6 +218,6 @@
     })();
   </script>
 
-  @stack('scripts')
+  @stack('4 scripts')
 </body>
 </html>
