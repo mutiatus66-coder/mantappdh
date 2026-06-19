@@ -6,15 +6,6 @@
 
 @section('content')
 
-{{-- ── Flash message ── --}}
-@if(session('success'))
-<div class="alert alert-dismissible fade show mb-4" role="alert"
-     style="background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); color:#1e40af; margin:0 24px;">
-    <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
-
 <div class="all-container">
 
     {{-- ── Header ── --}}
@@ -23,7 +14,7 @@
             <p class="rv-sub-label">Sub Event</p>
             <h3 class="rv-page-title">{{ $subEvent['sub_event'] }}</h3>
         </div>
-        <a href="{{ route('penilaian.tahap1.index') }}" class="btn btn-primary">
+        <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-primary">
             <i class="bi bi-arrow-left"></i>Kembali
         </a>
     </div>
@@ -48,11 +39,11 @@
 
         {{-- ── Tab Umum ── --}}
         <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
-            @include('master.penilaian.tahap1.panel', [
+            @include('master.penilaian.tahap2.panel', [
                 'group'    => 'umum',
-                'title'    => 'Verifikasi Umum',
+                'title'    => 'Nominator Umum',
                 'tableId'  => 'tableUmum',
-                'filename' => 'verifikasi-umum',
+                'filename' => 'nominasi-umum',
                 'nominasi' => $nominasiUmum,
                 'penilai'  => $penilai,
                 'indikators'            => $indikators,
@@ -63,11 +54,11 @@
 
         {{-- ── Tab Pelajar ── --}}
         <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
-            @include('master.penilaian.tahap1.panel', [
+            @include('master.penilaian.tahap2.panel', [
                 'group'    => 'pelajar',
-                'title'    => 'Verifikasi Pelajar',
+                'title'    => 'Nominator Pelajar',
                 'tableId'  => 'tablePelajar',
-                'filename' => 'verifikasi-pelajar',
+                'filename' => 'nominasi-pelajar',
                 'nominasi' => $nominasiPelajar,
                 'penilai'  => $penilai,
                 'indikators'            => $indikators,
@@ -85,46 +76,43 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const SIMPAN_URL = '{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}';
-    const NILAI_URL  = '{{ route("penilaian.tahap1.simpan.nilai", $subEvent["id"]) }}';
-    const CSRF       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+    const NILAI_URL = '{{ route("penilaian.tahap2.simpan.nilai", $subEvent["id"]) }}';
+    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // Nilai per inovator milik penilai yang sedang login (untuk pre-fill)
     const nilaiDb = @json($nilaiLoginPerInovator ?? []);
 
-    // ── Modal Input Nilai ─────────────────────────────────────────────────
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+    // ── Modal Input Nilai Tahap 2 ─────────────────────────────────────────
     let activeInovatorId = null;
 
-    document.querySelectorAll('.btn-input-nilai').forEach(btn => {
+    document.querySelectorAll('.btn-input-nilai-t2').forEach(btn => {
         btn.addEventListener('click', function () {
             activeInovatorId = this.dataset.inovatorId;
 
-            // Isi header modal
-            document.querySelectorAll('.modal-inovator-nama').forEach(el => el.textContent = this.dataset.inovator);
-            document.querySelectorAll('.modal-inovasi-nama').forEach(el => el.textContent = this.dataset.namaInovasi);
+            document.querySelectorAll('.modal-inovator-nama-t2').forEach(el => el.textContent = this.dataset.inovator);
+            document.querySelectorAll('.modal-inovasi-nama-t2').forEach(el => el.textContent = this.dataset.namaInovasi);
 
-            // Pre-fill dari nilaiDb
             const savedNilai = nilaiDb[activeInovatorId] ?? {};
-            document.querySelectorAll('.input-nilai-item').forEach(inp => {
+            document.querySelectorAll('.input-nilai-item-t2').forEach(inp => {
                 const kid = inp.dataset.keteranganId;
                 inp.value = savedNilai[kid] !== undefined ? savedNilai[kid] : '';
             });
 
-            // Tentukan group berdasarkan tombol yang diklik
             const group   = this.closest('.rv-card')
-                            ?.querySelector('.btn-simpan-nilai-modal')?.dataset.group ?? 'umum';
-            const modalId = 'modalNilaiTahap1' + cap(group);
+                            ?.querySelector('.btn-simpan-nilai-modal-t2')?.dataset.group ?? 'umum';
+            const modalId = 'modalNilaiTahap2' + cap(group);
             bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).show();
         });
     });
 
-    document.querySelectorAll('.btn-simpan-nilai-modal').forEach(btn => {
+    document.querySelectorAll('.btn-simpan-nilai-modal-t2').forEach(btn => {
         btn.addEventListener('click', function () {
             if (!activeInovatorId) return;
 
             const group = this.dataset.group;
             const nilai = {};
-            document.querySelectorAll('.input-nilai-item[data-group="' + group + '"]').forEach(inp => {
+            document.querySelectorAll('.input-nilai-item-t2[data-group="' + group + '"]').forEach(inp => {
                 if (inp.value !== '') nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
             });
 
@@ -147,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.success) {
                     toast('Nilai berhasil disimpan!', 'success');
                     nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
-                    const modalId = 'modalNilaiTahap1' + cap(group);
+                    const modalId = 'modalNilaiTahap2' + cap(group);
                     bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();
                 } else {
                     toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
@@ -313,7 +301,10 @@ document.querySelectorAll('.btn-catatan').forEach(btn => {
                 const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
                 return nilaiB - nilaiA;
             });
+
             rows.forEach((row, i) => {
+                const rankCell = row.querySelector('.rv-rank-cell');
+                if (rankCell) rankCell.textContent = i + 1;
                 const no = row.querySelector('.row-no');
                 if (no) no.textContent = i + 1;
                 tbody.appendChild(row);
@@ -329,7 +320,6 @@ document.querySelectorAll('.btn-catatan').forEach(btn => {
 
             const csv = [...table.querySelectorAll('tr')].map(row =>
                 [...row.querySelectorAll('th, td')]
-                    .slice(1)
                     .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"')
                     .join(',')
             ).join('\n');
