@@ -142,6 +142,16 @@
 /* ══════════════════════════════════════════
    EC CARD (shared: t1 / penilaian)
 ══════════════════════════════════════════ */
+#historyToggleBtn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+}
+
+#kt_header .bi-clock-history {
+    color: #ffffff !important;
+}
 .ec-title {
     font-size: 1.6rem;
     font-weight: 700;
@@ -875,9 +885,16 @@
 /* ══════════════════════════════════════════
    HEADER
 ══════════════════════════════════════════ */
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width:240px;
+#kt_header [data-kt-menu-trigger] {
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+}
+.history-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
 }
 .history-url {
     font-size:0.72rem;
