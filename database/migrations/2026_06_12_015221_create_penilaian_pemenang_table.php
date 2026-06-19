@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->unique(
                 ['usulan_id', 'penilai_id', 'keterangan_tahap2_id'],
-                'unique_penilaian_pemenang'
+                'unique_pemenang'
             );
         });
     }

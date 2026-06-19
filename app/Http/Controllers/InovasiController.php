@@ -8,11 +8,30 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\SubEvent;
 use App\Models\Usulan;
 use App\Models\AnggotaTim;
+use App\Models\PenilaianUsulan;
+use App\Models\Pemenang;
 
 class InovasiController extends Controller
 {
-    // ── Halaman pintu masuk peserta ───────────────────────────────────────
+    // ── Helper: hitung nilai akhir dari rows nilai ────────────────────────
+    private function hitungNilaiAkhir($rows): float|string
+    {
+        if ($rows->isEmpty()) return '-';
 
+        $grouped = [];
+        foreach ($rows as $row) {
+            $grouped[$row->penilai_id][] = $row->nilai;
+        }
+
+        $avgPerPenilai = [];
+        foreach ($grouped as $nilaiArr) {
+            $avgPerPenilai[] = array_sum($nilaiArr) / count($nilaiArr);
+        }
+
+        return round(array_sum($avgPerPenilai) / count($avgPerPenilai), 2);
+    }
+
+    // ── Halaman pintu masuk peserta ───────────────────────────────────────
     public function riwayat()
     {
         $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
@@ -20,15 +39,34 @@ class InovasiController extends Controller
     }
 
     public function rekapNilai()
-    {
-        $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
-        return view('inovasi.rekapnilai', compact('subEvents'));
+{
+    $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
+
+    foreach ($subEvents as $se) {
+        // Total usulan pada sub event ini (samakan dengan daftar di Rekap Pendaftar)
+        $usulanIds = Usulan::where('sub_event_id', $se->id)->pluck('id');
+
+        $se->inovasi_count = $usulanIds->count();
+
+        // Jumlah usulan yang sudah punya minimal 1 nilai (Tahap 1)
+        $se->dinilai_count = $usulanIds->isEmpty()
+            ? 0
+            : PenilaianUsulan::whereIn('usulan_id', $usulanIds)
+                ->distinct('usulan_id')
+                ->count('usulan_id');
     }
 
-    // ── Halaman kelola usulan (form modal + daftar) per sub event ─────────
+    return view('inovasi.rekapnilai', compact('subEvents'));
+}
 
+    // ── Halaman kelola usulan (form modal + daftar) per sub event ─────────
+    // UC-07: KHUSUS PESERTA. Admin Bapperida diarahkan ke halaman Riwayat (UC-09).
     public function usulan($subEventId)
     {
+        if (Auth::user()->isAdminBapperida()) {
+            return redirect()->route('inovasi.usulan-riwayat', $subEventId);
+        }
+
         $subEvent = SubEvent::with('event', 'bidangs')->findOrFail($subEventId);
 
         $usulans = Usulan::with('anggotaTim', 'bidang')
@@ -41,48 +79,80 @@ class InovasiController extends Controller
     }
 
     // ── Rekap semua pendaftar per sub event (admin) ───────────────────────
-
     public function rekapPendaftar($subEventId)
     {
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
         $subEventNama = $subEvent->sub_event;
 
-        $usulan = Usulan::with('bidang')
+        $usulans = Usulan::with('bidang')
             ->where('sub_event_id', $subEventId)
-            ->get()
-            ->map(fn ($u) => [
+            ->get();
+
+        $usulanIds = $usulans->pluck('id')->toArray();
+
+        $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+        $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+
+        $usulan = $usulans->map(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
+            $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
+            $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
+            $total = ($t1 !== '-' && $t2 !== '-')
+                ? round(((float)$t1 + (float)$t2) / 2, 2)
+                : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
+
+            return [
                 'judul'        => $u->judul ?? '',
                 'instansi'     => $u->inovator ?? '',
                 'link_youtube' => $u->link_video ?? '',
                 'no_hp'        => $u->ketua_wa ?? '',
                 'kategori'     => $u->kategori ?? '',
-                'nilai_t1'     => '-',
-                'nilai_t2'     => '-',
-                'nilai_total'  => '-',
-            ]);
+                'nilai_t1'     => $t1,
+                'nilai_t2'     => $t2,
+                'nilai_total'  => $total,
+            ];
+        });
 
         return view('inovasi.rekap_pendaftar', compact('subEventNama', 'usulan'));
     }
 
-    // ── Riwayat usulan milik peserta ──────────────────────────────────────
-
+    // ── Riwayat usulan (UC-08 & UC-09) ─────────────────────────────────────
+    // PERUBAHAN: Admin Bapperida melihat SEMUA usulan yang sudah dikirim;
+    //            Peserta hanya melihat usulan miliknya sendiri.
     public function usulanRiwayat($subEventId)
     {
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
         $subEventNama = $subEvent->sub_event;
         $eventNama    = $subEvent->event->nama_event ?? '-';
 
-        $usulan = Usulan::with('bidang', 'anggotaTim')
-            ->where('user_id', Auth::id())
-            ->where('sub_event_id', $subEventId)
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $isAdmin = Auth::user()->isAdminBapperida();
 
-        return view('inovasi.usulan_riwayat', compact('usulan', 'subEventNama', 'eventNama'));
+        $query = Usulan::with('bidang', 'anggotaTim', 'user')
+            ->where('sub_event_id', $subEventId);
+
+        if ($isAdmin) {
+            // UC-09: semua usulan yang SUDAH DIKIRIM pada sub event ini
+            $query->submitted();
+        } else {
+            // UC-08: peserta hanya usulan miliknya
+            $query->where('user_id', Auth::id());
+        }
+
+        $usulan = $query->orderBy('updated_at', 'desc')->get();
+
+        // Tandai usulan yang sudah ada nilainya (agar status tidak bisa direset admin)
+        $sudahDinilaiIds = PenilaianUsulan::whereIn('usulan_id', $usulan->pluck('id'))
+            ->distinct()
+            ->pluck('usulan_id')
+            ->toArray();
+
+        $usulan->each(function ($u) use ($sudahDinilaiIds) {
+            $u->sudah_dinilai = in_array($u->id, $sudahDinilaiIds);
+        });
+
+        return view('inovasi.usulan_riwayat', compact('usulan', 'subEventNama', 'eventNama', 'isAdmin'));
     }
 
     // ── Rekap nilai usulan milik peserta ──────────────────────────────────
-
     public function usulanNilai($subEventId)
     {
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
@@ -95,15 +165,28 @@ class InovasiController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
+        $usulanIds = $usulan->pluck('id')->toArray();
+
+        $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+        $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+
+        $usulan->each(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
+            $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
+            $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
+            $u->nilai_t1    = $t1;
+            $u->nilai_t2    = $t2;
+            $u->nilai_total = ($t1 !== '-' && $t2 !== '-')
+                ? round(((float)$t1 + (float)$t2) / 2, 2)
+                : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
+        });
+
         return view('inovasi.usulan_nilai', compact('usulan', 'subEventNama', 'eventNama'));
     }
 
-    // ── CRUD Usulan ───────────────────────────────────────────────────────
-
+    // ── CRUD Usulan (KHUSUS PESERTA / pemilik usulan) ─────────────────────
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Halaman 1
             'sub_event_id'  => 'required|exists:sub_events,id',
             'bidang_id'     => 'required|exists:bidangs,id',
             'judul'         => 'required|string|max:255',
@@ -119,7 +202,6 @@ class InovasiController extends Controller
             'kategori'      => 'required|in:umum,pelajar',
             'asal_sekolah'  => 'required_if:kategori,pelajar|nullable|string|max:255',
             'nama_guru'     => 'nullable|string|max:150',
-            // Halaman 2
             'latar_belakang'        => 'required|string',
             'kondisi_sebelumnya'    => 'required|string',
             'sasaran_tujuan'        => 'required|string',
@@ -131,19 +213,17 @@ class InovasiController extends Controller
             'hasil_diharapkan'      => 'required|string',
             'manfaat'               => 'required|string',
             'rencana_berkelanjutan' => 'required|string',
-            // Halaman 3
             'file_surat_pernyataan' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file_proposal'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file_gambar'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'link_video'            => 'nullable|url|max:255',
-            // Anggota
             'anggota'               => 'nullable|array',
             'anggota.*'             => 'nullable|string|max:255',
         ]);
 
-        $data             = $validated;
-        $data['user_id']  = Auth::id();
-        $data['status']   = 'Melengkapi Data';
+        $data                 = $validated;
+        $data['user_id']      = Auth::id();
+        $data['status']       = 'Melengkapi Data';
         $data['is_submitted'] = false;
         unset($data['anggota']);
 
@@ -329,5 +409,44 @@ class InovasiController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'Usulan berhasil dikirim!']);
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  BARU — UC-09: Edit Status oleh Admin Bapperida
+    //  Mengubah status usulan. Reset ke "Melengkapi Data" hanya boleh selama
+    //  belum ada penilai yang menginput nilai.
+    // ══════════════════════════════════════════════════════════════════════
+    public function editStatus(Request $request, $id)
+    {
+        if (! Auth::user()->isAdminBapperida()) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:Melengkapi Data,Sedang Dinilai,Selesai',
+        ]);
+
+        $usulan = Usulan::findOrFail($id);
+
+        if ($request->status === 'Melengkapi Data') {
+            $sudahDinilai = PenilaianUsulan::query()->where('usulan_id', $usulan->id)->exists();
+            if ($sudahDinilai) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status tidak dapat dikembalikan ke "Melengkapi Data" karena sudah ada penilai yang memberikan nilai.',
+                ], 422);
+            }
+            // Buka kunci agar peserta dapat melengkapi & mengirim ulang.
+            $usulan->is_submitted = false;
+        }
+
+        $usulan->status = $request->status;
+        $usulan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status usulan berhasil diperbarui.',
+            'status'  => $usulan->status,
+        ]);
     }
 }

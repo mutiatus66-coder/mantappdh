@@ -127,26 +127,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengumuman-luar',      [PengumumanLuarController::class, 'index'])->name('pengumuman_luar.index');
     Route::get('/pengumuman-luar/{id}', [PengumumanLuarController::class, 'show']) ->name('pengumuman_luar.show');
 
-    // ── Inovasi (Peserta) ─────────────────────────────────────────────────────
+    // ── Inovasi (Peserta & Admin Bapperida) ───────────────────────────────────
     Route::prefix('inovasi')->name('inovasi.')->group(function () {
+    // Navigasi / daftar
+    Route::get('/riwayat',     [InovasiController::class, 'riwayat'])    ->name('riwayat');
+    Route::get('/rekap-nilai', [InovasiController::class, 'rekapNilai']) ->name('rekapnilai');
 
-        // Navigasi / daftar
-        Route::get('/riwayat',    [InovasiController::class, 'riwayat'])   ->name('riwayat');
-        Route::get('/rekap-nilai',[InovasiController::class, 'rekapNilai'])->name('rekapnilai');
+    // Form & riwayat per sub event
+    Route::get('/usulan/{subEventId}',         [InovasiController::class, 'usulan'])        ->name('usulan');
+    Route::get('/usulan-riwayat/{subEventId}', [InovasiController::class, 'usulanRiwayat']) ->name('usulan-riwayat');
+    Route::get('/usulan-nilai/{subEventId}',   [InovasiController::class, 'usulanNilai'])   ->name('usulan-nilai');
 
-        // Form & riwayat per sub event
-        Route::get('/usulan/{subEventId}',         [InovasiController::class, 'usulan'])       ->name('usulan');
-        Route::get('/usulan-riwayat/{subEventId}', [InovasiController::class, 'usulanRiwayat'])->name('usulan-riwayat');
-        Route::get('/usulan-nilai/{subEventId}',   [InovasiController::class, 'usulanNilai'])  ->name('usulan-nilai');
+    // CRUD usulan (pemilik usulan)
+    Route::post('/',           [InovasiController::class, 'store'])   ->name('store');
+    Route::put('/{id}',        [InovasiController::class, 'update'])  ->name('update');
+    Route::delete('/{id}',     [InovasiController::class, 'destroy']) ->name('destroy');
+    Route::post('/{id}/kirim', [InovasiController::class, 'kirim'])   ->name('kirim');
 
-        // CRUD usulan
-        Route::post('/',          [InovasiController::class, 'store'])  ->name('store');
-        Route::put('/{id}',       [InovasiController::class, 'update']) ->name('update');
-        Route::delete('/{id}',    [InovasiController::class, 'destroy'])->name('destroy');
-        Route::post('/{id}/kirim',[InovasiController::class, 'kirim'])  ->name('kirim');
+    // ⬇️ BARU — Edit status oleh Admin Bapperida (UC-09)
+    Route::post('/{id}/edit-status', [InovasiController::class, 'editStatus'])->name('edit-status');
 
-        Route::get('/inovasi/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar']);
-    });
+    Route::get('/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar'])->name('rekap-pendaftar');
+});
 
     // ── Penilaian ─────────────────────────────────────────────────────────────
     Route::prefix('penilaian')->name('penilaian.')->group(function () {
