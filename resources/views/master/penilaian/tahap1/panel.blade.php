@@ -73,6 +73,13 @@
                                 data-nama-inovasi="{{ $nom['nama_inovasi'] }}">
                             <i class="bi bi-pencil-square"></i>
                         </button>
+                        <button class="btn btn-sm btn-outline-warning btn-catatan"
+                                data-usulan-id="{{ $nom['id'] }}"
+                                data-inovator="{{ $nom['inovator'] }}"
+                                data-nama-inovasi="{{ $nom['nama_inovasi'] }}"
+                                data-group="{{ $group }}">
+                            <i class="bi bi-chat-left-text"></i>
+                        </button>
                     </td>
                     @endif
                 </tr>
@@ -143,6 +150,34 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary btn-simpan-nilai-modal" data-group="{{ $group }}">
                     <i class="bi bi-save me-1"></i>Simpan Nilai
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+@if($penilaiLogin)
+<div class="modal fade" id="modalCatatan{{ ucfirst($group) }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-chat-left-text me-2"></i>Catatan Penilai
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 p-3 rounded" style="background:rgba(27,132,255,0.06); border:1px solid rgba(27,132,255,0.15);">
+                    <div class="fw-semibold modal-catatan-inovator-{{ $group }}"></div>
+                    <div class="text-muted small modal-catatan-inovasi-{{ $group }}"></div>
+                </div>
+                <textarea class="form-control textarea-catatan-{{ $group }}" rows="5"
+                        placeholder="Tulis catatan untuk usulan ini..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning btn-simpan-catatan" data-group="{{ $group }}">
+                    <i class="bi bi-save me-1"></i>Simpan Catatan
                 </button>
             </div>
         </div>

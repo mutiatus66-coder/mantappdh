@@ -47,7 +47,7 @@
 
     {{-- ── TABLE ── --}}
     <div style="overflow-x: auto;">
-        <table class="se-table">
+        <table class="se-table" id="tabelNilai">
             <thead>
                 <tr>
                     <th width="50">No</th>
@@ -109,38 +109,50 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const kategoriFilter = document.getElementById('kategoriFilter');
-    const searchInput    = document.getElementById('searchInput');
-    const tbody          = document.getElementById('tableBody');
-    const infoDiv        = document.getElementById('paginationInfo');
+    document.addEventListener('DOMContentLoaded', function () {
+        const kategoriFilter = document.getElementById('kategoriFilter');
+        const searchInput    = document.getElementById('searchInput');
+        const tbody          = document.getElementById('tableBody');
+        const infoDiv        = document.getElementById('paginationInfo');
 
-    function updateDisplay() {
-        const kategori = kategoriFilter.value;
-        const keyword  = searchInput.value.toLowerCase().trim();
-        const rows     = Array.from(tbody.querySelectorAll('tr'));
-        let visible    = 0;
+        function updateDisplay() {
+            const kategori = kategoriFilter.value;
+            const keyword  = searchInput.value.toLowerCase().trim();
+            const rows     = Array.from(tbody.querySelectorAll('tr'));
+            let visible    = 0;
 
-        rows.forEach(row => {
-            if (row.querySelector('.empty-row')) return;
-            const rowKat    = row.getAttribute('data-kategori') ?? '';
-            const teks      = row.textContent.toLowerCase();
-            const matchKat  = kategori === 'semua' || rowKat === kategori;
-            const matchCari = teks.includes(keyword);
-            const tampil    = matchKat && matchCari;
-            row.style.display = tampil ? '' : 'none';
-            if (tampil) visible++;
-        });
+            rows.forEach(row => {
+                if (row.querySelector('.empty-row')) return;
+                const rowKat    = row.getAttribute('data-kategori') ?? '';
+                const teks      = row.textContent.toLowerCase();
+                const matchKat  = kategori === 'semua' || rowKat === kategori;
+                const matchCari = teks.includes(keyword);
+                const tampil    = matchKat && matchCari;
+                row.style.display = tampil ? '' : 'none';
+                if (tampil) visible++;
+            });
 
-        infoDiv.textContent = `Menampilkan ${visible} dari ${rows.filter(r => !r.querySelector('.empty-row')).length} data`;
-    }
+            infoDiv.textContent = `Menampilkan ${visible} dari ${rows.filter(r => !r.querySelector('.empty-row')).length} data`;
+        }
 
-    kategoriFilter.addEventListener('change', updateDisplay);
-    searchInput.addEventListener('keyup', updateDisplay);
-    updateDisplay();
+        kategoriFilter.addEventListener('change', updateDisplay);
+        searchInput.addEventListener('keyup', updateDisplay);
+        updateDisplay();
 
-    document.getElementById('pdfBtn').onclick   = () => alert('Fitur Download PDF akan segera tersedia.');
-    document.getElementById('excelBtn').onclick = () => alert('Fitur Download Excel akan segera tersedia.');
+        document.getElementById('pdfBtn').onclick = () => {
+        window.print();
+    };
+        document.getElementById('excelBtn').onclick = () => {
+        const table = document.getElementById('tabelNilai');
+        if (!table) return;
+        const csv = [...table.querySelectorAll('tr')].map(row =>
+            [...row.querySelectorAll('th, td')].map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"').join(',')
+        ).join('\n');
+        const a = document.createElement('a');
+        a.href     = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }));
+        a.download = 'rekap_nilai.csv';
+        a.click();
+    };
 });
 </script>
 @endpush

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Penilai;
 use App\Models\Usulan;
 use App\Models\SubEvent;
@@ -11,6 +13,7 @@ use App\Models\KeteranganIndikator;
 use App\Models\IndikatorTahap2;
 use App\Models\PenilaianUsulan;
 use App\Models\Pemenang;
+use App\Models\CatatanPenilai;
 
 class PenilaianController extends Controller
 {
@@ -101,8 +104,12 @@ class PenilaianController extends Controller
     // ── Helper: split usulan LOLOS saja per kategori (Tahap 2) ───────────
     private function getUsulanLolosSplit(int $subEventId): array
     {
-        $lolosUmum    = session('tahap1_lolos_' . $subEventId . '_umum');
-        $lolosPelajar = session('tahap1_lolos_' . $subEventId . '_pelajar');
+        $lolosUmum    = Usulan::forSubEvent($subEventId)->submitted()
+                    ->where('kategori', 'umum')->where('lolos_tahap1', true)
+                    ->pluck('id')->toArray();
+        $lolosPelajar = Usulan::forSubEvent($subEventId)->submitted()
+                    ->where('kategori', 'pelajar')->where('lolos_tahap1', true)
+                    ->pluck('id')->toArray();
 
         $all = Usulan::forSubEvent($subEventId)
             ->submitted()
@@ -199,8 +206,12 @@ class PenilaianController extends Controller
 
         ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getUsulanSplit($id);
 
-        $lolosUmum    = session('tahap1_lolos_' . $id . '_umum');
-        $lolosPelajar = session('tahap1_lolos_' . $id . '_pelajar');
+        $lolosUmum    = Usulan::forSubEvent($id)->submitted()
+                    ->where('kategori', 'umum')->where('lolos_tahap1', true)
+                    ->pluck('id')->toArray();
+        $lolosPelajar = Usulan::forSubEvent($id)->submitted()
+                    ->where('kategori', 'pelajar')->where('lolos_tahap1', true)
+                    ->pluck('id')->toArray();
 
         if ($lolosUmum !== null) {
             foreach ($nominasiUmum as &$n) { $n['lolos'] = in_array($n['id'], $lolosUmum, true); }
@@ -257,7 +268,7 @@ class PenilaianController extends Controller
         ]);
     }
 
-    public function tahap1Simpan(Request $request, int $id)
+        public function tahap1Simpan(Request $request, int $id)
     {
         $request->validate([
             'kategori' => 'required|in:umum,pelajar',
@@ -265,7 +276,18 @@ class PenilaianController extends Controller
             'ids.*'    => 'integer',
         ]);
 
-        session(['tahap1_lolos_' . $id . '_' . $request->kategori => $request->ids ?? []]);
+        // Ambil semua usulan kategori ini di sub event ini
+        $semuaId = Usulan::forSubEvent($id)
+            ->submitted()
+            ->where('kategori', $request->kategori)
+            ->pluck('id')
+            ->toArray();
+
+        // Reset semua jadi false, lalu set yang dipilih jadi true
+        Usulan::whereIn('id', $semuaId)->update(['lolos_tahap1' => false]);
+        if (!empty($request->ids)) {
+            Usulan::whereIn('id', $request->ids)->update(['lolos_tahap1' => true]);
+        }
 
         return response()->json(['success' => true]);
     }
@@ -281,7 +303,8 @@ class PenilaianController extends Controller
             'nilai.*'   => 'integer|min:0|max:100',
         ]);
 
-        $usulan = Usulan::where('id', $request->usulan_id)
+        $usulan = Usulan::query()
+            ->where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->firstOrFail();
 
@@ -296,6 +319,7 @@ class PenilaianController extends Controller
             );
         }
 
+        Log::info('PENILAIAN TAHAP 1', ['penilai' => Auth::user()->email, 'usulan_id' => $request->usulan_id, 'sub_event_id' => $id]);
         return response()->json(['success' => true]);
     }
 
@@ -375,7 +399,7 @@ class PenilaianController extends Controller
             'nilai.*'   => 'integer|min:0|max:100',
         ]);
 
-        $usulan = Usulan::where('id', $request->usulan_id)
+        $usulan = Usulan::query()->where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->firstOrFail();
 
@@ -390,6 +414,38 @@ class PenilaianController extends Controller
             );
         }
 
+        Log::info('PENILAIAN TAHAP 2', ['penilai' => Auth::user()->email, 'usulan_id' => $request->usulan_id, 'sub_event_id' => $id]);
         return response()->json(['success' => true]);
+    }
+    // ==================== CATATAN PENILAI ====================
+public function simpanCatatan(Request $request, int $usulanId)
+{
+    $penilaiLogin = $this->getPenilaiLogin();
+    abort_unless($penilaiLogin, 403, 'Anda tidak terdaftar sebagai penilai.');
+
+    $request->validate([
+        'catatan' => 'required|string|max:1000',
+    ]);
+
+    CatatanPenilai::updateOrCreate(
+        ['usulan_id' => $usulanId, 'penilai_id' => $penilaiLogin->id],
+        ['catatan'   => $request->catatan]
+    );
+
+    Log::info('CATATAN PENILAI', ['penilai' => Auth::user()->email, 'usulan_id' => $usulanId]);
+
+        return response()->json(['success' => true, 'message' => 'Catatan berhasil disimpan.']);
+    }
+
+    public function getCatatan(int $usulanId)
+    {
+        $penilaiLogin = $this->getPenilaiLogin();
+        abort_unless($penilaiLogin, 403, 'Anda tidak terdaftar sebagai penilai.');
+
+        $catatan = CatatanPenilai::query()->where('usulan_id', $usulanId)
+            ->where('penilai_id', $penilaiLogin->id)
+            ->first();
+
+        return response()->json(['catatan' => $catatan?->catatan ?? '']);
     }
 }

@@ -146,6 +146,149 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── Helper: capitalize first letter ──
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+    // ── Build group helper ──
+    function buildGroup(name) {
+        return {
+            name,
+            get rows()    { return [...document.querySelectorAll('.chk-row[data-group="' + name + '"]')] },
+            get checked() { return [...document.querySelectorAll('.chk-row[data-group="' + name + '"]:checked')] },
+            get checkAll(){ return document.querySelector('.chk-all[data-group="' + name + '"]') },
+            get bar()     { return document.getElementById('simpanBar' + cap(name)) },
+            get count()   { return document.querySelector('#simpanBar' + cap(name) + ' .simpan-count') },
+        };
+    }
+
+    const groups = {
+        umum    : buildGroup('umum'),
+        pelajar : buildGroup('pelajar'),
+    };
+
+    // ── Sync UI state ──
+    function syncUI(g) {
+        const total = g.rows.length;
+        const n     = g.checked.length;
+
+        g.rows.forEach(chk => {
+            chk.closest('tr').classList.toggle('row-lolos', chk.checked);
+        });
+
+        if (g.checkAll) {
+            g.checkAll.indeterminate = n > 0 && n < total;
+            g.checkAll.checked       = total > 0 && n === total;
+        }
+
+        if (g.bar) g.bar.style.display = n > 0 ? 'flex' : 'none';
+        if (g.count) g.count.textContent = n;
+    }
+
+    Object.values(groups).forEach(g => syncUI(g));
+
+    document.querySelectorAll('.chk-row').forEach(chk => {
+        chk.addEventListener('change', function () { syncUI(groups[this.dataset.group]); });
+    });
+
+    document.querySelectorAll('.chk-all').forEach(chkAll => {
+        chkAll.addEventListener('change', function () {
+            const g = groups[this.dataset.group];
+            g.rows.forEach(chk => chk.checked = this.checked);
+            syncUI(g);
+        });
+    });
+
+    // ── Simpan lolos (session) ──
+    document.querySelectorAll('.btn-rv-simpan').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const g   = groups[this.dataset.group];
+            const ids = g.checked.map(c => c.dataset.id);
+
+            if (ids.length === 0) {
+                toast('Pilih minimal 1 inovasi terlebih dahulu.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
+            fetch(SIMPAN_URL, {
+                method : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+                body   : JSON.stringify({ kategori: g.name, ids }),
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) toast('Data berhasil disimpan!', 'success');
+                else toast(data.message ?? 'Gagal menyimpan data.', 'error');
+            })
+            .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan'; });
+        });
+    });
+    // ── Catatan Penilai ──
+const CATATAN_BASE = '{{ url("penilaian/catatan") }}';
+let activeUsulanId = null;
+
+document.querySelectorAll('.btn-catatan').forEach(btn => {
+    btn.addEventListener('click', function () {
+        activeUsulanId = this.dataset.usulanId;
+        const group    = this.dataset.group;
+
+        document.querySelector('.modal-catatan-inovator-' + group).textContent = this.dataset.inovator;
+        document.querySelector('.modal-catatan-inovasi-'  + group).textContent = this.dataset.namaInovasi;
+
+        // Load catatan existing
+        fetch(CATATAN_BASE + '/' + activeUsulanId, {
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+        })
+        .then(r => r.json())
+        .then(data => {
+            document.querySelector('.textarea-catatan-' + group).value = data.catatan ?? '';
+        })
+        .catch(() => {});
+
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById('modalCatatan' + cap(group))
+        ).show();
+    });
+});
+
+    document.querySelectorAll('.btn-simpan-catatan').forEach(btn => {
+    btn.addEventListener('click', function () {
+        if (!activeUsulanId) return;
+        const group   = this.dataset.group;
+        const catatan = document.querySelector('.textarea-catatan-' + group).value.trim();
+
+        if (!catatan) {
+            toast('Catatan tidak boleh kosong.', 'error');
+            return;
+        }
+
+        const orig    = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
+        fetch(CATATAN_BASE + '/' + activeUsulanId, {
+            method : 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+            body   : JSON.stringify({ catatan }),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                toast('Catatan berhasil disimpan!', 'success');
+                bootstrap.Modal.getInstance(
+                    document.getElementById('modalCatatan' + cap(group))
+                )?.hide();
+            } else {
+                toast(data.message ?? 'Gagal menyimpan catatan.', 'error');
+            }
+        })
+        .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+        .finally(() => { this.disabled = false; this.innerHTML = orig; });
+    });
+    });
     // ── Rangking ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {
