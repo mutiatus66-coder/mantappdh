@@ -34,19 +34,6 @@ Route::post('/sign-up', [AuthController::class, 'register'])  ->name('register')
 Route::get('/buletin',      [BuletinController::class, 'index'])->name('public.pengumuman.index');
 Route::get('/buletin/{id}', [BuletinController::class, 'show']) ->name('public.pengumuman.show');
 
-// ── DEBUG (hapus setelah selesai debug) ───────────────────────────────────────
-Route::get('/debug-usulan', function () {
-    $users   = \App\Models\User::select('id','nama','email','hak_akses')->get();
-    $usulans = \App\Models\Usulan::select('id','user_id','sub_event_id','nama_inovasi')->get();
-    $authId  = Auth::check() ? Auth::id() : null;
-    return response()->json([
-        'auth_user_id'  => $authId,
-        'db_file'       => DB::connection()->getDatabaseName(),
-        'users'         => $users,
-        'usulans'       => $usulans,
-    ], 200, [], JSON_PRETTY_PRINT);
-});
-
 Route::get('/dev-login/{email}', function ($email) {
     $user = \App\Models\User::where('email', $email)->firstOrFail();
     Auth::login($user);
@@ -71,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('admin.index');
 
     // ── Event ─────────────────────────────────────────────────────────────────
-    Route::prefix('event')->name('event.')->group(function () {
+    Route::middleware(['role:admin_bapperida'])->prefix('event')->name('event.')->group(function () {
         Route::get('/',        [EventController::class, 'index'])   ->name('index');
         Route::post('/',       [EventController::class, 'store'])   ->name('store');
         Route::put('/{id}',    [EventController::class, 'update'])  ->name('update');
@@ -79,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ── Sub Event ─────────────────────────────────────────────────────────────
-    Route::prefix('sub-event')->name('sub-event.')->group(function () {
+    Route::middleware(['role:admin_bapperida'])->prefix('sub-event')->name('sub-event.')->group(function () {
         Route::get('/',          [SubEventController::class, 'index'])   ->name('index');
         Route::post('/',         [SubEventController::class, 'store'])   ->name('store');
         Route::get('/{id}/edit', [SubEventController::class, 'edit'])    ->name('edit');
@@ -88,22 +75,21 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ── Bidang ────────────────────────────────────────────────────────────────
-    Route::prefix('bidang')->name('bidang.')->group(function () {
+    Route::middleware(['role:admin_bapperida'])->prefix('bidang')->name('bidang.')->group(function () {
         Route::get('/',          [BidangController::class, 'index'])   ->name('index');
         Route::post('/',         [BidangController::class, 'store'])   ->name('store');
         Route::get('/{id}/edit', [BidangController::class, 'edit'])    ->name('edit');
         Route::put('/{id}',      [BidangController::class, 'update'])  ->name('update');
         Route::delete('/{id}',   [BidangController::class, 'destroy']) ->name('destroy');
     });
-
+    Route::get('/user/login-back', [UserController::class, 'loginBack'])->name('user.login-back');
     // ── User ──────────────────────────────────────────────────────────────────
-    Route::prefix('user')->name('user.')->group(function () {
+    Route::middleware(['role:admin_bapperida'])->prefix('user')->name('user.')->group(function () {
         Route::get('/',              [UserController::class, 'index'])   ->name('index');
         Route::post('/',             [UserController::class, 'store'])   ->name('store');
         Route::put('/{id}',          [UserController::class, 'update'])  ->name('update');
         Route::delete('/{id}',       [UserController::class, 'destroy']) ->name('destroy');
         Route::get('/{id}/login-as', [UserController::class, 'loginAs'])  ->name('login-as');
-        Route::get('/login-back',     [UserController::class, 'loginBack']) ->name('login-back');
     });
 
     // ── Penilai — hanya admin_bapperida ──────────────────────────────────────
@@ -159,6 +145,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tahap-2',                    [PenilaianController::class, 'tahap2'])             ->name('tahap2.index');
         Route::get('/tahap-2/{id}',               [PenilaianController::class, 'tahap2Show'])         ->name('tahap2.show');
         Route::post('/tahap-2/{id}/simpan-nilai', [PenilaianController::class, 'tahap2Simpan'])       ->name('tahap2.simpan.nilai');
+        Route::post('/catatan/{usulanId}',  [PenilaianController::class, 'simpanCatatan'])->name('catatan.simpan');
+        Route::get('/catatan/{usulanId}',   [PenilaianController::class, 'getCatatan'])->name('catatan.get');
     });
 
     // ── Indikator ─────────────────────────────────────────────────────────────

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\CatatanPenilai;
 
 class Usulan extends Model
 {
@@ -26,6 +27,7 @@ class Usulan extends Model
         'file_surat_pernyataan', 'file_proposal', 'file_gambar', 'link_video',
         // Status
         'status', 'is_submitted',
+        'lolos_tahap1',
     ];
 
     protected $casts = [
@@ -34,6 +36,10 @@ class Usulan extends Model
 
     // ── Relasi ──────────────────────────────────────────────────────────
 
+    public function catatanPenilai(): HasMany
+    {
+        return $this->hasMany(CatatanPenilai::class);
+    }
     public function subEvent(): BelongsTo
     {
         return $this->belongsTo(SubEvent::class, 'sub_event_id');

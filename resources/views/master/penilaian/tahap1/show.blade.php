@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(NILAI_URL, {
                 method : 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
-                body   : JSON.stringify({ inovator_id: activeInovatorId, nilai }),
+                body   : JSON.stringify({ usulan_id: activeInovatorId, nilai }),
             })
             .then(r => r.json())
             .then(data => {
@@ -238,7 +238,69 @@ document.addEventListener('DOMContentLoaded', function () {
             .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan'; });
         });
     });
+    // ── Catatan Penilai ──
+const CATATAN_BASE = '{{ url("penilaian/catatan") }}';
+let activeUsulanId = null;
 
+document.querySelectorAll('.btn-catatan').forEach(btn => {
+    btn.addEventListener('click', function () {
+        activeUsulanId = this.dataset.usulanId;
+        const group    = this.dataset.group;
+
+        document.querySelector('.modal-catatan-inovator-' + group).textContent = this.dataset.inovator;
+        document.querySelector('.modal-catatan-inovasi-'  + group).textContent = this.dataset.namaInovasi;
+
+        // Load catatan existing
+        fetch(CATATAN_BASE + '/' + activeUsulanId, {
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+        })
+        .then(r => r.json())
+        .then(data => {
+            document.querySelector('.textarea-catatan-' + group).value = data.catatan ?? '';
+        })
+        .catch(() => {});
+
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById('modalCatatan' + cap(group))
+        ).show();
+    });
+});
+
+    document.querySelectorAll('.btn-simpan-catatan').forEach(btn => {
+    btn.addEventListener('click', function () {
+        if (!activeUsulanId) return;
+        const group   = this.dataset.group;
+        const catatan = document.querySelector('.textarea-catatan-' + group).value.trim();
+
+        if (!catatan) {
+            toast('Catatan tidak boleh kosong.', 'error');
+            return;
+        }
+
+        const orig    = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+
+        fetch(CATATAN_BASE + '/' + activeUsulanId, {
+            method : 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+            body   : JSON.stringify({ catatan }),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                toast('Catatan berhasil disimpan!', 'success');
+                bootstrap.Modal.getInstance(
+                    document.getElementById('modalCatatan' + cap(group))
+                )?.hide();
+            } else {
+                toast(data.message ?? 'Gagal menyimpan catatan.', 'error');
+            }
+        })
+        .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
+        .finally(() => { this.disabled = false; this.innerHTML = orig; });
+    });
+    });
     // ── Rangking ──
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {

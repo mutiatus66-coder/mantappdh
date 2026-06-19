@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Models\SubEvent;
 use App\Models\Usulan;
 use App\Models\AnggotaTim;
@@ -256,6 +257,7 @@ class InovasiController extends Controller
             }
         }
 
+        Log::info('TAMBAH USULAN', ['user' => Auth::user()->email, 'usulan_id' => $usulan->id, 'nama_inovasi' => $usulan->nama_inovasi]);
         return response()->json([
             'success' => true,
             'message' => 'Usulan berhasil disimpan.',
@@ -346,7 +348,7 @@ class InovasiController extends Controller
                 }
             }
         }
-
+        Log::info('EDIT STATUS USULAN', ['admin' => Auth::user()->email, 'usulan_id' => $usulan->id, 'status_baru' => $usulan->status]);
         return response()->json([
             'success' => true,
             'message' => 'Usulan berhasil diperbarui.',
@@ -407,7 +409,7 @@ class InovasiController extends Controller
             'is_submitted' => true,
             'status'       => 'Sedang Dinilai',
         ]);
-
+        Log::info('KIRIM USULAN', ['user' => Auth::user()->email, 'usulan_id' => $usulan->id, 'nama_inovasi' => $usulan->nama_inovasi]);
         return response()->json(['success' => true, 'message' => 'Usulan berhasil dikirim!']);
     }
 
@@ -443,6 +445,7 @@ class InovasiController extends Controller
         $usulan->status = $request->status;
         $usulan->save();
 
+        Log::info('EDIT STATUS USULAN', ['admin' => Auth::user()->email, 'usulan_id' => $usulan->id, 'status_baru' => $usulan->status]);
         return response()->json([
             'success' => true,
             'message' => 'Status usulan berhasil diperbarui.',

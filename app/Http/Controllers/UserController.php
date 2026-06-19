@@ -18,7 +18,7 @@ class UserController extends Controller
         $request->validate([
             'nama'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'hak_akses' => 'required|in:admin_bapperida,peserta,penilai',
+            'hak_akses' => 'required|in:admin_bapperida,admin_kecamatan,admin_opd,peserta,penilai',
             'status'    => 'required|in:aktif,nonaktif',
             'password'  => 'required|min:6',
         ]);
@@ -81,30 +81,41 @@ class UserController extends Controller
         Auth::login($user);
 
         // Tetap di halaman user
-        return redirect()->route('user.index')
-                         ->with('success', 'Sedang login sebagai ' . $user->nama . ' (' . $user->hak_akses . ')');
+            return redirect()->route('index')
+                            ->with('success', 'Sedang login sebagai ' . $user->nama . ' (' . $user->hak_akses . ')');
     }
 
     public function loginBack()
     {
-        $originalId = session('admin_original_id');
+            $originalId = session('admin_original_id');
 
-        if (!$originalId) {
+            if (!$originalId) {
+                return redirect()->route('index')
+                                ->with('error', 'Tidak ada sesi admin yang tersimpan.');
+            }
+
+            $admin = User::findOrFail($originalId);
+            Auth::login($admin);
+            session()->forget('admin_original_id');
+
             return redirect()->route('user.index')
-                             ->with('error', 'Tidak ada sesi admin yang tersimpan.');
-        }
-
-        $admin = User::findOrFail($originalId);
-        Auth::login($admin);
-        session()->forget('admin_original_id');
-
-        return redirect()->route('user.index')
-                         ->with('success', 'Kembali ke akun ' . $admin->nama);
+                            ->with('success', 'Kembali ke akun ' . $admin->nama);
     }
 
     public function destroy($id)
-    {
-        User::findOrFail($id)->delete();
-        return response()->json(['success' => true]);
+{
+    $user = User::findOrFail($id);
+
+    // Tambahkan blok ini sebelum delete:
+    $punyaUsulan = \App\Models\Usulan::query()->where('user_id', $id)->exists();
+    if ($punyaUsulan) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User tidak dapat dihapus karena sudah memiliki data usulan. Nonaktifkan saja.',
+        ], 422);
     }
+
+    $user->delete();
+    return response()->json(['success' => true]);
+}
 }

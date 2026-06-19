@@ -29,8 +29,8 @@ class PenilaianUsulanSeeder extends Seeder
         $total = 0;
 
         foreach ($usulans as $usulan) {
-            $penilais = Penilai::query()->where('sub_event_id', $usulan->sub_event_id)->get();
-            if ($penilais->isEmpty()) {
+            $penilai = Penilai::query()->where('sub_event_id', $usulan->sub_event_id)->get();
+            if ($penilai->isEmpty()) {
                 $this->command->warn("  - Usulan #{$usulan->id}: belum ada penilai di sub event. Jalankan PenilaiSeeder.");
                 continue;
             }
@@ -41,7 +41,7 @@ class PenilaianUsulanSeeder extends Seeder
                 continue;
             }
 
-            foreach ($penilais as $penilai) {
+            foreach ($penilai as $penilai) {
                 foreach ($indikators as $indikator) {
                     // Setiap penilai memilih 1 keterangan per indikator, lalu memberi nilai dalam rentangnya
                     $keterangans = KeteranganIndikator::query()->where('indikator_id', $indikator->id)->get();
