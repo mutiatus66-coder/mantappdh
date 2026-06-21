@@ -325,6 +325,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ── Reset tombol & field saat modal ditutup (apapun penyebabnya) ──
+    document.getElementById('modalPengumuman').addEventListener('hidden.bs.modal', function () {
+        resetModal();
+    });
+
     document.getElementById('btnSimpanPengumuman').addEventListener('click', async function () {
         const judul     = document.getElementById('pJudul').value.trim();
         const deskripsi = document.getElementById('pDeskripsi').value.trim();
@@ -347,28 +352,36 @@ document.addEventListener('DOMContentLoaded', function () {
         fd.append('status',    status);
         if (fileInput.files[0]) fd.append('file', fileInput.files[0]);
 
+        // Simpan referensi data sebelum async (karena this.dataset bisa berubah saat modal hide)
+        const updateId  = this.dataset.updateId;
+        const updateUrl = this.dataset.updateUrl;
+
         try {
-            const url = isUpdate ? this.dataset.updateUrl : storeUrl;
+            const url = isUpdate ? updateUrl : storeUrl;
             const res = await sendFormData(url, fd);
 
             if (res.success) {
-                modalPengumuman.hide();
-                toast(isUpdate ? 'Pengumuman berhasil diubah!' : 'Pengumuman berhasil ditambahkan!');
                 if (isUpdate) {
-                    updateRow(this.dataset.updateId, judul, deskripsi, status, res.file_url);
+                    updateRow(updateId, judul, deskripsi, status, res.file_url);
                 } else {
                     appendRow(res.pengumuman);
                 }
+                toast(isUpdate ? 'Pengumuman berhasil diubah!' : 'Pengumuman berhasil ditambahkan!');
+                modalPengumuman.hide(); // hidden.bs.modal akan reset tombol otomatis
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
-                this.disabled    = false;
-                this.textContent = 'Simpan';
             }
         } catch (e) {
             console.error(e);
-            toast('Terjadi kesalahan.', 'error');
-            this.disabled    = false;
-            this.textContent = 'Simpan';
+            toast('Terjadi kesalahan jaringan.', 'error');
+        } finally {
+            // Selalu re-enable tombol, kecuali modal ditutup (hidden.bs.modal yang handle)
+            // Cek apakah modal masih visible sebelum re-enable
+            const modalEl = document.getElementById('modalPengumuman');
+            if (modalEl.classList.contains('show')) {
+                this.disabled    = false;
+                this.textContent = 'Simpan';
+            }
         }
     });
 

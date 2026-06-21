@@ -224,11 +224,18 @@ document.addEventListener('DOMContentLoaded', function () {
             @if(in_array($item['id'], $formulasis1 ?? []))
             if (subEventId == '{{ $item['id'] }}') {
                 fetch(`/indikator/tahap-1/{{ $item['id'] }}/formulasi/get`)
-                    .then(r => r.json())
+                    .then(r => {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.json();
+                    })
                     .then(data => {
                         document.getElementById('inputNilaiMakalah').value   = data.nilai_makalah;
                         document.getElementById('inputNilaiSubstansi').value = data.nilai_substansi;
                         hitungTotal1();
+                    })
+                    .catch(err => {
+                        console.error('Gagal memuat data formulasi tahap 1:', err);
+                        alert('Gagal memuat data formulasi. Silakan coba lagi.');
                     });
             }
             @endif
