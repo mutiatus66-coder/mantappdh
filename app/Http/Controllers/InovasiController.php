@@ -43,18 +43,30 @@ class InovasiController extends Controller
 {
     $subEvents = SubEvent::with('event')->orderBy('tahun', 'desc')->get();
 
-    foreach ($subEvents as $se) {
-        // Total usulan pada sub event ini (samakan dengan daftar di Rekap Pendaftar)
-        $usulanIds = Usulan::where('sub_event_id', $se->id)->pluck('id');
+    // Kumpulkan semua usulan untuk seluruh sub event sekaligus (hindari N+1)
+    $subEventIds = $subEvents->pluck('id')->toArray();
 
-        $se->inovasi_count = $usulanIds->count();
+    $usulanPerSub = Usulan::whereIn('sub_event_id', $subEventIds)
+        ->get(['id', 'sub_event_id'])
+        ->groupBy('sub_event_id');
+
+    // Ambil distinct usulan_id yang sudah punya minimal 1 nilai Tahap 1
+    $allUsulanIds = $usulanPerSub->flatten()->pluck('id')->toArray();
+
+    $dinilaiIds = empty($allUsulanIds)
+        ? collect()
+        : PenilaianUsulan::whereIn('usulan_id', $allUsulanIds)
+            ->distinct()
+            ->pluck('usulan_id');
+
+    foreach ($subEvents as $se) {
+        $ids = ($usulanPerSub->get($se->id) ?? collect())->pluck('id');
+
+        // Total usulan pada sub event ini (samakan dengan daftar di Rekap Pendaftar)
+        $se->inovasi_count = $ids->count();
 
         // Jumlah usulan yang sudah punya minimal 1 nilai (Tahap 1)
-        $se->dinilai_count = $usulanIds->isEmpty()
-            ? 0
-            : PenilaianUsulan::whereIn('usulan_id', $usulanIds)
-                ->distinct('usulan_id')
-                ->count('usulan_id');
+        $se->dinilai_count = $ids->intersect($dinilaiIds)->count();
     }
 
     return view('inovasi.rekapnilai', compact('subEvents'));
@@ -81,40 +93,45 @@ class InovasiController extends Controller
 
     // ── Rekap semua pendaftar per sub event (admin) ───────────────────────
     public function rekapPendaftar($subEventId)
-    {
-        $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
-        $subEventNama = $subEvent->sub_event;
+{
+    $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
+    $subEventNama = $subEvent->sub_event;
 
-        $usulans = Usulan::with('bidang')
-            ->where('sub_event_id', $subEventId)
-            ->get();
+    // Samakan dengan hitungan di Rekap Nilai → JANGAN difilter submitted()
+    $usulans = Usulan::with('bidang')
+        ->where('sub_event_id', $subEventId)
+        ->orderBy('inovator')
+        ->get();
 
-        $usulanIds = $usulans->pluck('id')->toArray();
+    $usulanIds = $usulans->pluck('id')->toArray();
 
-        $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
-        $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+    // Group nilai per usulan sekali saja (hindari N+1)
+    $nilaiT1Rows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
+    $nilaiT2Rows = Pemenang::whereIn('usulan_id', $usulanIds)->get()->groupBy('usulan_id');
 
-        $usulan = $usulans->map(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
-            $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
-            $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
-            $total = ($t1 !== '-' && $t2 !== '-')
-                ? round(((float)$t1 + (float)$t2) / 2, 2)
-                : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
+    $usulan = $usulans->map(function ($u) use ($nilaiT1Rows, $nilaiT2Rows) {
+        $t1 = $this->hitungNilaiAkhir($nilaiT1Rows->get($u->id) ?? collect());
+        $t2 = $this->hitungNilaiAkhir($nilaiT2Rows->get($u->id) ?? collect());
 
-            return [
-                'judul'        => $u->judul ?? '',
-                'instansi'     => $u->inovator ?? '',
-                'link_youtube' => $u->link_video ?? '',
-                'no_hp'        => $u->ketua_wa ?? '',
-                'kategori'     => $u->kategori ?? '',
-                'nilai_t1'     => $t1,
-                'nilai_t2'     => $t2,
-                'nilai_total'  => $total,
-            ];
-        });
+        $total = ($t1 !== '-' && $t2 !== '-')
+            ? round(((float) $t1 + (float) $t2) / 2, 2)
+            : ($t1 !== '-' ? $t1 : ($t2 !== '-' ? $t2 : '-'));
 
-        return view('inovasi.rekap_pendaftar', compact('subEventNama', 'usulan'));
-    }
+        return [
+            // ⬇️ FIX: kolom "Judul Inovasi" pakai nama_inovasi (fallback ke judul)
+            'judul'        => $u->nama_inovasi ?: ($u->judul ?? '-'),
+            'instansi'     => $u->inovator ?? '-',
+            'link_youtube' => $u->link_video ?? '',
+            'no_hp'        => $u->ketua_wa ?? '-',
+            'kategori'     => $u->kategori ?? '-',
+            'nilai_t1'     => $t1,
+            'nilai_t2'     => $t2,
+            'nilai_total'  => $total,
+        ];
+    })->values();
+
+    return view('inovasi.rekap_pendaftar', compact('subEventNama', 'usulan'));
+}
 
     // ── Riwayat usulan (UC-08 & UC-09) ─────────────────────────────────────
     // PERUBAHAN: Admin Bapperida melihat SEMUA usulan yang sudah dikirim;
