@@ -187,7 +187,7 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-dark" style="min-width:120px;" data-bs-dismiss="modal">Batal</button>
           <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
@@ -210,11 +210,11 @@
         Tindakan ini tidak dapat dibatalkan.
       </p>
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark" style="min-width:120px;" data-bs-dismiss="modal">Batal</button>
         <form id="formHapus" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger">
+          <button type="submit" class="btn btn-danger" style="min-width:120px;">
             <i class="bi bi-trash3 me-1"></i> Ya, Hapus
           </button>
         </form>
