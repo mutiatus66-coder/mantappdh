@@ -154,7 +154,11 @@
     </div>
   </div>
 
-  @include('partials.history')
+  @auth
+    @if(auth()->user()->hak_akses === 'admin_bapperida')
+        @include('partials.history')
+    @endif
+  @endauth
 
   <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
     <i class="ki-outline ki-arrow-up"></i>
