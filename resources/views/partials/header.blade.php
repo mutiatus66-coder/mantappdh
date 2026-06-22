@@ -19,15 +19,18 @@
       <div class="d-flex align-items-stretch flex-shrink-0">
 
         {{-- Riwayat Halaman --}}
-      <div class="d-flex align-items-center ms-1 ms-lg-3">
-        <a href="#"
-          id="historyToggleBtn"
-          onclick="toggleHistoryPanel()"
-          class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
-          title="Riwayat Halaman">
-          <i class="bi bi-clock-history fs-1"></i>
-        </a>
-      </div>
+      @auth
+        @if(auth()->user()->hak_akses === 'admin_bapperida')
+            <div class="d-flex align-items-center ms-3">
+                <button type="button"
+                        onclick="toggleHistoryPanel()"
+                        class="btn btn-icon btn-active-light-primary"
+                        title="Riwayat Halaman">
+                    <i class="bi bi-clock-history fs-2"></i>
+                </button>
+            </div>
+        @endif
+    @endauth
 
         {{-- Ubah tema --}}
         <div class="d-flex align-items-center ms-1 ms-lg-3">

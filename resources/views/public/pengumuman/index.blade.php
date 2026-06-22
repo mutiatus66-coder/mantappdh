@@ -5,6 +5,9 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4 fw-bold">Pengumuman</h2>
+            <a href=" route('index') " class="btn btn-outline-secondary rounded-0 fw-semibold">
+                ← Kembali
+            </a>
         </div>
     </div>
     <div class="row">
