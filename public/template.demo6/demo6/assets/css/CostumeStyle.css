@@ -1507,3 +1507,16 @@
     transition: opacity 0.15s;
 }
 .ri-toast-close:hover { opacity: 1; }
+.history-user {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 0.7rem;
+    color: var(--ri-text-muted, #6b7280);
+    font-weight: 500;
+}
+.history-user .bi {
+    font-size: 0.8rem;
+    color: #2563eb;
+}

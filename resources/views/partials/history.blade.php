@@ -72,7 +72,10 @@
     white-space: nowrap;
   }
 </style>
-
+<script>
+    // Nama user yang sedang aktif (mendukung fitur "login as")
+    window.RI_CURRENT_USER = @json(auth()->user()->nama ?? 'Pengguna');
+</script>
 <script>
 (function () {
 
@@ -147,6 +150,7 @@
         const path  = window.location.pathname;
         const title = customTitle || getPageTitle(path);
         const now   = Date.now();
+        const user  = window.RI_CURRENT_USER || 'Pengguna';
 
         let hist = getHistory();
 
@@ -156,7 +160,7 @@
             hist = hist.filter(h => !(h.url === url && (h.action || 'index') === 'index'));
         }
 
-        hist.unshift({ url, path, title, action: action || 'index', time: now, icon: getPageIcon(path) });
+        hist.unshift({ url, path, title, action: action || 'index', time: now, icon: getPageIcon(path), user: user });
 
         if (hist.length > MAX_HISTORY) hist = hist.slice(0, MAX_HISTORY);
 
@@ -206,14 +210,17 @@
             a.href = h.url;
             a.className = 'history-item' + (isCurrent ? ' current' : '');
             a.innerHTML = `
-                <div class="history-icon"><i class="bi ${h.icon || 'bi-file-earmark'}"></i></div>
-                <div style="flex:1; min-width:0;">
-                    <div class="history-title">${h.title}</div>
-                    <div class="history-meta">
-                        <span class="history-action" style="background:${meta.bg}; color:${meta.fg};">${meta.label}</span>
-                        <span class="history-time">${timeAgo(h.time)}</span>
-                    </div>
+            <div class="history-icon"><i class="bi ${h.icon || 'bi-file-earmark'}"></i></div>
+            <div style="flex:1; min-width:0;">
+                <div class="history-title">${h.title}</div>
+                <div class="history-meta">
+                    <span class="history-action" style="background:${meta.bg}; color:${meta.fg};">${meta.label}</span>
+                    <span class="history-time">${timeAgo(h.time)}</span>
                 </div>
+                <div class="history-user">
+                    <i class="bi bi-person-circle me-1"></i>${h.user || 'Pengguna'}
+                </div>
+            </div>
             `;
             list.appendChild(a);
         });
