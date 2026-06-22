@@ -2,13 +2,10 @@
     <div class="rv-card-header">
         <h6 class="rv-card-title">{{ $title }}</h6>
         <div class="d-flex gap-2">
-            <button class="btn-rv-rank btn btn-primary"
-                    data-table="{{ $tableId }}">
+            <button class="btn-rv-rank btn btn-primary" data-table="{{ $tableId }}">
                 <i class="bi bi-sort-numeric-down me-1"></i>Rangking
             </button>
-            <button class="btn-rv-excel btn btn-info"
-                    data-table="{{ $tableId }}"
-                    data-filename="{{ $filename }}">
+            <button class="btn-rv-excel btn btn-info" data-table="{{ $tableId }}" data-filename="{{ $filename }}">
                 <i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel
             </button>
         </div>
@@ -46,10 +43,9 @@
             </thead>
             <tbody>
                 @forelse($nominasi as $i => $nom)
-                <tr data-id="{{ $nom['id'] }}">
+                <tr data-id="{{ $nom['id'] }}" data-group="{{ $group }}">
                     <td class="text-center">
-                        <input type="checkbox"
-                               class="rv-checkbox chk-row"
+                        <input type="checkbox" class="rv-checkbox chk-row"
                                data-group="{{ $group }}"
                                data-id="{{ $nom['id'] }}"
                                {{ !empty($nom['lolos']) ? 'checked' : '' }}>
@@ -70,7 +66,8 @@
                         <button class="btn btn-sm btn-outline-primary btn-input-nilai"
                                 data-inovator-id="{{ $nom['id'] }}"
                                 data-inovator="{{ $nom['inovator'] }}"
-                                data-nama-inovasi="{{ $nom['nama_inovasi'] }}">
+                                data-nama-inovasi="{{ $nom['nama_inovasi'] }}"
+                                data-group="{{ $group }}">
                             <i class="bi bi-pencil-square"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-warning btn-catatan"
@@ -96,37 +93,34 @@
     </div>
 </div>
 
-{{-- ── Modal Input Nilai Tahap 1 ── --}}
+{{-- ════════ MODAL: dipush ke stack agar dirender di luar tab ════════ --}}
 @if($penilaiLogin)
-<div class="modal fade" id="modalNilaiTahap1{{ ucfirst($group) }}" tabindex="-1">
+@push('penilaian-modals')
+
+{{-- ── Modal Input Nilai Tahap 1 ── --}}
+<div class="modal fade" id="modalNilaiTahap1{{ ucfirst($group) }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-pencil-square me-2"></i>Input Nilai Tahap 1
-                </h5>
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Input Nilai Tahap 1</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3 p-3 rounded" style="background:rgba(27,132,255,0.06); border:1px solid rgba(27,132,255,0.15);">
-                    <div class="fw-semibold modal-inovator-nama"></div>
-                    <div class="text-muted small modal-inovasi-nama"></div>
+                    <div class="fw-semibold modal-inovator-nama-{{ $group }}"></div>
+                    <div class="text-muted small modal-inovasi-nama-{{ $group }}"></div>
                 </div>
-
                 <div id="formIndikatorWrapper{{ ucfirst($group) }}">
                     @foreach($indikators as $ind)
                     <div class="mb-4">
-                        <div class="fw-semibold mb-2" style="color:var(--ri-primary)">
-                            {{ $ind['nama_indikator'] }}
-                        </div>
+                        <div class="fw-semibold mb-2" style="color:var(--ri-primary)">{{ $ind['nama_indikator'] }}</div>
                         @foreach($ind['keterangans'] as $k)
                         <div class="d-flex align-items-start gap-3 mb-2 p-2 rounded" style="background:#f8f9fa;">
                             <div class="flex-grow-1 small">
-                                <span class="badge bg-secondary me-1">{{ $k['nilai_minimal'] }}–{{ $k['nilai_maksimal'] }}</span>
+                                <span class="badge bg-secondary me-1">{{ $k['nilai_minimal'] }} – {{ $k['nilai_maksimal'] }}</span>
                                 {{ $k['keterangan'] }}
                             </div>
-                            <input type="number"
-                                   class="form-control form-control-sm input-nilai-item"
+                            <input type="number" class="form-control form-control-sm input-nilai-item"
                                    style="width:80px; flex-shrink:0;"
                                    data-keterangan-id="{{ $k['id'] }}"
                                    data-group="{{ $group }}"
@@ -137,7 +131,6 @@
                         @endforeach
                     </div>
                     @endforeach
-
                     @if(empty($indikators))
                     <div class="text-muted text-center py-3">
                         <i class="bi bi-exclamation-circle me-1"></i>
@@ -155,15 +148,13 @@
         </div>
     </div>
 </div>
-@endif
-@if($penilaiLogin)
-<div class="modal fade" id="modalCatatan{{ ucfirst($group) }}" tabindex="-1">
+
+{{-- ── Modal Catatan Penilai ── --}}
+<div class="modal fade" id="modalCatatan{{ ucfirst($group) }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-chat-left-text me-2"></i>Catatan Penilai
-                </h5>
+                <h5 class="modal-title"><i class="bi bi-chat-left-text me-2"></i>Catatan Penilai</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -172,7 +163,7 @@
                     <div class="text-muted small modal-catatan-inovasi-{{ $group }}"></div>
                 </div>
                 <textarea class="form-control textarea-catatan-{{ $group }}" rows="5"
-                        placeholder="Tulis catatan untuk usulan ini..."></textarea>
+                          placeholder="Tulis catatan untuk usulan ini..."></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -183,4 +174,6 @@
         </div>
     </div>
 </div>
+
+@endpush
 @endif
