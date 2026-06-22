@@ -30,12 +30,12 @@
               </p>
             </div>
             <div class="d-flex gap-2">
+              <a href="{{ route('indikator.tahap1') }}" class="btn btn-dark">
+                 ← Kembali
+              </a>
               <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIndikator">
                 Tambah Indikator
               </button>
-              <a href="{{ route('indikator.tahap1') }}" class="btn btn-secondary">
-                 Kembali
-              </a>
             </div>
           </div>
 
@@ -126,8 +126,8 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-warning">Simpan</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
     </div>
@@ -156,7 +156,7 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusIndikator" method="POST">
           @csrf
           @method('DELETE')
