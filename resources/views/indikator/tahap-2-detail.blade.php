@@ -19,13 +19,15 @@
         @endif
 
         {{-- Tombol atas --}}
-        <div class="d-flex gap-2 mb-4">
-          <button class="btn btn-primary" id="btnTambahIndikator">
-            Tambah Indikator
-          </button>
-          <a href="{{ route('indikator.tahap2') }}" class="btn btn-secondary">
-            Kembali
-          </a>
+        <div class="d-flex mb-8">
+          <div class="d-flex gap-4 ms-auto">
+            <a href="{{ route('indikator.tahap2') }}" class="btn btn-dark">
+              ← Kembali
+            </a>
+            <button class="btn btn-primary" id="btnTambahIndikator">
+              Tambah Indikator
+            </button>
+          </div>
         </div>
 
         <div class="sub-card">
@@ -185,8 +187,8 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
     </div>
