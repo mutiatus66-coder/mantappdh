@@ -1,81 +1,74 @@
+{{-- resources/views/master/penilaian/tahap2/show.blade.php --}}
 @extends('index', ['dummy' => true])
-
 @push('styles')
-    <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
+<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
 @endpush
-
 @section('content')
-<div class="all-container">
-
-    {{-- Header --}}
-    <div class="rv-page-header">
+@if(session('success'))
+<div class="alert alert-dismissible fade show mb-4" role="alert"
+     style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e; margin:0 20px;">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+<div class="page-container">
+    {{-- HEADER --}}
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <p class="rv-sub-label">Sub Event</p>
-            <h3 class="rv-page-title">{{ $subEvent['sub_event'] }}</h3>
+            <h3 class="ec-title">Penilaian Tahap 2 — {{ $subEvent['sub_event'] }}</h3>
+            <p class="ec-subtitle">Tahun {{ $subEvent['tahun'] }}</p>
         </div>
-        <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i> Kembali
+        <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-warning btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Kembali
         </a>
     </div>
 
-    {{-- Warning jika tidak ada data lolos --}}
-    @if(empty($nominasiUmum) && empty($nominasiPelajar))
-    <div class="alert mb-4 d-flex align-items-center gap-3"
-         style="background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); color:#854d0e; border-radius:10px; padding:16px 20px;">
-        <i class="bi bi-exclamation-triangle-fill fs-5" style="color:#ca8a04;"></i>
-        <div>
-            <div class="fw-semibold">Belum ada data yang lolos Tahap 1</div>
-            <div class="small mt-1">Silakan tentukan kelulusan peserta di
-                <a href="{{ route('penilaian.tahap1.show', $subEvent['id']) }}" class="fw-semibold" style="color:#92400e;">Penilaian Tahap 1</a>
-                terlebih dahulu.
-            </div>
-        </div>
-    </div>
-    @endif
+    {{-- TABS --}}
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active"
+                    data-bs-toggle="tab"
+                    data-bs-target="#tab-umum"
+                    type="button">
+                Umum
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#tab-pelajar"
+                    type="button">
+                Pelajar
+            </button>
+        </li>
+    </ul>
 
-    {{-- Tabs --}}
-    <div class="rv-tabs-wrap">
-        <ul class="nav rv-tabs" id="tabNominator" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="rv-tab-btn active"
-                        id="tab-umum" data-bs-toggle="tab" data-bs-target="#panel-umum"
-                        type="button" role="tab">Umum</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="rv-tab-btn"
-                        id="tab-pelajar" data-bs-toggle="tab" data-bs-target="#panel-pelajar"
-                        type="button" role="tab">Pelajar</button>
-            </li>
-        </ul>
-    </div>
-
-    <div class="tab-content" id="tabNominatorContent">
-        {{-- Tab Umum --}}
-        <div class="tab-pane fade show active" id="panel-umum" role="tabpanel">
+    <div class="tab-content">
+        {{-- Panel UMUM --}}
+        <div class="tab-pane fade show active" id="tab-umum" role="tabpanel">
             @include('master.penilaian.tahap2.panel', [
-                'group'                 => 'umum',
-                'title'                 => 'Nominator Umum',
-                'tableId'               => 'tableUmum',
-                'filename'              => 'nominasi-umum',
-                'nominasi'              => $nominasiUmum,
-                'penilai'               => $penilai,
-                'indikators'            => $indikators,
-                'penilaiLogin'          => $penilaiLogin,
-                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
+                'title'        => 'Nominasi Umum',
+                'tableId'      => 'tbl-nominasi-umum',
+                'filename'     => 'nominasi-umum-tahap2',
+                'group'        => 'umum',
+                'nominasi'     => $nominasiUmum,
+                'penilai'      => $penilai,
+                'penilaiLogin' => $penilaiLogin,
+                'rankingLogin' => $rankingLogin,
             ])
         </div>
-        {{-- Tab Pelajar --}}
-        <div class="tab-pane fade" id="panel-pelajar" role="tabpanel">
+        {{-- Panel PELAJAR --}}
+        <div class="tab-pane fade" id="tab-pelajar" role="tabpanel">
             @include('master.penilaian.tahap2.panel', [
-                'group'                 => 'pelajar',
-                'title'                 => 'Nominator Pelajar',
-                'tableId'               => 'tablePelajar',
-                'filename'              => 'nominasi-pelajar',
-                'nominasi'              => $nominasiPelajar,
-                'penilai'               => $penilai,
-                'indikators'            => $indikators,
-                'penilaiLogin'          => $penilaiLogin,
-                'nilaiLoginPerInovator' => $nilaiLoginPerInovator,
+                'title'        => 'Nominasi Pelajar',
+                'tableId'      => 'tbl-nominasi-pelajar',
+                'filename'     => 'nominasi-pelajar-tahap2',
+                'group'        => 'pelajar',
+                'nominasi'     => $nominasiPelajar,
+                'penilai'      => $penilai,
+                'penilaiLogin' => $penilaiLogin,
+                'rankingLogin' => $rankingLogin,
             ])
         </div>
     </div>
@@ -84,179 +77,147 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const NILAI_URL = @json(route('penilaian.tahap2.simpan.nilai', $subEvent['id']));
-    const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+(function () {
+    'use strict';
 
-    // { usulanId: { keteranganTahap2Id: nilai } }
-    const nilaiDbRaw = @json($nilaiLoginPerInovator ?? []);
-    const nilaiDb = {};
-    Object.keys(nilaiDbRaw).forEach(uid => {
-        nilaiDb[String(uid)] = {};
-        Object.keys(nilaiDbRaw[uid] ?? {}).forEach(kid => {
-            nilaiDb[String(uid)][String(kid)] = nilaiDbRaw[uid][kid];
+    const subEventId = {{ $subEvent['id'] }};
+
+    // ── Excel Export ──────────────────────────────────────────────────────────
+    document.querySelectorAll('.btn-rv-excel').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tableId  = this.dataset.table;
+            const filename = this.dataset.filename ?? 'export';
+            const table    = document.getElementById(tableId);
+            if (!table) return;
+
+            // Pakai SheetJS jika tersedia, fallback ke blob CSV
+            if (typeof XLSX !== 'undefined') {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.table_to_sheet(table);
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                XLSX.writeFile(wb, filename + '.xlsx');
+            } else {
+                // Fallback sederhana: download HTML table sebagai .xls
+                const html = table.outerHTML;
+                const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+                const a    = document.createElement('a');
+                a.href     = URL.createObjectURL(blob);
+                a.download = filename + '.xls';
+                a.click();
+            }
         });
     });
 
-    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-    let activeInovatorId = null;
+    // ── Simpan Ranking ────────────────────────────────────────────────────────
+    document.querySelectorAll('.btn-simpan-ranking').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const group = this.dataset.group;
+            const pane  = document.getElementById('tab-' + group);
+            if (!pane) return;
 
-    // Buka Modal (di-scope ke modal grup yang benar)
-    document.querySelectorAll('.btn-input-nilai-t2').forEach(btn => {
-        btn.addEventListener('click', function () {
-            activeInovatorId = String(this.dataset.inovatorId);
+            const inputs  = pane.querySelectorAll('.input-ranking');
+            const ranking = {};
+            let valid     = true;
 
-            const group = this.closest('.rv-card')
-                ?.querySelector('.btn-simpan-nilai-modal-t2')?.dataset.group ?? 'umum';
-            const modalEl = document.getElementById('modalNilaiTahap2' + cap(group));
-            if (!modalEl) return;
-
-            modalEl.querySelectorAll('.modal-inovator-nama-t2')
-                .forEach(el => el.textContent = this.dataset.inovator);
-            modalEl.querySelectorAll('.modal-inovasi-nama-t2')
-                .forEach(el => el.textContent = this.dataset.namaInovasi);
-
-            const savedNilai = nilaiDb[activeInovatorId] ?? {};
-            modalEl.querySelectorAll('.input-nilai-item-t2').forEach(inp => {
-                const kid = String(inp.dataset.keteranganId);
-                inp.value = savedNilai[kid] !== undefined ? savedNilai[kid] : '';
+            inputs.forEach(inp => {
+                const val = inp.value.trim();
+                if (val === '') return;                        // boleh kosong
+                const num = parseInt(val, 10);
+                if (isNaN(num) || num < 1) {
+                    inp.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    inp.classList.remove('is-invalid');
+                    ranking[inp.dataset.usulanId] = num;
+                }
             });
 
-            bootstrap.Modal.getOrCreateInstance(modalEl).show();
-        });
-    });
-
-    // Simpan Nilai
-    document.querySelectorAll('.btn-simpan-nilai-modal-t2').forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (!activeInovatorId) return;
-            const group = this.dataset.group;
-            const nilai = {};
-            document.querySelectorAll('.input-nilai-item-t2[data-group="' + group + '"]')
-                .forEach(inp => {
-                    if (inp.value !== '') nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
-                });
-            if (Object.keys(nilai).length === 0) {
-                toast('Isi minimal satu nilai terlebih dahulu.', 'error');
+            if (!valid) {
+                showToast('danger', 'Nilai ranking harus berupa angka ≥ 1.');
                 return;
             }
 
-            const orig     = this.innerHTML;
-            this.disabled  = true;
-            this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+            if (Object.keys(ranking).length === 0) {
+                showToast('warning', 'Belum ada ranking yang diisi.');
+                return;
+            }
 
-            fetch(NILAI_URL, {
-                method : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept'      : 'application/json',
-                    'X-CSRF-TOKEN': CSRF,
-                },
-                body: JSON.stringify({ usulan_id: activeInovatorId, nilai }),
-            })
-            .then(r => r.json())
-            .then(data => {
+            const btnEl = this;
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Menyimpan…';
+
+            try {
+                const res = await fetch(`/penilaian/tahap-2/${subEventId}/ranking`, {
+                    method:  'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept':       'application/json',
+                    },
+                    body: JSON.stringify({ ranking }),
+                });
+                const data = await res.json();
                 if (data.success) {
-                    toast('Nilai berhasil disimpan!', 'success');
-                    nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
-
-                    const row = document.querySelector(`tr[data-id="${activeInovatorId}"]`);
-                    if (row) {
-                        if (data.total_nilai !== undefined) {
-                            const nilaiCell = row.querySelector('.rv-nilai');
-                            if (nilaiCell) {
-                                nilaiCell.dataset.nilai = data.total_nilai;
-                                nilaiCell.textContent   = data.total_nilai > 0
-                                    ? parseFloat(data.total_nilai).toFixed(1)
-                                    : '-';
-                            }
-                        }
-                        if (data.nilai_penilai !== undefined) {
-                            const penilaiLoginId = {{ $penilaiLogin?->id ?? 'null' }};
-                            if (penilaiLoginId) {
-                                const pc = row.querySelector(`.rv-nilai-penilai[data-penilai-id="${penilaiLoginId}"]`);
-                                if (pc) pc.textContent = parseFloat(data.nilai_penilai).toFixed(2);
-                            }
-                        }
-                        if (data.sudah_lengkap !== undefined) {
-                            const hasAksi = {{ $penilaiLogin ? 'true' : 'false' }};
-                            const statusCell = row.querySelector(`td:nth-last-child(${hasAksi ? 2 : 1})`);
-                            if (statusCell) {
-                                statusCell.innerHTML = data.sudah_lengkap
-                                    ? '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Lengkap</span>'
-                                    : '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Sebagian</span>';
-                            }
-                        }
-                    }
-                    const modalEl = document.getElementById('modalNilaiTahap2' + cap(group));
-                    bootstrap.Modal.getInstance(modalEl)?.hide();
+                    showToast('success', data.message ?? 'Ranking berhasil disimpan.');
+                    updateTotalRank(pane, ranking);
                 } else {
-                    toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
+                    showToast('danger', data.message ?? 'Gagal menyimpan ranking.');
                 }
-            })
-            .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
-            .finally(() => { this.disabled = false; this.innerHTML = orig; });
+            } catch (e) {
+                showToast('danger', 'Terjadi kesalahan jaringan.');
+            } finally {
+                btnEl.disabled = false;
+                btnEl.innerHTML = '<i class="bi bi-trophy me-1"></i>Simpan Ranking';
+            }
         });
     });
 
-    // Rangking
-    document.querySelectorAll('.btn-rv-rank').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const tbody = document.querySelector('#' + this.dataset.table + ' tbody');
-            if (!tbody) return;
-            const rows = [...tbody.querySelectorAll('tr')].filter(row => row.querySelector('.rv-nilai'));
-            rows.sort((a, b) => {
-                const nilaiA = parseFloat(a.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-                const nilaiB = parseFloat(b.querySelector('.rv-nilai')?.dataset.nilai) || 0;
-                return nilaiB - nilaiA;
-            });
-            rows.forEach((row, i) => {
-                const rankCell = row.querySelector('.rv-rank-cell');
-                if (rankCell) rankCell.textContent = i + 1;
-                const no = row.querySelector('.row-no');
-                if (no) no.textContent = i + 1;
-                tbody.appendChild(row);
-            });
+    // Setelah simpan ranking → update kolom "Total Rank" di baris terkait
+    // (hanya tambah nilai baru ke total yang sudah ada; idealnya reload, tapi
+    //  untuk UX langsung kita set nilai input saja — total rank dihitung server)
+    function updateTotalRank(pane, ranking) {
+        // Tidak bisa menghitung total rank dari sisi klien (perlu data penilai lain)
+        // Cukup tandai baris sudah diranking
+        Object.entries(ranking).forEach(([usulanId, rank]) => {
+            const cell = pane.querySelector(`.rv-total-rank[data-usulan-id="${usulanId}"]`);
+            if (cell) {
+                // Refresh total rank dengan reload ringan setelah semua selesai
+                cell.innerHTML = `<span class="badge bg-secondary">${rank}</span>`;
+            }
         });
-    });
-
-    // Export CSV
-    document.querySelectorAll('.btn-rv-excel').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const table = document.getElementById(this.dataset.table);
-            if (!table) return;
-            const csv = [...table.querySelectorAll('tr')].map(row =>
-                [...row.querySelectorAll('th, td')]
-                    .map(c => '"' + c.innerText.trim().replace(/"/g, '""') + '"')
-                    .join(',')
-            ).join('\\n');
-            const a    = document.createElement('a');
-            a.href     = URL.createObjectURL(new Blob(['\\ufeff' + csv], { type: 'text/csv;charset=utf-8;' }));
-            a.download = this.dataset.filename + '.csv';
-            a.click();
-            URL.revokeObjectURL(a.href);
-        });
-    });
-
-    // Toast
-    function toast(msg, type = 'success') {
-        const el = document.createElement('div');
-        el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
-        el.innerHTML = `
-            <span class="ri-toast-icon">
-              <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
-            </span>
-            <span class="ri-toast-msg">${msg}</span>
-            <button class="ri-toast-close" onclick="this.parentElement.remove()">
-              <i class="bi bi-x-lg"></i>
-            </button>`;
-        document.body.appendChild(el);
-        requestAnimationFrame(() => el.classList.add('ri-toast-show'));
-        setTimeout(() => {
-            el.classList.remove('ri-toast-show');
-            setTimeout(() => el.remove(), 300);
-        }, 3500);
     }
-});
+
+    // ── Toast Helper ──────────────────────────────────────────────────────────
+    function showToast(type, message) {
+        const colors = {
+            success: '#198754',
+            danger:  '#dc3545',
+            warning: '#856404',
+            info:    '#0dcaf0',
+        };
+        const bg = {
+            success: 'rgba(25,135,84,0.1)',
+            danger:  'rgba(220,53,69,0.1)',
+            warning: 'rgba(245,158,11,0.1)',
+            info:    'rgba(13,202,240,0.1)',
+        };
+
+        const wrap = document.createElement('div');
+        wrap.style.cssText = `
+            position:fixed; top:20px; right:20px; z-index:9999;
+            background:${bg[type] ?? bg.info};
+            border:1px solid ${colors[type] ?? colors.info};
+            color:${colors[type] ?? colors.info};
+            padding:12px 20px; border-radius:8px;
+            font-size:0.875rem; font-weight:500;
+            max-width:360px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn .2s ease;
+        `;
+        wrap.textContent = message;
+        document.body.appendChild(wrap);
+        setTimeout(() => wrap.remove(), 3500);
+    }
+
+})();
 </script>
 @endpush

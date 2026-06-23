@@ -136,18 +136,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rekap-pendaftar/{id}', [InovasiController::class, 'rekapPendaftar'])->name('rekap-pendaftar');
 });
 
-    // ── Penilaian ─────────────────────────────────────────────────────────────
-    Route::prefix('penilaian')->name('penilaian.')->group(function () {
-        Route::get('/tahap-1',              [PenilaianController::class, 'tahap1'])       ->name('tahap1.index');
-        Route::get('/tahap-1/{id}',         [PenilaianController::class, 'tahap1Show'])   ->name('tahap1.show');
-        Route::post('/tahap-1/{id}/simpan',       [PenilaianController::class, 'tahap1Simpan'])      ->name('tahap1.simpan');
-        Route::post('/tahap-1/{id}/simpan-nilai', [PenilaianController::class, 'tahap1SimpanNilai'])->name('tahap1.simpan.nilai');
-        Route::get('/tahap-2',                    [PenilaianController::class, 'tahap2'])             ->name('tahap2.index');
-        Route::get('/tahap-2/{id}',               [PenilaianController::class, 'tahap2Show'])         ->name('tahap2.show');
-        Route::post('/tahap-2/{id}/simpan-nilai', [PenilaianController::class, 'tahap2Simpan'])       ->name('tahap2.simpan.nilai');
-        Route::post('/catatan/{usulanId}',  [PenilaianController::class, 'simpanCatatan'])->name('catatan.simpan');
-        Route::get('/catatan/{usulanId}',   [PenilaianController::class, 'getCatatan'])->name('catatan.get');
-    });
+// ── Penilaian ─────────────────────────────────────────────────────────────
+
+Route::prefix('penilaian')->name('penilaian.')->group(function () {
+    Route::get('/tahap-1',                    [PenilaianController::class, 'tahap1'])             ->name('tahap1.index');
+    Route::get('/tahap-1/{id}',               [PenilaianController::class, 'tahap1Show'])         ->name('tahap1.show');
+    Route::post('/tahap-1/{id}/simpan',       [PenilaianController::class, 'tahap1Simpan'])       ->name('tahap1.simpan');
+    Route::post('/tahap-1/{id}/simpan-nilai', [PenilaianController::class, 'tahap1SimpanNilai'])  ->name('tahap1.simpan.nilai');
+
+    Route::get('/tahap-2',            [PenilaianController::class, 'tahap2'])             ->name('tahap2.index');
+    Route::get('/tahap-2/{id}',       [PenilaianController::class, 'tahap2Show'])         ->name('tahap2.show');
+    // Route simpan-nilai Tahap 2 DIHAPUS — Tahap 2 tidak punya penilaian sendiri
+    Route::post('/tahap-2/{id}/ranking', [PenilaianController::class, 'tahap2SimpanRanking'])->name('tahap2.ranking');
+
+    Route::post('/catatan/{usulanId}', [PenilaianController::class, 'simpanCatatan'])->name('catatan.simpan');
+    Route::get('/catatan/{usulanId}',  [PenilaianController::class, 'getCatatan'])    ->name('catatan.get');
+});
 
     // ── Indikator ─────────────────────────────────────────────────────────────
     Route::prefix('indikator')->name('indikator.')->group(function () {
