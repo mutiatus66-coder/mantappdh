@@ -32,10 +32,11 @@
                     <th class="text-center" style="width:48px">No</th>
                     <th>Inovator</th>
                     <th>Nama Inovasi</th>
-                    <th class="text-center" style="width:100px">Total Nilai</th>
+                    <th class="text-center" style="width:110px">Total Nilai</th>
                     @foreach($penilai as $p)
-                    <th class="text-center" style="width:84px">{{ $p['nama_singkat'] }}</th>
+                    <th class="text-center" style="width:84px" title="{{ $p['nama'] }}">{{ $p['nama_singkat'] }}</th>
                     @endforeach
+                    <th class="text-center" style="width:110px">Status</th>
                     @if($penilaiLogin)
                     <th class="text-center" style="width:80px">Aksi</th>
                     @endif
@@ -43,12 +44,19 @@
             </thead>
             <tbody>
                 @forelse($nominasi as $i => $nom)
-                <tr data-id="{{ $nom['id'] }}" data-group="{{ $group }}">
+                @php
+                    $sudahLengkap = $nom['semua_penilai_sudah_nilai'] ?? false;
+                    $sudahDinilaiLogin = isset($nilaiLoginPerInovator[$nom['id']]) && count($nilaiLoginPerInovator[$nom['id']]) > 0;
+                @endphp
+                <tr data-id="{{ $nom['id'] }}" data-group="{{ $group }}"
+                    data-sudah-lengkap="{{ $sudahLengkap ? '1' : '0' }}">
                     <td class="text-center">
+                        {{-- Checkbox hanya bisa dicentang jika semua penilai sudah menilai --}}
                         <input type="checkbox" class="rv-checkbox chk-row"
                                data-group="{{ $group }}"
                                data-id="{{ $nom['id'] }}"
-                               {{ !empty($nom['lolos']) ? 'checked' : '' }}>
+                               {{ $sudahLengkap ? '' : 'disabled' }}
+                               title="{{ $sudahLengkap ? 'Siap diloloskan' : 'Belum semua penilai menilai' }}">
                     </td>
                     <td class="text-center row-no">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
@@ -57,24 +65,41 @@
                         {{ $nom['total_nilai'] > 0 ? number_format($nom['total_nilai'], 2) : '—' }}
                     </td>
                     @foreach($penilai as $p)
-                    <td class="text-center">
+                    <td class="text-center rv-nilai-penilai" data-penilai-id="{{ $p['id'] }}">
                         {{ isset($nom['nilai'][$p['id']]) ? number_format($nom['nilai'][$p['id']], 2) : '—' }}
                     </td>
                     @endforeach
+                    <td class="text-center">
+                        @if($sudahLengkap)
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>Lengkap
+                            </span>
+                        @elseif($sudahDinilaiLogin)
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-hourglass-split me-1"></i>Sebagian
+                            </span>
+                        @else
+                            <span class="badge bg-secondary">
+                                <i class="bi bi-dash-circle me-1"></i>Belum
+                            </span>
+                        @endif
+                    </td>
                     @if($penilaiLogin)
                     <td class="text-center">
                         <button class="btn btn-sm btn-outline-primary btn-input-nilai"
                                 data-inovator-id="{{ $nom['id'] }}"
                                 data-inovator="{{ $nom['inovator'] }}"
                                 data-nama-inovasi="{{ $nom['nama_inovasi'] }}"
-                                data-group="{{ $group }}">
+                                data-group="{{ $group }}"
+                                title="Input/Edit Nilai">
                             <i class="bi bi-pencil-square"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-warning btn-catatan"
                                 data-usulan-id="{{ $nom['id'] }}"
                                 data-inovator="{{ $nom['inovator'] }}"
                                 data-nama-inovasi="{{ $nom['nama_inovasi'] }}"
-                                data-group="{{ $group }}">
+                                data-group="{{ $group }}"
+                                title="Catatan Penilai">
                             <i class="bi bi-chat-left-text"></i>
                         </button>
                     </td>
@@ -82,7 +107,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="{{ 5 + count($penilai) + ($penilaiLogin ? 1 : 0) }}" class="rv-empty">
+                    <td colspan="{{ 6 + count($penilai) + ($penilaiLogin ? 1 : 0) }}" class="rv-empty">
                         <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                         Belum ada data nominasi {{ $group }}.
                     </td>
@@ -113,7 +138,12 @@
                 <div id="formIndikatorWrapper{{ ucfirst($group) }}">
                     @foreach($indikators as $ind)
                     <div class="mb-4">
-                        <div class="fw-semibold mb-2" style="color:var(--ri-primary)">{{ $ind['nama_indikator'] }}</div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="fw-semibold" style="color:var(--ri-primary)">{{ $ind['nama_indikator'] }}</div>
+                            <span class="badge {{ $ind['jenis'] === 'makalah' ? 'bg-info' : 'bg-primary' }} text-uppercase" style="font-size:0.65rem">
+                                {{ $ind['jenis'] }}
+                            </span>
+                        </div>
                         @foreach($ind['keterangans'] as $k)
                         <div class="d-flex align-items-start gap-3 mb-2 p-2 rounded" style="background:#f8f9fa;">
                             <div class="flex-grow-1 small">

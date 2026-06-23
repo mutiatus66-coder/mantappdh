@@ -20,13 +20,17 @@ class Pemenang extends Model
         return $this->belongsTo(Usulan::class);
     }
 
+    /**
+     * FIX: penilai_id menyimpan Penilai.id (bukan User.id), konsisten dengan
+     * PenilaianController & FK migration (constrained('penilai')).
+     */
     public function penilai()
     {
-        return $this->belongsTo(User::class, 'penilai_id');
+        return $this->belongsTo(Penilai::class, 'penilai_id');
     }
 
     public function keteranganTahap2()
     {
-        return $this->belongsTo(KeteranganTahap2::class);
+        return $this->belongsTo(KeteranganTahap2::class, 'keterangan_tahap2_id');
     }
 }
