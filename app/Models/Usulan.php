@@ -12,6 +12,11 @@ class Usulan extends Model
 {
     protected $table = 'usulans';
 
+    // ── Status constants ──────────────────────────────────────────────────
+    const STATUS_MENUNGGU      = 'Menunggu';
+    const STATUS_SEDANG_DINILAI = 'Sedang Dinilai';
+    const STATUS_SELESAI       = 'Selesai';
+
     protected $fillable = [
         // Identitas
         'user_id', 'sub_event_id', 'bidang_id',

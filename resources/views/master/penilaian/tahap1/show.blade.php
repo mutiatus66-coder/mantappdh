@@ -12,9 +12,16 @@
             <p class="rv-sub-label">Sub Event</p>
             <h3 class="rv-page-title">{{ $subEvent['sub_event'] }}</h3>
         </div>
-        <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-primary">
+        <a href="{{ route('penilaian.tahap1.index') }}" class="btn btn-primary">
             <i class="bi bi-arrow-left"></i>Kembali
         </a>
+    </div>
+
+    {{-- ── Keterangan Status ── --}}
+    <div class="alert alert-info d-flex gap-3 flex-wrap align-items-center mb-3" style="font-size:.875rem">
+        <span><span class="badge bg-secondary me-1"><i class="bi bi-dash-circle"></i></span> Belum ada penilaian</span>
+        <span><span class="badge bg-warning text-dark me-1"><i class="bi bi-hourglass-split"></i></span> Sebagian penilai sudah menilai</span>
+        <span><span class="badge bg-success me-1"><i class="bi bi-check-circle"></i></span> Semua penilai sudah menilai — siap diloloskan</span>
     </div>
 
     {{-- ── Tabs ── --}}
@@ -78,10 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const CATATAN_BASE = '{{ url("penilaian/catatan") }}';
     const CSRF         = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
     const nilaiDb      = @json($nilaiLoginPerInovator ?? []);
+    const penilaiLoginId = {{ $penilaiLogin?->id ?? 'null' }};
 
     const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-    // ── Helper: tentukan group secara berlapis (anti salah-target) ──────────
+    // ── Helper: tentukan group secara berlapis ──────────────────────────
     function resolveGroup(el) {
         return el.dataset.group
             ?? el.closest('[data-group]')?.dataset.group
@@ -89,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ?? 'umum';
     }
 
-    // ── Toast ───────────────────────────────────────────────────────────────
+    // ── Toast ───────────────────────────────────────────────────────────
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
@@ -109,7 +117,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3500);
     }
 
-    // ── Modal Input Nilai Tahap 1 ───────────────────────────────────────────
+    // ── Update baris tabel setelah simpan nilai ─────────────────────────
+    function updateRowAfterSave(usulanId, data) {
+        const row = document.querySelector(`tr[data-id="${usulanId}"]`);
+        if (!row) return;
+
+        // Update total nilai
+        if (data.total_nilai !== undefined) {
+            const nilaiCell = row.querySelector('.rv-nilai');
+            if (nilaiCell) {
+                nilaiCell.dataset.nilai = data.total_nilai;
+                nilaiCell.textContent   = data.total_nilai > 0
+                    ? parseFloat(data.total_nilai).toFixed(2)
+                    : '—';
+            }
+        }
+
+        // Update nilai kolom penilai login
+        if (data.nilai_penilai !== undefined && penilaiLoginId) {
+            const penilaiCell = row.querySelector(`.rv-nilai-penilai[data-penilai-id="${penilaiLoginId}"]`);
+            if (penilaiCell) {
+                penilaiCell.textContent = parseFloat(data.nilai_penilai).toFixed(2);
+            }
+        }
+
+        // Update status badge dan checkbox
+        if (data.sudah_lengkap !== undefined) {
+            row.dataset.sudahLengkap = data.sudah_lengkap ? '1' : '0';
+
+            const statusCell = row.querySelector('td:nth-last-child(' + (penilaiLoginId ? '2' : '1') + ')');
+            if (statusCell) {
+                if (data.sudah_lengkap) {
+                    statusCell.innerHTML = '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Lengkap</span>';
+                } else {
+                    statusCell.innerHTML = '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Sebagian</span>';
+                }
+            }
+
+            const chk = row.querySelector('.chk-row');
+            if (chk) {
+                chk.disabled = !data.sudah_lengkap;
+                chk.title    = data.sudah_lengkap ? 'Siap diloloskan' : 'Belum semua penilai menilai';
+                if (!data.sudah_lengkap) chk.checked = false;
+            }
+
+            // Sync UI group setelah perubahan checkbox
+            const group = resolveGroup(row);
+            if (groups[group]) syncUI(groups[group]);
+        }
+    }
+
+    // ── Modal Input Nilai Tahap 1 ───────────────────────────────────────
     let activeInovatorId = null;
 
     document.querySelectorAll('.btn-input-nilai').forEach(btn => {
@@ -140,9 +198,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const modalEl = document.getElementById('modalNilaiTahap1' + cap(group));
 
             const nilai = {};
+            let allFilled = true;
             modalEl.querySelectorAll('.input-nilai-item').forEach(inp => {
-                if (inp.value !== '') nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
+                if (inp.value !== '') {
+                    nilai[inp.dataset.keteranganId] = parseInt(inp.value, 10);
+                } else {
+                    allFilled = false;
+                }
             });
+
             if (Object.keys(nilai).length === 0) {
                 toast('Isi minimal satu nilai terlebih dahulu.', 'error');
                 return;
@@ -160,49 +224,31 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-            toast('Nilai berhasil disimpan!', 'success');
-            nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
+                    toast('Nilai berhasil disimpan!', 'success');
 
-            // ── Update total nilai di tabel ──────────────────────────────
-            if (data.total_nilai !== undefined) {
-                const row = document.querySelector(`tr[data-id="${activeInovatorId}"]`);
-                if (row) {
-                    const nilaiCell = row.querySelector('.rv-nilai');
-                    if (nilaiCell) {
-                        nilaiCell.dataset.nilai = data.total_nilai;
-                        nilaiCell.textContent   = data.total_nilai > 0
-                            ? parseFloat(data.total_nilai).toFixed(2)
-                            : '—';
-                    }
+                    // Update cache nilai lokal
+                    nilaiDb[activeInovatorId] = Object.assign(nilaiDb[activeInovatorId] ?? {}, nilai);
+
+                    // Update tampilan tabel
+                    updateRowAfterSave(activeInovatorId, data);
+
+                    bootstrap.Modal.getInstance(modalEl)?.hide();
+                } else {
+                    toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
                 }
-            }
-
-        // ── Update nilai per-penilai di kolom login ──────────────────
-        if (data.nilai_penilai !== undefined) {
-            const row = document.querySelector(`tr[data-id="${activeInovatorId}"]`);
-            if (row) {
-                const penilaiCell = row.querySelector('.rv-nilai-penilai-login');
-                if (penilaiCell) {
-                    penilaiCell.textContent = parseFloat(data.nilai_penilai).toFixed(2);
-                }
-            }
-        }
-
-        bootstrap.Modal.getInstance(modalEl)?.hide();
-    } else {
-        toast(data.message ?? 'Gagal menyimpan nilai.', 'error');
-    }
-})
+            })
             .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
             .finally(() => { this.disabled = false; this.innerHTML = orig; });
         });
     });
 
-    // ── Checkbox lolos ──────────────────────────────────────────────────────
+    // ── Checkbox lolos ──────────────────────────────────────────────────
     function buildGroup(name) {
         return {
             name,
             get rows()     { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]`)]; },
+            // Hanya baris yang TIDAK disabled yang ikut hitungan
+            get rowsEnabled() { return this.rows.filter(c => !c.disabled); },
             get checked()  { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]:checked`)]; },
             get checkAll() { return document.querySelector(`.chk-all[data-group="${name}"]`); },
             get bar()      { return document.getElementById('simpanBar' + cap(name)); },
@@ -212,8 +258,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const groups = { umum: buildGroup('umum'), pelajar: buildGroup('pelajar') };
 
     function syncUI(g) {
-        const total = g.rows.length;
-        const n     = g.checked.length;
+        const total   = g.rowsEnabled.length;
+        const n       = g.checked.length;
         g.rows.forEach(chk => chk.closest('tr').classList.toggle('row-lolos', chk.checked));
         if (g.checkAll) {
             g.checkAll.indeterminate = n > 0 && n < total;
@@ -230,18 +276,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.chk-all').forEach(chkAll =>
         chkAll.addEventListener('change', function () {
             const g = groups[this.dataset.group];
-            g.rows.forEach(chk => chk.checked = this.checked);
+            // Hanya toggle yang tidak disabled
+            g.rowsEnabled.forEach(chk => chk.checked = this.checked);
             syncUI(g);
         })
     );
 
-    // ── Simpan lolos ──────────────────────────────────────────────────────────
+    // ── Simpan lolos ────────────────────────────────────────────────────
     document.querySelectorAll('.btn-rv-simpan').forEach(btn => {
         btn.addEventListener('click', function () {
             const g   = groups[this.dataset.group];
             const ids = g.checked.map(c => c.dataset.id);
             if (ids.length === 0) { toast('Pilih minimal 1 inovasi terlebih dahulu.', 'error'); return; }
 
+            const orig = this.innerHTML;
             btn.disabled  = true;
             btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
 
@@ -252,15 +300,20 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(r => r.json())
             .then(data => {
-                if (data.success) toast('Data berhasil disimpan!', 'success');
-                else toast(data.message ?? 'Gagal menyimpan data.', 'error');
+                if (data.success) {
+                    toast('Data berhasil disimpan! Halaman akan direfresh...', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    // Tampilkan pesan error (termasuk "belum lengkap")
+                    toast(data.message ?? 'Gagal menyimpan data.', 'error');
+                }
             })
             .catch(() => toast('Terjadi kesalahan jaringan.', 'error'))
-            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan'; });
+            .finally(() => { btn.disabled = false; btn.innerHTML = orig; });
         });
     });
 
-    // ── Catatan Penilai ─────────────────────────────────────────────────────
+    // ── Catatan Penilai ─────────────────────────────────────────────────
     let activeUsulanId = null;
 
     document.querySelectorAll('.btn-catatan').forEach(btn => {
@@ -319,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Rangking ──────────────────────────────────────────────────────────────
+    // ── Rangking ─────────────────────────────────────────────────────────
     document.querySelectorAll('.btn-rv-rank').forEach(btn => {
         btn.addEventListener('click', function () {
             const tbody = document.querySelector('#' + this.dataset.table + ' tbody');
@@ -338,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Export CSV ──────────────────────────────────────────────────────────
+    // ── Export CSV ────────────────────────────────────────────────────────
     document.querySelectorAll('.btn-rv-excel').forEach(btn => {
         btn.addEventListener('click', function () {
             const table = document.getElementById(this.dataset.table);
