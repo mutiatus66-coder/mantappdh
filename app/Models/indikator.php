@@ -11,6 +11,7 @@ class Indikator extends Model
     protected $fillable = [
         'sub_event_id',
         'nama_indikator',
+        'jenis',
     ];
 
     public function subEvent()

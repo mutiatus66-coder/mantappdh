@@ -13,24 +13,47 @@ class PenilaianUsulanSeeder extends Seeder
 {
     public function run(): void
     {
-        // Hanya usulan berstatus "Selesai" yang diberi nilai lengkap.
-        // Usulan "Sedang Dinilai" sengaja DIBIARKAN tanpa nilai supaya
-        // aturan UC-09 (reset status ke "Melengkapi Data") bisa diuji.
-        
-        $usulans = Usulan::query()->where('is_submitted', true)
+        // ── Strategi seeding ──────────────────────────────────────────────
+        // 1. Semua usulan "Selesai"        → DINILAI penuh.
+        // 2. Sebagian usulan "Sedang Dinilai" → DINILAI (agar rekap berisi).
+        // 3. Sisa usulan "Sedang Dinilai"  → DIBIARKAN tanpa nilai
+        //    supaya aturan UC-09 (reset status ke "Melengkapi Data") tetap bisa diuji.
+
+        $selesai = Usulan::query()
+            ->where('is_submitted', true)
             ->where('status', 'Selesai')
             ->get();
 
+        // Ambil ~50% usulan "Sedang Dinilai" untuk ikut dinilai.
+        $sedangDinilai = Usulan::query()
+            ->where('is_submitted', true)
+            ->where('status', 'Sedang Dinilai')
+            ->get();
+
+        $dinilaiSebagian = $sedangDinilai->shuffle()
+            ->take((int) ceil($sedangDinilai->count() / 2));
+
+        // Gabungkan usulan yang akan diberi nilai.
+        $usulans = $selesai->merge($dinilaiSebagian);
+
         if ($usulans->isEmpty()) {
-            $this->command->warn('PenilaianUsulanSeeder: tidak ada usulan "Selesai". Jalankan UsulanSeeder dulu.');
+            $this->command->warn('PenilaianUsulanSeeder: tidak ada usulan untuk dinilai. Jalankan UsulanSeeder dulu.');
             return;
         }
+
+        $this->command->info(sprintf(
+            'PenilaianUsulanSeeder: %d "Selesai" + %d "Sedang Dinilai" (dari %d) akan dinilai. %d "Sedang Dinilai" dibiarkan kosong untuk uji UC-09.',
+            $selesai->count(),
+            $dinilaiSebagian->count(),
+            $sedangDinilai->count(),
+            $sedangDinilai->count() - $dinilaiSebagian->count()
+        ));
 
         $total = 0;
 
         foreach ($usulans as $usulan) {
-            $penilai = Penilai::query()->where('sub_event_id', $usulan->sub_event_id)->get();
-            if ($penilai->isEmpty()) {
+            $penilais = Penilai::query()->where('sub_event_id', $usulan->sub_event_id)->get();
+            if ($penilais->isEmpty()) {
                 $this->command->warn("  - Usulan #{$usulan->id}: belum ada penilai di sub event. Jalankan PenilaiSeeder.");
                 continue;
             }
@@ -41,10 +64,12 @@ class PenilaianUsulanSeeder extends Seeder
                 continue;
             }
 
-            foreach ($penilai as $penilai) {
+            foreach ($penilais as $penilai) {
                 foreach ($indikators as $indikator) {
-                    // Setiap penilai memilih 1 keterangan per indikator, lalu memberi nilai dalam rentangnya
-                    $keterangans = KeteranganIndikator::query()->where('indikator_id', $indikator->id)->get();
+                    // Setiap penilai memilih 1 keterangan per indikator, lalu memberi nilai dalam rentangnya.
+                    $keterangans = KeteranganIndikator::query()
+                        ->where('indikator_id', $indikator->id)
+                        ->get();
                     if ($keterangans->isEmpty()) continue;
 
                     $ket   = $keterangans->random();
@@ -58,6 +83,7 @@ class PenilaianUsulanSeeder extends Seeder
                         ],
                         ['nilai' => $nilai]
                     );
+
                     $total++;
                 }
             }

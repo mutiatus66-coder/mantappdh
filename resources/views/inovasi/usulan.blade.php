@@ -95,12 +95,12 @@
                 </div>
                 <div class="u-card-actions">
                     @if(!$u->is_submitted)
-                    <button class="btn btn-sm btn-outline-primary btn-edit"
+                    <button class="btn btn-warning btn-outline-sm btn-edit"
                             data-id="{{ $u->id }}"
                             data-u="{{ json_encode($u->load('anggotaTim')) }}">
                         <i class="bi bi-pencil"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-outline-danger btn-hapus" data-id="{{ $u->id }}">
+                    <button class="btn btn-danger btn-outline-sm btn-hapus" data-id="{{ $u->id }}">
                         <i class="bi bi-trash"></i> Hapus
                     </button>
                     <button class="btn btn-sm btn-success btn-kirim" data-id="{{ $u->id }}">
@@ -271,7 +271,7 @@
 
                         <div class="us-section-title">Anggota Tim</div>
                         <div id="anggotaList"></div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="btnAddAnggota">
+                        <button type="button" class="btn btn-primary btn-outline-sm mt-1" id="btnAddAnggota">
                             <i class="bi bi-plus me-1"></i> Tambah Anggota
                         </button>
 
@@ -378,13 +378,13 @@
 
             <div class="modal-footer px-5 py-3 justify-content-between">
                 <div>
-                    <button type="button" class="btn btn-light" id="btnPrev" style="display:none">
+                    <button type="button" class="btn btn-secondary" id="btnPrev" style="display:none">
                         <i class="bi bi-arrow-left me-1"></i> Sebelumnya
                     </button>
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-light" id="btnBatal">Batal</button>
-                    <button type="button" class="btn btn-primary" id="btnNext">
+                    <button type="button" class="btn btn-dark" id="btnBatal">Batal</button>
+                    <button type="button" class="btn btn-success" id="btnNext">
                         Selanjutnya <i class="bi bi-arrow-right ms-1"></i>
                     </button>
                     <button type="button" class="btn btn-success" id="btnSimpan" style="display:none">

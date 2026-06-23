@@ -13,23 +13,30 @@ class PemenangSeeder extends Seeder
 {
     public function run(): void
     {
-        // Tahap 2 hanya untuk usulan yang sudah "Selesai"
-        $usulans = Usulan::query()->where('is_submitted', true)
-            ->where('status', 'Selesai')
+        // FIX UTAMA: Tahap 2 menilai usulan yang LOLOS Tahap 1 (lolos_tahap1 = true).
+        // Sebelumnya difilter status = 'Selesai' (= usulan yang GAGAL Tahap 1),
+        // sehingga nilai tidak pernah tampil di halaman Tahap 2 (semua '-').
+        $usulans = Usulan::query()
+            ->where('is_submitted', true)
+            ->where('lolos_tahap1', true)
             ->get();
 
         if ($usulans->isEmpty()) {
-            $this->command->warn('PemenangSeeder: tidak ada usulan "Selesai".');
+            $this->command->warn('PemenangSeeder: tidak ada usulan yang lolos Tahap 1.');
             return;
         }
 
         $total = 0;
 
         foreach ($usulans as $usulan) {
-            $penilais = Penilai::query()->where('sub_event_id', $usulan->sub_event_id)->get();
+            $penilais = Penilai::query()
+                ->where('sub_event_id', $usulan->sub_event_id)
+                ->get();
             if ($penilais->isEmpty()) continue;
 
-            $indikators = IndikatorTahap2::query()->where('sub_event_id', $usulan->sub_event_id)->get();
+            $indikators = IndikatorTahap2::query()
+                ->where('sub_event_id', $usulan->sub_event_id)
+                ->get();
             if ($indikators->isEmpty()) {
                 $this->command->warn("  - Usulan #{$usulan->id}: belum ada indikator tahap 2.");
                 continue;
@@ -37,13 +44,15 @@ class PemenangSeeder extends Seeder
 
             foreach ($penilais as $penilai) {
                 foreach ($indikators as $indikator) {
-                    $keterangans = KeteranganTahap2::query()->where('indikator_tahap2_id', $indikator->id)->get();
+                    $keterangans = KeteranganTahap2::query()
+                        ->where('indikator_tahap2_id', $indikator->id)
+                        ->get();
                     if ($keterangans->isEmpty()) continue;
 
                     $ket   = $keterangans->random();
                     $nilai = rand((int) $ket->nilai_minimal, (int) $ket->nilai_maksimal);
 
-                    // ⚠️ VERIFIKASI nama kolom ini terhadap migration `pemenang` kamu
+                    // penilai_id = Penilai.id (konsisten dgn controller & FK migration)
                     Pemenang::firstOrCreate(
                         [
                             'usulan_id'            => $usulan->id,

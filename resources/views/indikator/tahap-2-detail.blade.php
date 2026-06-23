@@ -19,13 +19,15 @@
         @endif
 
         {{-- Tombol atas --}}
-        <div class="d-flex gap-2 mb-4">
-          <button class="btn btn-primary" id="btnTambahIndikator">
-            Tambah Indikator
-          </button>
-          <a href="{{ route('indikator.tahap2') }}" class="btn btn-secondary">
-            Kembali
-          </a>
+        <div class="d-flex mb-8">
+          <div class="d-flex gap-4 ms-auto">
+            <a href="{{ route('indikator.tahap2') }}" class="btn btn-dark">
+              ← Kembali
+            </a>
+            <button class="btn btn-primary" id="btnTambahIndikator">
+              Tambah Indikator
+            </button>
+          </div>
         </div>
 
         <div class="sub-card">
@@ -185,8 +187,8 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
     </div>
@@ -208,12 +210,12 @@
         Tindakan ini tidak dapat dibatalkan.
       </p>
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
         <form id="formHapus" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash3 me-1"></i> Ya, Hapus
+          <button type="submit" class="btn btn-danger" style="min-width:120px; height:42px;">
+            <i></i>Hapus
           </button>
         </form>
       </div>

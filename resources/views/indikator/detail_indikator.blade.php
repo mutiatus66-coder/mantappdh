@@ -24,12 +24,12 @@
               Indikator : {{ $indikatorName ?? 'N/A' }}
             </p>
             <div class="d-flex gap-2">
+              <a href="{{ route('indikator.tahap1.inovasi', $subEventId) }}" class="btn btn-dark">
+                ← Kembali
+              </a>
               <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalKeterangan">
               Tambah Keterangan
               </button>
-              <a href="{{ route('indikator.tahap1.inovasi', $subEventId) }}" class="btn btn-secondary">
-               Kembali
-              </a>
             </div>
           </div>
 
@@ -41,7 +41,7 @@
                   <th>Keterangan</th>
                   <th width="140">Nilai Minimal</th>
                   <th width="140">Nilai Maksimal</th>
-                  <th width="200">Aksi</th>
+                  <th width="200" style="text-align:center;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,8 +128,8 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
     </div>
@@ -158,12 +158,12 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusKeterangan" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+          <button type="submit" class="btn btn-danger" style="min-width:120px; height:42px;">
+            <i></i>Hapus
           </button>
         </form>
       </div>

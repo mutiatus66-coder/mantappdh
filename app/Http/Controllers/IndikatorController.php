@@ -73,18 +73,33 @@ class IndikatorController extends Controller
         return view('indikator.detail_inovasi', compact('subEventId', 'subEventName', 'indikators'));
     }
 
+    // ↓↓↓ DIUBAH: tambah validasi & simpan kolom `jenis`
     public function inovasiStore(Request $request, $subEventId)
     {
-        $request->validate(['nama_indikator' => 'required|string|max:255']);
+        $request->validate([
+            'nama_indikator' => 'required|string|max:255',
+            'jenis'          => 'required|in:makalah,substansi',
+        ]);
         SubEvent::findOrFail($subEventId);
-        Indikator::create(['sub_event_id' => $subEventId, 'nama_indikator' => $request->nama_indikator]);
+        Indikator::create([
+            'sub_event_id'   => $subEventId,
+            'nama_indikator' => $request->nama_indikator,
+            'jenis'          => $request->jenis,
+        ]);
         return redirect()->route('indikator.tahap1.inovasi', $subEventId)->with('success', 'Indikator berhasil ditambahkan.');
     }
 
+    // ↓↓↓ DIUBAH: tambah validasi & update kolom `jenis`
     public function inovasiUpdate(Request $request, $subEventId, $id)
     {
-        $request->validate(['nama_indikator' => 'required|string|max:255']);
-        Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($id)->update(['nama_indikator' => $request->nama_indikator]);
+        $request->validate([
+            'nama_indikator' => 'required|string|max:255',
+            'jenis'          => 'required|in:makalah,substansi',
+        ]);
+        Indikator::query()->where('sub_event_id', $subEventId)->findOrFail($id)->update([
+            'nama_indikator' => $request->nama_indikator,
+            'jenis'          => $request->jenis,
+        ]);
         return redirect()->route('indikator.tahap1.inovasi', $subEventId)->with('success', 'Indikator berhasil diperbarui.');
     }
 
@@ -194,13 +209,10 @@ class IndikatorController extends Controller
     {
         $keterangan = KeteranganTahap2::findOrFail($id);
         $indikator  = $keterangan->indikator;
-
         $keterangan->delete();
-
         if ($indikator && $indikator->keterangans()->count() === 0) {
             $indikator->delete();
         }
-
         return redirect()->route('indikator.tahap2.indikator', $subEventId)->with('success', 'Indikator berhasil dihapus.');
     }
 }

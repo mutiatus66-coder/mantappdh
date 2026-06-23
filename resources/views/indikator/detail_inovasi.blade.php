@@ -30,12 +30,12 @@
               </p>
             </div>
             <div class="d-flex gap-2">
+              <a href="{{ route('indikator.tahap1') }}" class="btn btn-dark">
+                 ← Kembali
+              </a>
               <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIndikator">
                 Tambah Indikator
               </button>
-              <a href="{{ route('indikator.tahap1') }}" class="btn btn-secondary">
-                 Kembali
-              </a>
             </div>
           </div>
 
@@ -45,6 +45,8 @@
                 <tr>
                   <th width="60">No</th>
                   <th>Indikator</th>
+                  {{-- ↓↓↓ BARU: kolom Jenis --}}
+                  <th width="130">Jenis</th>
                   <th width="160">Detail Indikator</th>
                   <th width="220">Aksi</th>
                 </tr>
@@ -54,6 +56,14 @@
                   <tr>
                     <td style="text-align:center;">{{ $loop->iteration }}</td>
                     <td>{{ $item['nama_indikator'] ?? '-' }}</td>
+                    {{-- ↓↓↓ BARU: tampilkan jenis dengan badge --}}
+                    <td style="text-align:center;">
+                      @if(($item['jenis'] ?? '') === 'makalah')
+                        <span class="badge bg-info text-white">Makalah</span>
+                      @else
+                        <span class="badge bg-primary text-white">Substansi</span>
+                      @endif
+                    </td>
                     <td style="text-align:center;">
                       <a href="{{ route('indikator.tahap1.detail', [$subEventId, $item['id']]) }}"
                          class="btn btn-warning btn-detail">
@@ -64,7 +74,8 @@
                       <div class="d-flex align-items-center justify-content-center gap-1">
                         <button class="btn btn-warning btn-edit-indikator"
                                 data-id="{{ $item['id'] }}"
-                                data-indikator="{{ $item['nama_indikator'] ?? '-' }}">
+                                data-indikator="{{ $item['nama_indikator'] ?? '-' }}"
+                                data-jenis="{{ $item['jenis'] ?? 'substansi' }}">
                            Ubah
                         </button>
                         <button class="btn btn-danger btn-hapus-indikator"
@@ -78,7 +89,7 @@
                   </tr>
                 @empty
                   <tr>
-                    <td colspan="4" class="empty-row">
+                    <td colspan="5" class="empty-row">
                       <i class="bi bi-inbox fs-4 d-block mb-2"></i>
                       Belum ada data indikator
                     </td>
@@ -118,16 +129,27 @@
             <label class="form-label fw-semibold">Sub Event</label>
             <input type="text" class="form-control" value="{{ $subEventName ?? '' }}" disabled>
           </div>
-          <div class="mb-2">
+          <div class="mb-3">
             <label class="form-label fw-semibold required">Indikator</label>
             <input type="text" name="nama_indikator" id="inputNamaIndikator"
                    class="form-control" placeholder="Masukkan nama indikator..." required>
           </div>
+          {{-- ↓↓↓ BARU: field Jenis --}}
+          <div class="mb-2">
+            <label class="form-label fw-semibold required">Jenis</label>
+            <select name="jenis" id="selectJenis" class="form-select" required>
+              <option value="substansi">Substansi Inovasi</option>
+              <option value="makalah">Makalah</option>
+            </select>
+            <div class="form-text text-muted">
+              Sesuaikan dengan bobot formulasi yang sudah dikonfigurasi.
+            </div>
+          </div>
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-warning">Simpan</button>
+          <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
     </div>
@@ -156,12 +178,12 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusIndikator" method="POST">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+          <button type="submit" class="btn btn-danger" style="min-width:120px; height:42px;">
+            <i></i>Hapus
           </button>
         </form>
       </div>
@@ -173,15 +195,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const storeUrl  = "{{ route('indikator.tahap1.inovasi.store', $subEventId) }}";
+    const storeUrl   = "{{ route('indikator.tahap1.inovasi.store', $subEventId) }}";
     const subEventId = "{{ $subEventId }}";
 
     // ── Reset modal ke mode Tambah saat ditutup ──
     document.getElementById('modalIndikator').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('formIndikator').action = storeUrl;
+        document.getElementById('formIndikator').action      = storeUrl;
         document.getElementById('formIndikatorMethod').value = 'POST';
         document.getElementById('modalIndikatorTitle').textContent = 'Tambah Indikator Inovasi';
-        document.getElementById('inputNamaIndikator').value = '';
+        document.getElementById('inputNamaIndikator').value  = '';
+        document.getElementById('selectJenis').value         = 'substansi'; // ← BARU: reset jenis
     });
 
     // ── Tombol Ubah ──
@@ -189,11 +212,13 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             const id        = this.dataset.id;
             const indikator = this.dataset.indikator;
+            const jenis     = this.dataset.jenis || 'substansi'; // ← BARU
 
             document.getElementById('modalIndikatorTitle').textContent = 'Ubah Indikator';
             document.getElementById('formIndikator').action = `/indikator/tahap-1/${subEventId}/inovasi/${id}`;
             document.getElementById('formIndikatorMethod').value = 'PUT';
-            document.getElementById('inputNamaIndikator').value = indikator;
+            document.getElementById('inputNamaIndikator').value  = indikator;
+            document.getElementById('selectJenis').value         = jenis; // ← BARU
 
             new bootstrap.Modal(document.getElementById('modalIndikator')).show();
         });
