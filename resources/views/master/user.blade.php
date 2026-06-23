@@ -65,6 +65,7 @@ $hakAksesLabel = [
                     </td>
                     <td style="text-align:center;">
                         <div class="btn-aksi-wrap">
+                            @if(Auth::id() !== $item->id)
                             <button class="btn btn-warning btn-aksi btn-edit-user"
                                     data-id="{{ $item->id }}"
                                     data-nama="{{ $item->nama }}"
@@ -84,6 +85,9 @@ $hakAksesLabel = [
                                class="btn btn-success btn-aksi">
                                 Login As
                             </a>
+                            @else
+                            <span class="text-muted small fst-italic">Akun Anda</span>
+                            @endif
                         </div>
                     </td>
                 </tr>
