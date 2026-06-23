@@ -41,7 +41,7 @@
                   <th>Keterangan</th>
                   <th width="140">Nilai Minimal</th>
                   <th width="140">Nilai Maksimal</th>
-                  <th width="200">Aksi</th>
+                  <th width="200" style="text-align:center;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +128,7 @@
         </div>
 
         <div class="modal-footer px-5 py-3">
-          <button type="button" class="btn btn-dark" style="min-width:120px; height:42px;" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
           <button type="submit" class="btn btn-success px-4">Simpan</button>
         </div>
       </form>
@@ -158,12 +158,12 @@
       </p>
 
       <div class="d-flex gap-2 justify-content-center">
-        <button type="button" class="btn btn-dark" style="min-width:120px; height:42px;" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">Batal</button>
         <form id="formHapusKeterangan" method="POST">
           @csrf
           @method('DELETE')
           <button type="submit" class="btn btn-danger" style="min-width:120px; height:42px;">
-            <i class="bi bi-trash3 me-1"></i>Ya, Hapus
+            <i></i>Hapus
           </button>
         </form>
       </div>
