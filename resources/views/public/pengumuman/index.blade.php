@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4 fw-bold">Pengumuman</h2>
-            <a href=" route('index') " class="btn btn-outline-secondary rounded-0 fw-semibold">
+            <a href="{{ route('landing') }}" class="btn btn-outline-secondary rounded-0 fw-semibold">
                 ← Kembali
             </a>
         </div>
@@ -22,7 +22,7 @@
                     <h5 class="card-title fw-bold">{{ $item->judul }}</h5>
                     <p class="card-text text-muted">{{ Str::limit(strip_tags($item->deskripsi), 100) }}</p>
                     {{-- Pakai id karena tidak ada slug --}}
-                    <a href="{{ route('public.pengumuman.show', $item->id) }}" 
+                    <a href="{{ route('public.pengumuman.show', $item->id) }}"
                     class="btn btn-link ps-0 text-primary fw-semibold text-decoration-none">
                         Selengkapnya →
                     </a>
