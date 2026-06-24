@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/PenilaianController.php
 
 namespace App\Http\Controllers;
 
@@ -22,8 +21,14 @@ use App\Models\RankingTahap2;
 
 class PenilaianController extends Controller
 {
-    // ===================== HELPERS - UMUM =====================
+    // =========================================================================
+    // SECTION 1 — HELPERS UMUM
+    // Fungsi pembantu yang digunakan lintas Tahap 1 dan Tahap 2.
+    // =========================================================================
 
+    /**
+     * Ambil semua SubEvent beserta nama Event induknya, diurutkan tahun terbaru.
+     */
     private function getSubEvents(): array
     {
         return SubEvent::with('event')
@@ -38,9 +43,12 @@ class PenilaianController extends Controller
             ->toArray();
     }
 
+    /**
+     * Ambil daftar penilai untuk satu sub event, lengkap dengan nama singkat.
+     */
     private function getPenilaiForSubEvent(int $subEventId): array
     {
-        return Penilai::where('sub_event_id', $subEventId)
+        return Penilai::query()->where('sub_event_id', $subEventId)
             ->orderBy('nama')
             ->get()
             ->map(fn($p) => [
@@ -51,27 +59,38 @@ class PenilaianController extends Controller
             ->toArray();
     }
 
+    /**
+     * Ekstrak nama depan yang bukan gelar dari nama lengkap.
+     * Digunakan untuk header kolom penilai di tabel penilaian.
+     *
+     * Contoh: "Dr. Budi Santoso, M.T." → "Budi"
+     */
     private function namaSingkat(?string $nama): string
     {
         $nama = trim((string) $nama);
         if ($nama === '') return '-';
 
-        $titles = [
+        $gelar = [
             'dr', 'drs', 'dra', 'ir', 'prof', 'h', 'hj', 'kh',
             'st', 'se', 'mm', 'mt', 'msi', 'spd', 'mpd', 'phd',
         ];
 
         $parts = preg_split('/\s+/', $nama);
-        foreach ($parts as $p) {
-            $clean = strtolower(rtrim($p, '.,'));
-            if ($clean === '' || in_array($clean, $titles, true)) {
+        foreach ($parts as $part) {
+            $bersih = strtolower(rtrim($part, '.,'));
+            if ($bersih === '' || in_array($bersih, $gelar, true)) {
                 continue;
             }
-            return $p;
+            return $part;
         }
+
         return $parts[0] ?? $nama;
     }
 
+    /**
+     * Ambil data penilai yang sedang login untuk sub event tertentu.
+     * Mengembalikan null jika user yang login bukan penilai di sub event ini.
+     */
     private function getPenilaiLogin(int $subEventId): ?object
     {
         return Penilai::where('user_id', auth()->id())
@@ -79,54 +98,93 @@ class PenilaianController extends Controller
             ->first();
     }
 
-    // ===================== HELPERS - FORMULASI & NILAI =====================
+    // =========================================================================
+    // SECTION 2 — HELPERS FORMULASI & PERHITUNGAN NILAI
+    // Fungsi untuk normalisasi jenis indikator dan penghitungan nilai berbobot.
+    // =========================================================================
 
+    /**
+     * Normalisasi jenis indikator Tahap 1 ke dua kanon: 'makalah' atau 'substansi'.
+     */
     private function canonJenisTahap1(?string $jenis): string
     {
         $j = strtolower(trim((string) $jenis));
         return str_contains($j, 'makalah') ? 'makalah' : 'substansi';
     }
 
+    /**
+     * Normalisasi jenis indikator Tahap 2 ke dua kanon: 'Peragaan' atau 'Subtansi Inovasi'.
+     */
     private function canonJenisTahap2(?string $jenis): string
     {
         $j = strtolower(trim((string) $jenis));
         return str_contains($j, 'perag') ? 'Peragaan' : 'Subtansi Inovasi';
     }
 
+    /**
+     * Buat peta: keterangan_indikator_id → jenis ('makalah' | 'substansi')
+     * untuk sub event tertentu. Digunakan saat mengelompokkan nilai per jenis
+     * sebelum menghitung bobot.
+     */
     private function mapKeteranganJenisTahap1(int $subEventId): array
     {
-        $indikatorJenis = Indikator::where('sub_event_id', $subEventId)
-            ->pluck('jenis', 'id')
-            ->toArray();
+        $indikators = Indikator::query()->where('sub_event_id', $subEventId)
+            ->get(['id', 'jenis']);
 
-        if (empty($indikatorJenis)) return [];
+        if ($indikators->isEmpty()) return [];
 
+        // [indikator_id => jenis_kanon]
+        $indikatorJenis = $indikators->mapWithKeys(fn($ind) => [
+            $ind->id => $this->canonJenisTahap1($ind->jenis ?? 'substansi'),
+        ])->toArray();
+
+        // [keterangan_indikator_id => jenis_kanon]
         return KeteranganIndikator::whereIn('indikator_id', array_keys($indikatorJenis))
-            ->get()
+            ->get(['id', 'indikator_id'])
             ->mapWithKeys(fn($k) => [
-                $k->id => $this->canonJenisTahap1($indikatorJenis[$k->indikator_id] ?? null),
-            ])
-            ->toArray();
+                $k->id => $indikatorJenis[$k->indikator_id] ?? 'substansi',
+            ])->toArray();
     }
 
+    /**
+     * Buat peta: keterangan_tahap2_id → jenis ('Peragaan' | 'Subtansi Inovasi')
+     * untuk sub event tertentu.
+     */
     private function mapKeteranganJenisTahap2(int $subEventId): array
     {
-        $indikatorJenis = IndikatorTahap2::where('sub_event_id', $subEventId)
-            ->pluck('jenis', 'id')
-            ->toArray();
+        $indikators = IndikatorTahap2::query()->where('sub_event_id', $subEventId)
+            ->get(['id', 'jenis']);
 
-        if (empty($indikatorJenis)) return [];
+        if ($indikators->isEmpty()) return [];
 
+        // [indikator_tahap2_id => jenis_kanon]
+        $indikatorJenis = $indikators->mapWithKeys(fn($ind) => [
+            $ind->id => $this->canonJenisTahap2($ind->jenis ?? 'Subtansi Inovasi'),
+        ])->toArray();
+
+        // [keterangan_tahap2_id => jenis_kanon]
         return KeteranganTahap2::whereIn('indikator_tahap2_id', array_keys($indikatorJenis))
-            ->get()
+            ->get(['id', 'indikator_tahap2_id'])
             ->mapWithKeys(fn($k) => [
-                $k->id => $this->canonJenisTahap2($indikatorJenis[$k->indikator_tahap2_id] ?? null),
-            ])
-            ->toArray();
+                $k->id => $indikatorJenis[$k->indikator_tahap2_id] ?? 'Subtansi Inovasi',
+            ])->toArray();
     }
 
+    /**
+     * Hitung nilai akhir satu penilai untuk satu usulan, dengan mempertimbangkan bobot.
+     *
+     * Alur:
+     *   1. Rata-rata nilai per jenis (misal: avg(makalah), avg(substansi))
+     *   2. Jika ada formulasi bobot → nilai_berbobot = Σ(avg_jenis × bobot_jenis) / Σbobot
+     *   3. Jika tidak ada bobot     → rata-rata semua nilai tanpa pemisahan jenis
+     *
+     * @param  array $perJenis   [jenis => [nilai, nilai, ...]]
+     * @param  array $bobot      [jenis => bobot_persen]
+     * @param  bool  $adaBobot   true jika total bobot > 0
+     */
     private function hitungNilaiBerbobot(array $perJenis, array $bobot, bool $adaBobot): float
     {
+        // Langkah 1 — rata-rata per jenis
         $avgPerJenis = [];
         foreach ($perJenis as $jenis => $nilaiArr) {
             $avgPerJenis[$jenis] = count($nilaiArr) > 0
@@ -134,33 +192,41 @@ class PenilaianController extends Controller
                 : 0;
         }
 
+        // Langkah 2a — ada bobot: hitung weighted average
         if ($adaBobot) {
             $totalNilai = 0;
             $totalBobot = 0;
             foreach ($bobot as $jenis => $bobotNilai) {
-                if ($bobotNilai <= 0) continue;
-                if (isset($avgPerJenis[$jenis])) {
-                    $totalNilai += $avgPerJenis[$jenis] * $bobotNilai;
-                    $totalBobot += $bobotNilai;
-                }
+                if ($bobotNilai <= 0 || !isset($avgPerJenis[$jenis])) continue;
+                $totalNilai += $avgPerJenis[$jenis] * $bobotNilai;
+                $totalBobot += $bobotNilai;
             }
             return $totalBobot > 0 ? ($totalNilai / $totalBobot) : 0;
         }
 
+        // Langkah 2b — tidak ada bobot: rata-rata semua nilai
         if (empty($perJenis)) return 0;
         $semua = array_merge(...array_values($perJenis));
         return count($semua) > 0 ? array_sum($semua) / count($semua) : 0;
     }
 
-    // ===================== HELPERS - STATUS =====================
+    // =========================================================================
+    // SECTION 3 — HELPERS STATUS PENILAIAN
+    // Cek apakah semua penilai sudah memberikan nilai untuk satu usulan.
+    // =========================================================================
 
+    /**
+     * Cek apakah semua penilai sub event sudah menilai usulan di Tahap 1.
+     * Digunakan sebagai syarat sebelum usulan bisa diloloskan ke Tahap 2.
+     */
     private function semuaPenilaiSudahMenilaiTahap1(int $usulanId, int $subEventId): bool
     {
-        $penilaiIds    = Penilai::where('sub_event_id', $subEventId)->pluck('id');
+        $penilaiIds    = Penilai::query()->where('sub_event_id', $subEventId)->pluck('id');
         $jumlahPenilai = $penilaiIds->count();
+
         if ($jumlahPenilai === 0) return false;
 
-        $jumlahSudah = PenilaianUsulan::where('usulan_id', $usulanId)
+        $jumlahSudah = PenilaianUsulan::query()->where('usulan_id', $usulanId)
             ->whereIn('penilai_id', $penilaiIds)
             ->distinct('penilai_id')
             ->count('penilai_id');
@@ -168,13 +234,17 @@ class PenilaianController extends Controller
         return $jumlahSudah >= $jumlahPenilai;
     }
 
+    /**
+     * Cek apakah semua penilai sub event sudah menilai usulan di Tahap 2.
+     */
     private function semuaPenilaiSudahMenilaiTahap2(int $usulanId, int $subEventId): bool
     {
-        $penilaiIds    = Penilai::where('sub_event_id', $subEventId)->pluck('id');
+        $penilaiIds    = Penilai::query()->where('sub_event_id', $subEventId)->pluck('id');
         $jumlahPenilai = $penilaiIds->count();
+
         if ($jumlahPenilai === 0) return false;
 
-        $jumlahSudah = Pemenang::where('usulan_id', $usulanId)
+        $jumlahSudah = Pemenang::query()->where('usulan_id', $usulanId)
             ->whereIn('penilai_id', $penilaiIds)
             ->distinct('penilai_id')
             ->count('penilai_id');
@@ -182,11 +252,16 @@ class PenilaianController extends Controller
         return $jumlahSudah >= $jumlahPenilai;
     }
 
-    // ===================== HELPERS - RANKING =====================
+    // =========================================================================
+    // SECTION 4 — HELPERS RANKING
+    // =========================================================================
 
     /**
      * Ambil total rank per usulan dalam satu sub event.
-     * Total rank = jumlah ranking dari semua penilai (rank kecil = lebih baik).
+     * Total rank = jumlah ranking dari semua penilai.
+     * Rank kecil = posisi lebih baik (rank 1 terbaik).
+     *
+     * @return \Illuminate\Support\Collection  keyed by usulan_id
      */
     private function getRankingAkhir(int $subEventId): \Illuminate\Support\Collection
     {
@@ -200,10 +275,20 @@ class PenilaianController extends Controller
             ->keyBy('usulan_id');
     }
 
-    // ===================== HELPERS - DATA USULAN =====================
+    // =========================================================================
+    // SECTION 5 — HELPERS DATA USULAN
+    // Fungsi untuk membangun struktur data usulan lengkap dengan nilai.
+    // =========================================================================
 
+    /**
+     * Ambil usulan Tahap 1 yang BELUM lolos, lengkap dengan nilai per penilai
+     * dan status kelengkapan penilaian. Dibagi per kategori (umum / pelajar).
+     *
+     * Digunakan oleh: tahap1Show()
+     */
     private function getUsulanSplit(int $subEventId): array
     {
+        // Ambil hanya usulan yang belum lolos (masih dalam proses penilaian Tahap 1)
         $all = Usulan::forSubEvent($subEventId)
             ->submitted()
             ->where('lolos_tahap1', false)
@@ -216,28 +301,32 @@ class PenilaianController extends Controller
                 'kategori'                  => $u->kategori,
                 'lolos'                     => false,
                 'total_nilai'               => 0,
-                'nilai'                     => [],
+                'nilai'                     => [],    // [penilai_id => nilai_berbobot]
                 'semua_penilai_sudah_nilai' => false,
             ])
             ->toArray();
 
+        // Siapkan formulasi bobot Tahap 1
         $ketJenis  = $this->mapKeteranganJenisTahap1($subEventId);
-        $formulasi = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+        $formulasi = FormulasiTahap1::query()->where('sub_event_id', $subEventId)->first();
         $bobot = [
             'makalah'   => (int) ($formulasi->nilai_makalah   ?? 0),
             'substansi' => (int) ($formulasi->nilai_substansi ?? 0),
         ];
         $adaBobot = ($bobot['makalah'] + $bobot['substansi']) > 0;
 
-        $penilaiSubEvent = Penilai::where('sub_event_id', $subEventId)->pluck('id')->toArray();
+        $penilaiSubEvent = Penilai::query()->where('sub_event_id', $subEventId)->pluck('id')->toArray();
         $jumlahPenilai   = count($penilaiSubEvent);
+        $usulanIds       = array_column($all, 'id');
 
-        $usulanIds = array_column($all, 'id');
+        // Hitung nilai jika ada usulan dan penilai
         if (!empty($usulanIds) && !empty($penilaiSubEvent)) {
+            // Ambil semua baris nilai sekaligus (1 query)
             $nilaiRows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)
                 ->whereIn('penilai_id', $penilaiSubEvent)
                 ->get();
 
+            // grouped[usulan_id][penilai_id][jenis][] = nilai
             $grouped = [];
             foreach ($nilaiRows as $row) {
                 $jenis = $ketJenis[$row->keterangan_indikator_id] ?? 'substansi';
@@ -247,14 +336,18 @@ class PenilaianController extends Controller
             foreach ($all as &$n) {
                 if (!isset($grouped[$n['id']])) continue;
 
+                // Hitung nilai berbobot per penilai, lalu rata-ratakan
                 $totalAll = [];
                 foreach ($grouped[$n['id']] as $penilaiId => $perJenis) {
-                    $nilaiPenilai        = $this->hitungNilaiBerbobot($perJenis, $bobot, $adaBobot);
-                    $n['nilai'][$penilaiId] = $nilaiPenilai;
-                    $totalAll[]          = $nilaiPenilai;
+                    $nilaiPenilai            = $this->hitungNilaiBerbobot($perJenis, $bobot, $adaBobot);
+                    $n['nilai'][$penilaiId]  = $nilaiPenilai;
+                    $totalAll[]              = $nilaiPenilai;
                 }
-                $n['total_nilai'] = !empty($totalAll) ? array_sum($totalAll) / count($totalAll) : 0;
+                $n['total_nilai'] = !empty($totalAll)
+                    ? array_sum($totalAll) / count($totalAll)
+                    : 0;
 
+                // Tandai jika semua penilai sub event sudah memberikan nilai
                 $sudah = array_keys($grouped[$n['id']]);
                 $n['semua_penilai_sudah_nilai'] = $jumlahPenilai > 0
                     && count(array_intersect($sudah, $penilaiSubEvent)) >= $jumlahPenilai;
@@ -268,57 +361,65 @@ class PenilaianController extends Controller
         ];
     }
 
+    /**
+     * Ambil usulan Tahap 2 yang SUDAH lolos Tahap 1, lengkap dengan nilai
+     * Tahap 1 (sebagai referensi) dan total rank Tahap 2.
+     * Dibagi per kategori (umum / pelajar).
+     *
+     * Digunakan oleh: tahap2Show()
+     */
     private function getUsulanLolosSplit(int $subEventId): array
     {
+        // Ambil hanya usulan yang sudah lolos Tahap 1
         $all = Usulan::forSubEvent($subEventId)
             ->submitted()
             ->where('lolos_tahap1', true)
             ->orderBy('inovator')
             ->get()
             ->map(fn($u) => [
-                'id'                  => $u->id,
-                'inovator'            => $u->inovator,
-                'nama_inovasi'        => $u->nama_inovasi,
-                'kategori'            => $u->kategori,
-                'total_nilai_tahap1'  => 0,   // total rata-rata semua penilai
-                'nilai_per_penilai'   => [],   // [penilai_id => nilai_berbobot]
-                'total_rank'          => 0,
+                'id'                 => $u->id,
+                'inovator'           => $u->inovator,
+                'nama_inovasi'       => $u->nama_inovasi,
+                'kategori'           => $u->kategori,
+                'total_nilai_tahap1' => 0,   // rata-rata nilai Tahap 1 dari semua penilai
+                'nilai_per_penilai'  => [],   // [penilai_id => nilai_berbobot_tahap1]
+                'total_rank'         => 0,    // akumulasi ranking Tahap 2
             ])
             ->toArray();
- 
-        $penilaiSubEvent = Penilai::where('sub_event_id', $subEventId)->pluck('id')->toArray();
-        $jumlahPenilai   = count($penilaiSubEvent);
+
+        $penilaiSubEvent = Penilai::query()->where('sub_event_id', $subEventId)->pluck('id')->toArray();
         $usulanIds       = array_column($all, 'id');
- 
-        // ── Hitung nilai Tahap 1 per penilai ─────────────────────────────────
+
+        // Hitung nilai Tahap 1 sebagai referensi di halaman Tahap 2
         if (!empty($usulanIds) && !empty($penilaiSubEvent)) {
             $ketJenisTahap1  = $this->mapKeteranganJenisTahap1($subEventId);
-            $formulasiTahap1 = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+            $formulasiTahap1 = FormulasiTahap1::query()->where('sub_event_id', $subEventId)->first();
             $bobotTahap1 = [
                 'makalah'   => (int) ($formulasiTahap1->nilai_makalah   ?? 0),
                 'substansi' => (int) ($formulasiTahap1->nilai_substansi ?? 0),
             ];
             $adaBobotTahap1 = ($bobotTahap1['makalah'] + $bobotTahap1['substansi']) > 0;
- 
+
+            // Ambil semua nilai Tahap 1 sekaligus (1 query)
             $nilaiRows = PenilaianUsulan::whereIn('usulan_id', $usulanIds)
                 ->whereIn('penilai_id', $penilaiSubEvent)
                 ->get();
- 
+
             // grouped[usulan_id][penilai_id][jenis][] = nilai
             $grouped = [];
             foreach ($nilaiRows as $row) {
                 $jenis = $ketJenisTahap1[$row->keterangan_indikator_id] ?? 'substansi';
                 $grouped[$row->usulan_id][$row->penilai_id][$jenis][] = $row->nilai;
             }
- 
+
             foreach ($all as &$n) {
                 if (!isset($grouped[$n['id']])) continue;
- 
+
                 $totalAll = [];
                 foreach ($grouped[$n['id']] as $penilaiId => $perJenis) {
-                    $nilaiPenilai = $this->hitungNilaiBerbobot($perJenis, $bobotTahap1, $adaBobotTahap1);
+                    $nilaiPenilai                       = $this->hitungNilaiBerbobot($perJenis, $bobotTahap1, $adaBobotTahap1);
                     $n['nilai_per_penilai'][$penilaiId] = $nilaiPenilai;
-                    $totalAll[] = $nilaiPenilai;
+                    $totalAll[]                         = $nilaiPenilai;
                 }
                 $n['total_nilai_tahap1'] = !empty($totalAll)
                     ? array_sum($totalAll) / count($totalAll)
@@ -326,8 +427,8 @@ class PenilaianController extends Controller
             }
             unset($n);
         }
- 
-        // ── Ranking Akhir ─────────────────────────────────────────────────────
+
+        // Sertakan total rank Tahap 2 (jika sudah ada ranking)
         $rankingAkhir = $this->getRankingAkhir($subEventId);
         foreach ($all as &$n) {
             $n['total_rank'] = isset($rankingAkhir[$n['id']])
@@ -335,19 +436,30 @@ class PenilaianController extends Controller
                 : 0;
         }
         unset($n);
- 
+
         return [
             'umum'    => array_values(array_filter($all, fn($n) => $n['kategori'] === 'umum')),
             'pelajar' => array_values(array_filter($all, fn($n) => $n['kategori'] === 'pelajar')),
         ];
     }
 
-
-    private function buildNominasiData(array $subEvents): array
+    /**
+     * Bangun peta nominasiData untuk halaman index Tahap 1:
+     *   [sub_event_id => [['id', 'inovator', 'nama_inovasi', 'kategori'], ...]]
+     *
+     * Hanya mencakup usulan yang BELUM lolos Tahap 1 agar angka progress
+     * di card index sinkron dengan jumlah yang tampil di halaman detail.
+     *
+     * ⚠️  BUG FIX: sebelumnya tidak ada filter lolos_tahap1=false sehingga
+     *     usulan yang sudah lolos tetap ikut terhitung di $total pada card.
+     */
+    private function buildNominasiDataTahap1(array $subEvents): array
     {
         $subEventIds = array_column($subEvents, 'id');
-        $allUsulan   = Usulan::whereIn('sub_event_id', $subEventIds)
+
+        $allUsulan = Usulan::whereIn('sub_event_id', $subEventIds)
             ->submitted()
+            ->where('lolos_tahap1', false)   // hanya yang belum lolos
             ->orderBy('inovator')
             ->get();
 
@@ -360,24 +472,74 @@ class PenilaianController extends Controller
                     'inovator'     => $u->inovator,
                     'nama_inovasi' => $u->nama_inovasi,
                     'kategori'     => $u->kategori,
+                    'total_nilai'  => 0,   // diisi saat render blade (progress %)
                 ])
                 ->values()
                 ->toArray();
         }
+
         return $nominasiData;
     }
 
+    /**
+     * Bangun peta nominasiData untuk halaman index Tahap 2:
+     *   [sub_event_id => [['id', ..., 'sudah_ranking'], ...]]
+     *
+     * Hanya usulan yang SUDAH lolos Tahap 1. Progress dihitung per-usulan
+     * (sudah punya ranking atau belum), bukan per sub event.
+     */
+    private function buildNominasiDataTahap2(array $subEvents): array
+    {
+        $subEventIds = array_column($subEvents, 'id');
+
+        $allUsulan = Usulan::whereIn('sub_event_id', $subEventIds)
+            ->submitted()
+            ->where('lolos_tahap1', true)
+            ->orderBy('inovator')
+            ->get();
+
+        // Ambil usulan_id yang sudah punya minimal 1 ranking (1 query)
+        $usulanSudahRanking = RankingTahap2::query()
+            ->join('usulans', 'ranking_tahap2.usulan_id', '=', 'usulans.id')
+            ->whereIn('usulans.sub_event_id', $subEventIds)
+            ->distinct()
+            ->pluck('ranking_tahap2.usulan_id')
+            ->flip();   // jadikan key untuk lookup O(1)
+
+        $nominasiData = [];
+        foreach ($subEvents as $se) {
+            $nominasiData[$se['id']] = $allUsulan
+                ->where('sub_event_id', $se['id'])
+                ->map(fn($u) => [
+                    'id'             => $u->id,
+                    'inovator'       => $u->inovator,
+                    'nama_inovasi'   => $u->nama_inovasi,
+                    'kategori'       => $u->kategori,
+                    // true jika usulan ini sudah mendapat ranking dari minimal 1 penilai
+                    'sudah_ranking'  => isset($usulanSudahRanking[$u->id]),
+                ])
+                ->values()
+                ->toArray();
+        }
+
+        return $nominasiData;
+    }
+
+    /**
+     * Hitung nilai berbobot penilai yang sedang login untuk satu usulan.
+     * Digunakan sebagai return value setelah simpan nilai (live update tabel).
+     */
     private function hitungNilaiPenilaiLogin(int $usulanId, int $penilaiId, int $subEventId): float
     {
         $ketJenis  = $this->mapKeteranganJenisTahap1($subEventId);
-        $formulasi = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+        $formulasi = FormulasiTahap1::query()->where('sub_event_id', $subEventId)->first();
         $bobot = [
             'makalah'   => (int) ($formulasi->nilai_makalah   ?? 0),
             'substansi' => (int) ($formulasi->nilai_substansi ?? 0),
         ];
         $adaBobot = ($bobot['makalah'] + $bobot['substansi']) > 0;
 
-        $rows = PenilaianUsulan::where('usulan_id', $usulanId)
+        $rows = PenilaianUsulan::query()->where('usulan_id', $usulanId)
             ->where('penilai_id', $penilaiId)
             ->get();
 
@@ -390,21 +552,26 @@ class PenilaianController extends Controller
         return empty($perJenis) ? 0 : $this->hitungNilaiBerbobot($perJenis, $bobot, $adaBobot);
     }
 
+    /**
+     * Hitung total nilai Tahap 1 (rata-rata semua penilai) untuk satu usulan.
+     * Digunakan sebagai return value setelah simpan nilai (live update tabel).
+     */
     private function hitungTotalNilaiTahap1(int $usulanId, int $subEventId): float
     {
         $ketJenis  = $this->mapKeteranganJenisTahap1($subEventId);
-        $formulasi = FormulasiTahap1::where('sub_event_id', $subEventId)->first();
+        $formulasi = FormulasiTahap1::query()->where('sub_event_id', $subEventId)->first();
         $bobot = [
             'makalah'   => (int) ($formulasi->nilai_makalah   ?? 0),
             'substansi' => (int) ($formulasi->nilai_substansi ?? 0),
         ];
         $adaBobot = ($bobot['makalah'] + $bobot['substansi']) > 0;
 
-        $penilaiIds = Penilai::where('sub_event_id', $subEventId)->pluck('id')->toArray();
-        $rows       = PenilaianUsulan::where('usulan_id', $usulanId)
+        $penilaiIds = Penilai::query()->where('sub_event_id', $subEventId)->pluck('id')->toArray();
+        $rows       = PenilaianUsulan::query()->where('usulan_id', $usulanId)
             ->whereIn('penilai_id', $penilaiIds)
             ->get();
 
+        // grouped[penilai_id][jenis][] = nilai
         $grouped = [];
         foreach ($rows as $row) {
             $jenis = $ketJenis[$row->keterangan_indikator_id] ?? 'substansi';
@@ -415,26 +582,44 @@ class PenilaianController extends Controller
         foreach ($grouped as $perJenis) {
             $totalAll[] = $this->hitungNilaiBerbobot($perJenis, $bobot, $adaBobot);
         }
+
         return !empty($totalAll) ? array_sum($totalAll) / count($totalAll) : 0;
     }
 
-    // ===================== TAHAP 1 =====================
+    // =========================================================================
+    // SECTION 6 — TAHAP 1 (Controllers)
+    // =========================================================================
 
+    /**
+     * GET /penilaian/tahap1
+     * Halaman index Tahap 1 — daftar card per sub event dengan progress penilaian.
+     */
     public function tahap1()
     {
         $subEvents    = $this->getSubEvents();
-        $nominasiData = $this->buildNominasiData($subEvents);
+        $nominasiData = $this->buildNominasiDataTahap1($subEvents);
+
         return view('master.penilaian.tahap1.index', compact('subEvents', 'nominasiData'));
     }
 
+    /**
+     * GET /penilaian/tahap1/{id}
+     * Halaman detail Tahap 1 — tabel penilaian per usulan untuk satu sub event.
+     */
     public function tahap1Show(int $id)
     {
         $subEvent = SubEvent::findOrFail($id);
-        $seArr = ['id' => $subEvent->id, 'sub_event' => $subEvent->sub_event, 'tahun' => $subEvent->tahun];
+        $seArr    = [
+            'id'        => $subEvent->id,
+            'sub_event' => $subEvent->sub_event,
+            'tahun'     => $subEvent->tahun,
+        ];
 
+        // Usulan yang belum lolos, sudah dilengkapi nilai per penilai
         ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getUsulanSplit($id);
 
-        $indikators = Indikator::where('sub_event_id', $id)
+        // Indikator + keterangan untuk form penilaian modal
+        $indikators = Indikator::query()->where('sub_event_id', $id)
             ->orderBy('jenis')
             ->orderBy('id')
             ->get()
@@ -458,13 +643,15 @@ class PenilaianController extends Controller
         $penilai      = $this->getPenilaiForSubEvent($id);
         $penilaiLogin = $this->getPenilaiLogin($id);
 
+        // Nilai yang sudah diisi penilai login (untuk pre-populate modal)
+        // [usulan_id => [keterangan_indikator_id => nilai]]
         $nilaiLoginPerUsulan = [];
         if ($penilaiLogin) {
             $usulanIds = array_merge(
                 array_column($nominasiUmum,    'id'),
                 array_column($nominasiPelajar, 'id')
             );
-            $rows = PenilaianUsulan::where('penilai_id', $penilaiLogin->id)
+            $rows = PenilaianUsulan::query()->where('penilai_id', $penilaiLogin->id)
                 ->whereIn('usulan_id', $usulanIds)
                 ->get();
             foreach ($rows as $row) {
@@ -472,6 +659,7 @@ class PenilaianController extends Controller
             }
         }
 
+        // Total keterangan = jumlah kolom nilai dalam tabel
         $totalKeterangan = array_sum(array_map(fn($ind) => count($ind['keterangans']), $indikators));
 
         return view('master.penilaian.tahap1.show', [
@@ -486,6 +674,16 @@ class PenilaianController extends Controller
         ]);
     }
 
+    /**
+     * POST /penilaian/tahap1/{id}/simpan
+     * Simpan keputusan lolos/tidak lolos setelah penilaian selesai.
+     *
+     * Request:
+     *   - kategori : 'umum' | 'pelajar'
+     *   - ids[]    : array usulan_id yang diloloskan (boleh kosong)
+     *
+     * Validasi: semua penilai wajib sudah menilai sebelum usulan bisa diloloskan.
+     */
     public function tahap1Simpan(Request $request, int $id)
     {
         $request->validate([
@@ -494,6 +692,7 @@ class PenilaianController extends Controller
             'ids.*'    => 'integer',
         ]);
 
+        // Hanya usulan kategori ini yang belum lolos yang bisa diproses
         $kandidatId = Usulan::forSubEvent($id)
             ->submitted()
             ->where('kategori', $request->kategori)
@@ -501,8 +700,10 @@ class PenilaianController extends Controller
             ->pluck('id')
             ->toArray();
 
+        // Intersect: hanya yang ada di request DAN memang kandidat
         $lolosIds = array_values(array_intersect($kandidatId, $request->ids ?? []));
 
+        // Cek kelengkapan penilaian untuk semua calon yang diloloskan
         $belumLengkap = [];
         foreach ($lolosIds as $usulanId) {
             if (!$this->semuaPenilaiSudahMenilaiTahap1($usulanId, $id)) {
@@ -515,11 +716,12 @@ class PenilaianController extends Controller
             return response()->json([
                 'success'       => false,
                 'message'       => 'Penilaian belum lengkap untuk: ' . implode(', ', $belumLengkap)
-                                 . '. Semua penilai harus menilai sebelum usulan bisa diloloskan.',
+                . '. Semua penilai harus menilai sebelum usulan bisa diloloskan.',
                 'belum_lengkap' => $belumLengkap,
             ], 422);
         }
 
+        // Tandai lolos
         if (!empty($lolosIds)) {
             Usulan::whereIn('id', $lolosIds)->update([
                 'lolos_tahap1' => true,
@@ -527,6 +729,7 @@ class PenilaianController extends Controller
             ]);
         }
 
+        // Tandai tidak lolos (sisa kandidat yang tidak dipilih)
         $tidakLolosIds = array_values(array_diff($kandidatId, $lolosIds));
         if (!empty($tidakLolosIds)) {
             Usulan::whereIn('id', $tidakLolosIds)->update([
@@ -537,6 +740,19 @@ class PenilaianController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * POST /penilaian/tahap1/{id}/simpan-nilai
+     * Simpan nilai indikator dari penilai yang login untuk satu usulan.
+     *
+     * Request:
+     *   - usulan_id : integer
+     *   - nilai     : [keterangan_indikator_id => nilai (0–100)]
+     *
+     * Response:
+     *   - nilai_penilai : nilai berbobot penilai ini
+     *   - total_nilai   : rata-rata semua penilai
+     *   - sudah_lengkap : apakah semua penilai sudah menilai
+     */
     public function tahap1SimpanNilai(Request $request, int $id)
     {
         $penilaiLogin = $this->getPenilaiLogin($id);
@@ -548,12 +764,14 @@ class PenilaianController extends Controller
             'nilai.*'   => 'numeric|min:0|max:100',
         ]);
 
+        // Pastikan usulan memang milik sub event ini dan belum lolos
         $usulan = Usulan::query()
             ->where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->where('lolos_tahap1', false)
             ->firstOrFail();
 
+        // Upsert nilai per keterangan indikator
         foreach ($request->nilai as $keteranganId => $nilai) {
             PenilaianUsulan::updateOrCreate(
                 [
@@ -585,8 +803,14 @@ class PenilaianController extends Controller
         ]);
     }
 
-    // ===================== CATATAN PENILAI =====================
+    // =========================================================================
+    // SECTION 7 — CATATAN PENILAI
+    // =========================================================================
 
+    /**
+     * POST /penilaian/catatan/{usulanId}
+     * Simpan atau update catatan penilai untuk satu usulan.
+     */
     public function simpanCatatan(Request $request, int $usulanId)
     {
         $usulan       = Usulan::findOrFail($usulanId);
@@ -600,11 +824,18 @@ class PenilaianController extends Controller
             ['catatan'   => $request->catatan]
         );
 
-        Log::info('CATATAN PENILAI', ['penilai' => Auth::user()->email, 'usulan_id' => $usulanId]);
+        Log::info('CATATAN PENILAI', [
+            'penilai'    => Auth::user()->email,
+            'usulan_id'  => $usulanId,
+        ]);
 
         return response()->json(['success' => true, 'message' => 'Catatan berhasil disimpan.']);
     }
 
+    /**
+     * GET /penilaian/catatan/{usulanId}
+     * Ambil catatan penilai yang sedang login untuk satu usulan.
+     */
     public function getCatatan(int $usulanId)
     {
         $usulan       = Usulan::findOrFail($usulanId);
@@ -619,97 +850,80 @@ class PenilaianController extends Controller
         return response()->json(['catatan' => $catatan?->catatan ?? '']);
     }
 
-    // ===================== TAHAP 2 =====================
+    // =========================================================================
+    // SECTION 8 — TAHAP 2 (Controllers)
+    // =========================================================================
 
+    /**
+     * GET /penilaian/tahap2
+     * Halaman index Tahap 2 — daftar card per sub event dengan progress ranking.
+     */
     public function tahap2()
     {
-        $subEvents = $this->getSubEvents();
- 
-        // Hitung progress ranking (berapa usulan sudah punya minimal 1 ranking)
-        $subEventIds = array_column($subEvents, 'id');
-        $allUsulan   = Usulan::whereIn('sub_event_id', $subEventIds)
-            ->submitted()
-            ->where('lolos_tahap1', true)
-            ->orderBy('inovator')
-            ->get();
- 
-        $rankingCounts = RankingTahap2::query()
-            ->join('usulans', 'ranking_tahap2.usulan_id', '=', 'usulans.id')
-            ->whereIn('usulans.sub_event_id', $subEventIds)
-            ->selectRaw('usulans.sub_event_id, ranking_tahap2.usulan_id')
-            ->distinct()
-            ->get()
-            ->groupBy('sub_event_id')
-            ->map(fn($rows) => $rows->count());
- 
-        $nominasiData = [];
-        foreach ($subEvents as $se) {
-            $seId = $se['id'];
-            $nominasiData[$seId] = $allUsulan
-                ->where('sub_event_id', $seId)
-                ->map(fn($u) => [
-                    'id'           => $u->id,
-                    'inovator'     => $u->inovator,
-                    'nama_inovasi' => $u->nama_inovasi,
-                    'kategori'     => $u->kategori,
-                    // Untuk progress card: sudah ada ranking atau belum
-                    'sudah_ranking' => false,  // di-update di bawah
-                ])
-                ->values()
-                ->toArray();
- 
-            $dinilaiCount = $rankingCounts[$seId] ?? 0;
-            foreach ($nominasiData[$seId] as &$n) {
-                // tandai jika usulan ini sudah punya ranking
-                $n['sudah_ranking'] = $dinilaiCount > 0;
-            }
-            unset($n);
-        }
- 
+        $subEvents    = $this->getSubEvents();
+        $nominasiData = $this->buildNominasiDataTahap2($subEvents);
+
         return view('master.penilaian.tahap2.index', compact('subEvents', 'nominasiData'));
     }
 
-
+    /**
+     * GET /penilaian/tahap2/{id}
+     * Halaman detail Tahap 2 — tabel nilai + ranking nominator untuk satu sub event.
+     */
     public function tahap2Show(int $id)
     {
         $subEvent = SubEvent::findOrFail($id);
-        $seArr = [
+        $seArr    = [
             'id'        => $subEvent->id,
             'sub_event' => $subEvent->sub_event,
             'tahun'     => $subEvent->tahun,
         ];
- 
+
+        // Usulan yang lolos, lengkap dengan nilai Tahap 1 & ranking Tahap 2
         ['umum' => $nominasiUmum, 'pelajar' => $nominasiPelajar] = $this->getUsulanLolosSplit($id);
- 
+
         $penilai      = $this->getPenilaiForSubEvent($id);
         $penilaiLogin = $this->getPenilaiLogin($id);
- 
-        // Ranking yang sudah diisi oleh penilai yang login (pre-populate input)
+
+        // Ranking yang sudah diisi penilai login (untuk pre-populate input ranking)
+        // [usulan_id => ranking]
         $rankingLogin = [];
         if ($penilaiLogin) {
             $usulanIds = array_merge(
                 array_column($nominasiUmum,    'id'),
                 array_column($nominasiPelajar, 'id')
             );
-            $rows = RankingTahap2::where('penilai_id', $penilaiLogin->id)
+            $rows = RankingTahap2::query()->where('penilai_id', $penilaiLogin->id)
                 ->whereIn('usulan_id', $usulanIds)
                 ->get();
             foreach ($rows as $row) {
                 $rankingLogin[$row->usulan_id] = $row->ranking;
             }
         }
- 
+
         return view('master.penilaian.tahap2.show', [
-            'subEvent'      => $seArr,
-            'nominasiUmum'  => $nominasiUmum,
+            'subEvent'        => $seArr,
+            'nominasiUmum'    => $nominasiUmum,
             'nominasiPelajar' => $nominasiPelajar,
-            'penilai'       => $penilai,
-            'penilaiLogin'  => $penilaiLogin,
-            'rankingLogin'  => $rankingLogin,
+            'penilai'         => $penilai,
+            'penilaiLogin'    => $penilaiLogin,
+            'rankingLogin'    => $rankingLogin,
         ]);
     }
 
-
+    /**
+     * POST /penilaian/tahap2/{id}/simpan
+     * Simpan nilai indikator Tahap 2 dari penilai yang login untuk satu usulan.
+     *
+     * Request:
+     *   - usulan_id : integer
+     *   - nilai     : [keterangan_tahap2_id => nilai (0–100)]
+     *
+     * Response:
+     *   - nilai_penilai : nilai berbobot penilai ini
+     *   - total_nilai   : rata-rata semua penilai
+     *   - sudah_lengkap : apakah semua penilai sudah menilai
+     */
     public function tahap2Simpan(Request $request, int $id)
     {
         $penilaiLogin = $this->getPenilaiLogin($id);
@@ -721,12 +935,14 @@ class PenilaianController extends Controller
             'nilai.*'   => 'numeric|min:0|max:100',
         ]);
 
+        // Pastikan usulan memang milik sub event ini dan sudah lolos Tahap 1
         $usulan = Usulan::query()
             ->where('id', $request->usulan_id)
             ->where('sub_event_id', $id)
             ->where('lolos_tahap1', true)
             ->firstOrFail();
 
+        // Upsert nilai per keterangan Tahap 2
         foreach ($request->nilai as $keteranganId => $nilai) {
             Pemenang::updateOrCreate(
                 [
@@ -738,15 +954,16 @@ class PenilaianController extends Controller
             );
         }
 
+        // Hitung nilai berbobot penilai login
         $ketJenis  = $this->mapKeteranganJenisTahap2($id);
-        $formulasi = FormulasiTahap2::where('sub_event_id', $id)->first();
+        $formulasi = FormulasiTahap2::query()->where('sub_event_id', $id)->first();
         $bobot = [
             'Subtansi Inovasi' => (int) ($formulasi->nilai_inovasi  ?? 0),
             'Peragaan'         => (int) ($formulasi->nilai_peragaan ?? 0),
         ];
         $adaBobot = ($bobot['Subtansi Inovasi'] + $bobot['Peragaan']) > 0;
 
-        $rows = Pemenang::where('usulan_id', $usulan->id)
+        $rows = Pemenang::query()->where('usulan_id', $usulan->id)
             ->where('penilai_id', $penilaiLogin->id)
             ->get();
 
@@ -757,8 +974,9 @@ class PenilaianController extends Controller
         }
         $nilaiPenilai = empty($perJenis) ? 0 : $this->hitungNilaiBerbobot($perJenis, $bobot, $adaBobot);
 
-        $penilaiIds = Penilai::where('sub_event_id', $id)->pluck('id')->toArray();
-        $allRows    = Pemenang::where('usulan_id', $usulan->id)
+        // Hitung total nilai (rata-rata semua penilai)
+        $penilaiIds = Penilai::query()->where('sub_event_id', $id)->pluck('id')->toArray();
+        $allRows    = Pemenang::query()->where('usulan_id', $usulan->id)
             ->whereIn('penilai_id', $penilaiIds)
             ->get();
 
@@ -792,6 +1010,13 @@ class PenilaianController extends Controller
         ]);
     }
 
+    /**
+     * POST /penilaian/tahap2/{id}/simpan-ranking
+     * Simpan atau update ranking Tahap 2 dari penilai yang login.
+     *
+     * Request:
+     *   - ranking : [usulan_id => ranking (integer ≥ 1)]
+     */
     public function tahap2SimpanRanking(Request $request, int $id)
     {
         $penilaiLogin = $this->getPenilaiLogin($id);
@@ -803,8 +1028,8 @@ class PenilaianController extends Controller
         ]);
 
         foreach ($request->ranking as $usulanId => $ranking) {
-            // Pastikan usulan memang milik sub event ini dan lolos Tahap 1
-            $exists = Usulan::where('id', $usulanId)
+            // Guard: pastikan usulan milik sub event ini dan sudah lolos Tahap 1
+            $exists = Usulan::query()->where('id', $usulanId)
                 ->where('sub_event_id', $id)
                 ->where('lolos_tahap1', true)
                 ->exists();

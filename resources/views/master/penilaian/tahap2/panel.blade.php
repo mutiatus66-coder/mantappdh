@@ -3,11 +3,16 @@
     <div class="rv-card-header">
         <h6 class="rv-card-title">{{ $title }}</h6>
         <div class="d-flex gap-2">
+            <button class="btn btn-warning btn-auto-ranking"
+                    data-group="{{ $group }}"
+                    title="Urutkan berdasarkan nilai tertinggi dan isi ranking otomatis">
+                <i class="bi bi-sort-numeric-down me-1"></i>Ranking
+            </button>
             @if($penilaiLogin)
             <button class="btn btn-success btn-simpan-ranking"
                     data-group="{{ $group }}"
                     data-sub-event-id="{{ request()->route('id') }}">
-                <i class="bi bi-trophy me-1"></i>Simpan Ranking
+                <i class="bi bi-floppy me-1"></i>Simpan Ranking
             </button>
             @endif
             <button class="btn-rv-excel btn btn-info"
@@ -35,18 +40,20 @@
                     <th class="text-center" style="width:100px">Total Rank</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody-{{ $group }}">
                 @forelse($nominasi as $i => $nom)
                 @php
                     $totalNilai  = $nom['total_nilai_tahap1'] ?? 0;
-                    $totalRank   = $nom['total_rank'] ?? 0;
-                    $rankingSaya = $rankingLogin[$nom['id']] ?? '';
+                    $totalRank   = (int) ($nom['total_rank'] ?? 0);
+                    $rankingSaya = $rankingLogin[$nom['id']] ?? null;
+                    // Gunakan ranking saya jika ada, fallback ke total rank agregat
+                    $rankTampil  = ($rankingSaya !== null && $rankingSaya !== '') ? (int) $rankingSaya : $totalRank;
                 @endphp
-                <tr data-id="{{ $nom['id'] }}">
+                <tr data-id="{{ $nom['id'] }}" data-nilai="{{ $totalNilai }}">
                     <td class="text-center row-no">{{ $i + 1 }}</td>
                     <td>{{ $nom['inovator'] }}</td>
                     <td>{{ $nom['nama_inovasi'] }}</td>
-                    <td class="text-center rv-nilai" data-nilai="{{ $totalNilai }}">
+                    <td class="text-center rv-nilai">
                         @if($totalNilai > 0)
                             <span class="badge"
                                   style="background:rgba(27,132,255,0.12); color:#1b84ff; font-size:0.82em;">
@@ -69,15 +76,19 @@
                                data-usulan-id="{{ $nom['id'] }}"
                                data-group="{{ $group }}"
                                min="1"
-                               value="{{ $rankingSaya }}"
+                               value="{{ $rankingSaya ?? '' }}"
                                placeholder="-">
                     </td>
                     @endif
                     <td class="text-center rv-total-rank" data-usulan-id="{{ $nom['id'] }}">
-                        @if($totalRank > 0)
-                            <span class="badge bg-primary">{{ $totalRank }}</span>
+                        @if($rankTampil > 0)
+                            @if($rankTampil <= 3)
+                                <span class="badge rv-rank-badge rv-rank-top">{{ $rankTampil }}</span>
+                            @else
+                                <span class="badge rv-rank-badge rv-rank-normal">{{ $rankTampil }}</span>
+                            @endif
                         @else
-                            <span style="color:var(--ri-text-muted)">-</span>
+                            <span class="rv-rank-empty" style="color:var(--ri-text-muted)">-</span>
                         @endif
                     </td>
                 </tr>
