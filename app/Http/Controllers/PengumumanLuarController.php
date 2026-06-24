@@ -8,7 +8,8 @@ class PengumumanLuarController extends Controller
 {
     public function index()
     {
-        $pengumuman = Pengumuman::where('status', 'Published')
+        $pengumuman = Pengumuman::query()
+                                ->where('status', 'Published')
                                 ->orderBy('created_at', 'desc')
                                 ->paginate(9);
         return view('pengumuman_luar.index', compact('pengumuman'));
@@ -16,7 +17,8 @@ class PengumumanLuarController extends Controller
 
     public function show($id)
     {
-        $pengumuman = Pengumuman::where('id', $id)
+        $pengumuman = Pengumuman::query()
+                                ->where('id', $id)
                                 ->where('status', 'Published')
                                 ->firstOrFail();
         return view('pengumuman_luar.show', compact('pengumuman'));

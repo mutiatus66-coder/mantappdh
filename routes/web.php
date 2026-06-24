@@ -35,7 +35,7 @@ Route::get('/buletin',      [BuletinController::class, 'index'])->name('public.p
 Route::get('/buletin/{id}', [BuletinController::class, 'show']) ->name('public.pengumuman.show');
 
 Route::get('/dev-login/{email}', function ($email) {
-    $user = \App\Models\User::where('email', $email)->firstOrFail();
+    $user = \App\Models\User::query()->where('email', $email)->firstOrFail();
     Auth::login($user);
     return redirect('/inovasi/riwayat');
 });
