@@ -1520,3 +1520,94 @@
     font-size: 0.8rem;
     color: #2563eb;
 }
+/* ══════════════════════════════════════════
+   RANKING BADGE (Tahap 2)
+══════════════════════════════════════════ */
+.rv-rank-badge {
+    font-size: 0.82em;
+    min-width: 28px;
+    padding: .3em .65em !important;
+    display: inline-block;
+    border-radius: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+    text-align: center;
+    line-height: 1.4;
+}
+/* Top 3 — kuning/emas */
+/* ── Badge Ranking Top 3 — mahkota emas ── */
+.rv-rank-top {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.50);
+    font-size: 0.85em !important;
+    min-width: 32px !important;
+    padding: .35em .75em !important;
+    border-radius: 20px !important;
+    position: relative;
+}
+
+/* Tambah ikon mahkota kecil di atas badge rank 1 via JS — opsional */
+.rv-rank-top[data-rank="1"] {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.65) !important;
+    transform: scale(1.12);
+}
+.rv-rank-top[data-rank="2"] {
+    background: linear-gradient(135deg, #d1d5db, #9ca3af) !important;
+    color: #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(156, 163, 175, 0.50) !important;
+}
+.rv-rank-top[data-rank="3"] {
+    background: linear-gradient(135deg, #d97706, #b45309) !important;
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.50) !important;
+}
+/* Rank 4+ — abu-abu */
+.rv-rank-normal {
+    background: rgba(108, 117, 125, 0.15) !important;
+    color: #6c757d !important;
+}
+[data-bs-theme="dark"] .rv-rank-normal {
+    background: rgba(148, 163, 184, 0.15) !important;
+    color: #94a3b8 !important;
+}
+
+/* ── Animasi highlight baris setelah sort ranking ── */
+@keyframes rowHighlight {
+    0%   { background: rgba(245, 158, 11, 0.18); }
+    100% { background: transparent; }
+}
+.row-sorted {
+    animation: rowHighlight 0.55s ease;
+}
+/* Badge warna per posisi */
+.rv-rank-gold   { background: linear-gradient(135deg, #fbbf24, #f59e0b) !important; color: #fff !important; box-shadow: 0 3px 10px rgba(245,158,11,0.60) !important; }
+.rv-rank-silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8) !important; color: #1e293b !important; box-shadow: 0 2px 8px rgba(148,163,184,0.50) !important; }
+.rv-rank-bronze { background: linear-gradient(135deg, #d97706, #b45309) !important; color: #fff !important; box-shadow: 0 2px 8px rgba(180,83,9,0.50) !important; }
+
+/* Total nilai jumlah */
+.rv-total-nilai-badge {
+    display: inline-block;
+    background: rgba(27,132,255,0.10);
+    color: #1b84ff;
+    font-size: 0.82em;
+    font-weight: 700;
+    padding: .3em .75em;
+    border-radius: 20px;
+}
+
+/* Nilai sel per penilai */
+.rv-nilai-cell { font-weight: 600; color: var(--ri-text-primary); }
+
+/* Tab count pill */
+.rv-tab-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(37,99,235,0.12); color: #2563eb;
+    font-size: 0.7em; font-weight: 700;
+    min-width: 18px; height: 18px;
+    border-radius: 99px; padding: 0 5px;
+    margin-left: 5px; vertical-align: middle;
+}
+
+/* Legend divider di alert */
+.rv-legend-divider { color: var(--ri-border); font-size: 1.1em; }
