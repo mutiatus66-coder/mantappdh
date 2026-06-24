@@ -88,13 +88,13 @@
                     @if($penilaiLogin)
                     <td class="text-center">
                         <input type="number"
-                               class="form-control form-control-sm text-center input-ranking"
-                               style="width:64px; margin:auto;"
-                               data-usulan-id="{{ $nom['id'] }}"
-                               data-group="{{ $group }}"
-                               min="1"
-                               value="{{ $rankingSaya ?? '' }}"
-                               placeholder="-">
+                            class="form-control form-control-sm text-center input-ranking"
+                            style="width:64px; margin:auto;"
+                            data-usulan-id="{{ $nom['id'] }}"
+                            data-group="{{ $group }}"
+                            min="1"
+                            value="{{ $rankingSaya ?? '' }}"
+                            placeholder="-">
                     </td>
                     @endif
 

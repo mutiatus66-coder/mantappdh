@@ -30,13 +30,14 @@
     </div>
 
     {{-- ── Keterangan Status (disembunyikan server-side jika sudah ada ranking) ── --}}
+    {{-- ──
     @php
-        $adaRanking = collect($nominasiUmum)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0)
-                   || collect($nominasiPelajar)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0);
+            $adaRanking = collect($nominasiUmum)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0)
+                    || collect($nominasiPelajar)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0);
     @endphp
     <div class="alert alert-info d-flex gap-3 flex-wrap align-items-center mb-3"
-         id="alert-keterangan-ranking"
-         style="font-size:.875rem; {{ $adaRanking ? 'display:none;' : '' }}">
+            id="alert-keterangan-ranking"
+            style="font-size:.875rem; {{ $adaRanking ? 'display:none;' : '' }}">
         <span>
             <span class="badge bg-secondary me-1"><i class="bi bi-dash-circle"></i></span>
             Belum ada ranking
@@ -65,6 +66,7 @@
             Rank lainnya
         </span>
     </div>
+    ── --}}
 
     {{-- ── Tabs ── --}}
     <div class="rv-tabs-wrap">
@@ -149,13 +151,13 @@
         const el = document.createElement('div');
         el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
         el.innerHTML = `
-            <span class="ri-toast-icon">
-              <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
-            </span>
-            <span class="ri-toast-msg">${msg}</span>
-            <button class="ri-toast-close" onclick="this.parentElement.remove()">
-              <i class="bi bi-x-lg"></i>
-            </button>`;
+                <span class="ri-toast-icon">
+                <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+                </span>
+                <span class="ri-toast-msg">${msg}</span>
+                <button class="ri-toast-close" onclick="this.parentElement.remove()">
+                <i class="bi bi-x-lg"></i>
+                </button>`;
         document.body.appendChild(el);
         requestAnimationFrame(() => el.classList.add('ri-toast-show'));
         setTimeout(() => {
@@ -199,7 +201,6 @@
 
     // ════════════════════════════════════════════════════════════════
     // TOMBOL RANKING OTOMATIS
-    // Sort by total nilai desc → isi input + badge
     // ════════════════════════════════════════════════════════════════
     document.querySelectorAll('.btn-auto-ranking').forEach(btn => {
         btn.addEventListener('click', function () {
