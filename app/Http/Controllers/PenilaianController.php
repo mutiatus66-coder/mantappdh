@@ -264,16 +264,16 @@ class PenilaianController extends Controller
      * @return \Illuminate\Support\Collection  keyed by usulan_id
      */
     private function getRankingAkhir(int $subEventId): \Illuminate\Support\Collection
-    {
-        return RankingTahap2::query()
-            ->join('usulans', 'ranking_tahap2.usulan_id', '=', 'usulans.id')
-            ->where('usulans.sub_event_id', $subEventId)
-            ->selectRaw('ranking_tahap2.usulan_id, SUM(ranking_tahap2.ranking) as total_rank')
-            ->groupBy('ranking_tahap2.usulan_id')
-            ->orderBy('total_rank')
-            ->get()
-            ->keyBy('usulan_id');
-    }
+        {
+            return RankingTahap2::query()
+                ->join('usulans', 'ranking_tahap2.usulan_id', '=', 'usulans.id')
+                ->where('usulans.sub_event_id', $subEventId)
+                ->selectRaw('ranking_tahap2.usulan_id, SUM(ranking_tahap2.ranking) as total_rank')
+                ->groupBy('ranking_tahap2.usulan_id')
+                ->orderBy('total_rank')
+                ->get()
+                ->keyBy(fn($row) => (int) $row->usulan_id); // ← cast ke int
+        }
 
     // =========================================================================
     // SECTION 5 — HELPERS DATA USULAN

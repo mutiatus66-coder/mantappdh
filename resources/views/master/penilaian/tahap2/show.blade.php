@@ -25,14 +25,45 @@
             <h3 class="rv-page-title">{{ $subEvent['sub_event'] }}</h3>
         </div>
         <a href="{{ route('penilaian.tahap2.index') }}" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i>Kembali
+            <i class="bi bi-arrow-left me-1"></i>Kembali
         </a>
     </div>
 
-    {{-- ── Keterangan Status ── --}}
-    <div class="alert alert-info d-flex gap-3 flex-wrap align-items-center mb-3" style="font-size:.875rem">
-        <span><span class="badge bg-secondary me-1"><i class="bi bi-dash-circle"></i></span> Belum ada ranking</span>
-        <span><span class="badge rv-rank-badge rv-rank-top me-1"></span>- 3 Besar Akan Tersorot</span>
+    {{-- ── Keterangan Status (disembunyikan server-side jika sudah ada ranking) ── --}}
+    @php
+        $adaRanking = collect($nominasiUmum)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0)
+                   || collect($nominasiPelajar)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0);
+    @endphp
+    <div class="alert alert-info d-flex gap-3 flex-wrap align-items-center mb-3"
+         id="alert-keterangan-ranking"
+         style="font-size:.875rem; {{ $adaRanking ? 'display:none;' : '' }}">
+        <span>
+            <span class="badge bg-secondary me-1"><i class="bi bi-dash-circle"></i></span>
+            Belum ada ranking
+        </span>
+        <span class="rv-legend-divider">|</span>
+        <span>
+            <span class="badge rv-rank-badge rv-rank-gold me-1">
+                <i class="bi bi-trophy-fill" style="font-size:0.7em"></i>
+            </span>
+            Rank 1
+        </span>
+        <span>
+            <span class="badge rv-rank-badge rv-rank-silver me-1">
+                <i class="bi bi-award-fill" style="font-size:0.7em"></i>
+            </span>
+            Rank 2
+        </span>
+        <span>
+            <span class="badge rv-rank-badge rv-rank-bronze me-1">
+                <i class="bi bi-award-fill" style="font-size:0.7em"></i>
+            </span>
+            Rank 3
+        </span>
+        <span>
+            <span class="badge rv-rank-badge rv-rank-normal me-1">4+</span>
+            Rank lainnya
+        </span>
     </div>
 
     {{-- ── Tabs ── --}}
@@ -41,12 +72,24 @@
             <li class="nav-item" role="presentation">
                 <button class="rv-tab-btn active" id="tab-umum-btn"
                         data-bs-toggle="tab" data-bs-target="#tab-umum"
-                        type="button" role="tab">Umum</button>
+                        type="button" role="tab">
+                    Umum
+                    @php $countUmum = count($nominasiUmum); @endphp
+                    @if($countUmum > 0)
+                        <span class="rv-tab-count">{{ $countUmum }}</span>
+                    @endif
+                </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="rv-tab-btn" id="tab-pelajar-btn"
                         data-bs-toggle="tab" data-bs-target="#tab-pelajar"
-                        type="button" role="tab">Pelajar</button>
+                        type="button" role="tab">
+                    Pelajar
+                    @php $countPelajar = count($nominasiPelajar); @endphp
+                    @if($countPelajar > 0)
+                        <span class="rv-tab-count">{{ $countPelajar }}</span>
+                    @endif
+                </button>
             </li>
         </ul>
     </div>
@@ -89,7 +132,18 @@
     const subEventId = {{ $subEvent['id'] }};
 
     // ════════════════════════════════════════════════════════════════
-    // TOAST — disamakan dengan sistem ri-toast milik Tahap 1
+    // ALERT KETERANGAN — sembunyikan jika sudah ada badge rank
+    // ════════════════════════════════════════════════════════════════
+    function updateAlertKeterangan() {
+        const alertEl = document.getElementById('alert-keterangan-ranking');
+        if (!alertEl) return;
+        const adaRanking = document.querySelector('.rv-total-rank .rv-rank-badge') !== null;
+        if (adaRanking) alertEl.style.display = 'none';
+    }
+    updateAlertKeterangan();
+
+    // ════════════════════════════════════════════════════════════════
+    // TOAST
     // ════════════════════════════════════════════════════════════════
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
@@ -111,17 +165,31 @@
     }
 
     // ════════════════════════════════════════════════════════════════
-    // HELPER: render badge ranking di kolom "Total Rank"
+    // RENDER BADGE RANK — ikon + warna per posisi
     // ════════════════════════════════════════════════════════════════
     function renderRankBadge(rankNum) {
         if (!rankNum || rankNum < 1) {
             return `<span class="rv-rank-empty" style="color:var(--ri-text-muted)">-</span>`;
         }
-        const cls = rankNum <= 3 ? 'rv-rank-top' : 'rv-rank-normal';
-        return `<span class="badge rv-rank-badge ${cls}">${rankNum}</span>`;
+        if (rankNum === 1) {
+            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-gold" data-rank="1">
+                        <i class="bi bi-trophy-fill me-1" style="font-size:0.7em"></i>1
+                    </span>`;
+        }
+        if (rankNum === 2) {
+            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-silver" data-rank="2">
+                        <i class="bi bi-award-fill me-1" style="font-size:0.7em"></i>2
+                    </span>`;
+        }
+        if (rankNum === 3) {
+            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-bronze" data-rank="3">
+                        <i class="bi bi-award-fill me-1" style="font-size:0.7em"></i>3
+                    </span>`;
+        }
+        return `<span class="badge rv-rank-badge rv-rank-normal" data-rank="${rankNum}">${rankNum}</span>`;
     }
 
-    // Helper re-nomori kolom "No" setelah sort
+    // Re-nomori kolom "No" setelah sort
     function renumberRows(tbody) {
         tbody.querySelectorAll('tr[data-id]').forEach((tr, idx) => {
             const noCell = tr.querySelector('.row-no');
@@ -130,7 +198,8 @@
     }
 
     // ════════════════════════════════════════════════════════════════
-    // TOMBOL RANKING — sort by total nilai desc → isi input + badge
+    // TOMBOL RANKING OTOMATIS
+    // Sort by total nilai desc → isi input + badge
     // ════════════════════════════════════════════════════════════════
     document.querySelectorAll('.btn-auto-ranking').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -141,6 +210,7 @@
             const rows = Array.from(tbody.querySelectorAll('tr[data-id]'));
             if (rows.length === 0) return;
 
+            // Sort descending berdasarkan total nilai (jumlah)
             rows.sort((a, b) => {
                 const na = parseFloat(a.dataset.nilai) || 0;
                 const nb = parseFloat(b.dataset.nilai) || 0;
@@ -150,20 +220,24 @@
             rows.forEach((tr, idx) => {
                 const rank = idx + 1;
 
+                // Isi input ranking
                 const inp = tr.querySelector('.input-ranking');
                 if (inp) inp.value = rank;
 
+                // Update badge Total Rank
                 const rankCell = tr.querySelector('.rv-total-rank');
                 if (rankCell) rankCell.innerHTML = renderRankBadge(rank);
 
                 tbody.appendChild(tr);
 
+                // Animasi highlight baris
                 tr.classList.remove('row-sorted');
                 void tr.offsetWidth;
                 tr.classList.add('row-sorted');
             });
 
             renumberRows(tbody);
+            updateAlertKeterangan();
         });
     });
 
@@ -220,6 +294,7 @@
                 const data = await res.json();
                 if (data.success) {
                     toast(data.message ?? 'Ranking berhasil disimpan.', 'success');
+                    updateAlertKeterangan();
                 } else {
                     toast(data.message ?? 'Gagal menyimpan ranking.', 'error');
                 }
