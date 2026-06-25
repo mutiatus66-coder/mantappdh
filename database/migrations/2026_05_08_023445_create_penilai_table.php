@@ -10,6 +10,11 @@ return new class extends Migration
     {
         Schema::create('penilai', function (Blueprint $table) {
             $table->id();
+
+            // Tambahkan user_id dan foreign key langsung dari awal
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->string('nama');
             $table->string('email')->unique();
             $table->timestamps();
