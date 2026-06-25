@@ -37,10 +37,13 @@ class EventController extends Controller
 
         return response()->json([
             'success' => true,
-            'event'   => array_merge($event->toArray(), [
-                'update_url'  => route('event.update', $event->id),
+            'event' => [
+                'id' => $event->id,
+                'nama_event' => $event->nama_event,
+                'jenis' => $event->jenis,
+                'update_url' => route('event.update', $event->id),
                 'destroy_url' => route('event.destroy', $event->id),
-            ]),
+            ]
         ]);
     }
 
