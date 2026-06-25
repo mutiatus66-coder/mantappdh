@@ -32,5 +32,8 @@
     "bugs": {
         "url": "https://github.com/mutiatus66-coder/mantappdh/issues"
     },
-    "homepage": "https://github.com/mutiatus66-coder/mantappdh#readme"
+    "homepage": "https://github.com/mutiatus66-coder/mantappdh#readme",
+    "dependencies": {
+        "datatables.net-dt": "^2.3.8"
+    }
 }
