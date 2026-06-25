@@ -1,7 +1,20 @@
 @extends('index', ['dummy' => true])
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}">
+
+    {{--
+        PENTING: Jangan pakai datatables.css lokal karena versi nya lama (1.x)
+        nanti tampilan DT v2.x + ColumnControl berantakan.
+        pake CDN aja yh —Regan.
+    --}}
+    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.css"
+          rel="stylesheet"
+          integrity="sha384-wExd39N36yrzP/MYKag3xdBw+uoLSMRfH0f2+A/gxs5f3COtMPq/+indiwzt2Bcm"
+          crossorigin="anonymous">
+@endpush
+
 @section('content')
-<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
 
 {{-- ══ FLASH MESSAGES ══ --}}
 @if(session('success'))
@@ -62,7 +75,8 @@
                             data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ $se->id }}"
                             aria-expanded="false"
-                            aria-controls="collapse-{{ $se->id }}">
+                            aria-controls="collapse-{{ $se->id }}"
+                            data-se-id="{{ $se->id }}">
                         <span class="me-2 small text-muted">{{ $se->tahun }}</span>
                         <span class="fw-bold">{{ $se->sub_event }}</span>
                     </button>
@@ -78,10 +92,10 @@
                         {{-- Stats + Tambah --}}
                         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                             <div class="d-flex gap-2">
-                                <span class="badge-aktif rounded-pill px-3 py-2">
+                                <span class="badge-aktif rounded-pill px-3 py-2" id="badge-aktif-{{ $se->id }}">
                                     Aktif <strong>{{ $aktif }}</strong>
                                 </span>
-                                <span class="badge-nonaktif rounded-pill px-3 py-2">
+                                <span class="badge-nonaktif rounded-pill px-3 py-2" id="badge-nonaktif-{{ $se->id }}">
                                     Tidak Aktif <strong>{{ $nonaktif }}</strong>
                                 </span>
                             </div>
@@ -93,60 +107,50 @@
                             </button>
                         </div>
 
-                        {{-- Tabel Bidang --}}
-                        <div class="table-responsive">
-                            <table class="table bidang-table align-middle mb-0">
-                                <thead>
-                                    <tr>
-                                        <th width="60" class="text-center">No</th>
-                                        <th>Bidang</th>
-                                        <th width="180" class="text-center">Status</th>
-                                        <th width="280" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody-se-{{ $se->id }}">
-                                    @forelse($se->bidangs as $bidang)
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td>{{ ucfirst($bidang->nama) }}</td>
-                                        <td class="text-center">
-                                            @if($bidang->status === 'aktif')
-                                                <span class="badge-aktif px-3 py-2">Aktif</span>
-                                            @else
-                                                <span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="btn-aksi-wrap">
-                                                <button class="btn btn-warning btn-ubah-bidang btn-aksi"
-                                                        data-id="{{ $bidang->id }}"
-                                                        data-nama="{{ $bidang->nama }}"
-                                                        data-status="{{ $bidang->status }}"
-                                                        data-sub-event-id="{{ $se->id }}"
-                                                        data-sub-event-nama="{{ $se->sub_event }}"
-                                                        data-url="{{ route('bidang.update', $bidang->id) }}">
-                                                    Ubah
-                                                </button>
-                                                <button class="btn btn-danger btn-hapus-bidang btn-aksi"
-                                                        data-id="{{ $bidang->id }}"
-                                                        data-nama="{{ $bidang->nama }}"
-                                                        data-url="{{ route('bidang.destroy', $bidang->id) }}">
-                                                    Hapus
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr class="empty-row-wrapper">
-                                        <td colspan="4" class="text-center py-5 empty-row">
-                                            <i class="bi bi-inbox fs-4 d-block mb-2"></i>
-                                            Belum ada bidang untuk sub event ini.
-                                        </td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                        {{--
+                            Tabel: class "display" = stylesheet DT default (stripe + hover + order-column).
+                            nggak perlu overflow-x wrapper karna DT mengelola scroll sendiri.
+                        --}}
+                        <table id="tabelBidang-{{ $se->id }}" class="display nowrap compact" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Bidang</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-se-{{ $se->id }}">
+                                @forelse($se->bidangs as $bidang)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ ucfirst($bidang->nama) }}</td>
+                                    <td>{{ $bidang->status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}</td>
+                                    <td>
+                                        {{-- HTML aksi disimpan di sini tapi dirender via DT --}}
+                                        <div class="btn-aksi-wrap" style="display:flex;gap:6px;justify-content:center;">
+                                            <button class="btn btn-warning btn-sm btn-ubah-bidang"
+                                                    data-id="{{ $bidang->id }}"
+                                                    data-nama="{{ $bidang->nama }}"
+                                                    data-status="{{ $bidang->status }}"
+                                                    data-sub-event-id="{{ $se->id }}"
+                                                    data-sub-event-nama="{{ $se->sub_event }}"
+                                                    data-url="{{ route('bidang.update', $bidang->id) }}">
+                                                Ubah
+                                            </button>
+                                            <button class="btn btn-danger btn-sm btn-hapus-bidang"
+                                                    data-id="{{ $bidang->id }}"
+                                                    data-nama="{{ $bidang->nama }}"
+                                                    data-url="{{ route('bidang.destroy', $bidang->id) }}">
+                                                Hapus
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                @endforelse
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
@@ -228,7 +232,7 @@
 
             <div class="d-flex justify-content-center mb-3">
                 <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem; color:var(--ri-text-danger);"></i>
+                    <i class="bi bi-trash3" style="font-size:1.6rem; color:#dc2626;"></i>
                 </div>
             </div>
 
@@ -240,8 +244,8 @@
             </p>
 
             <div class="d-flex gap-2 justify-content-center">
-                <button type="button" class="btn btn-dark btn-aksi px-3" id="btnBatalHapusBidang">Batal</button>
-                <button type="button" id="btnHapusBidang" class="btn btn-danger btn-aksi px-3">Hapus</button>
+                <button type="button" class="btn btn-dark btn-sm px-3" id="btnBatalHapusBidang">Batal</button>
+                <button type="button" id="btnHapusBidang" class="btn btn-danger btn-sm px-3">Hapus</button>
             </div>
 
         </div>
@@ -251,44 +255,110 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+<script src="{{ asset('assets/jquery/jquery-4.0.0.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.js" integrity="sha384-R/5yB/Q48CmXPUHiIs/s7Oi2np8MQlE/bd774P/X5aCQMbUHQgY0MXTaPFUCd/GZ" crossorigin="anonymous"></script>
 
-    // ── Konstanta ──
+<script>
+(function () {
+    'use strict';
+
+    /* ══════════════════════════════════════════
+       KONSTANTA & ELEMEN
+    ══════════════════════════════════════════ */
     const STORE_URL = "{{ route('bidang.store') }}";
     const CSRF      = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    // ── Modal: singleton + static backdrop ──
     const modalBidangEl = document.getElementById('modalBidang');
     const modalHapusEl  = document.getElementById('modalHapusBidang');
     const modalBidang   = new bootstrap.Modal(modalBidangEl);
     const modalHapus    = new bootstrap.Modal(modalHapusEl);
 
-    // ── State ──
+    /* ══════════════════════════════════════════
+       STATE
+    ══════════════════════════════════════════ */
     let activeMode         = 'store';
-    let activeUpdateId     = null;
-    let activeUpdateUrl    = null;
-    let activeSubEventId   = null;
-    let activeSubEventNama = null;
-    let activeHapusId      = null;
-    let activeHapusUrl     = null;
-    let activeHapusNama    = null;
-    let isSaving           = false;
-    let isDeleting         = false;
+    let activeUpdateId     = null, activeUpdateUrl    = null;
+    let activeSubEventId   = null, activeSubEventNama = null;
+    let activeHapusId      = null, activeHapusUrl     = null, activeHapusNama = null;
+    let isSaving           = false, isDeleting        = false;
 
-    // ────────────────────────────────────────────
-    // HELPER: AJAX pakai FormData agar _method terbaca Laravel
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       DATATABLES — registry & inisialisasi
+       Setiap sub event punya instance DT sendiri,
+       disimpan di dtMap agar bisa di-update.
+    ══════════════════════════════════════════ */
+    const dtMap = {};   // { seId: DataTable instance }
+
+    function initDT(seId) {
+        if (dtMap[seId]) return;   // sudah diinit, skip
+        dtMap[seId] = $(`#tabelBidang-${seId}`).DataTable({
+            responsive: true,
+
+            language: {
+                lengthMenu  : 'Tampilkan _MENU_ data',
+                search      : 'Cari:',
+                zeroRecords : 'Tidak ada data ditemukan',
+                info        : 'Menampilkan _START_–_END_ dari _TOTAL_ data',
+                infoEmpty   : 'Tidak ada data',
+                infoFiltered: '(difilter dari _MAX_ total data)',
+                paginate    : { first: '«', last: '»', next: '›', previous: '‹' },
+                emptyTable  : 'Belum ada bidang untuk sub event ini.',
+            },
+
+            layout: {
+                topStart: ['pageLength', { buttons: ['colvis'] }],
+                topEnd  : 'search',
+            },
+
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            order     : [[0, 'asc']],
+
+            columnDefs: [
+                {
+                    targets  : [0],
+                    searchable: false,
+                    width    : '50px',
+                    className: 'dt-center',
+                },
+                {
+                    targets  : [2],
+                    width    : '140px',
+                    className: 'dt-center',
+                },
+                {
+                    targets   : [3],
+                    orderable : false,
+                    searchable: false,
+                    width     : '200px',
+                    className : 'dt-center',
+                },
+            ],
+        });
+    }
+
+    /* ── Inisialisasi DT saat accordion dibuka (lazy) ── */
+    document.querySelectorAll('.accordion-collapse').forEach(function (collapseEl) {
+        collapseEl.addEventListener('shown.bs.collapse', function () {
+            const seId = this.id.replace('collapse-', '');
+            initDT(seId);
+            // Penting: DT butuh columns.adjust() saat container baru terlihat
+            if (dtMap[seId]) dtMap[seId].columns.adjust().responsive.recalc();
+        });
+    });
+
+    /* ══════════════════════════════════════════
+       HELPER: AJAX
+    ══════════════════════════════════════════ */
     async function sendRequest(url, data) {
         const form = new FormData();
         Object.entries(data).forEach(([k, v]) => form.append(k, v));
         const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': CSRF,
-                'Accept': 'application/json',
-            },
-            body: form,
+            method : 'POST',
+            headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+            body   : form,
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
@@ -297,19 +367,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return res.json();
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Toast
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       HELPER: TOAST
+    ══════════════════════════════════════════ */
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
         el.innerHTML = `
             <span class="ri-toast-icon">
-              <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+                <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
             </span>
             <span class="ri-toast-msg">${msg}</span>
             <button class="ri-toast-close" onclick="this.parentElement.remove()">
-              <i class="bi bi-x-lg"></i>
+                <i class="bi bi-x-lg"></i>
             </button>`;
         document.body.appendChild(el);
         requestAnimationFrame(() => el.classList.add('ri-toast-show'));
@@ -319,90 +389,149 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3500);
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Update baris yang sudah ada
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       HELPER: BADGE COUNTER
+       Update badge Aktif / Tidak Aktif di header accordion
+    ══════════════════════════════════════════ */
+    function updateBadges(seId) {
+        const dt = dtMap[seId];
+        if (!dt) return;
+
+        let aktif = 0, nonaktif = 0;
+        dt.rows().every(function () {
+            const statusText = this.data()[2];    // kolom ke-2 = Status (plain text)
+            if (typeof statusText === 'string') {
+                if (statusText.trim() === 'Aktif') aktif++;
+                else nonaktif++;
+            }
+        });
+
+        const badgeAktif    = document.getElementById(`badge-aktif-${seId}`);
+        const badgeNonaktif = document.getElementById(`badge-nonaktif-${seId}`);
+        if (badgeAktif)    badgeAktif.innerHTML    = `Aktif <strong>${aktif}</strong>`;
+        if (badgeNonaktif) badgeNonaktif.innerHTML = `Tidak Aktif <strong>${nonaktif}</strong>`;
+    }
+
+    /* ══════════════════════════════════════════
+       HELPER: MANIPULASI BARIS DT
+    ══════════════════════════════════════════ */
+    function makeAksiHtml(id, nama, status, seId, seNama, updateUrl, destroyUrl) {
+        return `
+        <div class="btn-aksi-wrap" style="display:flex;gap:6px;justify-content:center;">
+            <button class="btn btn-warning btn-sm btn-ubah-bidang"
+                    data-id="${id}"
+                    data-nama="${nama}"
+                    data-status="${status}"
+                    data-sub-event-id="${seId}"
+                    data-sub-event-nama="${seNama}"
+                    data-url="${updateUrl}">
+                Ubah
+            </button>
+            <button class="btn btn-danger btn-sm btn-hapus-bidang"
+                    data-id="${id}"
+                    data-nama="${nama}"
+                    data-url="${destroyUrl}">
+                Hapus
+            </button>
+        </div>`;
+    }
+
     function updateRow(id, nama, status) {
-        const ubahBtn = document.querySelector(`.btn-ubah-bidang[data-id="${id}"]`);
-        if (!ubahBtn) return;
-        const tr = ubahBtn.closest('tr');
-        tr.cells[1].textContent = nama.charAt(0).toUpperCase() + nama.slice(1);
-        tr.cells[2].innerHTML   = status === 'aktif'
-            ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
-            : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
-        ubahBtn.dataset.nama   = nama;
-        ubahBtn.dataset.status = status;
-        const hapusBtn = tr.querySelector('.btn-hapus-bidang');
-        if (hapusBtn) hapusBtn.dataset.nama = nama;
+        const seId = activeSubEventId;
+        const dt   = dtMap[seId];
+        if (!dt) return;
+
+        // Cari baris berdasarkan data-id di kolom aksi
+        dt.rows().every(function () {
+            const node = this.node();
+            const btn  = node?.querySelector(`.btn-ubah-bidang[data-id="${id}"]`);
+            if (!btn) return;
+
+            const statusText = status === 'aktif' ? 'Aktif' : 'Tidak Aktif';
+            const statusHtml = status === 'aktif'
+                ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+                : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
+
+            // Update data DT (kolom 1 & 2) lalu invalidate
+            this.data()[1] = nama.charAt(0).toUpperCase() + nama.slice(1);
+            this.data()[2] = statusText;
+            dt.cell(this.index(), 1).data(nama.charAt(0).toUpperCase() + nama.slice(1));
+            dt.cell(this.index(), 2).data(statusText);
+
+            // Render ulang kolom status sebagai HTML badge
+            $(node).find('td').eq(2).html(statusHtml);
+
+            // Perbarui data-attribute tombol
+            btn.dataset.nama   = nama;
+            btn.dataset.status = status;
+            const hapusBtn = node.querySelector('.btn-hapus-bidang');
+            if (hapusBtn) hapusBtn.dataset.nama = nama;
+        });
+
+        updateBadges(seId);
+        dt.draw(false);
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Tambah baris baru ke tbody sub event
-    // ────────────────────────────────────────────
-    function appendRow(bidang, subEventId) {
-        const tbody = document.getElementById(`tbody-se-${subEventId}`);
-        if (!tbody) return;
+    function appendRow(bidang, seId) {
+        const dt = dtMap[seId];
+        if (!dt) return;
 
-        const emptyRow = tbody.querySelector('.empty-row-wrapper');
-        if (emptyRow) emptyRow.remove();
+        const statusText = bidang.status === 'aktif' ? 'Aktif' : 'Tidak Aktif';
+        const newNo      = dt.rows().count() + 1;
 
-        const rowCount = tbody.querySelectorAll('tr').length + 1;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="text-center">${rowCount}</td>
-            <td>${bidang.nama.charAt(0).toUpperCase() + bidang.nama.slice(1)}</td>
-            <td class="text-center">
-                ${bidang.status === 'aktif'
-                    ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
-                    : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`}
-            </td>
-            <td class="text-center">
-                <div class="btn-aksi-wrap">
-                    <button class="btn btn-warning btn-ubah-bidang btn-aksi"
-                            data-id="${bidang.id}"
-                            data-nama="${bidang.nama}"
-                            data-status="${bidang.status}"
-                            data-sub-event-id="${subEventId}"
-                            data-sub-event-nama="${bidang.sub_event_nama ?? ''}"
-                            data-url="${bidang.update_url}">
-                        Ubah
-                    </button>
-                    <button class="btn btn-danger btn-hapus-bidang btn-aksi"
-                            data-id="${bidang.id}"
-                            data-nama="${bidang.nama}"
-                            data-url="${bidang.destroy_url}">
-                        Hapus
-                    </button>
-                </div>
-            </td>`;
-        tbody.appendChild(tr);
-        // Tidak perlu re-attach listener — pakai event delegation di bawah
+        dt.row.add([
+            newNo,
+            bidang.nama.charAt(0).toUpperCase() + bidang.nama.slice(1),
+            statusText,
+            makeAksiHtml(
+                bidang.id,
+                bidang.nama,
+                bidang.status,
+                seId,
+                bidang.sub_event_nama ?? '',
+                bidang.update_url,
+                bidang.destroy_url
+            ),
+        ]).draw(false);
+
+        // Render kolom status sebagai badge setelah row ditambah
+        const lastRow = dt.row(':last', { search: 'none' }).node();
+        if (lastRow) {
+            const statusHtml = bidang.status === 'aktif'
+                ? `<span class="badge-aktif px-3 py-2">Aktif</span>`
+                : `<span class="badge-nonaktif px-3 py-2">Tidak Aktif</span>`;
+            $(lastRow).find('td').eq(2).html(statusHtml);
+        }
+
+        updateBadges(seId);
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Loading state tombol Simpan
-    // ────────────────────────────────────────────
-    function setSimpanLoading(loading) {
-        document.getElementById('btnSimpanBidang').disabled     = loading;
-        document.getElementById('btnSimpanBidang').textContent  = loading ? 'Menyimpan...' : 'Simpan';
-        document.getElementById('btnBatalBidang').disabled      = loading;
-        document.getElementById('btnTutupModalBidang').disabled = loading;
+    /* ══════════════════════════════════════════
+       HELPER: LOADING STATE
+    ══════════════════════════════════════════ */
+    function setSimpanLoading(on) {
+        const btn   = document.getElementById('btnSimpanBidang');
+        const batal = document.getElementById('btnBatalBidang');
+        const tutup = document.getElementById('btnTutupModalBidang');
+        btn.disabled    = on;
+        btn.textContent = on ? 'Menyimpan...' : 'Simpan';
+        batal.disabled  = on;
+        tutup.disabled  = on;
     }
 
-    // ────────────────────────────────────────────
-    // HELPER: Loading state tombol Hapus
-    // ────────────────────────────────────────────
-    function setHapusLoading(loading) {
-        document.getElementById('btnHapusBidang').disabled      = loading;
-        document.getElementById('btnHapusBidang').textContent   = loading ? 'Menghapus...' : 'Hapus';
-        document.getElementById('btnBatalHapusBidang').disabled = loading;
+    function setHapusLoading(on) {
+        const btn   = document.getElementById('btnHapusBidang');
+        const batal = document.getElementById('btnBatalHapusBidang');
+        btn.disabled    = on;
+        btn.textContent = on ? 'Menghapus...' : 'Hapus';
+        batal.disabled  = on;
     }
 
-    // ────────────────────────────────────────────
-    // EVENT DELEGATION: Tambah, Ubah, Hapus
-    // Satu listener di document body — menangkap semua tombol
-    // termasuk baris yang baru di-append
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       EVENT DELEGATION — Tambah / Ubah / Hapus
+       Satu listener di body menangkap semua tombol
+       termasuk baris yang baru di-append ke DT
+    ══════════════════════════════════════════ */
     document.body.addEventListener('click', function (e) {
 
         // ── Tambah Bidang ──
@@ -447,50 +576,41 @@ document.addEventListener('DOMContentLoaded', function () {
             activeHapusId   = hapusBtn.dataset.id;
             activeHapusUrl  = hapusBtn.dataset.url;
             activeHapusNama = hapusBtn.dataset.nama;
+            // Ambil seId dari tombol ubah di baris yang sama
+            const tr = hapusBtn.closest('tr');
+            const ubahSibling = tr?.querySelector('.btn-ubah-bidang');
+            activeSubEventId = ubahSibling?.dataset.subEventId ?? activeSubEventId;
             document.getElementById('namaBidangHapus').textContent = activeHapusNama;
             setHapusLoading(false);
             modalHapus.show();
         }
     });
 
-    // ────────────────────────────────────────────
-    // MODAL: tutup manual (guard saat loading)
-    // ────────────────────────────────────────────
-    document.getElementById('btnTutupModalBidang').addEventListener('click', function () {
-        if (isSaving) return;
-        modalBidang.hide();
-    });
-    document.getElementById('btnBatalBidang').addEventListener('click', function () {
-        if (isSaving) return;
-        modalBidang.hide();
-    });
-    document.getElementById('btnBatalHapusBidang').addEventListener('click', function () {
-        if (isDeleting) return;
-        modalHapus.hide();
-    });
+    /* ══════════════════════════════════════════
+       MODAL: TUTUP MANUAL
+    ══════════════════════════════════════════ */
+    document.getElementById('btnTutupModalBidang').addEventListener('click', () => { if (!isSaving)   modalBidang.hide(); });
+    document.getElementById('btnBatalBidang').addEventListener('click',      () => { if (!isSaving)   modalBidang.hide(); });
+    document.getElementById('btnBatalHapusBidang').addEventListener('click', () => { if (!isDeleting) modalHapus.hide(); });
 
-    // ────────────────────────────────────────────
-    // SUBMIT: Tambah / Ubah
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       SUBMIT: TAMBAH / UBAH
+    ══════════════════════════════════════════ */
     document.getElementById('btnSimpanBidang').addEventListener('click', async function () {
         if (isSaving) return;
 
         const nama   = document.getElementById('bidangNama').value.trim();
         const status = document.querySelector('input[name="statusBidang"]:checked').value;
 
-        if (!nama) {
-            document.getElementById('bidangNama').focus();
-            return;
-        }
+        if (!nama) { document.getElementById('bidangNama').focus(); return; }
 
         isSaving = true;
         setSimpanLoading(true);
 
         try {
             const isUpdate = activeMode === 'update';
-            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
-            const res      = await sendRequest(url, {
-                _method:      isUpdate ? 'PUT' : 'POST',
+            const res = await sendRequest(isUpdate ? activeUpdateUrl : STORE_URL, {
+                _method     : isUpdate ? 'PUT' : 'POST',
                 nama,
                 status,
                 sub_event_id: activeSubEventId,
@@ -499,26 +619,24 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.success) {
                 modalBidang.hide();
                 toast(isUpdate ? 'Bidang berhasil diubah!' : 'Bidang berhasil ditambahkan!');
-                if (isUpdate) {
-                    updateRow(activeUpdateId, nama, status);
-                } else {
-                    appendRow(res.bidang, activeSubEventId);
-                }
+                isUpdate
+                    ? updateRow(activeUpdateId, nama, status)
+                    : appendRow(res.bidang, activeSubEventId);
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }
-        } catch (e) {
-            console.error(e);
-            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } catch (err) {
+            console.error(err);
+            toast('Terjadi kesalahan, coba lagi.', 'error');
         } finally {
             isSaving = false;
             setSimpanLoading(false);
         }
     });
 
-    // ────────────────────────────────────────────
-    // SUBMIT: Hapus
-    // ────────────────────────────────────────────
+    /* ══════════════════════════════════════════
+       SUBMIT: HAPUS
+    ══════════════════════════════════════════ */
     document.getElementById('btnHapusBidang').addEventListener('click', async function () {
         if (isDeleting) return;
 
@@ -530,20 +648,29 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.success) {
                 modalHapus.hide();
                 toast(`Bidang "${activeHapusNama}" berhasil dihapus!`);
-                const hapusBtn = document.querySelector(`.btn-hapus-bidang[data-id="${activeHapusId}"]`);
-                if (hapusBtn) hapusBtn.closest('tr').remove();
+
+                const dt = dtMap[activeSubEventId];
+                if (dt) {
+                    dt.rows().every(function () {
+                        const node = this.node();
+                        if (node?.querySelector(`.btn-hapus-bidang[data-id="${activeHapusId}"]`)) {
+                            dt.row(this.index()).remove().draw(false);
+                        }
+                    });
+                    updateBadges(activeSubEventId);
+                }
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }
-        } catch (e) {
-            console.error(e);
-            toast(e.message ?? 'Terjadi kesalahan, coba lagi.', 'error');
+        } catch (err) {
+            console.error(err);
+            toast('Terjadi kesalahan, coba lagi.', 'error');
         } finally {
             isDeleting = false;
             setHapusLoading(false);
         }
     });
 
-});
+})();
 </script>
 @endpush

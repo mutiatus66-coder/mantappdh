@@ -4,9 +4,9 @@
     <link rel="stylesheet" href="<?= asset('template.demo6/demo6/assets/css/CostumeStyle.css') ?>">
 
     {{--
-        PENTING: JANGAN pakai datatables.css lokal karena versi lama (1.x)
-        yang akan mengoverride dan merusak tampilan DT v2.x + ColumnControl.
-        Gunakan CDN resmi saja — semuanya sudah kompatibel.
+        PENTING: Jangan pakai datatables.css lokal karena versi nya lama (1.x)
+        nanti tampilan DT v2.x + ColumnControl berantakan.
+        pake CDN aja yh —Regan.
     --}}
     <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.css" rel="stylesheet" integrity="sha384-wExd39N36yrzP/MYKag3xdBw+uoLSMRfH0f2+A/gxs5f3COtMPq/+indiwzt2Bcm" crossorigin="anonymous">
 
@@ -33,9 +33,9 @@
 
     {{--
         Tabel: class "display" = stylesheet DT default (stripe + hover + order-column).
-        Tidak perlu overflow-x wrapper karena DT mengelola scroll sendiri.
+        nggak perlu overflow-x wrapper karna DT mengelola scroll sendiri.
     --}}
-    <table id="tabelEvent" class="display nowrap" style="width:100%">
+    <table id="tabelEvent" class="display nowrap compact" style="width:100%">
         <thead>
             <tr>
                 <th>No</th>
@@ -142,11 +142,7 @@
 
 @push('scripts')
 {{--
-    Urutan WAJIB:
-    1. jQuery (lokal — sudah ada di project)
-    2. DataTables core JS  (CDN v2.3.8)
-    3. ColumnControl JS    (CDN v1.1.1)
-    JANGAN load DT core JS lokal karena kemungkinan versi 1.x
+    JANGAN load DT core JS lokal karena kemungkinan versi lawas
 --}}
 <script src="<?= asset('assets/jquery/jquery-4.0.0.min.js') ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
@@ -180,20 +176,12 @@
     let dt              = null;
 
     /* ══════════════════════════════════════════
-       INIT DATATABLES + COLUMNCONTROL
-       
-       Root cause filter tidak muncul sebelumnya:
-       ① CSS lokal (datatables.css v1.x) override style ColumnControl
-         sehingga dropdown filter tidak visible / z-index tertimpa.
-       ② format columnControl array nested ['order', ['searchList']]
-         tidak valid — harus flat string: ['order', 'searchList']
-       ③ ordering: { indicators, handler } bukan syntax DT v2.x —
-         harus orderIndicators + orderHandler di root object
+    Layout Datatables
     ══════════════════════════════════════════ */
     $(document).ready(function () {
         dt = $('#tabelEvent').DataTable({
+            responsive: true,
 
-            /* ── Bahasa ── */
             language: {
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
@@ -201,54 +189,39 @@
                 info        : 'Menampilkan _START_–_END_ dari _TOTAL_ data',
                 infoEmpty   : 'Tidak ada data',
                 infoFiltered: '(difilter dari _MAX_ total data)',
-                paginate    : { first: '«', last: '»', next: '›', previous: '‹' },
+                paginate    : {
+                    first: '«',
+                    last: '»',
+                    next: '›',
+                    previous: '‹'
+                }
             },
 
-            /* ── Layout kontrol DT (sesuai DT v2.x) ── */
             layout: {
-                topStart   : 'pageLength',
-                topEnd     : 'search',
-                bottomStart: 'info',
-                bottomEnd  : 'paging',
+                topStart: ['pageLength',
+                { buttons: ['colvis'] }],
+                topEnd: 'search'
             },
 
             pageLength: 10,
-            lengthMenu: [10, 25, 50, 100],
-            order     : [[1, 'asc']],
-
-            /* ── Serahkan sort ke ColumnControl, bukan DT bawaan ── */
-            orderIndicators: false,
-            orderHandler   : false,
-
-            /* ── ColumnControl: format FLAT string (bukan nested array) ──
-               'order'      → ikon sort per kolom (↑↓)
-               'searchList' → dropdown daftar nilai unik untuk filter
-               Default ini berlaku untuk semua kolom kecuali yang di-override
-            ── */
-            columnControl: ['order', 'searchList'],
+            lengthMenu: [10,25,50,100],
+            order: [[0,'asc']],
 
             columnDefs: [
                 {
-                    /* Kolom No: sort saja, tanpa filter */
-                    targets      : [0],
-                    columnControl: ['order'],
-                    orderable    : true,
-                    searchable   : false,
-                    width        : '50px',
-                    className    : 'dt-center',
+                    targets: [0],
+                    searchable: false,
+                    width: '50px',
+                    className: 'dt-center'
                 },
                 {
-                    /* Kolom Aksi: tidak ada sort, tidak ada filter */
-                    targets      : [3],
-                    columnControl: [],
-                    orderable    : false,
-                    searchable   : false,
-                    width        : '160px',
-                    className    : 'dt-center',
-                },
-                /* Kolom 1 (Nama Event) dan 2 (Jenis):
-                   otomatis pakai default global ['order', 'searchList'] */
-            ],
+                    targets: [3],
+                    orderable: false,
+                    searchable: false,
+                    width: '160px',
+                    className: 'dt-center'
+                }
+            ]
         });
 
         dt.on('draw', updateTotal);
@@ -303,17 +276,25 @@
     /* ══════════════════════════════════════════
        HELPER: MANIPULASI BARIS DT
     ══════════════════════════════════════════ */
-    function makeAksiHtml(id, namaEvent, jenis, updateUrl, destroyUrl) {
-        return `<div style="display:flex;gap:6px;justify-content:center;">
-            <button class="btn btn-warning btn-sm btn-edit-event"
-                    data-id="${id}"
-                    data-nama-event="${namaEvent}"
-                    data-jenis="${jenis}"
-                    data-url="${updateUrl}">Ubah</button>
-            <button class="btn btn-danger btn-sm btn-hapus-event"
-                    data-id="${id}"
-                    data-nama="${namaEvent}"
-                    data-url="${destroyUrl}">Hapus</button>
+    function makeAksiHtml(id, namaEvent, jenis, updateUrl = '', destroyUrl = '') {
+        return `
+        <div class="btn-aksi-wrap d-flex gap-2 justify-content-center">
+            <button
+                class="btn btn-warning btn-sm btn-edit-event"
+                data-id="${id}"
+                data-nama-event="${namaEvent}"
+                data-jenis="${jenis}"
+                data-url="${updateUrl}">
+                Ubah
+            </button>
+
+            <button
+                class="btn btn-danger btn-sm btn-hapus-event"
+                data-id="${id}"
+                data-nama="${namaEvent}"
+                data-url="${destroyUrl}">
+                Hapus
+            </button>
         </div>`;
     }
 

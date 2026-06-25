@@ -2,6 +2,12 @@
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
+    {{--
+        PENTING: Jangan pakai datatables.css lokal karena versi nya lama (1.x)
+        nanti tampilan DT v2.x + ColumnControl berantakan.
+        pake CDN aja yh —Regan.
+    --}}
+<link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.css" rel="stylesheet" integrity="sha384-wExd39N36yrzP/MYKag3xdBw+uoLSMRfH0f2+A/gxs5f3COtMPq/+indiwzt2Bcm" crossorigin="anonymous">
 @endpush
 
 @section('content')
@@ -22,13 +28,10 @@
         <div class="total-badge">
             Total Sub Event: <span id="totalSubEvent">{{ $subEvents->count() }}</span>
         </div>
-        <div class="search-box">
-            <input type="text" id="searchSubEvent" placeholder="Cari sub event...">
-        </div>
     </div>
 
     <div style="overflow-x: auto;">
-        <table class="se-table">
+        <table id="tabelSubEvent" class="display nowrap compact" style="width:80%">
             <thead>
                 <tr>
                     <th width="50">No</th>
@@ -52,8 +55,8 @@
                     <td>{{ $item->mulai }}</td>
                     <td>{{ $item->berakhir }}</td>
                     <td style="text-align:center;">
-                        <div class="btn-aksi-wrap">
-                            <button class="btn btn-warning btn-edit-se btn-aksi"
+                        <div class="btn-aksi-wrap" style="display:flex;gap:6px;justify-content:center;">
+                            <button class="btn btn-warning btn-edit-se btn-sm"
                                     data-id="{{ $item->id }}"
                                     data-tahun="{{ $item->tahun }}"
                                     data-event-id="{{ $item->event_id }}"
@@ -64,7 +67,7 @@
                                     data-url="{{ route('sub-event.update', $item->id) }}">
                                 Ubah
                             </button>
-                            <button class="btn btn-danger btn-hapus-se btn-aksi"
+                            <button class="btn btn-danger btn-hapus-se btn-sm"
                                     data-id="{{ $item->id }}"
                                     data-nama="{{ $item->sub_event }}"
                                     data-url="{{ route('sub-event.destroy', $item->id) }}">
@@ -175,6 +178,12 @@
 @endsection
 
 @push('scripts')
+
+<script src="<?= asset('assets/jquery/jquery-4.0.0.min.js') ?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.js" integrity="sha384-R/5yB/Q48CmXPUHiIs/s7Oi2np8MQlE/bd774P/X5aCQMbUHQgY0MXTaPFUCd/GZ" crossorigin="anonymous"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -203,6 +212,67 @@ document.addEventListener('DOMContentLoaded', function () {
     let isSaving        = false;
     let isDeleting      = false;
 
+    /* ══════════════════════════════════════════
+    Layout Datatables
+    ══════════════════════════════════════════ */
+    $(document).ready(function () {
+        dt = $('#tabelSubEvent').DataTable({
+            responsive: true,
+
+            language: {
+                lengthMenu  : 'Tampilkan _MENU_ data',
+                search      : 'Cari:',
+                zeroRecords : 'Tidak ada data ditemukan',
+                info        : 'Menampilkan _START_–_END_ dari _TOTAL_ data',
+                infoEmpty   : 'Tidak ada data',
+                infoFiltered: '(difilter dari _MAX_ total data)',
+                paginate    : {
+                    first: '«',
+                    last: '»',
+                    next: '›',
+                    previous: '‹'
+                }
+            },
+
+            layout: {
+                topStart: ['pageLength',
+                { buttons: ['colvis'] }],
+                topEnd: 'search'
+            },
+
+            pageLength: 10,
+            lengthMenu: [10,25,50,100],
+            order: [[0,'asc']],
+
+            columnDefs: [
+                {
+                    targets: [0],
+                    searchable: false,
+                    width: '50px',
+                    className: 'dt-center'
+                },
+                {
+                    targets: [7],
+                    orderable: false,
+                    searchable: false,
+                    width: '160px',
+                    className: 'dt-center'
+                },
+                {
+                    targets: [5, 6],
+                    type: 'date'
+                }
+            ]
+        });
+
+        dt.on('draw', updateTotal);
+        updateTotal();
+    });
+
+    function updateTotal() {
+        if (!dt || !totalSpan) return;
+        totalSpan.textContent = dt.rows({ search: 'applied' }).count();
+    }
     // ────────────────────────────────────────────
     // HELPER: AJAX pakai FormData agar _method terbaca Laravel
     // ────────────────────────────────────────────
