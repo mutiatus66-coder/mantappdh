@@ -45,6 +45,7 @@
                         <div class="btn-aksi-wrap">
                             <button class="btn btn-warning btn-aksi btn-edit-penilai"
                                     data-id="{{ $p->id }}"
+                                    data-user-id="{{ $p->user_id }}"
                                     data-nama="{{ $p->nama }}"
                                     data-email="{{ $p->email }}"
                                     data-url="{{ route('penilai.update', $p->id) }}">Ubah</button>
@@ -69,7 +70,7 @@
 
 </div>
 
-{{-- MODAL Tambah / Ubah --}}
+{{-- MODAL Tambah / Ubah (Sekarang menggunakan Dropdown User) --}}
 <div class="modal fade" id="modalPenilai" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
@@ -79,13 +80,24 @@
                         id="btnTutupModalPenilai"><i class="bi bi-x-lg fs-5"></i></button>
             </div>
             <div class="modal-body px-5 py-4">
+                {{-- PILIH USER --}}
                 <div class="mb-4">
-                    <label class="form-label fw-semibold required">Nama</label>
-                    <input type="text" id="penilaiNama" class="form-control" placeholder="Nama penilai...">
+                    <label class="form-label fw-semibold required">Pilih User Penilai</label>
+                    <select id="penilaiUserId" class="form-select">
+                        <option value="" disabled selected>Pilih User Penilai...</option>
+                        @foreach($usersPenilai as $u)
+                        <option value="{{ $u->id }}" data-nama="{{ $u->nama }}" data-email="{{ $u->email }}">
+                            {{ $u->nama }} ({{ $u->email }})
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="mb-4">
-                    <label class="form-label fw-semibold required">Email</label>
-                    <input type="email" id="penilaiEmail" class="form-control" placeholder="Email penilai...">
+
+                {{-- PREVIEW NAMA & EMAIL (otomatis terisi saat user dipilih) --}}
+                <div id="previewPenilai" class="p-2 bg-light rounded d-none">
+                    <small class="text-muted">
+                        Nama: <span id="previewNama" class="fw-semibold"></span> &nbsp;|&nbsp; Email: <span id="previewEmail" class="fw-semibold"></span>
+                    </small>
                 </div>
             </div>
             <div class="modal-footer px-5 py-3">
@@ -141,10 +153,23 @@ document.addEventListener('DOMContentLoaded', function () {
     let isSaving        = false;
     let isDeleting      = false;
 
+    // ── Preview Nama & Email saat dropdown berubah ──
+    document.getElementById('penilaiUserId').addEventListener('change', function () {
+        const selected = this.options[this.selectedIndex];
+        const previewEl = document.getElementById('previewPenilai');
+        if (selected.value) {
+            previewEl.classList.remove('d-none');
+            document.getElementById('previewNama').textContent  = selected.dataset.nama;
+            document.getElementById('previewEmail').textContent = selected.dataset.email;
+        } else {
+            previewEl.classList.add('d-none');
+        }
+    });
+
     async function sendRequest(url, data) {
         const form = new FormData();
         Object.entries(data).forEach(([k, v]) => {
-            if (v !== null && v !== undefined) form.append(k, v);
+            if (v !== null && v !== undefined && v !== '') form.append(k, v);
         });
         const res = await fetch(url, {
             method: 'POST',
@@ -190,18 +215,21 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('btnBatalHapusPenilai').disabled = loading;
     }
 
-    function updateRow(id, nama, email) {
+    // Update baris dengan data baru
+    function updateRow(id, nama, email, userId) {
         const editBtn = tbody.querySelector(`.btn-edit-penilai[data-id="${id}"]`);
         if (!editBtn) return;
         const tr = editBtn.closest('tr');
         tr.cells[1].textContent = nama;
         tr.cells[2].textContent = email;
-        editBtn.dataset.nama  = nama;
-        editBtn.dataset.email = email;
+        editBtn.dataset.nama    = nama;
+        editBtn.dataset.email   = email;
+        editBtn.dataset.userId  = userId;
         const hapusBtn = tr.querySelector('.btn-hapus-penilai');
         if (hapusBtn) hapusBtn.dataset.nama = nama;
     }
 
+    // Tambah baris baru
     function appendRow(p) {
         document.getElementById('emptyRow')?.remove();
         const n  = tbody.querySelectorAll('tr').length + 1;
@@ -213,8 +241,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <td style="text-align:center;">
                 <div class="btn-aksi-wrap">
                     <button class="btn btn-warning btn-aksi btn-edit-penilai"
-                            data-id="${p.id}" data-nama="${p.nama}"
-                            data-email="${p.email}" data-url="${p.update_url}">Ubah</button>
+                            data-id="${p.id}" data-user-id="${p.user_id}"
+                            data-nama="${p.nama}" data-email="${p.email}"
+                            data-url="${p.update_url}">Ubah</button>
                     <button class="btn btn-danger btn-aksi btn-hapus-penilai"
                             data-id="${p.id}" data-nama="${p.nama}"
                             data-url="${p.destroy_url}">Hapus</button>
@@ -232,22 +261,29 @@ document.addEventListener('DOMContentLoaded', function () {
         totalSpan.textContent = n;
     }
 
+    // ── BUKA MODAL TAMBAH ──
     document.getElementById('btnTambahPenilai').addEventListener('click', function () {
         activeMode = 'store'; activeUpdateId = null; activeUpdateUrl = null;
         document.getElementById('modalPenilaiTitle').textContent = 'Tambah Penilai';
-        document.getElementById('penilaiNama').value  = '';
-        document.getElementById('penilaiEmail').value = '';
+        document.getElementById('penilaiUserId').value = '';
+        document.getElementById('previewPenilai').classList.add('d-none');
         setSimpanLoading(false);
         modalPenilai.show();
     });
 
+    // ── BUKA MODAL EDIT / HAPUS ──
     tbody.addEventListener('click', function (e) {
         const editBtn = e.target.closest('.btn-edit-penilai');
         if (editBtn) {
-            activeMode = 'update'; activeUpdateId = editBtn.dataset.id; activeUpdateUrl = editBtn.dataset.url;
-            document.getElementById('modalPenilaiTitle').textContent = 'Ubah Penilai';
-            document.getElementById('penilaiNama').value  = editBtn.dataset.nama;
-            document.getElementById('penilaiEmail').value = editBtn.dataset.email;
+            activeMode = 'update';
+            activeUpdateId  = editBtn.dataset.id;
+            activeUpdateUrl = editBtn.dataset.url;
+            document.getElementById('modalPenilaiTitle').textContent = 'Ganti Penilai';
+
+            // Set dropdown sesuai user yang sedang dipilih, lalu trigger perubahan
+            document.getElementById('penilaiUserId').value = editBtn.dataset.userId;
+            document.getElementById('penilaiUserId').dispatchEvent(new Event('change'));
+
             setSimpanLoading(false);
             modalPenilai.show();
             return;
@@ -261,28 +297,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ── TUTUP MODAL (Guard saat loading) ──
     document.getElementById('btnTutupModalPenilai').addEventListener('click', () => { if (!isSaving) modalPenilai.hide(); });
     document.getElementById('btnBatalPenilai').addEventListener('click',       () => { if (!isSaving) modalPenilai.hide(); });
     document.getElementById('btnBatalHapusPenilai').addEventListener('click',  () => { if (!isDeleting) modalHapusPenilai.hide(); });
 
+    // ── SIMPAN (STORE / UPDATE) ──
     document.getElementById('btnSimpanPenilai').addEventListener('click', async function () {
         if (isSaving) return;
-        const nama  = document.getElementById('penilaiNama').value.trim();
-        const email = document.getElementById('penilaiEmail').value.trim();
-        if (!nama || !email) { toast('Nama dan email wajib diisi.', 'error'); return; }
+        const userId = document.getElementById('penilaiUserId').value;
+        if (!userId) { toast('Harap pilih user penilai.', 'error'); return; }
 
         isSaving = true; setSimpanLoading(true);
         try {
             const isUpdate = activeMode === 'update';
-            const res = await sendRequest(isUpdate ? activeUpdateUrl : STORE_URL, {
+            const url      = isUpdate ? activeUpdateUrl : STORE_URL;
+            const res = await sendRequest(url, {
                 _method: isUpdate ? 'PUT' : 'POST',
                 sub_event_id: SUB_EVENT_ID,
-                nama, email,
+                user_id: userId,
             });
             if (res.success) {
                 modalPenilai.hide();
-                toast(isUpdate ? 'Penilai berhasil diubah!' : 'Penilai berhasil ditambahkan!');
-                isUpdate ? updateRow(activeUpdateId, nama, email) : appendRow(res.penilai);
+                toast(isUpdate ? 'Penilai berhasil diganti!' : 'Penilai berhasil ditambahkan!');
+                if (isUpdate) {
+                    updateRow(activeUpdateId, res.penilai.nama, res.penilai.email, res.penilai.user_id);
+                } else {
+                    appendRow(res.penilai);
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }
@@ -293,6 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ── HAPUS ──
     document.getElementById('btnHapusPenilai').addEventListener('click', async function () {
         if (isDeleting) return;
         isDeleting = true; setHapusLoading(true);
@@ -316,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ── SEARCH ──
     document.getElementById('searchPenilai').addEventListener('input', function () {
         const kw = this.value.toLowerCase();
         let n = 0;
