@@ -11,11 +11,9 @@
   <meta property="og:url" content="https://rumahinovasi.com/admin" />
   <meta property="og:site_name" content="Rumah Inovasi Magetan" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="shortcut icon" href="{{ asset('template.demo6/demo6/assets/media/logos/Magetan.png') }}" />
+  <link rel="shortcut icon" href="{{ asset('template.demo6/demo6/assets/media/logos/mgt.png') }}" />
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-  <link href="{{ asset('template.demo6/demo6/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" />
-  <link href="{{ asset('template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" />
   <link href="{{ asset('template.demo6/demo6/assets/css/style.bundle.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -180,7 +178,6 @@
   <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
-  <script src="{{ asset('template.demo6/demo6/assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/widgets.bundle.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/custom/widgets.js') }}"></script>
   <script src="{{ asset('template.demo6/demo6/assets/js/custom/apps/chat/chat.js') }}"></script>
