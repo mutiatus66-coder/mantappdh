@@ -329,28 +329,14 @@
                 infoFiltered: '(difilter dari _MAX_ total data)',
                 paginate    : { first: '«', last: '»', next: '›', previous: '‹' },
             },
-            layout      : {
+            layout: {
                 topStart: [
                     'pageLength',
                     {
-                        buttons: [
-                            'colvis',
-                            {
-                                extend   : 'excelHtml5',
-                                text     : '<i class="bi bi-file-earmark-spreadsheet me-1"></i>Excel',
-                                className: 'btn btn-info btn-sm',
-                                title    : '{{ addslashes($title) }}',
-                                exportOptions: {
-                                    /* Tidak export kolom checkbox & aksi */
-                                    columns: ADA_AKSI
-                                        ? ':not(:first-child):not(:last-child)'
-                                        : ':not(:first-child)',
-                                },
-                            },
-                        ],
+                        buttons: ['colvis'],
                     },
                 ],
-                topEnd  : 'search',
+                topEnd     : 'search',
                 bottomStart: 'info',
                 bottomEnd  : 'paging',
             },

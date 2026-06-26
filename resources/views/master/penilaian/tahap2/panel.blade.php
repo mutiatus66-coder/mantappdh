@@ -177,11 +177,11 @@
         (_, i) => i
     ).filter(i => i !== 0 && i !== COL_RANKING);
 
-    $(document).ready(function () {
+    window.jQuery4(document).ready(function () {
 
         /* Guard: jika sudah pernah diinit (hot-reload), destroy dulu */
-        if ($.fn.DataTable.isDataTable('#' + TABLE_ID)) {
-            $('#' + TABLE_ID).DataTable().destroy();
+        if (window.jQuery4.fn.DataTable.isDataTable('#' + TABLE_ID)) {
+            window.jQuery4('#' + TABLE_ID).DataTable().destroy();
         }
 
         const columnDefs = [
@@ -208,7 +208,7 @@
         }
 
         /* Simpan instance DT di window agar bisa diakses btn-auto-ranking */
-        window['dt_' + TABLE_ID] = $('#' + TABLE_ID).DataTable({
+        window['dt_' + TABLE_ID] = window.jQuery4('#' + TABLE_ID).DataTable({
             responsive : true,
             language   : {
                 lengthMenu  : 'Tampilkan _MENU_ data',

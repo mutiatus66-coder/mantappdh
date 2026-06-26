@@ -96,27 +96,7 @@
 @endsection
 
 @push('scripts')
-{{--
-    CDN wajib di-load di sini (bukan di panel) agar tidak terduplikat.
-    Panel di-include 2x, kalau CDN ada di panel maka jQuery + DT di-load 2x.
---}}
-<script src="{{ asset('assets/jquery/jquery-4.0.0.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"
-        integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
-        integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.js"
-        integrity="sha384-R/5yB/Q48CmXPUHiIs/s7Oi2np8MQlE/bd774P/X5aCQMbUHQgY0MXTaPFUCd/GZ"
-        crossorigin="anonymous"></script>
-
-{{--
-    @stack('dt-init') harus diletakkan SETELAH CDN DT di atas.
-    Panel menaruh inisialisasi DataTables-nya ke stack ini via @push('dt-init').
-    Dengan urutan ini: CDN siap dulu → baru init per-tabel dijalankan.
---}}
-@stack('dt-init')
+{{-- pdfmake + DT CDN sudah di-load di index.blade.php — tidak perlu load lagi di sini --}}
 
 <script>
 (function () {
