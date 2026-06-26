@@ -3,6 +3,14 @@
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
+{{--
+    PENTING: Jangan pakai datatables.css lokal — versi lama (1.x) akan
+    membuat tampilan DT v2.x + ColumnControl berantakan. Pakai CDN. —Regan.
+--}}
+<link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.css"
+      rel="stylesheet"
+      integrity="sha384-wExd39N36yrzP/MYKag3xdBw+uoLSMRfH0f2+A/gxs5f3COtMPq/+indiwzt2Bcm"
+      crossorigin="anonymous">
 @endpush
 
 @section('content')
@@ -11,7 +19,7 @@
     {{-- ── Flash Success ── --}}
     @if(session('success'))
     <div class="alert alert-dismissible fade show mb-4" role="alert"
-        style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
+         style="background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.3); color:#92400e;">
         <i class="bi bi-check-circle-fill me-2"></i>
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -28,45 +36,6 @@
             <i class="bi bi-arrow-left me-1"></i>Kembali
         </a>
     </div>
-
-    {{-- ── Keterangan Status (disembunyikan server-side jika sudah ada ranking) ── --}}
-    {{-- ──
-    @php
-            $adaRanking = collect($nominasiUmum)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0)
-                    || collect($nominasiPelajar)->contains(fn($n) => ($n['total_rank'] ?? 0) > 0);
-    @endphp
-    <div class="alert alert-info d-flex gap-3 flex-wrap align-items-center mb-3"
-            id="alert-keterangan-ranking"
-            style="font-size:.875rem; {{ $adaRanking ? 'display:none;' : '' }}">
-        <span>
-            <span class="badge bg-secondary me-1"><i class="bi bi-dash-circle"></i></span>
-            Belum ada ranking
-        </span>
-        <span class="rv-legend-divider">|</span>
-        <span>
-            <span class="badge rv-rank-badge rv-rank-gold me-1">
-                <i class="bi bi-trophy-fill" style="font-size:0.7em"></i>
-            </span>
-            Rank 1
-        </span>
-        <span>
-            <span class="badge rv-rank-badge rv-rank-silver me-1">
-                <i class="bi bi-award-fill" style="font-size:0.7em"></i>
-            </span>
-            Rank 2
-        </span>
-        <span>
-            <span class="badge rv-rank-badge rv-rank-bronze me-1">
-                <i class="bi bi-award-fill" style="font-size:0.7em"></i>
-            </span>
-            Rank 3
-        </span>
-        <span>
-            <span class="badge rv-rank-badge rv-rank-normal me-1">4+</span>
-            Rank lainnya
-        </span>
-    </div>
-    ── --}}
 
     {{-- ── Tabs ── --}}
     <div class="rv-tabs-wrap">
@@ -127,22 +96,14 @@
 @endsection
 
 @push('scripts')
+{{-- pdfmake + DT CDN sudah di-load di index.blade.php — tidak perlu load lagi di sini --}}
+
 <script>
 (function () {
     'use strict';
 
     const subEventId = {{ $subEvent['id'] }};
-
-    // ════════════════════════════════════════════════════════════════
-    // ALERT KETERANGAN — sembunyikan jika sudah ada badge rank
-    // ════════════════════════════════════════════════════════════════
-    function updateAlertKeterangan() {
-        const alertEl = document.getElementById('alert-keterangan-ranking');
-        if (!alertEl) return;
-        const adaRanking = document.querySelector('.rv-total-rank .rv-rank-badge') !== null;
-        if (adaRanking) alertEl.style.display = 'none';
-    }
-    updateAlertKeterangan();
+    const CSRF       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     // ════════════════════════════════════════════════════════════════
     // TOAST
@@ -151,13 +112,13 @@
         const el = document.createElement('div');
         el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
         el.innerHTML = `
-                <span class="ri-toast-icon">
+            <span class="ri-toast-icon">
                 <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
-                </span>
-                <span class="ri-toast-msg">${msg}</span>
-                <button class="ri-toast-close" onclick="this.parentElement.remove()">
+            </span>
+            <span class="ri-toast-msg">${msg}</span>
+            <button class="ri-toast-close" onclick="this.parentElement.remove()">
                 <i class="bi bi-x-lg"></i>
-                </button>`;
+            </button>`;
         document.body.appendChild(el);
         requestAnimationFrame(() => el.classList.add('ri-toast-show'));
         setTimeout(() => {
@@ -167,83 +128,8 @@
     }
 
     // ════════════════════════════════════════════════════════════════
-    // RENDER BADGE RANK — ikon + warna per posisi
-    // ════════════════════════════════════════════════════════════════
-    function renderRankBadge(rankNum) {
-        if (!rankNum || rankNum < 1) {
-            return `<span class="rv-rank-empty" style="color:var(--ri-text-muted)">-</span>`;
-        }
-        if (rankNum === 1) {
-            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-gold" data-rank="1">
-                        <i class="bi bi-trophy-fill me-1" style="font-size:0.7em"></i>1
-                    </span>`;
-        }
-        if (rankNum === 2) {
-            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-silver" data-rank="2">
-                        <i class="bi bi-award-fill me-1" style="font-size:0.7em"></i>2
-                    </span>`;
-        }
-        if (rankNum === 3) {
-            return `<span class="badge rv-rank-badge rv-rank-top rv-rank-bronze" data-rank="3">
-                        <i class="bi bi-award-fill me-1" style="font-size:0.7em"></i>3
-                    </span>`;
-        }
-        return `<span class="badge rv-rank-badge rv-rank-normal" data-rank="${rankNum}">${rankNum}</span>`;
-    }
-
-    // Re-nomori kolom "No" setelah sort
-    function renumberRows(tbody) {
-        tbody.querySelectorAll('tr[data-id]').forEach((tr, idx) => {
-            const noCell = tr.querySelector('.row-no');
-            if (noCell) noCell.textContent = idx + 1;
-        });
-    }
-
-    // ════════════════════════════════════════════════════════════════
-    // TOMBOL RANKING OTOMATIS
-    // ════════════════════════════════════════════════════════════════
-    document.querySelectorAll('.btn-auto-ranking').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const group = this.dataset.group;
-            const tbody = document.getElementById('tbody-' + group);
-            if (!tbody) return;
-
-            const rows = Array.from(tbody.querySelectorAll('tr[data-id]'));
-            if (rows.length === 0) return;
-
-            // Sort descending berdasarkan total nilai (jumlah)
-            rows.sort((a, b) => {
-                const na = parseFloat(a.dataset.nilai) || 0;
-                const nb = parseFloat(b.dataset.nilai) || 0;
-                return nb - na;
-            });
-
-            rows.forEach((tr, idx) => {
-                const rank = idx + 1;
-
-                // Isi input ranking
-                const inp = tr.querySelector('.input-ranking');
-                if (inp) inp.value = rank;
-
-                // Update badge Total Rank
-                const rankCell = tr.querySelector('.rv-total-rank');
-                if (rankCell) rankCell.innerHTML = renderRankBadge(rank);
-
-                tbody.appendChild(tr);
-
-                // Animasi highlight baris
-                tr.classList.remove('row-sorted');
-                void tr.offsetWidth;
-                tr.classList.add('row-sorted');
-            });
-
-            renumberRows(tbody);
-            updateAlertKeterangan();
-        });
-    });
-
-    // ════════════════════════════════════════════════════════════════
     // SIMPAN RANKING
+    // (btn-auto-ranking sudah ditangani di dalam panel via DT API)
     // ════════════════════════════════════════════════════════════════
     document.querySelectorAll('.btn-simpan-ranking').forEach(btn => {
         btn.addEventListener('click', async function () {
@@ -277,58 +163,31 @@
                 return;
             }
 
-            const btnEl = this;
-            const orig  = btnEl.innerHTML;
-            btnEl.disabled  = true;
-            btnEl.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
+            const orig      = this.innerHTML;
+            this.disabled   = true;
+            this.innerHTML  = '<i class="bi bi-hourglass-split me-1"></i>Menyimpan...';
 
             try {
-                const res = await fetch(`/penilaian/tahap-2/${subEventId}/ranking`, {
-                    method:  'POST',
+                const res  = await fetch(`/penilaian/tahap-2/${subEventId}/ranking`, {
+                    method : 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept':       'application/json',
+                        'X-CSRF-TOKEN': CSRF,
+                        'Accept'      : 'application/json',
                     },
                     body: JSON.stringify({ ranking }),
                 });
                 const data = await res.json();
                 if (data.success) {
                     toast(data.message ?? 'Ranking berhasil disimpan.', 'success');
-                    updateAlertKeterangan();
                 } else {
                     toast(data.message ?? 'Gagal menyimpan ranking.', 'error');
                 }
-            } catch (e) {
+            } catch {
                 toast('Terjadi kesalahan jaringan.', 'error');
             } finally {
-                btnEl.disabled  = false;
-                btnEl.innerHTML = orig;
-            }
-        });
-    });
-
-    // ════════════════════════════════════════════════════════════════
-    // EXCEL EXPORT
-    // ════════════════════════════════════════════════════════════════
-    document.querySelectorAll('.btn-rv-excel').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const tableId  = this.dataset.table;
-            const filename = this.dataset.filename ?? 'export';
-            const table    = document.getElementById(tableId);
-            if (!table) return;
-
-            if (typeof XLSX !== 'undefined') {
-                const wb = XLSX.utils.book_new();
-                const ws = XLSX.utils.table_to_sheet(table);
-                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-                XLSX.writeFile(wb, filename + '.xlsx');
-            } else {
-                const blob = new Blob([table.outerHTML], { type: 'application/vnd.ms-excel' });
-                const a    = document.createElement('a');
-                a.href     = URL.createObjectURL(blob);
-                a.download = filename + '.xls';
-                a.click();
+                this.disabled  = false;
+                this.innerHTML = orig;
             }
         });
     });

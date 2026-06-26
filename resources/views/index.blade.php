@@ -78,9 +78,7 @@
           <div id="kt_content_container" class="container-fluid">
 
             @auth
-              {{-- Tampilkan @yield jika child view punya section 'content' (ditandai $dummy), otherwise welcome --}}
               @if(!empty($dummy))
-              {{-- Banner Login As --}}
                 @if(session()->has('admin_original_id'))
                 <div class="d-flex align-items-center justify-content-between px-4 py-2 mb-3"
                     style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; color:#856404;">
@@ -102,7 +100,6 @@
                 </div>
               @endif
             @else
-              {{-- Fallback: harusnya tidak terjadi karena route sudah dilindungi auth --}}
               <div class="p-6">
                 <p class="text-danger">Sesi Anda telah berakhir. <a href="{{ route('login') }}">Login kembali</a>.</p>
               </div>
@@ -234,5 +231,54 @@
   </script>
 
   @stack('scripts')
+
+  {{--
+    jQuery 4.0 untuk DataTables v2.x.
+    Di-load SETELAH plugins.bundle.js (yang sudah include jQuery lama milik template).
+    noConflict(true) mengembalikan $ dan jQuery ke versi lama → template tidak rusak.
+    jQuery 4.0 disimpan di window.jQuery4 → dipakai oleh DataTables init di panel.
+  --}}
+  <script src="{{ asset('template.demo6/demo6/assets/jquery/jquery-4.0.0.min.js') }}"></script>
+  <script>window.jQuery4 = jQuery.noConflict(true);</script>
+
+  {{--
+    pdfmake + DataTables CDN di-load di sini, SETELAH jQuery4 siap.
+    DT akan otomatis mendeteksi jQuery4 sebagai jQuery aktif saat ini
+    karena $ dan jQuery sudah dikembalikan ke versi lama via noConflict(true).
+    DT akan bind ke jQuery4 yang terakhir di-load.
+  --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"
+          integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
+          integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.js"
+          integrity="sha384-R/5yB/Q48CmXPUHiIs/s7Oi2np8MQlE/bd774P/X5aCQMbUHQgY0MXTaPFUCd/GZ"
+          crossorigin="anonymous"></script>
+  {{--
+    Pasang DT ke jQuery4 secara eksplisit.
+    DT v2.x mendukung multi-jQuery via $.fn.dataTable — kita pastikan
+    DT ter-register ke jQuery4, bukan jQuery lama.
+  --}}
+  <script>
+    if (window.jQuery4 && window.jQuery4.fn) {
+      // DT sudah ter-load — pastikan jQuery4.fn.DataTable tersedia
+      // dengan cara memanggil DataTable factory menggunakan jQuery4
+      if (typeof $.fn !== 'undefined' && typeof $.fn.dataTable !== 'undefined') {
+        window.jQuery4.fn.dataTable = $.fn.dataTable;
+        window.jQuery4.fn.DataTable = $.fn.DataTable;
+        window.jQuery4.fn.dataTableSettings = $.fn.dataTableSettings;
+        window.jQuery4.fn.dataTableExt    = $.fn.dataTableExt;
+      }
+    }
+  </script>
+
+  {{--
+    Stack dt-init: inisialisasi DataTables per-tabel.
+    Di-load SETELAH jQuery4 + DT siap, sehingga window.jQuery4.fn.DataTable pasti ada.
+  --}}
+  @stack('dt-init')
+
 </body>
-</html>   
+</html>
