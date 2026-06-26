@@ -79,21 +79,22 @@
 
             @auth
               {{-- Tampilkan @yield jika child view punya section 'content' (ditandai $dummy), otherwise welcome --}}
+              {{-- Banner Login As — selalu tampil di semua halaman --}}
+              @if(session()->has('admin_original_id'))
+              <div class="d-flex align-items-center justify-content-between px-4 py-2 mb-3"
+                  style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; color:#856404;">
+                  <div>
+                      <i class="bi bi-person-fill-gear me-2"></i>
+                      Sedang login sebagai <strong>{{ Auth::user()->nama }}</strong>
+                      ({{ Auth::user()->hak_akses }})
+                  </div>
+                  <a href="{{ route('user.login-back') }}" class="btn btn-sm btn-warning ms-3">
+                      <i class="bi bi-arrow-return-left me-1"></i> Kembali ke Akun Admin
+                  </a>
+              </div>
+              @endif
+
               @if(!empty($dummy))
-              {{-- Banner Login As --}}
-                @if(session()->has('admin_original_id'))
-                <div class="d-flex align-items-center justify-content-between px-4 py-2 mb-3"
-                    style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; color:#856404;">
-                    <div>
-                        <i class="bi bi-person-fill-gear me-2"></i>
-                        Sedang login sebagai <strong>{{ Auth::user()->nama }}</strong>
-                        ({{ Auth::user()->hak_akses }})
-                    </div>
-                    <a href="{{ route('user.login-back') }}" class="btn btn-sm btn-warning ms-3">
-                        <i class="bi bi-arrow-return-left me-1"></i> Kembali ke Akun Admin
-                    </a>
-                </div>
-                @endif
                 @yield('content')
               @else
                 <div class="p-6">
@@ -235,4 +236,4 @@
 
   @stack('scripts')
 </body>
-</html>   
+</html>
