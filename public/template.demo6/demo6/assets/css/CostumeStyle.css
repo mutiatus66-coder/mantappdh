@@ -570,6 +570,10 @@
     gap: 6px;
     justify-content: center;
     flex-wrap: nowrap;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 .bidang-container .btn-aksi-wrap .btn,
 .page-container .btn-aksi-wrap .btn {
@@ -612,8 +616,12 @@
 }
 
 .btn-detail-indikator {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg,  #d97706);
     color: white !important;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 
 .btn-detail-formulasi {
@@ -627,12 +635,12 @@
 }
 
 .btn-detail {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #d97706);
     color: white !important;
 }
 
 .btn-tambah-se {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #d97706);
     color: white !important;
     box-shadow: 0 3px 12px rgba(245,158,11,.30);
 }
@@ -652,6 +660,10 @@
 .btn-edit:hover {
     opacity: .88;
     color: white !important;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 
 /* ══════════════════════════════════════════
@@ -677,8 +689,12 @@
 }
 
 .btn-hapus:hover {
-    background: #8b2424;
+    background: btn-danger;
     color: white !important;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 
 /* ══════════════════════════════════════════
@@ -1621,6 +1637,162 @@
 }
 
 #tabelEvent .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelSubEvent.dataTable > thead > tr > th,
+#tabelSubEvent.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelSubEvent .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelPenilaiIndex.dataTable > thead > tr > th,
+#tabelPenilaiIndex.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelPenilaiIndex .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelUser.dataTable > thead > tr > th,
+#tabelUser.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelUser .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelPenilai.dataTable > thead > tr > th,
+#tabelPenilai.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelPenilai .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelPengumuman.dataTable > thead > tr > th,
+#tabelPengumuman.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelPengumuman .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelDetailInovasi.dataTable > thead > tr > th,
+#tabelDetailInovasi.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelDetailInovasi .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelKeterangan.dataTable > thead > tr > th,
+#tabelKeterangan.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelKeterangan .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelTahap1.dataTable > thead > tr > th,
+#tabelTahap1.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelTahap1 .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelTahap2.dataTable > thead > tr > th,
+#tabelTahap2.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelTahap2 .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelTahap2Detail.dataTable > thead > tr > th,
+#tabelTahap2Detail.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelTahap2Detail .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelRekap.dataTable > thead > tr > th,
+#tabelRekap.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelRekap .btn-aksi-wrap .btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
+}
+#tabelRiwayat.dataTable > thead > tr > th,
+#tabelRiwayat.dataTable > tbody > tr > td {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+}
+
+#tabelRiwayat .btn-aksi-wrap .btn {
     padding: 4px 12px !important;
     font-size: 12px !important;
     height: auto !important;

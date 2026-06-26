@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('penilai', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sub_event_id'); // Pastikan ada kolom ini
+            $table->foreign('sub_event_id')->references('id')->on('sub_events')->onDelete('cascade');
 
-            // Tambahkan user_id dan foreign key langsung dari awal
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->string('nama');
-            $table->string('email')->unique();
+            $table->string('email'); // ✅ HAPUS ->unique() DI SINI
             $table->timestamps();
         });
     }
