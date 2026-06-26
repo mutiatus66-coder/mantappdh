@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ═══════════════════════════════════════════════════════════════════════
      * KONSTANTA & URL
      * ═══════════════════════════════════════════════════════════════════════ */
-    const MAX_LOLOS      = 7;
+    const MAX_LOLOS      = 10; // ganti maksimal lolos hanya butuh ganti ni nomor
     const NILAI_URL      = '{{ route("penilaian.tahap1.simpan.nilai", $subEvent["id"]) }}';
     const SIMPAN_URL     = '{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}';
     const CATATAN_BASE   = '{{ url("penilaian/catatan") }}';
