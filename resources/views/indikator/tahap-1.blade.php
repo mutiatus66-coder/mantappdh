@@ -13,8 +13,7 @@
 
     {{-- Alert session --}}
     @if(session('success'))
-        <div class="alert alert-dismissible fade show mb-4" role="alert"
-             style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#92400e;">
+        <div class="alert alert-success-indikator alert-dismissible fade show mb-4" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -59,36 +58,34 @@
                 <td>
                     @if($detailValid1[$item['id']] ?? false)
                         <a href="{{ route('indikator.tahap1.inovasi', $item['id']) }}"
-                           class="btn-detail-indikator btn-primary">
-                            <i></i> Detail
-                        </a>
+                            class="btn btn-primary btn-aksi-wrap btn-sm" style="width: 75px; margin-left: 28%;">Detail</a>
                     @else
-                        <button class="btn-detail-indikator btn-info"
-                                style="background:#9ca3af;cursor:not-allowed;opacity:0.7;"
+                        <button class="btn-detail-disabled" style="width: 75px; margin-left: 28%"
                                 title="Isi formulasi hingga 100% terlebih dahulu" disabled>
-                            <i></i> Detail
+                            Detail
                         </button>
                     @endif
                 </td>
                 <td>
                     @if(in_array($item['id'], $formulasis1 ?? []))
-                        <button class="btn-detail-formulasi btn-open-formulasi1"
+                        <button class="btn btn-primary btn-aksi-wrap btn-sm btn-open-formulasi1"
+                                style="width: 75px; margin-left: 28%"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['sub_event'] }}">
-                            <i></i> Detail
+                            Detail
                         </button>
                     @else
                         <button class="btn-tambah-formulasi btn-open-formulasi1"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['sub_event'] }}">
-                            <i></i> Tambah Formulasi
+                            Tambah Formulasi
                         </button>
                     @endif
                 </td>
             </tr>
             @empty
             <tr>
-                <td colspan="4" style="text-align:center;padding:32px;color:#888;">
+                <td colspan="4" class="rv-empty">
                     <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
                     Belum ada data sub event
                 </td>
@@ -152,7 +149,7 @@
                         <span id="totalStatus1"></span>
                     </div>
 
-                    <p class="mt-3 mb-0" style="font-size:0.82rem;color:#dc2626;font-weight:500;">
+                    <p class="mt-3 mb-0 text-catatan">
                         <i class="bi bi-exclamation-circle me-1"></i>
                         Catatan: Nilai makalah dan nilai substansi jika ditotal harus menjadi 100%.
                     </p>
@@ -187,8 +184,6 @@
 
     /* ══════════════════════════════════════════
        DATA FORMULASI — di-pass dari Blade ke JS
-       Digunakan untuk menentukan apakah fetch
-       data diperlukan saat modal dibuka
     ══════════════════════════════════════════ */
     const formulasiIds = @json($formulasis1 ?? []);
 
@@ -197,7 +192,7 @@
     ══════════════════════════════════════════ */
     let isSubmitting = false;
 
-    const modalEl       = document.getElementById('modalFormulasi1');
+    const modalEl        = document.getElementById('modalFormulasi1');
     const modalFormulasi = new bootstrap.Modal(modalEl);
 
     /* ══════════════════════════════════════════
@@ -225,7 +220,6 @@
             order     : [[0, 'asc']],
             columnDefs: [
                 { targets: [0], searchable: false, width: '50px', className: 'dt-center' },
-                // Kolom Detail Indikator & Formulasi: tidak sortable, tidak di-search, center
                 { targets: [2, 3], orderable: false, searchable: false, className: 'dt-center', width: '180px' },
             ],
         });
@@ -244,7 +238,6 @@
 
     /* ══════════════════════════════════════════
        HITUNG TOTAL REALTIME
-       Aktifkan tombol Simpan hanya jika = 100%
     ══════════════════════════════════════════ */
     window.hitungTotal1 = function () {
         const makalah   = parseInt(document.getElementById('inputNilaiMakalah').value)   || 0;
@@ -275,12 +268,12 @@
        HELPER: RESET FORM MODAL
     ══════════════════════════════════════════ */
     function resetFormulasi1() {
-        document.getElementById('formFormulasi1').action         = '';
+        document.getElementById('formFormulasi1').action            = '';
         document.getElementById('modalFormulasi1Title').textContent = 'Tambah Formulasi Nilai';
-        document.getElementById('inputNilaiMakalah').value       = '';
-        document.getElementById('inputNilaiSubstansi').value     = '';
-        document.getElementById('totalPreview1').style.display   = 'none';
-        document.getElementById('btnSimpan1').disabled           = true;
+        document.getElementById('inputNilaiMakalah').value          = '';
+        document.getElementById('inputNilaiSubstansi').value        = '';
+        document.getElementById('totalPreview1').style.display      = 'none';
+        document.getElementById('btnSimpan1').disabled              = true;
     }
 
     /* ══════════════════════════════════════════
@@ -289,7 +282,7 @@
     modalEl.addEventListener('hidden.bs.modal', resetFormulasi1);
 
     /* ══════════════════════════════════════════
-       TUTUP MANUAL — block dismiss saat submit
+       TUTUP MANUAL
     ══════════════════════════════════════════ */
     document.getElementById('btnTutupFormulasi1').addEventListener('click', () => {
         if (!isSubmitting) modalFormulasi.hide();
@@ -300,8 +293,6 @@
 
     /* ══════════════════════════════════════════
        EVENT DELEGATION: BUKA MODAL FORMULASI
-       Tangkap klik tombol di dalam tabel DT
-       (termasuk baris di halaman lain pagination)
     ══════════════════════════════════════════ */
     document.querySelector('#tabelTahap1 tbody').addEventListener('click', function (e) {
         const btn = e.target.closest('.btn-open-formulasi1');
@@ -310,7 +301,6 @@
         const subEventId   = btn.dataset.id;
         const subEventNama = btn.dataset.nama;
 
-        // Judul modal bergantung pada mode tambah/detail
         document.getElementById('modalFormulasi1Title').textContent =
             btn.classList.contains('btn-tambah-formulasi')
                 ? 'Tambah Formulasi Nilai'
@@ -320,13 +310,11 @@
         document.getElementById('formFormulasi1').action    =
             `/indikator/tahap-1/${subEventId}/formulasi`;
 
-        // Reset field sebelum isi
         document.getElementById('inputNilaiMakalah').value     = '';
         document.getElementById('inputNilaiSubstansi').value   = '';
         document.getElementById('totalPreview1').style.display = 'none';
         document.getElementById('btnSimpan1').disabled         = true;
 
-        // Jika sudah ada formulasi, fetch data lalu isi field
         if (formulasiIds.includes(parseInt(subEventId))) {
             fetch(`/indikator/tahap-1/${subEventId}/formulasi/get`)
                 .then(r => {
