@@ -291,17 +291,18 @@ class InovasiController extends Controller
             'kategori'              => 'required|in:umum,pelajar',
             'asal_sekolah'          => 'required_if:kategori,pelajar|nullable|string|max:255',
             'nama_guru'             => 'nullable|string|max:150',
-            'latar_belakang'        => 'required|string',
-            'kondisi_sebelumnya'    => 'required|string',
-            'sasaran_tujuan'        => 'required|string',
+            // Narasi — nullable saat store (diisi bertahap per step)
+            'latar_belakang'        => 'nullable|string',
+            'kondisi_sebelumnya'    => 'nullable|string',
+            'sasaran_tujuan'        => 'nullable|string',
             'materi_inovasi'        => 'nullable|string',
-            'deskripsi'             => 'required|string',
+            'deskripsi'             => 'nullable|string',
             'bahan_baku'            => 'nullable|string',
-            'cara_kerja'            => 'required|string',
-            'keunggulan'            => 'required|string',
-            'hasil_diharapkan'      => 'required|string',
-            'manfaat'               => 'required|string',
-            'rencana_berkelanjutan' => 'required|string',
+            'cara_kerja'            => 'nullable|string',
+            'keunggulan'            => 'nullable|string',
+            'hasil_diharapkan'      => 'nullable|string',
+            'manfaat'               => 'nullable|string',
+            'rencana_berkelanjutan' => 'nullable|string',
             // File: validasi dasar Laravel (ekstensi + ukuran)
             'file_surat_pernyataan' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file_proposal'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
@@ -372,17 +373,18 @@ class InovasiController extends Controller
             'kategori'              => 'required|in:umum,pelajar',
             'asal_sekolah'          => 'required_if:kategori,pelajar|nullable|string|max:255',
             'nama_guru'             => 'nullable|string|max:150',
-            'latar_belakang'        => 'required|string',
-            'kondisi_sebelumnya'    => 'required|string',
-            'sasaran_tujuan'        => 'required|string',
+            // Narasi — nullable saat update (diisi bertahap per step)
+            'latar_belakang'        => 'nullable|string',
+            'kondisi_sebelumnya'    => 'nullable|string',
+            'sasaran_tujuan'        => 'nullable|string',
             'materi_inovasi'        => 'nullable|string',
-            'deskripsi'             => 'required|string',
+            'deskripsi'             => 'nullable|string',
             'bahan_baku'            => 'nullable|string',
-            'cara_kerja'            => 'required|string',
-            'keunggulan'            => 'required|string',
-            'hasil_diharapkan'      => 'required|string',
-            'manfaat'               => 'required|string',
-            'rencana_berkelanjutan' => 'required|string',
+            'cara_kerja'            => 'nullable|string',
+            'keunggulan'            => 'nullable|string',
+            'hasil_diharapkan'      => 'nullable|string',
+            'manfaat'               => 'nullable|string',
+            'rencana_berkelanjutan' => 'nullable|string',
             'file_surat_pernyataan' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file_proposal'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file_gambar'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -439,7 +441,13 @@ class InovasiController extends Controller
             if ($usulan->$field) Storage::disk('public')->delete($usulan->$field);
         }
 
+        // Disable foreign key checks untuk SQLite
+        \DB::statement('PRAGMA foreign_keys = OFF');
+        $usulan->catatanPenilai()->delete();
+        $usulan->anggotaTim()->delete();
         $usulan->delete();
+        \DB::statement('PRAGMA foreign_keys = ON');
+
         return response()->json(['success' => true, 'message' => 'Usulan berhasil dihapus.']);
     }
 
@@ -451,11 +459,31 @@ class InovasiController extends Controller
             return response()->json(['success' => false, 'message' => 'Usulan sudah pernah dikirim.'], 422);
         }
 
-        $required = ['latar_belakang','deskripsi','cara_kerja','keunggulan','hasil_diharapkan','manfaat'];
-        foreach ($required as $field) {
+        // Validasi semua field wajib saat kirim
+        $requiredFields = [
+            'latar_belakang'        => 'Latar Belakang',
+            'kondisi_sebelumnya'    => 'Kondisi Sebelumnya',
+            'sasaran_tujuan'        => 'Sasaran dan Tujuan',
+            'deskripsi'             => 'Deskripsi Inovasi',
+            'cara_kerja'            => 'Cara Kerja',
+            'keunggulan'            => 'Keunggulan',
+            'hasil_diharapkan'      => 'Hasil yang Diharapkan',
+            'manfaat'               => 'Manfaat',
+            'rencana_berkelanjutan' => 'Rencana Berkelanjutan',
+        ];
+
+        $kosong = [];
+        foreach ($requiredFields as $field => $label) {
             if (empty($usulan->$field)) {
-                return response()->json(['success' => false, 'message' => 'Lengkapi semua field wajib (narasi inovasi) sebelum mengirim.'], 422);
+                $kosong[] = $label;
             }
+        }
+
+        if (!empty($kosong)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lengkapi field berikut sebelum mengirim: ' . implode(', ', $kosong) . '.',
+            ], 422);
         }
 
         $usulan->update(['is_submitted' => true, 'status' => 'Sedang Dinilai']);

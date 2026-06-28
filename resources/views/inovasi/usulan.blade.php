@@ -228,7 +228,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="us-label">Nama Ketua <span class="us-required">*</span></label>
-                                <input type="text" class="us-input" name="ketua_nama" id="fKetuaNama">
+                                <input type="text" class="us-input" name="ketua_nama" id="fKetuaNama" placeholder="Nama lengkap ketua tim">
                                 <div class="us-error-msg" id="e-ketua_nama"></div>
                             </div>
                             <div class="col-md-6">
@@ -248,7 +248,10 @@
                             </div>
                             <div class="col-md-5">
                                 <label class="us-label">No. KTP / Kartu Pelajar <span class="us-required">*</span></label>
-                                <input type="text" class="us-input" name="ktp" id="fKtp" placeholder="16 digit NIK">
+                                <input type="text" class="us-input" name="ktp" id="fKtp" 
+                                       placeholder="16 digit NIK" maxlength="16"
+                                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                                       onblur="validateKtp()">
                                 <div class="us-error-msg" id="e-ktp"></div>
                             </div>
                         </div>
@@ -340,7 +343,7 @@
                                 <label class="us-file-wrap">
                                     <i class="bi bi-image fs-5"></i>
                                     <span>Klik untuk pilih gambar...</span>
-                                    <input type="file" name="file_gambar" id="fFileGambar" accept=".jpg,.jpeg,.png">
+                                    <input type="file" name="file_gambar" id="fFileGambar" accept="image/jpeg,image/png,.jpg,.jpeg,.png">
                                 </label>
                                 <div class="us-file-name" id="nameGambar"></div>
                                 <div id="previewGambar" class="mt-2"></div>
@@ -478,7 +481,7 @@
         el.id = 'ri-toast';
         el.style.cssText = [
             'position:fixed',
-            'top:72px',          /* tepat di bawah navbar */
+            'bottom:80px',       /* di atas footer */
             'right:20px',
             'z-index:9999',
             'min-width:280px',
@@ -492,22 +495,22 @@
             'gap:8px',
             'box-shadow:0 4px 16px rgba(0,0,0,.12)',
             'animation:toastIn .2s ease',
-            `background:${ok ? 'rgba(16,185,129,.13)' : 'rgba(220,53,69,.11)'}`,
-            `border:1px solid ${ok ? 'rgba(16,185,129,.45)' : 'rgba(220,53,69,.35)'}`,
-            `color:${ok ? '#065f46' : '#7f1d1d'}`,
+            `background:${ok ? 'rgba(16,185,129,.92)' : 'rgba(220,53,69,.90)'}`,
+            `border:1px solid ${ok ? 'rgba(16,185,129,1)' : 'rgba(220,53,69,1)'}`,
+            `color:${ok ? '#fff' : '#fff'}`,
         ].join(';');
         el.innerHTML = `<i class="bi bi-${ok ? 'check-circle-fill' : 'x-circle-fill'}" style="font-size:1rem;flex-shrink:0"></i>
             <span style="flex:1">${msg}</span>
             <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;opacity:.6;font-size:1rem;line-height:1;color:inherit">&times;</button>`;
         document.body.appendChild(el);
-        _toastTimer = setTimeout(() => el?.remove(), 4000);
+        _toastTimer = setTimeout(() => el?.remove(), 5000);
     }
 
     // Inject animasi toast sekali saja
     if (!document.getElementById('ri-toast-style')) {
         const s = document.createElement('style');
         s.id = 'ri-toast-style';
-        s.textContent = `@keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}`;
+        s.textContent = `@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`;
         document.head.appendChild(s);
     }
 
@@ -526,7 +529,7 @@
 
         const required1 = [
             'fNamaInovasi','fJudul','fBidangId','fInteraksi','fKategori',
-            'fInovator','fKetuaNama','fAlamatKetua','fKtp'
+            'fInovator','fKetuaNama','fAlamatKetua'
         ];
         required1.forEach(id => {
             const el = document.getElementById(id);
@@ -538,6 +541,26 @@
                 ok = false;
             }
         });
+
+        // Validasi KTP 16 digit
+        const ktpEl = document.getElementById('fKtp');
+        if (ktpEl) {
+            const ktpVal = ktpEl.value.trim();
+            const ktpErr = document.getElementById('e-ktp');
+            if (!ktpVal) {
+                ktpEl.classList.add('is-invalid');
+                if (ktpErr) { ktpErr.textContent = 'No. KTP / Kartu Pelajar wajib diisi.'; ktpErr.style.display = 'block'; }
+                ok = false;
+            } else if (ktpVal.length !== 16) {
+                ktpEl.classList.add('is-invalid');
+                if (ktpErr) { ktpErr.textContent = 'NIK harus tepat 16 digit (saat ini ' + ktpVal.length + ' digit).'; ktpErr.style.display = 'block'; }
+                ok = false;
+            } else {
+                ktpEl.classList.remove('is-invalid');
+                ktpEl.classList.add('is-valid');
+                if (ktpErr) { ktpErr.textContent = ''; ktpErr.style.display = 'none'; }
+            }
+        }
 
         // Validasi email
         const emailEl = document.getElementById('fKetuaEmail');
@@ -615,17 +638,92 @@
     }
     document.getElementById('btnAddAnggota').onclick = () => addAnggota();
 
-    // ── File inputs ───────────────────────────────────────────────────
+    // ── Aturan validasi file ───────────────────────────────────────────
+    const FILE_RULES = {
+        fFileSurat:    { maxMB: 2, mimes: ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'], exts: ['.pdf','.doc','.docx'], errId: 'e-file_surat_pernyataan' },
+        fFileProposal: { maxMB: 2, mimes: ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'], exts: ['.pdf','.doc','.docx'], errId: 'e-file_proposal' },
+        fFileGambar:   { maxMB: 2, mimes: ['image/jpeg','image/png'], exts: ['.jpg','.jpeg','.png'], errId: 'e-file_gambar' },
+    };
+
+    // Magic bytes tiap format
+    const MAGIC = {
+        '.pdf':  [0x25,0x50,0x44,0x46],
+        '.doc':  [0xD0,0xCF,0x11,0xE0],
+        '.docx': [0x50,0x4B,0x03,0x04],
+        '.jpg':  [0xFF,0xD8,0xFF],
+        '.jpeg': [0xFF,0xD8,0xFF],
+        '.png':  [0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A],
+    };
+
+    function showFileErr(errId, msg) {
+        const el = document.getElementById(errId);
+        if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
+    function clearFileErr(errId) {
+        const el = document.getElementById(errId);
+        if (el) { el.textContent = ''; el.style.display = 'none'; }
+    }
+
+    // ── File inputs dengan validasi 4 lapis ──────────────────────────
     function wireFile(inputId, nameId, previewId) {
         document.getElementById(inputId).addEventListener('change', function () {
-            const f = this.files[0];
+            const f    = this.files[0];
+            const rule = FILE_RULES[inputId];
+            const self = this;
+
+            if (rule) clearFileErr(rule.errId);
+            document.getElementById(nameId).textContent = '';
+            if (previewId) document.getElementById(previewId).innerHTML = '';
+
             if (!f) return;
-            document.getElementById(nameId).textContent = f.name;
-            if (previewId) {
-                const prev = document.getElementById(previewId);
-                prev.innerHTML = `<img src="${URL.createObjectURL(f)}"
-                    style="max-height:90px;border-radius:6px;border:1px solid var(--ri-border);margin-top:4px">`;
+
+            if (rule) {
+                // Lapis 1: ekstensi
+                const ext = '.' + f.name.split('.').pop().toLowerCase();
+                if (!rule.exts.includes(ext)) {
+                    showFileErr(rule.errId, `Format tidak valid. Gunakan: ${rule.exts.join(', ')}`);
+                    self.value = ''; return;
+                }
+
+                // Lapis 2: MIME type browser
+                if (f.type && !rule.mimes.includes(f.type)) {
+                    showFileErr(rule.errId, `Tipe file tidak diizinkan (${f.type}).`);
+                    self.value = ''; return;
+                }
+
+                // Lapis 3: ukuran
+                if (f.size > rule.maxMB * 1024 * 1024) {
+                    showFileErr(rule.errId, `Ukuran melebihi ${rule.maxMB} MB. File Anda: ${(f.size/1024/1024).toFixed(1)} MB`);
+                    self.value = ''; return;
+                }
+
+                // Lapis 4: magic bytes (baca isi asli file)
+                const sig = MAGIC[ext];
+                if (sig) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const bytes = new Uint8Array(e.target.result);
+                        const valid = sig.every((b, i) => bytes[i] === b);
+                        if (!valid) {
+                            showFileErr(rule.errId, `File terdeteksi tidak valid atau berbahaya. Pastikan file benar-benar ${ext}.`);
+                            self.value = '';
+                            document.getElementById(nameId).textContent = '';
+                            if (previewId) document.getElementById(previewId).innerHTML = '';
+                            return;
+                        }
+                        // Semua valid
+                        document.getElementById(nameId).textContent = `✓ ${f.name} (${(f.size/1024).toFixed(0)} KB)`;
+                        if (previewId) {
+                            document.getElementById(previewId).innerHTML =
+                                `<img src="${URL.createObjectURL(f)}" style="max-height:90px;border-radius:6px;border:1px solid var(--ri-border);margin-top:4px">`;
+                        }
+                    };
+                    reader.readAsArrayBuffer(f.slice(0, 8));
+                    return; // tunggu async
+                }
             }
+
+            document.getElementById(nameId).textContent = `✓ ${f.name}`;
         });
     }
     wireFile('fFileSurat',    'nameSurat',    null);
@@ -733,7 +831,12 @@
             if (!res.ok || !data.success) {
                 // Tampilkan error validasi Laravel (422)
                 if (data.errors) showErrors(data.errors);
-                toast(data.message || 'Gagal menyimpan.', false);
+                if (data.errors) {
+                const msgs = Object.values(data.errors).flat();
+                toast('Gagal menyimpan: ' + msgs.join(' '), false);
+            } else {
+                toast(data.message || 'Gagal menyimpan. Periksa kembali isian Anda.', false);
+            }
                 return;
             }
 
