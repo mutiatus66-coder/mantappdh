@@ -592,9 +592,9 @@
 }
 
 /* ── Custom buttons (indikator) ── */
+.btn-tambah-formulasi,
 .btn-detail-indikator,
 .btn-detail-formulasi,
-.btn-tambah-formulasi,
 .btn-detail,
 .btn-tambah-se,
 .btn-kembali {
@@ -616,8 +616,6 @@
 }
 
 .btn-detail-indikator {
-    background: linear-gradient(135deg,  #d97706);
-    color: white !important;
     padding: 4px 12px !important;
     font-size: 12px !important;
     height: auto !important;
@@ -625,8 +623,10 @@
 }
 
 .btn-detail-formulasi {
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    color: white !important;
+        padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 
 .btn-tambah-formulasi {
@@ -635,8 +635,10 @@
 }
 
 .btn-detail {
-    background: linear-gradient(135deg, #d97706);
-    color: white !important;
+        padding: 4px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    min-width: auto !important;
 }
 
 .btn-tambah-se {

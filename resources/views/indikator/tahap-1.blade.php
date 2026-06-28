@@ -59,11 +59,11 @@
                 <td>
                     @if($detailValid1[$item['id']] ?? false)
                         <a href="{{ route('indikator.tahap1.inovasi', $item['id']) }}"
-                           class="btn-detail-indikator">
+                           class="btn-detail-indikator btn-primary">
                             <i></i> Detail
                         </a>
                     @else
-                        <button class="btn-detail-indikator"
+                        <button class="btn-detail-indikator btn-info"
                                 style="background:#9ca3af;cursor:not-allowed;opacity:0.7;"
                                 title="Isi formulasi hingga 100% terlebih dahulu" disabled>
                             <i></i> Detail
