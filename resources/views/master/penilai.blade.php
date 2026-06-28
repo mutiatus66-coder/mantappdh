@@ -56,7 +56,8 @@
                 <td>{{ $item->penilai->count() }}</td>
                 <td>
                     <a href="{{ route('penilai.detail', $item->id) }}"
-                       class="btn btn-primary btn-sm">Detail</a>
+                            class="btn btn-primary btn-aksi-wrap btn-sm" style="width: 75px">
+                            Detail</a>
                 </td>
             </tr>
             @empty

@@ -12,8 +12,7 @@
 <div class="page-container">
 
     @if(session('success'))
-        <div class="alert alert-dismissible fade show mb-4" role="alert"
-             style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.25);color:#1e40af;">
+        <div class="alert alert-success-detail alert-dismissible fade show mb-4" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -23,7 +22,7 @@
     <div class="sub-event-header">
         <div class="sub-event-title">
             <h3>Data Detail Inovasi</h3>
-            <p style="color:#2563eb;font-weight:700;">Sub Event: {{ $subEventName ?? 'N/A' }}</p>
+            <p class="sub-event-name">Sub Event: {{ $subEventName ?? 'N/A' }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('indikator.tahap1') }}" class="btn btn-dark">← Kembali</a>
@@ -62,12 +61,12 @@
                 </td>
                 <td>
                     <a href="{{ route('indikator.tahap1.detail', [$subEventId, $item['id']]) }}"
-                       class="btn btn-warning btn-sm">
-                        <i></i> Detail
+                       class="btn btn-primary btn-aksi-wrap btn-sm" style="width: 75px; margin-left: 15%">
+                        Detail
                     </a>
                 </td>
                 <td>
-                    <div class="btn-aksi-wrap" style="display:flex;gap:6px;justify-content:center;">
+                    <div class="btn-aksi-wrap">
                         <button class="btn btn-warning btn-sm btn-edit-indikator"
                                 data-id="{{ $item['id'] }}"
                                 data-indikator="{{ $item['nama_indikator'] ?? '-' }}"
@@ -85,7 +84,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" style="text-align:center;padding:32px;color:#888;">
+                <td colspan="5" class="rv-empty">
                     <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
                     Belum ada data indikator
                 </td>
@@ -156,12 +155,12 @@
 
             <div class="d-flex justify-content-center mb-3">
                 <div class="hapus-icon-circle">
-                    <i class="bi bi-trash3" style="font-size:1.6rem;color:#dc2626;"></i>
+                    <i class="bi bi-trash3 hapus-icon-trash"></i>
                 </div>
             </div>
 
-            <h5 class="fw-semibold mb-1" style="color:var(--ri-text-primary);">Hapus Data Ini?</h5>
-            <p class="mb-4 hapus-teks-muted" style="font-size:.875rem;line-height:1.6;">
+            <h5 class="fw-semibold mb-1 hapus-judul">Hapus Data Ini?</h5>
+            <p class="mb-4 hapus-teks-muted hapus-desc">
                 Tindakan ini tidak dapat dibatalkan. Indikator
                 <strong id="namaIndikatorHapus" class="hapus-nama-strong"></strong>
                 akan dihapus secara permanen.
@@ -188,7 +187,7 @@
         integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
-        integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n"
+        integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zo9/GxcBPRKOEcESxaxufwRXqzq6n"
         crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.8/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/r-3.0.8/datatables.min.js"
         integrity="sha384-R/5yB/Q48CmXPUHiIs/s7Oi2np8MQlE/bd774P/X5aCQMbUHQgY0MXTaPFUCd/GZ"
@@ -237,11 +236,8 @@
             order     : [[0, 'asc']],
             columnDefs: [
                 { targets: [0], searchable: false, width: '50px', className: 'dt-center' },
-                // Kolom Jenis: center, render HTML badge diizinkan
                 { targets: [2], className: 'dt-center' },
-                // Kolom Detail: tidak sortable, center
                 { targets: [3], orderable: false, searchable: false, className: 'dt-center', width: '140px' },
-                // Kolom Aksi: tidak sortable, tidak di-search
                 { targets: [4], orderable: false, searchable: false, className: 'dt-center', width: '180px' },
             ],
         });
@@ -258,14 +254,13 @@
        HELPER: RESET FORM MODAL INDIKATOR
     ══════════════════════════════════════════ */
     function resetModalIndikator() {
-        document.getElementById('formIndikator').action         = STORE_URL;
-        document.getElementById('formIndikatorMethod').value    = 'POST';
+        document.getElementById('formIndikator').action            = STORE_URL;
+        document.getElementById('formIndikatorMethod').value       = 'POST';
         document.getElementById('modalIndikatorTitle').textContent = 'Tambah Indikator Inovasi';
-        document.getElementById('inputNamaIndikator').value     = '';
-        document.getElementById('selectJenis').value            = 'substansi';
+        document.getElementById('inputNamaIndikator').value        = '';
+        document.getElementById('selectJenis').value               = 'substansi';
     }
 
-    // Reset saat modal tertutup (apapun penyebabnya)
     modalIndikatorEl.addEventListener('hidden.bs.modal', resetModalIndikator);
 
     /* ══════════════════════════════════════════
@@ -285,8 +280,6 @@
 
     /* ══════════════════════════════════════════
        EVENT DELEGATION: UBAH & HAPUS
-       Menangkap klik di semua baris termasuk
-       baris di halaman lain pagination DT
     ══════════════════════════════════════════ */
     tbody.addEventListener('click', function (e) {
 
@@ -296,9 +289,9 @@
             document.getElementById('modalIndikatorTitle').textContent = 'Ubah Indikator';
             document.getElementById('formIndikator').action =
                 `/indikator/tahap-1/${SUB_ID}/inovasi/${editBtn.dataset.id}`;
-            document.getElementById('formIndikatorMethod').value   = 'PUT';
-            document.getElementById('inputNamaIndikator').value    = editBtn.dataset.indikator;
-            document.getElementById('selectJenis').value           = editBtn.dataset.jenis || 'substansi';
+            document.getElementById('formIndikatorMethod').value = 'PUT';
+            document.getElementById('inputNamaIndikator').value  = editBtn.dataset.indikator;
+            document.getElementById('selectJenis').value         = editBtn.dataset.jenis || 'substansi';
             modalIndikator.show();
             return;
         }

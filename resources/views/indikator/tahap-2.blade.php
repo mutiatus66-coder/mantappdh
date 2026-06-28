@@ -12,8 +12,7 @@
 <div class="page-container">
 
     @if(session('success'))
-        <div class="alert alert-dismissible fade show mb-4" role="alert"
-             style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#92400e;">
+        <div class="alert alert-success-indikator alert-dismissible fade show mb-4" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -57,36 +56,38 @@
                 <td>
                     @if($detailValid[$item['id']] ?? false)
                         <a href="{{ route('indikator.tahap2.indikator', $item['id']) }}"
-                           class="btn-detail-indikator">
-                            <i></i> Detail
+                            class="btn btn-primary btn-aksi-wrap btn-sm"
+                            style="width: 75px; margin-left: 28%">
+                            Detail
                         </a>
                     @else
-                        <button class="btn-detail-indikator"
-                                style="background:#9ca3af;cursor:not-allowed;opacity:0.7;"
+                        <button class="btn-detail-disabled"
+                                style="width: 75px; margin-left: 28%"
                                 title="Isi formulasi hingga 100% terlebih dahulu" disabled>
-                            <i></i> Detail
+                            Detail
                         </button>
                     @endif
                 </td>
                 <td>
                     @if(in_array($item['id'], $formulasis ?? []))
-                        <button class="btn-detail-formulasi btn-open-formulasi"
+                        <button class="btn btn-primary btn-aksi-wrap btn-sm btn-open-formulasi"
+                                style="width: 75px; margin-left: 28%"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['sub_event'] }}">
-                            <i></i> Detail
+                            Detail
                         </button>
                     @else
                         <button class="btn-tambah-formulasi btn-open-formulasi"
                                 data-id="{{ $item['id'] }}"
                                 data-nama="{{ $item['sub_event'] }}">
-                            <i></i> Tambah Formulasi
+                            Tambah Formulasi
                         </button>
                     @endif
                 </td>
             </tr>
             @empty
             <tr>
-                <td colspan="4" style="text-align:center;padding:32px;color:#888;">
+                <td colspan="4" class="rv-empty">
                     <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
                     Belum ada data sub event
                 </td>
@@ -150,7 +151,7 @@
                         <span id="totalStatus"></span>
                     </div>
 
-                    <p class="mt-3 mb-0" style="font-size:0.82rem;color:#dc2626;font-weight:500;">
+                    <p class="mt-3 mb-0 text-catatan">
                         <i class="bi bi-exclamation-circle me-1"></i>
                         Catatan: Nilai Inovasi dan Nilai Peragaan jika ditotal harus menjadi 100%.
                     </p>
@@ -190,7 +191,7 @@
 
     let isSubmitting = false;
 
-    const modalEl      = document.getElementById('modalFormulasi');
+    const modalEl        = document.getElementById('modalFormulasi');
     const modalFormulasi = new bootstrap.Modal(modalEl);
 
     /* ══════════════════════════════════════════
@@ -263,12 +264,12 @@
        HELPER: RESET FORM
     ══════════════════════════════════════════ */
     function resetFormulasi2() {
-        document.getElementById('formFormulasi').action        = '';
+        document.getElementById('formFormulasi').action           = '';
         document.getElementById('modalFormulasiTitle').textContent = 'Tambah Formulasi Nilai';
-        document.getElementById('inputNilaiInovasi').value    = '';
-        document.getElementById('inputNilaiPeragaan').value   = '';
-        document.getElementById('totalPreview').style.display = 'none';
-        document.getElementById('btnSimpan2').disabled        = true;
+        document.getElementById('inputNilaiInovasi').value        = '';
+        document.getElementById('inputNilaiPeragaan').value       = '';
+        document.getElementById('totalPreview').style.display     = 'none';
+        document.getElementById('btnSimpan2').disabled            = true;
     }
 
     modalEl.addEventListener('hidden.bs.modal', resetFormulasi2);
@@ -304,7 +305,6 @@
         document.getElementById('totalPreview').style.display = 'none';
         document.getElementById('btnSimpan2').disabled        = true;
 
-        // Fetch data jika sudah ada formulasi untuk sub event ini
         if (formulasiIds.includes(parseInt(subEventId))) {
             fetch(`/indikator/tahap-2/${subEventId}/formulasi/get`)
                 .then(r => {
