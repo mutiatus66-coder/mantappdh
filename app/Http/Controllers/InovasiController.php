@@ -441,12 +441,24 @@ class InovasiController extends Controller
             if ($usulan->$field) Storage::disk('public')->delete($usulan->$field);
         }
 
-        // Disable foreign key checks untuk SQLite
-        \DB::statement('PRAGMA foreign_keys = OFF');
+        // Nonaktifkan sementara pengecekan foreign key — sintaksnya beda
+        // per jenis database (SQLite pakai PRAGMA, MySQL pakai SET).
+        $driver = \DB::connection()->getDriverName();
+        if ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = OFF');
+        } else {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        }
+
         $usulan->catatanPenilai()->delete();
         $usulan->anggotaTim()->delete();
         $usulan->delete();
-        \DB::statement('PRAGMA foreign_keys = ON');
+
+        if ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
 
         return response()->json(['success' => true, 'message' => 'Usulan berhasil dihapus.']);
     }
