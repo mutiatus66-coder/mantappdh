@@ -7,9 +7,13 @@
 .phpunit.result.cache
 /.codex
 /.cursor/
+/database/testing.sqlite
+/.env.dusk.local
 /.idea
 /.nova
 /.phpunit.cache
+/tests/Browser/screenshots/*
+/tests/Browser/console/*
 /.vscode
 /.zed
 /auth.json
@@ -20,7 +24,17 @@
 /storage/*.key
 /storage/pail
 /vendor
+!tests/Browser/screenshots/.gitkeep
+!tests/Browser/console/.gitkeep
 _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

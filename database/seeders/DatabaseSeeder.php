@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         'name'      => 'kamu',
         'nama'      => 'Admin',
         'email'     => 'admin@admin.com',
+        'password'  => bcrypt('password'),
         'hak_akses' => 'admin_bapperida',
         'status'    => 'aktif',
     ]);

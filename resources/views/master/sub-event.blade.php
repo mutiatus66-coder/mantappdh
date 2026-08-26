@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Elemen ──
     const tbody       = document.getElementById('tabelSubEventBody');
     const totalSpan   = document.getElementById('totalSubEvent');
-    const searchInput = document.getElementById('searchSubEvent');
+    // const searchInput = document.getElementById('searchSubEvent');
 
     // ── Modal: singleton + static backdrop ──
     const modalSEEl    = document.getElementById('modalSubEvent');
@@ -560,20 +560,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ────────────────────────────────────────────
-    // SEARCH
-    // ────────────────────────────────────────────
-    searchInput.addEventListener('input', function () {
-        const kw = this.value.toLowerCase().trim();
-        let n = 0;
-        tbody.querySelectorAll('tr').forEach(tr => {
-            if (tr.querySelector('.empty-row')) return;
-            const show = tr.textContent.toLowerCase().includes(kw);
-            tr.style.display = show ? '' : 'none';
-            if (show) n++;
-        });
-        totalSpan.textContent = n;
-    });
+    // // ────────────────────────────────────────────
+    // // SEARCH
+    // // ────────────────────────────────────────────
+    // searchInput.addEventListener('input', function () {
+    //     const kw = this.value.toLowerCase().trim();
+    //     let n = 0;
+    //     tbody.querySelectorAll('tr').forEach(tr => {
+    //         if (tr.querySelector('.empty-row')) return;
+    //         const show = tr.textContent.toLowerCase().includes(kw);
+    //         tr.style.display = show ? '' : 'none';
+    //         if (show) n++;
+    //     });
+    //     totalSpan.textContent = n;
+    // });
 
 });
 </script>
