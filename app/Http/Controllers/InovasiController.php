@@ -225,7 +225,7 @@ class InovasiController extends Controller
         $subEvent     = SubEvent::with('event')->findOrFail($subEventId);
         $subEventNama = $subEvent->sub_event;
         $eventNama    = $subEvent->event->nama_event ?? '-';
-        $isAdmin      = Auth::user()->isAdminBapperida();
+        $isAdmin      = Auth::user()->isAdminBapperida() || Auth::user()->hasRole('penilai');
 
         $query = Usulan::with('bidang', 'anggotaTim', 'user')->where('sub_event_id', $subEventId);
         if ($isAdmin) {

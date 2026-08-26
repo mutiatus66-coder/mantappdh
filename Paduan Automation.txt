@@ -1,0 +1,29 @@
+Dusk
+    Penilai
+    -   php artisan dusk test/Browser/PenilaiWorkflowTest
+
+    Peserta
+    -   php artisan dusk test/Browser/PesertaWorkflowTest
+
+    Super Admin
+    -   php artisan dusk test/Browser/AdminWorkflowTest
+
+Selenium
+    Penilai
+    -   node selenium/penilai.cjs
+
+    Peserta
+    -   node selenium/peserta.cjs
+
+    Super Admin
+    -   node selenium/admin.cjs
+
+Playwright
+    Penilai
+    -   node playwright/penilai.cjs
+
+    Peserta
+    -   node playwright/peserta.cjs
+
+    Super Admin
+    -   node playwright/admin.cjs

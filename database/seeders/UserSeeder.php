@@ -20,14 +20,6 @@ class UserSeeder extends Seeder
                 'status'    => 'aktif',
             ],
             [
-                'name'      => 'penilausatu',
-                'nama'      => 'Penilai Satu',
-                'email'     => 'penilai1@inovasi.test',
-                'password'  => Hash::make('password'),
-                'hak_akses' => 'penilai',            // Tim Penilai (UC §2.3.c)
-                'status'    => 'aktif',
-            ],
-            [
                 'name'      => 'pesertasatu',
                 'nama'      => 'Peserta Satu',
                 'email'     => 'peserta1@inovasi.test',

@@ -531,6 +531,33 @@ class UsulanSeeder extends Seeder
             ]),
         ];
 
+        // Tambah data dummy
+        for ($i = 1; $i <= 30; $i++) {
+            $usulans[] = array_merge($base, [
+                'judul'        => 'Inovasi E2E Test ' . $i,
+                'inovator'     => 'Instansi Test',
+                'nama_inovasi' => 'Inovasi Gen ' . $i,
+                'nama_tim'     => 'Tim Gen ' . $i,
+                'ketua_nama'   => 'Peserta Gen ' . $i,
+                'ketua_email'  => "peserta.gen{$i}@email.com",
+                'ketua_wa'     => '081234567890',
+                'ktp'          => '3520000000000' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'interaksi'    => 'Lainnya',
+                'status'       => 'Sedang Dinilai',
+                'is_submitted' => true,
+                'deskripsi'    => 'Deskripsi dummy untuk inovasi tambahan e2e.',
+                'kategori'     => $i % 2 == 0 ? 'umum' : 'pelajar',
+                'latar_belakang'        => 'Latar belakang dummy.',
+                'kondisi_sebelumnya'    => 'Kondisi dummy.',
+                'sasaran_tujuan'        => 'Sasaran dummy.',
+                'cara_kerja'            => 'Cara kerja dummy.',
+                'keunggulan'            => 'Keunggulan dummy.',
+                'hasil_diharapkan'      => 'Hasil dummy.',
+                'manfaat'               => 'Manfaat dummy.',
+                'rencana_berkelanjutan' => 'Rencana dummy.',
+            ]);
+        }
+
         foreach ($usulans as $item) {
             $item['user_id'] = $peserta->id;
 

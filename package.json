@@ -34,6 +34,8 @@
     },
     "homepage": "https://github.com/mutiatus66-coder/mantappdh#readme",
     "dependencies": {
-        "datatables.net-dt": "^2.3.8"
+        "datatables.net-dt": "^2.3.8",
+        "playwright": "^1.62.1",
+        "selenium-webdriver": "^4.47.0"
     }
 }

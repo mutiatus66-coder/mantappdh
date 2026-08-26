@@ -125,10 +125,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usulan-nilai/{subEventId}',   [InovasiController::class, 'usulanNilai'])   ->name('usulan-nilai');
 
     // CRUD usulan (pemilik usulan)
-    Route::post('/',           [InovasiController::class, 'store'])   ->name('store');
-    Route::put('/{id}',        [InovasiController::class, 'update'])  ->name('update');
-    Route::delete('/{id}',     [InovasiController::class, 'destroy']) ->name('destroy');
-    Route::post('/{id}/kirim', [InovasiController::class, 'kirim'])   ->name('kirim');
+    Route::middleware(['role:user'])->group(function () {
+        Route::post('/',           [InovasiController::class, 'store'])   ->name('store');
+        Route::put('/{id}',        [InovasiController::class, 'update'])  ->name('update');
+        Route::delete('/{id}',     [InovasiController::class, 'destroy']) ->name('destroy');
+        Route::post('/{id}/kirim', [InovasiController::class, 'kirim'])   ->name('kirim');
+    });
 
     // ⬇️ BARU — Edit status oleh Admin Bapperida (UC-09)
     Route::post('/{id}/edit-status', [InovasiController::class, 'editStatus'])->name('edit-status');
@@ -138,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
 
 // ── Penilaian ─────────────────────────────────────────────────────────────
 
-Route::prefix('penilaian')->name('penilaian.')->group(function () {
+Route::middleware(['role:penilai,admin_bapperida'])->prefix('penilaian')->name('penilaian.')->group(function () {
     Route::get('/tahap-1',                    [PenilaianController::class, 'tahap1'])             ->name('tahap1.index');
     Route::get('/tahap-1/{id}',               [PenilaianController::class, 'tahap1Show'])         ->name('tahap1.show');
     Route::post('/tahap-1/{id}/simpan',       [PenilaianController::class, 'tahap1Simpan'])       ->name('tahap1.simpan');
@@ -146,7 +148,7 @@ Route::prefix('penilaian')->name('penilaian.')->group(function () {
 
     Route::get('/tahap-2',            [PenilaianController::class, 'tahap2'])             ->name('tahap2.index');
     Route::get('/tahap-2/{id}',       [PenilaianController::class, 'tahap2Show'])         ->name('tahap2.show');
-    // Route simpan-nilai Tahap 2 DIHAPUS — Tahap 2 tidak punya penilaian sendiri
+    Route::post('/tahap-2/{id}/simpan-nilai', [PenilaianController::class, 'tahap2Simpan'])->name('tahap2.simpan.nilai');
     Route::post('/tahap-2/{id}/ranking', [PenilaianController::class, 'tahap2SimpanRanking'])->name('tahap2.ranking');
 
     Route::post('/catatan/{usulanId}', [PenilaianController::class, 'simpanCatatan'])->name('catatan.simpan');
