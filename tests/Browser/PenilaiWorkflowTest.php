@@ -125,10 +125,15 @@ class PenilaiWorkflowTest extends DuskTestCase
 
             echo "17. Filter Total Nilai (Klik header Total Nilai)...\n";
             $browser->script(
-                "let th = Array.from(document.querySelectorAll('th')).find(t => t.textContent.includes('Total Nilai'));" .
-                "if(th) { th.scrollIntoView({block: 'center'}); th.click(); setTimeout(() => th.click(), 1000); }"
+                "let th1 = Array.from(document.querySelectorAll('th')).find(t => t.textContent.includes('Total Nilai'));" .
+                "if(th1) { th1.scrollIntoView({block: 'center'}); th1.click(); }"
             );
-            $browser->pause(2500);
+            $browser->pause(1000);
+            $browser->script(
+                "let th2 = Array.from(document.querySelectorAll('th')).find(t => t.textContent.includes('Total Nilai'));" .
+                "if(th2) { th2.scrollIntoView({block: 'center'}); th2.click(); }"
+            );
+            $browser->pause(1500);
 
             echo "18. Menekan check box select all (chk-all)...\n";
             $browser->script(
