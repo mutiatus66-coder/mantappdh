@@ -13,7 +13,7 @@ const tests = [
 ];
 
 console.log("==========================================");
-console.log("🚀 MEMULAI SEMUA PENGUJIAN PLAYWRIGHT ADMIN");
+console.log("MEMULAI PLAYWRIGHT SEBAGAI ADMIN MENYELURUH");
 console.log("==========================================\n");
 
 for (const test of tests) {
@@ -27,5 +27,5 @@ for (const test of tests) {
 }
 
 console.log("\n==========================================");
-console.log("✅ SEMUA PENGUJIAN PLAYWRIGHT ADMIN BERHASIL LULUS!");
+console.log("PENGUJIAN PLAYWRIGHT TELAH BERJALAN LANCAR");
 console.log("==========================================\n");
