@@ -10,20 +10,20 @@ Dusk
 
 Selenium
     Penilai
-    -   node selenium/penilai.cjs
+    -   node selenium/penilai.js
 
     Peserta
-    -   node selenium/peserta.cjs
+    -   node selenium/peserta.js
 
     Super Admin
-    -   node selenium/admin.cjs
+    -   node selenium/admin.js
 
 Playwright
     Penilai
-    -   node playwright/penilai.cjs
+    -   node playwright/penilai.js
 
     Peserta
-    -   node playwright/peserta.cjs
+    -   node playwright/peserta.js
 
     Super Admin
-    -   node playwright/admin.cjs
+    -   node playwright/admin.js
