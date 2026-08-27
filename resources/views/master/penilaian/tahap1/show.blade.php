@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ═══════════════════════════════════════════════════════════════════════
      * KONSTANTA & URL
      * ═══════════════════════════════════════════════════════════════════════ */
-    const MAX_LOLOS      = 10; // ganti maksimal lolos hanya butuh ganti ni nomor
+    const MAX_LOLOS      = 7; // ganti maksimal lolos hanya butuh ganti ni nomor
     const NILAI_URL      = '{{ route("penilaian.tahap1.simpan.nilai", $subEvent["id"]) }}';
     const SIMPAN_URL     = '{{ route("penilaian.tahap1.simpan", $subEvent["id"]) }}';
     const CATATAN_BASE   = '{{ url("penilaian/catatan") }}';
@@ -151,7 +151,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildGroup(name) {
         return {
             name,
-            get rows()        { return [...document.querySelectorAll(`.chk-row[data-group="${name}"]`)]; },
+            get rows() {
+                const tableId = name === 'umum' ? 'tableUmum' : 'tablePelajar';
+                if ($.fn.DataTable.isDataTable('#' + tableId)) {
+                    return [...$('#' + tableId).DataTable().$(`.chk-row[data-group="${name}"]`)];
+                }
+                return [...document.querySelectorAll(`.chk-row[data-group="${name}"]`)];
+            },
             get rowsEnabled() { return this.rows.filter(c => !c.disabled); },
             get checked()     { return this.rows.filter(c => c.checked); },
             get checkAll()    { return document.querySelector(`.chk-all[data-group="${name}"]`); },

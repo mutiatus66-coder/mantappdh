@@ -178,22 +178,47 @@
                     targets: [0],
                     searchable: false,
                     width: '50px',
-                    className: 'dt-center'
+                    className: 'dt-center',
+                    responsivePriority: 1
                 },
                 {
                     targets: [1],
-                    className: 'dt-center'
+                    className: 'dt-center',
+                    responsivePriority: 3
+                },
+                {
+                    targets: [2],
+                    responsivePriority: 2
+                },
+                {
+                    targets: [3], // Inovator
+                    responsivePriority: 4
+                },
+                {
+                    targets: [4], // Ketua
+                    responsivePriority: 5
+                },
+                {
+                    targets: [5], // Bidang
+                    responsivePriority: 6
+                },
+                {
+                    targets: [6], // Kategori
+                    className: 'dt-center',
+                    responsivePriority: 7
                 },
                 {
                     // Kolom Dokumen — tidak perlu di-sort/search karena berisi link
                     targets: [7],
                     orderable: false,
                     searchable: false,
-                    className: 'dt-center'
+                    className: 'dt-center',
+                    responsivePriority: 8
                 },
                 {
-                    targets: [8],
-                    className: 'dt-center'
+                    targets: [8], // Terkirim
+                    className: 'dt-center',
+                    responsivePriority: 9
                 }
             ]
         });

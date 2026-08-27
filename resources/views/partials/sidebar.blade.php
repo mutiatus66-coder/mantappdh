@@ -27,7 +27,7 @@
         @php $user = auth()->user(); @endphp
 
         {{-- ── Dashboard: semua role ── --}}
-        <a class="ri-menu-item" href="/">
+        <a class="ri-menu-item {{ request()->is('/') ? 'active' : '' }}" href="/">
           <span class="ri-icon">
             <svg viewBox="0 0 24 24">
               <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -44,7 +44,7 @@
           <div class="ri-divider"></div>
           <span class="ri-section-label">Master</span>
 
-          <a class="ri-menu-item" href="/event">
+          <a class="ri-menu-item {{ request()->is('event*') ? 'active' : '' }}" href="/event">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -56,7 +56,7 @@
             <span class="ri-menu-label">Event</span>
           </a>
 
-          <a class="ri-menu-item" href="/sub-event">
+          <a class="ri-menu-item {{ request()->is('sub-event*') ? 'active' : '' }}" href="/sub-event">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <line x1="8" y1="6" x2="21" y2="6"/>
@@ -70,7 +70,7 @@
             <span class="ri-menu-label">Sub Event</span>
           </a>
 
-          <a class="ri-menu-item" href="/bidang">
+          <a class="ri-menu-item {{ request()->is('bidang*') ? 'active' : '' }}" href="/bidang">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -82,7 +82,7 @@
             <span class="ri-menu-label">Bidang</span>
           </a>
 
-          <a class="ri-menu-item" href="/user">
+          <a class="ri-menu-item {{ request()->is('user*') ? 'active' : '' }}" href="/user">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -94,7 +94,7 @@
             <span class="ri-menu-label">User</span>
           </a>
 
-          <a class="ri-menu-item" href="/penilai">
+          <a class="ri-menu-item {{ request()->is('penilai*') && !request()->is('penilaian*') ? 'active' : '' }}" href="/penilai">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -104,7 +104,7 @@
             <span class="ri-menu-label">Penilai</span>
           </a>
 
-          <a class="ri-menu-item" href="/pengumuman">
+          <a class="ri-menu-item {{ request()->is('pengumuman*') ? 'active' : '' }}" href="/pengumuman">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/>
@@ -120,7 +120,7 @@
           <div class="ri-divider"></div>
           <span class="ri-section-label">Indikator</span>
 
-          <a class="ri-menu-item" href="/indikator/tahap-1">
+          <a class="ri-menu-item {{ request()->is('indikator/tahap-1*') ? 'active' : '' }}" href="/indikator/tahap-1">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="10"/>
@@ -130,7 +130,7 @@
             <span class="ri-menu-label">Indikator Tahap 1</span>
           </a>
 
-          <a class="ri-menu-item" href="/indikator/tahap-2">
+          <a class="ri-menu-item {{ request()->is('indikator/tahap-2*') ? 'active' : '' }}" href="/indikator/tahap-2">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <line x1="8" y1="6" x2="21" y2="6"/>
@@ -149,7 +149,7 @@
         <div class="ri-divider"></div>
         <span class="ri-section-label">Inovasi</span>
 
-        <a class="ri-menu-item" href="/inovasi/riwayat">
+        <a class="ri-menu-item {{ request()->is('inovasi/riwayat*') || request()->is('inovasi/usulan*') ? 'active' : '' }}" href="/inovasi/riwayat">
           <span class="ri-icon">
             <svg viewBox="0 0 24 24">
               <polyline points="1 4 1 10 7 10"/>
@@ -161,7 +161,7 @@
 
         {{-- Rekap Nilai: Admin Bapperida & Penilai --}}
         @if($user->hasRole(['admin_bapperida', 'penilai']))
-          <a class="ri-menu-item" href="/inovasi/rekap-nilai">
+          <a class="ri-menu-item {{ request()->is('inovasi/rekap-nilai*') || request()->is('inovasi/rekap-pendaftar*') ? 'active' : '' }}" href="/inovasi/rekap-nilai">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <line x1="18" y1="20" x2="18" y2="10"/>
@@ -178,7 +178,7 @@
           <div class="ri-divider"></div>
           <span class="ri-section-label">Penilaian</span>
 
-          <a class="ri-menu-item" href="/penilaian/tahap-1">
+          <a class="ri-menu-item {{ request()->is('penilaian/tahap-1*') ? 'active' : '' }}" href="/penilaian/tahap-1">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <polyline points="20 6 9 17 4 12"/>
@@ -187,7 +187,7 @@
             <span class="ri-menu-label">Penilaian Tahap 1</span>
           </a>
 
-          <a class="ri-menu-item" href="/penilaian/tahap-2">
+          <a class="ri-menu-item {{ request()->is('penilaian/tahap-2*') ? 'active' : '' }}" href="/penilaian/tahap-2">
             <span class="ri-icon">
               <svg viewBox="0 0 24 24">
                 <line x1="18" y1="20" x2="18" y2="10"/>

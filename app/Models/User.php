@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function isUser(): bool
     {
-        return $this->hak_akses === 'user';
+        return $this->hak_akses === 'user' || $this->hak_akses === 'peserta';
     }
     public function isAdminBapperida(): bool
 {

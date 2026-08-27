@@ -70,9 +70,11 @@
             <a href="{{ url('/inovasi/riwayat') }}" class="btn btn-dark">
                 <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
+            @if(auth()->user()->isUser())
             <button class="btn btn-primary" id="btnTambah">
                 <i class="bi bi-plus-lg me-1"></i> Tambah Usulan
             </button>
+            @endif
         </div>
     </div>
 
@@ -95,17 +97,19 @@
                 </div>
                 <div class="u-card-actions">
                     @if(!$u->is_submitted)
-                    <button class="btn btn-warning btn-outline-sm btn-edit"
-                            data-id="{{ $u->id }}"
-                            data-u="{{ json_encode($u->load('anggotaTim')) }}">
-                        <i class="bi bi-pencil"></i> Edit
-                    </button>
-                    <button class="btn btn-danger btn-outline-sm btn-hapus" data-id="{{ $u->id }}">
-                        <i class="bi bi-trash"></i> Hapus
-                    </button>
-                    <button class="btn btn-sm btn-success btn-kirim" data-id="{{ $u->id }}">
-                        <i class="bi bi-send"></i> Kirim
-                    </button>
+                        @if(auth()->user()->isUser())
+                        <button class="btn btn-warning btn-outline-sm btn-edit"
+                                data-id="{{ $u->id }}"
+                                data-u="{{ json_encode($u->load('anggotaTim')) }}">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-outline-sm btn-hapus" data-id="{{ $u->id }}">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                        <button class="btn btn-sm btn-success btn-kirim" data-id="{{ $u->id }}">
+                            <i class="bi bi-send"></i> Kirim
+                        </button>
+                        @endif
                     @else
                     <span class="text-muted small"><i class="bi bi-lock me-1"></i>Sudah dikirim</span>
                     @endif

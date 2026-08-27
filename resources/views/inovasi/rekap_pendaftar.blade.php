@@ -26,12 +26,7 @@
             <a href="{{ url('/inovasi/rekap-nilai') }}" class="btn btn-dark">
                 <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
-            <button class="btn btn-danger" id="pdfBtn">
-                <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
-            </button>
-            <button class="btn btn-success" id="excelBtn">
-                <i class="bi bi-file-earmark-excel me-1"></i> Download Excel
-            </button>
+
         </div>
     </div>
 
@@ -159,15 +154,7 @@
         });
     });
 
-    /* ══════════════════════════════════════════
-       EXPORT BUTTON CUSTOM — trigger DT internal
-    ══════════════════════════════════════════ */
-    document.getElementById('pdfBtn')?.addEventListener('click', function () {
-        $('.buttons-pdf').click();
-    });
-    document.getElementById('excelBtn')?.addEventListener('click', function () {
-        $('.buttons-excel').click();
-    });
+
 
 })();
 </script>

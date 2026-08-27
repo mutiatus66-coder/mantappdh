@@ -1,45 +1,41 @@
 {
-  "$schema": "https://www.schemastore.org/package.json",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:report": "playwright show-report"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.62.1",
-    "@tailwindcss/vite": "^4.0.0",
-    "@types/node": "^26.2.0",
-    "autoprefixer": "^10.5.0",
-    "concurrently": "^9.0.1",
-    "laravel-vite-plugin": "^3.0.0",
-    "postcss": "^8.5.10",
-    "tailwindcss": "^3.4.19",
-    "vite": "^8.0.0"
-  },
-  "name": "mantappdh",
-  "version": "1.0.0",
-  "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
-  "main": "vite.config.js",
-  "directories": {
-    "test": "tests"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mutiatus66-coder/mantappdh.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mutiatus66-coder/mantappdh/issues"
-  },
-  "homepage": "https://github.com/mutiatus66-coder/mantappdh#readme",
-  "dependencies": {
-    "datatables.net-dt": "^2.3.8"
-  }
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "autoprefixer": "^10.5.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^3.0.0",
+        "postcss": "^8.5.10",
+        "tailwindcss": "^3.4.19",
+        "vite": "^8.0.0"
+    },
+    "name": "mantappdh",
+    "version": "1.0.0",
+    "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+    "main": "vite.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mutiatus66-coder/mantappdh.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mutiatus66-coder/mantappdh/issues"
+    },
+    "homepage": "https://github.com/mutiatus66-coder/mantappdh#readme",
+    "dependencies": {
+        "datatables.net-dt": "^2.3.8",
+        "playwright": "^1.62.1",
+        "selenium-webdriver": "^4.47.0"
+    }
 }

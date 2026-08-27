@@ -18,6 +18,7 @@ class PenilaianUsulanSeeder extends Seeder
 
         $usulans = Usulan::query()
             ->where('is_submitted', true)
+            ->take(15)
             ->get();
 
         if ($usulans->isEmpty()) {

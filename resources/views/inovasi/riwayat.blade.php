@@ -44,9 +44,15 @@
                             {{ $se->mulai }} &ndash; {{ $se->berakhir }}
                         </span>
                     </div>
+                    @if(auth()->user()->isUser())
                     <a href="{{ url('/inovasi/usulan/' . $se->id) }}" class="btn btn-primary">
                         <i class="bi bi-arrow-right me-1"></i> Kelola Usulan
                     </a>
+                    @else
+                    <a href="{{ url('/inovasi/usulan-riwayat/' . $se->id) }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right me-1"></i> Lihat Usulan
+                    </a>
+                    @endif
                 </div>
             </div>
         </div>
