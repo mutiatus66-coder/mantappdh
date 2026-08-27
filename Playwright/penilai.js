@@ -2,9 +2,9 @@ import { chromium } from 'playwright';
 
 (async () => {
     // Setup Playwright
-    const browser = await chromium.launch({ headless: false });
+    const browser = await chromium.launch({ headless: false, args: ['--start-maximized'] });
     const context = await browser.newContext({
-        viewport: { width: 1280, height: 720 }
+        viewport: null
     });
     const page = await context.newPage();
 
@@ -102,7 +102,7 @@ import { chromium } from 'playwright';
                     await inputs.nth(j).fill('10');
                 }
             }
-            await page.click('text="Simpan Nilai"');
+            await page.locator('button:has-text("Simpan Nilai"):visible').first().click();
             await page.waitForTimeout(1000);
             
             await btnCatatan.nth(i).scrollIntoViewIfNeeded();
@@ -117,7 +117,7 @@ import { chromium } from 'playwright';
                     break;
                 }
             }
-            await page.click('text="Simpan Catatan"');
+            await page.locator('button:has-text("Simpan Catatan"):visible').first().click();
             await page.waitForTimeout(1000);
         }
 
@@ -158,6 +158,15 @@ import { chromium } from 'playwright';
         console.log("24. Menekan tombol Simpan Ranking...");
         await page.click('button:has-text("Simpan Ranking")');
         await page.waitForTimeout(2000);
+
+        console.log("24.5. Menekan tombol Download Excel...");
+        const btnExcelTahap2 = page.locator('.buttons-excel');
+        if (await btnExcelTahap2.count() > 0 && await btnExcelTahap2.first().isVisible()) {
+            await btnExcelTahap2.first().click();
+            await page.waitForTimeout(2000);
+        } else {
+            console.log("   -> Tombol Excel tidak ditemukan");
+        }
 
         console.log("25. Menekan tombol Kembali...");
         await page.click('text="Kembali"');

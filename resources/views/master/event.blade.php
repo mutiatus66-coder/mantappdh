@@ -45,7 +45,7 @@
             </tr>
         </thead>
         <tbody id="tabelEventBody">
-            @forelse($events as $index => $item)
+            @foreach($events as $index => $item)
             <tr>
                 <td><?= $index + 1 ?></td>
                 <td><?= e($item->nama_event) ?></td>
@@ -68,14 +68,7 @@
                     </div>
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="4" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data event
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -183,6 +176,7 @@
             responsive: true,
 
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>                     Belum ada data event</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

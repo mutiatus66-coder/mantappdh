@@ -8,47 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap">
     <link href="/template.demo6/demo6/assets/plugins/global/plugins.bundle.css" rel="stylesheet">
     <link href="/template.demo6/demo6/assets/css/style.bundle.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: #ffffff; }
-        .modern-header {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .menu-link.nav-link {
-            font-weight: 600;
-            color: #1e293b !important;
-            padding: 0.6rem 1.2rem;
-            transition: all 0.3s;
-        }
-        .menu-link.nav-link:hover {
-            background: #f1f5f9;
-            transform: translateY(-2px);
-        }
-        .btn-login {
-            background: #2563eb;
-            color: white;
-            border-radius: 0px;
-            padding: 0.5rem 1.8rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        .btn-login:hover {
-            background: #1d4ed8;
-        }
-        .footer {
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
-            padding: 1.5rem 0;
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .footer p { color: #64748b; font-size: 0.875rem; margin: 0; }
-    </style>
+    <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet" />
 </head>
 <body>
     <div class="modern-header">

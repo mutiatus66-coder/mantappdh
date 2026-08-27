@@ -49,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($subEvents ?? [] as $index => $item)
+            @foreach($subEvents ?? [] as $index => $item)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item['sub_event'] }}</td>
@@ -85,14 +85,7 @@
                     @endif
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="4" class="rv-empty">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data sub event
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -202,6 +195,7 @@
         dt = $('#tabelTahap2').DataTable({
             responsive: true,
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>                     Belum ada data sub event</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

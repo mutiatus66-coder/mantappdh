@@ -59,7 +59,7 @@
             @php $no = 1; @endphp
             @foreach(['Subtansi Inovasi', 'Peragaan'] as $jenis)
                 @foreach($indikators->where('jenis', $jenis) as $ind)
-                    @forelse($ind->keterangans as $ket)
+                    @foreach($ind->keterangans as $ket)
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>{{ $ind->nama_indikator }}</td>
@@ -87,28 +87,7 @@
                         </td>
                         <td>{{ $jenis }}</td>{{-- Data grouping tersembunyi --}}
                     </tr>
-                    @empty
-                    <tr>
-                        <td>{{ $no++ }}</td>
-                        <td>{{ $ind->nama_indikator }}</td>
-                        <td colspan="3" style="color:var(--ri-text-muted);font-style:italic;">
-                            Belum ada keterangan
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm btn-edit-indikator"
-                                    data-id=""
-                                    data-indikator-id="{{ $ind->id }}"
-                                    data-nama-indikator="{{ $ind->nama_indikator }}"
-                                    data-jenis="{{ $ind->jenis }}"
-                                    data-keterangan=""
-                                    data-nilai-minimal=""
-                                    data-nilai-maksimal="">
-                                Edit
-                            </button>
-                        </td>
-                        <td>{{ $jenis }}</td>
-                    </tr>
-                    @endforelse
+                    @endforeach
                 @endforeach
             @endforeach
         </tbody>
@@ -255,6 +234,7 @@
         dt = $('#tabelTahap2Detail').DataTable({
             responsive: true,
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;">Belum ada keterangan</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

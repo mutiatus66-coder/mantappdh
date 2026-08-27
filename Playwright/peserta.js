@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 (async () => {
     // Setup Playwright
     // Set headless: true jika ingin berjalan di latar belakang (tanpa UI)
-    const browser = await chromium.launch({ headless: false }); 
+    const browser = await chromium.launch({ headless: false, args: ['--start-maximized'] }); 
     const context = await browser.newContext();
     const page = await context.newPage();
 

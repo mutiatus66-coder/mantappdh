@@ -49,7 +49,7 @@
             </tr>
         </thead>
         <tbody id="tabelPengumumanBody">
-            @forelse($pengumuman as $index => $p)
+            @foreach($pengumuman as $index => $p)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $p->judul }}</td>
@@ -85,14 +85,7 @@
                     </div>
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="6" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data pengumuman
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -232,6 +225,7 @@
             responsive: true,
 
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>                     Belum ada data pengumuman</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

@@ -1,0 +1,60 @@
+                AUTOMATION E2E
+Dusk
+    Penilai
+    -   php artisan dusk tests/Browser/PenilaiWorkflowTest.php
+
+    Peserta
+    -   php artisan dusk tests/Browser/PesertaWorkFlowTest.php
+
+    Super Admin
+    -   php artisan dusk tests/Browser/Admin
+    -   php artisan dusk tests/Browser/Admin/Test1_MasterTest.php
+    -   php artisan dusk tests/Browser/Admin/Test2_IndikatorTest.php
+    -   php artisan dusk tests/Browser/Admin/Test3_InovasiTest.php
+    -   php artisan dusk tests/Browser/Admin/Test4_PenilaianTest.php
+
+Selenium
+    Penilai
+    -   node selenium/penilai.js
+
+    Peserta
+    -   node selenium/peserta.js
+
+    Super Admin
+    -   Bisa dijalankan sekaligus berurutan:
+        node Selenium/admin.js
+
+    -   Atau dijalankan terpisah satu per satu:
+        node Selenium/Admin/Test1_MasterTest.js
+        node Selenium/Admin/Test2_IndikatorTest.js
+        node Selenium/Admin/Test3_InovasiTest.js
+        node Selenium/Admin/Test4_PenilaianTest.js
+
+Playwright
+    Penilai
+    -   node playwright/penilai.js
+
+    Peserta
+    -   node playwright/peserta.js
+
+    Super Admin
+    -   Bisa dijalankan sekaligus berurutan:
+        node Playwright/admin.js
+
+    -   Atau dijalankan terpisah satu per satu:
+        node Playwright/Admin/Test1_MasterTest.js
+        node Playwright/Admin/Test2_IndikatorTest.js
+        node Playwright/Admin/Test3_InovasiTest.js
+        node Playwright/Admin/Test4_PenilaianTest.js
+
+                ROLLBACK DATA
+
+Rollback ke 10 menit yang lalu: php artisan db:rollback 10m
+
+Rollback ke 30 menit yang lalu: php artisan db:rollback 30m
+
+Rollback ke 6 jam yang lalu: php artisan db:rollback 6h
+
+Rollback ke 24 jam yang lalu: php artisan db:rollback 24h
+
+Rollback ke 3 hari yang lalu: php artisan db:rollback 3d

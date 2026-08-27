@@ -49,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($usulan as $item)
+            @foreach($usulan as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item['judul'] ?? '-' }}</td>
@@ -69,14 +69,7 @@
                 <td>{{ $item['nilai_t2'] ?? '-' }}</td>
                 <td><strong>{{ $item['nilai_total'] ?? '-' }}</strong></td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="9" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data pendaftar untuk sub event ini
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -104,6 +97,7 @@
         dt = $('#tabelRekap').DataTable({
             responsive: true,
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>                     Belum ada data pendaftar untuk sub event ini</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

@@ -50,7 +50,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($usulan as $u)
+            @foreach($usulan as $u)
             @php
                 $color = match($u->status) {
                     'Melengkapi Data' => 'warning',
@@ -76,7 +76,7 @@
                     <div>{{ $u->ketua_nama ?? '-' }}</div>
                     <small class="text-muted">{{ $u->ketua_email ?? '' }}</small>
                 </td>
-                <td>{{ $u->bidang->nama ?? '-' }}</td>
+                <td>{{ optional($u->bidang)->nama ?? '-' }}</td>
                 <td><span class="badge-kategori">{{ ucfirst($u->kategori ?? '-') }}</span></td>
                 <td>
                     <div class="d-flex flex-column gap-1" style="font-size:.76rem">
@@ -117,14 +117,7 @@
                     @endif
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="9" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada usulan untuk sub event ini
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -153,6 +146,7 @@
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>Belum ada usulan untuk sub event ini</div>',
                 info        : 'Menampilkan _START_–_END_ dari _TOTAL_ data',
                 infoEmpty   : 'Tidak ada data',
                 infoFiltered: '(difilter dari _MAX_ total data)',

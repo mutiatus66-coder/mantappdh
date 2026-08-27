@@ -92,7 +92,7 @@ class PesertaWorkFlowTest extends DuskTestCase
                     ->press('Selanjutnya')
                     ->pause(1000);
 
-            // Mengisi Form Langkah 3
+            // 9. Mengisi Form Langkah 3
             $browser->attach('file_surat_pernyataan', __DIR__.'/contoh.pdf')
                     ->attach('file_proposal', __DIR__.'/contoh.pdf')
                     ->attach('file_gambar', __DIR__.'/contoh.jpg')
@@ -102,6 +102,20 @@ class PesertaWorkFlowTest extends DuskTestCase
                     ->press('Simpan Usulan')
                     ->pause(3000)
                     ->screenshot('real_10_usulan_tersimpan');
+
+            // 9.5. Menekan tombol Kirim pada usulan yang baru dibuat
+            echo "   -> Menekan tombol Kirim...\n";
+            $browser->pause(2000); // Ekstra pause untuk memastikan halaman sudah reload sepenuhnya
+            $browser->script(
+                "let btns = document.querySelectorAll('.btn-kirim');" .
+                "if(btns.length > 0) { let btn = btns[0]; btn.scrollIntoView({block: 'center'}); btn.click(); }"
+            );
+            $browser->pause(2000);
+            $browser->script(
+                "let btnOk = document.getElementById('btnOkKirim');" .
+                "if(btnOk) { btnOk.scrollIntoView({block: 'center'}); btnOk.click(); }"
+            );
+            $browser->pause(3000);
 
             // 8. Kembali (mengklik tombol back/kembali)
             $browser->clickLink('Kembali') // Tombol kembali di usulan.blade.php

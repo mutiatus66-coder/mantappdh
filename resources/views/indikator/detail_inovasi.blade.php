@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody id="tabelDetailInovasiBody">
-            @forelse($indikators ?? [] as $index => $item)
+            @foreach($indikators ?? [] as $index => $item)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item['nama_indikator'] ?? '-' }}</td>
@@ -82,14 +82,7 @@
                     </div>
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="5" class="rv-empty">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data indikator
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
@@ -219,6 +212,7 @@
         dt = $('#tabelDetailInovasi').DataTable({
             responsive: true,
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>                     Belum ada data indikator</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

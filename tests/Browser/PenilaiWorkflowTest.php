@@ -175,6 +175,13 @@ class PenilaiWorkflowTest extends DuskTestCase
             );
             $browser->pause(3000);
 
+            echo "24.5. Menekan tombol Download Excel...\n";
+            $browser->script(
+                "let btnExcel = document.querySelector('.buttons-excel');" .
+                "if(btnExcel) { btnExcel.scrollIntoView({block: 'center'}); btnExcel.click(); }"
+            );
+            $browser->pause(2000);
+
             echo "25. Menekan tombol Kembali...\n";
             $browser->clickLink('Kembali')
                     ->pause(2000);

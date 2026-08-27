@@ -125,7 +125,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usulan-nilai/{subEventId}',   [InovasiController::class, 'usulanNilai'])   ->name('usulan-nilai');
 
     // CRUD usulan (pemilik usulan)
-    Route::middleware(['role:user'])->group(function () {
+    Route::middleware(['role:peserta'])->group(function () {
         Route::post('/',           [InovasiController::class, 'store'])   ->name('store');
         Route::put('/{id}',        [InovasiController::class, 'update'])  ->name('update');
         Route::delete('/{id}',     [InovasiController::class, 'destroy']) ->name('destroy');

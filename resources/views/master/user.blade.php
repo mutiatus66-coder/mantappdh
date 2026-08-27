@@ -57,7 +57,7 @@ $hakAksesLabel = [
             </tr>
         </thead>
         <tbody id="tabelUserBody">
-            @forelse($users ?? [] as $index => $item)
+            @foreach($users ?? [] as $index => $item)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item->nama }}</td>
@@ -92,14 +92,7 @@ $hakAksesLabel = [
                     @endif
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="6" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada data user
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 

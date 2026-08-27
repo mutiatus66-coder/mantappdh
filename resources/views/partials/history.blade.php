@@ -54,24 +54,7 @@
 
 </div>
 
-<style>
-  .history-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 2px;
-  }
-  .history-action {
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 1px 8px;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: .02em;
-    line-height: 1.5;
-    white-space: nowrap;
-  }
-</style>
+<link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet" />
 <script>
     // Nama user yang sedang aktif (mendukung fitur "login as")
     window.RI_CURRENT_USER = @json(auth()->user()->nama ?? 'Pengguna');

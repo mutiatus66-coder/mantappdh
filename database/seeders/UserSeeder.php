@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
             [
                 'name'      => 'adminbapperida',
                 'nama'      => 'Admin BAPPERIDA',
-                'email'     => 'admin@bapperida.test',
+                'email'     => 'admin@demo.test',
                 'password'  => Hash::make('password'),
-                'hak_akses' => 'admin_bapperida',   // Super Admin (UC §2.3.a)
+                'hak_akses' => 'admin_bapperida',   // Super Admin
                 'status'    => 'aktif',
             ],
             [
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'nama'      => 'Peserta Satu',
                 'email'     => 'peserta1@inovasi.test',
                 'password'  => Hash::make('password'),
-                'hak_akses' => 'peserta',            // Peserta / Inovator (UC §2.3.b)
+                'hak_akses' => 'peserta',            // Peserta / Inovator
                 'status'    => 'aktif',
             ],
         ];

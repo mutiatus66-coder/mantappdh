@@ -45,7 +45,7 @@
                 </tr>
             </thead>
             <tbody id="tabelSubEventBody">
-                @forelse($subEvents as $index => $item)
+                @foreach($subEvents as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->tahun }}</td>
@@ -76,14 +76,7 @@
                         </div>
                     </td>
                 </tr>
-                @empty
-                <tr id="emptyRow">
-                    <td colspan="8" class="empty-row">
-                        <i class="bi bi-inbox fs-4 d-block mb-2"></i>
-                        Belum ada data sub event
-                    </td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -220,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             responsive: true,
 
             language: {
+                emptyTable  : '<div style="text-align:center;padding:32px;color:#888;"><i class="bi bi-inbox fs-4 d-block mb-2"></i>                         Belum ada data sub event</div>',
                 lengthMenu  : 'Tampilkan _MENU_ data',
                 search      : 'Cari:',
                 zeroRecords : 'Tidak ada data ditemukan',

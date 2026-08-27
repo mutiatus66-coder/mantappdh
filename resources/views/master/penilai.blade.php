@@ -47,7 +47,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($subEvents as $index => $item)
+            @foreach($subEvents as $index => $item)
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item->tahun }}</td>
@@ -60,14 +60,7 @@
                             Detail</a>
                 </td>
             </tr>
-            @empty
-            <tr>
-                <td colspan="6" style="text-align:center;padding:32px;color:#888;">
-                    <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                    Belum ada sub event
-                </td>
-            </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 

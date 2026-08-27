@@ -35,7 +35,7 @@
                         <i class="bi bi-journal-text ec-card-icon"></i>
                     </div>
                     {{-- Nama Event parent --}}
-                    <p class="ec-card-parent-label mb-0">{{ $se->event->nama_event ?? '-' }}</p>
+                    <p class="ec-card-parent-label mb-0">{{ optional($se->event)->nama_event ?? '-' }}</p>
                     {{-- Nama Sub Event — bold tebal seperti penilaian --}}
                     <h5 class="ec-card-title">{{ $se->sub_event }}</h5>
                     <div class="mt-3 mb-3">

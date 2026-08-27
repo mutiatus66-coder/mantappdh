@@ -2,54 +2,7 @@
 
 @push('styles')
 <link href="{{ asset('template.demo6/demo6/assets/css/CostumeStyle.css') }}" rel="stylesheet">
-<style>
-/* ── Stepper ───────────────────────────────────────────────────── */
-.us-stepper{display:flex;align-items:flex-start;gap:0;margin-bottom:28px}
-.us-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
-.us-step:not(:last-child)::after{content:'';position:absolute;top:18px;left:60%;width:80%;height:2px;background:var(--ri-border);z-index:0}
-.us-step.done:not(:last-child)::after{background:#1b84ff}
-.us-step-num{width:36px;height:36px;border-radius:50%;border:2px solid var(--ri-border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;background:var(--ri-card-bg);color:var(--ri-text-muted);z-index:1;transition:.2s}
-.us-step.active .us-step-num{border-color:#1b84ff;color:#1b84ff;background:#e8f0ff}
-.us-step.done   .us-step-num{border-color:#1b84ff;background:#1b84ff;color:#fff}
-.us-step-label{font-size:.72rem;margin-top:5px;color:var(--ri-text-muted);text-align:center}
-.us-step.active .us-step-label,.us-step.done .us-step-label{color:#1b84ff;font-weight:600}
 
-/* ── Panels ────────────────────────────────────────────────────── */
-.us-panel{display:none}
-.us-panel.active{display:block}
-
-/* ── Form ──────────────────────────────────────────────────────── */
-.us-section-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ri-text-muted);border-bottom:1px solid var(--ri-border);padding-bottom:6px;margin:20px 0 12px}
-.us-label{font-size:.82rem;font-weight:600;margin-bottom:4px;display:block;color:var(--ri-text-primary)}
-.us-required{color:#e53e3e;margin-left:2px}
-.us-input,.us-textarea,.us-select{width:100%;padding:8px 12px;border:1px solid var(--ri-border);border-radius:8px;background:var(--ri-input-bg);color:var(--ri-text-primary);font-size:.875rem;transition:.15s}
-.us-input:focus,.us-textarea:focus,.us-select:focus{outline:none;border-color:#1b84ff;box-shadow:0 0 0 3px rgba(27,132,255,.12)}
-.us-input.is-invalid,.us-textarea.is-invalid,.us-select.is-invalid{border-color:#dc3545}
-.us-textarea{resize:vertical;min-height:80px}
-.us-error-msg{font-size:.74rem;color:#dc3545;margin-top:3px;display:none}
-.us-file-wrap{border:1.5px dashed var(--ri-border);border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--ri-input-bg);transition:.15s}
-.us-file-wrap:hover{border-color:#1b84ff;color:#1b84ff}
-.us-file-wrap input{display:none}
-.us-file-name{font-size:.76rem;color:#1b84ff;margin-top:3px}
-
-/* ── Anggota row ───────────────────────────────────────────────── */
-.anggota-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.anggota-row .us-input{flex:1}
-.btn-del-anggota{width:32px;height:32px;border:none;border-radius:6px;background:rgba(220,53,69,.1);color:#dc3545;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-
-/* ── Card usulan ───────────────────────────────────────────────── */
-.u-card{border:1px solid var(--ri-border);border-radius:10px;background:var(--ri-card-bg);padding:16px 20px;margin-bottom:12px;transition:.15s}
-.u-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
-.u-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
-.u-card-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:.8rem;color:var(--ri-text-muted)}
-.u-card-actions{display:flex;gap:6px;flex-wrap:wrap}
-.badge-melengkapi{background:rgba(245,158,11,.12);color:#92400e;border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:2px 10px;font-size:.74rem;font-weight:600;white-space:nowrap}
-.badge-dinilai   {background:rgba(27,132,255,.12);color:#1e40af;border:1px solid rgba(27,132,255,.3);border-radius:20px;padding:2px 10px;font-size:.74rem;font-weight:600;white-space:nowrap}
-.badge-selesai   {background:rgba(16,185,129,.12);color:#064e3b;border:1px solid rgba(16,185,129,.3);border-radius:20px;padding:2px 10px;font-size:.74rem;font-weight:600;white-space:nowrap}
-
-/* ── Nav buttons ───────────────────────────────────────────────── */
-.us-nav{display:flex;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid var(--ri-border)}
-</style>
 @endpush
 
 @section('content')
@@ -117,7 +70,7 @@
             </div>
             <div class="u-card-meta">
                 <span><i class="bi bi-person me-1"></i>{{ $u->ketua_nama }}</span>
-                <span><i class="bi bi-grid me-1"></i>{{ $u->bidang->nama ?? '-' }}</span>
+                <span><i class="bi bi-grid me-1"></i>{{ optional($u->bidang)->nama ?? '-' }}</span>
                 <span><i class="bi bi-tag me-1"></i>{{ ucfirst($u->kategori) }}</span>
                 @if($u->anggotaTim->count())
                 <span><i class="bi bi-people me-1"></i>{{ $u->anggotaTim->count() }} anggota</span>
