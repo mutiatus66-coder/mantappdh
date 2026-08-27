@@ -16,7 +16,7 @@ test('Login Admin - full flow', async ({ page }) => {
   console.log('✅ Redirect ke halaman login berhasil');
 
   // 3. Isi form login
-  await page.fill('input[name="email"]', 'admin@bapperida.test');
+  await page.fill('input[name="email"]', 'admin@admin.com');
   await page.fill('input[name="password"]', 'password');
   await page.click('button[type="submit"]');
 

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8000';
-const ADMIN_EMAIL = 'admin@bapperida.test';
+const ADMIN_EMAIL = 'admin@admin.com';
 const ADMIN_PASSWORD = 'password';
 
 test.describe('Penilaian Tahap 1 - Admin', () => {
