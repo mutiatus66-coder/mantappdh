@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    const baseUrl = "http://mantappdh.test";
+    const baseUrl = "http://127.0.0.1:8000";
     const uniqueEmail = `peserta_${Date.now()}@test.com`;
 
     // Helpers untuk membuat file dummy (PDF & JPG)

@@ -21,7 +21,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("[4] PENILAIAN DATA (Selenium)");
         
         console.log("   -> Login Admin...");
-        await driver.get('http://mantappdh.test/');
+        await driver.get('http://127.0.0.1:8000/');
         await sleep(1000);
         await driver.findElement(By.xpath("//a[contains(text(), 'Login')]")).click();
         await sleep(2000);

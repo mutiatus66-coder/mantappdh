@@ -9,7 +9,7 @@ import { chromium } from 'playwright';
         console.log("[2] INDIKATOR DATA (Playwright)");
         
         console.log("   -> Login Admin...");
-        await page.goto('http://mantappdh.test/');
+        await page.goto('http://127.0.0.1:8000/');
         await page.waitForTimeout(1000);
         await page.click('text="Login"');
         await page.waitForTimeout(2000);

@@ -18,7 +18,7 @@ class PenilaiWorkflowTest extends DuskTestCase
             $browser->resize(1280, 720);
 
             echo "1. Membuka landing page...\n";
-            $browser->visit('http://mantappdh.test/');
+            $browser->visit('http://127.0.0.1:8000/');
             $browser->pause(1000);
 
             echo "2. Menekan tombol Login...\n";

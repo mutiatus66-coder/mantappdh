@@ -8,7 +8,7 @@ import { chromium } from 'playwright';
     });
     const page = await context.newPage();
 
-    const baseUrl = "http://mantappdh.test";
+    const baseUrl = "http://127.0.0.1:8000";
     const emailPenilai = "ahmad.fauzi@example.com";
     const passwordPenilai = "password";
 
