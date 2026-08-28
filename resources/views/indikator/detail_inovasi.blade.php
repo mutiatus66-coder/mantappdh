@@ -132,7 +132,7 @@
 
                 <div class="modal-footer px-5 py-3">
                     <button type="button" class="btn btn-dark px-4" id="btnBatalIndikator">Batal</button>
-                    <button type="submit" class="btn btn-success px-4">Simpan</button>
+                    <button type="submit"class="btn btn-success px-4"id="btnSimpanIndikator">Simpan</button>
                 </div>
             </form>
         </div>
