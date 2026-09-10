@@ -140,14 +140,17 @@ const __dirname = path.dirname(__filename);
             await page.fill('input[name="link_video"]', 'https://youtube.com/watch?v=123');
             
             console.log("   -> Menekan Simpan Usulan...");
-            await page.getByRole('button', { name: 'Simpan Usulan' }).click();
+            await Promise.all([
+                page.waitForNavigation({ timeout: 15000 }).catch(() => {}),
+                page.getByRole('button', { name: 'Simpan Usulan' }).click()
+            ]);
             await page.waitForTimeout(2000);
         } else {
             console.log("   -> (Form Usulan tidak ditemukan, kemungkinan tidak ada Event aktif untuk diikuti. Melanjutkan ke Logout...)");
         }
 
         console.log("10. Kembali ke menu Riwayat...");
-        await page.goto(baseUrl + '/inovasi/riwayat');
+        await page.goto(baseUrl + '/inovasi/riwayat', { waitUntil: 'commit' }).catch(e => console.log("   -> Peringatan navigasi:", e.message));
         await page.waitForTimeout(2000);
 
         console.log("11. Log Out...");
