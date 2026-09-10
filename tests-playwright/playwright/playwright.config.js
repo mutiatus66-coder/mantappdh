@@ -1,18 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
-  timeout: 30000,
-  fullyParallel: true,
-  retries: 2,
+  testDir: './tests-playwright/playwright/tests',
+  timeout: 600000,
+  fullyParallel: false,
+  workers: 1,
+  retries: 0,
 
   use: {
     baseURL: 'http://localhost:8000',
-    headless: false,  // 🔥 INI AGAR BROWSER TERBUKA
+    headless: false,
     viewport: { width: 1280, height: 720 },
-    trace: 'on-first-retry',
   },
 
+  // 🔥 CUMA CHROMIUM - HAPUS FIREFOX & WEBKIT
   projects: [
     {
       name: 'chromium',
@@ -20,4 +21,3 @@ export default defineConfig({
     },
   ],
 });
-
