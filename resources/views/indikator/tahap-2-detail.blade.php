@@ -76,7 +76,7 @@
                                         data-keterangan="{{ $ket->keterangan }}"
                                         data-nilai-minimal="{{ $ket->nilai_minimal }}"
                                         data-nilai-maksimal="{{ $ket->nilai_maksimal }}">
-                                    Edit
+                                    Ubah
                                 </button>
                                 <button class="btn btn-danger btn-sm btn-hapus-indikator"
                                         data-id="{{ $ket->id }}"
@@ -336,22 +336,22 @@
     ══════════════════════════════════════════ */
     tbody.addEventListener('click', function (e) {
 
-        // ── Tombol Edit ──
-        const editBtn = e.target.closest('.btn-edit-indikator');
-        if (editBtn) {
-            const ketId = editBtn.dataset.id;
+        // ── Tombol Ubah ──
+        const ubahBtn = e.target.closest('.btn-edit-indikator');
+        if (ubahBtn) {
+            const ketId = ubahBtn.dataset.id;
 
-            document.getElementById('modalIndikatorTitle').textContent = 'Edit Indikator Nominator';
+            document.getElementById('modalIndikatorTitle').textContent = 'Ubah Indikator Nominator';
             document.getElementById('formIndikatorMethod').value       = 'PUT';
             document.getElementById('hiddenKetId').value               = ketId;
             document.getElementById('formIndikator').action            =
                 `/indikator/tahap-2/${SUB_ID}/indikator/${ketId}`;
 
-            document.getElementById('inputNamaIndikator').value = editBtn.dataset.namaIndikator;
-            document.getElementById('inputJenis').value         = editBtn.dataset.jenis;
-            document.getElementById('inputKeterangan').value    = editBtn.dataset.keterangan;
-            document.getElementById('inputNilaiMinimal').value  = editBtn.dataset.nilaiMinimal;
-            document.getElementById('inputNilaiMaksimal').value = editBtn.dataset.nilaiMaksimal;
+            document.getElementById('inputNamaIndikator').value = ubahBtn.dataset.namaIndikator;
+            document.getElementById('inputJenis').value         = ubahBtn.dataset.jenis;
+            document.getElementById('inputKeterangan').value    = ubahBtn.dataset.keterangan;
+            document.getElementById('inputNilaiMinimal').value  = ubahBtn.dataset.nilaiMinimal;
+            document.getElementById('inputNilaiMaksimal').value = ubahBtn.dataset.nilaiMaksimal;
 
             modalIndikator.show();
             return;

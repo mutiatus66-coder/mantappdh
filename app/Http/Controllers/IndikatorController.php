@@ -161,7 +161,7 @@ class IndikatorController extends Controller
 
     /* ══════════════════════════════════════════════════════════
        TAHAP 1 — Update Indikator
-       Scope query ke sub_event_id agar tidak bisa edit
+       Scope query ke sub_event_id agar tidak bisa Ubah
        indikator milik sub event lain.
     ══════════════════════════════════════════════════════════ */
     public function inovasiUpdate(Request $request, int $subEventId, int $id)

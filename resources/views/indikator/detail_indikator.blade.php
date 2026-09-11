@@ -64,7 +64,7 @@
                                 data-keterangan="{{ $item['keterangan'] }}"
                                 data-nilai-minimal="{{ $item['nilai_minimal'] }}"
                                 data-nilai-maksimal="{{ $item['nilai_maksimal'] }}">
-                            Edit
+                            Ubah
                         </button>
                         <button class="btn btn-danger btn-sm btn-hapus-keterangan"
                                 data-id="{{ $item['id'] }}"
@@ -268,16 +268,16 @@
     ══════════════════════════════════════════ */
     tbody.addEventListener('click', function (e) {
 
-        // ── Tombol Edit ──
-        const editBtn = e.target.closest('.btn-edit-keterangan');
-        if (editBtn) {
+        // ── Tombol Ubah ──
+        const ubahBtn = e.target.closest('.btn-edit-keterangan');
+        if (ubahBtn) {
             document.getElementById('modalKeteranganTitle').textContent = 'Ubah Keterangan';
             document.getElementById('formKeterangan').action =
-                `/indikator/tahap-1/${SUB_ID}/detail/${INDIKATOR_ID}/${editBtn.dataset.id}`;
+                `/indikator/tahap-1/${SUB_ID}/detail/${INDIKATOR_ID}/${ubahBtn.dataset.id}`;
             document.getElementById('formKeteranganMethod').value  = 'PUT';
-            document.getElementById('inputKeterangan').value       = editBtn.dataset.keterangan;
-            document.getElementById('inputNilaiMinimal').value     = editBtn.dataset.nilaiMinimal;
-            document.getElementById('inputNilaiMaksimal').value    = editBtn.dataset.nilaiMaksimal;
+            document.getElementById('inputKeterangan').value       = ubahBtn.dataset.keterangan;
+            document.getElementById('inputNilaiMinimal').value     = ubahBtn.dataset.nilaiMinimal;
+            document.getElementById('inputNilaiMaksimal').value    = ubahBtn.dataset.nilaiMaksimal;
             modalKeterangan.show();
             return;
         }
