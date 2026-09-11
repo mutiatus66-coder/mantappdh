@@ -15,15 +15,15 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests-playwright',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 2,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['./simple-reporter.js'], ['html']],
 
   /* Default timeout untuk semua expect(...). Dinaikkan dari default 5000ms
    * karena WebKit di Windows kadang butuh waktu lebih lama menyelesaikan
@@ -44,22 +44,28 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.js/ },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
     },
+<<<<<<< HEAD
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
+=======
+    // Firefox dan WebKit dinonaktifkan sementara agar tes tidak jalan 3x lipat
+>>>>>>> f4f153e1de5a537227a1b693e1f4114a96ebbd31
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },

@@ -54,7 +54,7 @@ class UserCrudTest extends DuskTestCase
     public function test_admin_can_create_user(): void
     {
         $namaUser  = 'User Test ' . time();
-        $emailUser = 'usertest' . time() . '@mantappdh.test';
+        $emailUser = 'usertest' . time() . '@127.0.0.1:8000';
 
         $this->browse(function (Browser $browser) use ($namaUser, $emailUser) {
             $this->freshLogin($browser, $this->admin());
@@ -73,7 +73,7 @@ class UserCrudTest extends DuskTestCase
     public function test_admin_can_delete_user(): void
     {
         $namaUser  = 'User Hapus ' . time();
-        $emailUser = 'userhapus' . time() . '@mantappdh.test';
+        $emailUser = 'userhapus' . time() . '@127.0.0.1:8000';
 
         $this->browse(function (Browser $browser) use ($namaUser, $emailUser) {
             $this->freshLogin($browser, $this->admin());

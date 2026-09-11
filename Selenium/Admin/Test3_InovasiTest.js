@@ -21,11 +21,11 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("[3] INOVASI DATA (Selenium)");
         
         console.log("   -> Login Admin...");
-        await driver.get('http://mantappdh.test/');
+        await driver.get('http://127.0.0.1:8000/');
         await sleep(1000);
         await driver.findElement(By.xpath("//a[contains(text(), 'Login')]")).click();
         await sleep(2000);
-        await driver.wait(until.elementLocated(By.name('email')), 10000).sendKeys('admin@admin.com');
+        await driver.wait(until.elementLocated(By.name('email')), 10000).sendKeys('admin@demo.test');
         await driver.findElement(By.name('password')).sendKeys('password');
         await driver.findElement(By.css('button[type="submit"]')).click();
         await sleep(3000);

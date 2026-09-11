@@ -12,9 +12,7 @@ const tests = [
     'Test4_PenilaianTest.js'
 ];
 
-console.log("==========================================");
 console.log("MEMULAI PLAYWRIGHT SEBAGAI ADMIN MENYELURUH");
-console.log("==========================================\n");
 
 for (const test of tests) {
     console.log(`\n▶️  Menjalankan: ${test}...`);
@@ -26,6 +24,4 @@ for (const test of tests) {
     }
 }
 
-console.log("\n==========================================");
-console.log("PENGUJIAN PLAYWRIGHT TELAH BERJALAN LANCAR");
-console.log("==========================================\n");
+console.log("Workflow E2E Playwright untuk Admin selesai tanpa error!");

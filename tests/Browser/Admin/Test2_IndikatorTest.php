@@ -10,7 +10,7 @@ class Test2_IndikatorTest extends DuskTestCase
 {
     private function loginAdmin(Browser $browser): void
     {
-        $browser->visit('http://mantappdh.test/')
+        $browser->visit('http://127.0.0.1:8000/')
                 ->pause(1000)
                 ->clickLink('Login')
                 ->pause(2000)
