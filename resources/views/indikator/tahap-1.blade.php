@@ -298,7 +298,7 @@
         document.getElementById('modalFormulasi1Title').textContent =
             btn.classList.contains('btn-tambah-formulasi')
                 ? 'Tambah Formulasi Nilai'
-                : 'Edit Formulasi Nilai';
+                : 'Ubah Formulasi Nilai';
 
         document.getElementById('inputSubEventName1').value = subEventNama;
         document.getElementById('formFormulasi1').action    =

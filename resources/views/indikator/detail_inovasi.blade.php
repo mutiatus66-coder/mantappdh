@@ -278,14 +278,14 @@
     tbody.addEventListener('click', function (e) {
 
         // ── Tombol Ubah ──
-        const editBtn = e.target.closest('.btn-edit-indikator');
-        if (editBtn) {
+        const ubahBtn = e.target.closest('.btn-edit-indikator');
+        if (ubahBtn) {
             document.getElementById('modalIndikatorTitle').textContent = 'Ubah Indikator';
             document.getElementById('formIndikator').action =
-                `/indikator/tahap-1/${SUB_ID}/inovasi/${editBtn.dataset.id}`;
+                `/indikator/tahap-1/${SUB_ID}/inovasi/${ubahBtn.dataset.id}`;
             document.getElementById('formIndikatorMethod').value = 'PUT';
-            document.getElementById('inputNamaIndikator').value  = editBtn.dataset.indikator;
-            document.getElementById('selectJenis').value         = editBtn.dataset.jenis || 'substansi';
+            document.getElementById('inputNamaIndikator').value  = ubahBtn.dataset.indikator;
+            document.getElementById('selectJenis').value         = ubahBtn.dataset.jenis || 'substansi';
             modalIndikator.show();
             return;
         }
