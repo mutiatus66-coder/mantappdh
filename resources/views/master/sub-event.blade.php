@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const emptyRow = tbody.querySelector('#emptyRow');
         if (emptyRow) emptyRow.remove();
 
-        const rowCount = tbody.querySelectorAll('tr').length + 1;
+        const rowCount = dt ? dt.rows().count() + 1 : tbody.querySelectorAll('tr').length + 1;
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${rowCount}</td>
@@ -351,8 +351,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <td>${se.mulai}</td>
             <td>${se.berakhir}</td>
             <td style="text-align:center;">
-                <div class="btn-aksi-wrap">
-                    <button class="btn btn-warning btn-edit-se btn-aksi"
+                <div class="btn-aksi-wrap" style="display:flex;gap:6px;justify-content:center;">
+                    <button class="btn btn-warning btn-edit-se btn-sm"
                             data-id="${se.id}"
                             data-tahun="${se.tahun}"
                             data-event-id="${se.event_id}"
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             data-url="${se.update_url}">
                         Ubah
                     </button>
-                    <button class="btn btn-danger btn-hapus-se btn-aksi"
+                    <button class="btn btn-danger btn-hapus-se btn-sm"
                             data-id="${se.id}"
                             data-nama="${se.sub_event}"
                             data-url="${se.destroy_url}">
@@ -371,8 +371,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     </button>
                 </div>
             </td>`;
-        tbody.appendChild(tr);
-        totalSpan.textContent = tbody.querySelectorAll('tr').length;
+            
+        if (typeof dt !== 'undefined' && dt) {
+            dt.row.add(tr).draw(false);
+        } else {
+            tbody.appendChild(tr);
+        }
+        updateTotal();
     }
 
     // ────────────────────────────────────────────
@@ -544,8 +549,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalHapus.hide();
                 toast(`Sub Event "${activeHapusNama}" berhasil dihapus!`);
                 const hapusBtn = tbody.querySelector(`.btn-hapus-se[data-id="${activeHapusId}"]`);
-                if (hapusBtn) hapusBtn.closest('tr').remove();
+                if (hapusBtn) {
+                    const tr = hapusBtn.closest('tr');
+                    if (typeof dt !== 'undefined' && dt) {
+                        dt.row(tr).remove().draw(false);
+                    } else {
+                        tr.remove();
+                    }
+                }
                 renumberRows();
+                updateTotal();
             } else {
                 toast(res.message ?? 'Gagal menghapus data.', 'error');
             }

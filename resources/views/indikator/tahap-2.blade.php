@@ -205,7 +205,7 @@
                 paginate    : { first: '«', last: '»', next: '›', previous: '‹' },
             },
             layout: {
-                topStart: ['pageLength', { buttons: ['colvis'] }],
+                topStart: { pageLength: {}, buttons: ['colvis'] },
                 topEnd  : 'search',
             },
             pageLength: 10,

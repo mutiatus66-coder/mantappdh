@@ -35,7 +35,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:8000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://mantappdh.test',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -49,23 +49,6 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['setup'],
-    },
-<<<<<<< HEAD
-
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
-
-    /* Test against mobile viewports. */
-=======
-    // Firefox dan WebKit dinonaktifkan sementara agar tes tidak jalan 3x lipat
->>>>>>> f4f153e1de5a537227a1b693e1f4114a96ebbd31
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },

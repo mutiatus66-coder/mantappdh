@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-import { sleep, testDataTables } from '../helpers.js';
+import { sleep, testDataTables, takeScreenshotSession } from '../helpers.js';
 
 (async function test1Master() {
     let options = new chrome.Options();
@@ -50,13 +50,16 @@ import { sleep, testDataTables } from '../helpers.js';
         console.log("   -> Event: Tambah, Ubah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/event"]');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Aksi_' + Date.now());
         await testDataTables(driver, 'Event');
         await executeScriptClick('#btnTambahEvent');
         await sleep(800);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Tambah_' + Date.now());
         await driver.findElement(By.css('#inputNamaEvent')).sendKeys(`Event ${waktu}`);
         await driver.findElement(By.css('#inputJenis')).sendKeys('INOTEK');
         await executeScriptClick('#btnSimpanEvent');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
 
         await driver.executeScript(`
             let btns = document.querySelectorAll('.btn-edit-event'); 
@@ -68,6 +71,7 @@ import { sleep, testDataTables } from '../helpers.js';
         await inputEvent.sendKeys(`Event Edit ${waktu}`);
         await executeScriptClick('#btnSimpanEvent');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
 
         await driver.executeScript(`
             let btns = document.querySelectorAll('.btn-hapus-event'); 
@@ -76,14 +80,17 @@ import { sleep, testDataTables } from '../helpers.js';
         await sleep(800);
         await executeScriptClick('#btnHapusEvent');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Hapus_' + Date.now());
 
         // 2. SUB EVENT
         console.log("   -> Sub Event: Tambah, Ubah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/sub-event"]');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Aksi_' + Date.now());
         await testDataTables(driver, 'Sub Event');
         await executeScriptClick('#btnTambahSubEvent');
         await sleep(800);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Tambah_' + Date.now());
         await driver.findElement(By.css('#seTahun')).sendKeys(String(new Date().getFullYear() + 1));
         await driver.executeScript(`
             let sel = document.getElementById('seEvent'); 
@@ -95,6 +102,7 @@ import { sleep, testDataTables } from '../helpers.js';
         await driver.findElement(By.css('#seBerakhir')).sendKeys('2025-12-31');
         await executeScriptClick('#btnSimpanSE');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
         
         await driver.executeScript(`
             let btns = document.querySelectorAll('.btn-hapus-se'); 
@@ -103,11 +111,13 @@ import { sleep, testDataTables } from '../helpers.js';
         await sleep(800);
         await executeScriptClick('#btnHapusSE');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Hapus_' + Date.now());
 
         // 3. BIDANG
         console.log("   -> Bidang: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/bidang"]');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Aksi_' + Date.now());
         await testDataTables(driver, 'Bidang');
         await driver.executeScript(`
             let acc = document.querySelector('.bidang-accordion-btn'); 
@@ -123,6 +133,7 @@ import { sleep, testDataTables } from '../helpers.js';
         await executeScriptClick('#statusAktifBidang');
         await executeScriptClick('#btnSimpanBidang');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
         
         await driver.executeScript(`
             let btns = document.querySelectorAll('.btn-hapus-bidang'); 
@@ -131,20 +142,24 @@ import { sleep, testDataTables } from '../helpers.js';
         await sleep(800);
         await executeScriptClick('#btnHapusBidang');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Hapus_' + Date.now());
 
         // 4. USER
         console.log("   -> User: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/user"]');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Aksi_' + Date.now());
         await testDataTables(driver, 'User');
         await executeScriptClick('#btnTambahUser');
         await sleep(800);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Tambah_' + Date.now());
         await driver.findElement(By.css('#inputNama')).sendKeys('User Test');
         await driver.findElement(By.css('#inputEmail')).sendKeys(`user_${waktu}@test.com`);
         await driver.findElement(By.css('#inputHakAkses')).sendKeys('peserta');
         await driver.findElement(By.css('#inputPassword')).sendKeys('Password123!');
         await executeScriptClick('#btnSimpanUser');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
         
         await driver.findElement(By.css('.dt-search input')).sendKeys('User Test');
         await sleep(1000);
@@ -155,19 +170,23 @@ import { sleep, testDataTables } from '../helpers.js';
         await sleep(800);
         await executeScriptClick('#btnHapusUser');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Hapus_' + Date.now());
 
         // 5. PENGUMUMAN
         console.log("   -> Pengumuman: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/pengumuman"]');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Aksi_' + Date.now());
         await testDataTables(driver, 'Pengumuman');
         await executeScriptClick('#btnTambahPengumuman');
         await sleep(800);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Tambah_' + Date.now());
         await driver.findElement(By.css('#pJudul')).sendKeys(`Pengumuman ${waktu}`);
         await driver.findElement(By.css('#pDeskripsi')).sendKeys('Deskripsi');
         await driver.findElement(By.css('#pStatus')).sendKeys('Draft');
         await executeScriptClick('#btnSimpanPengumuman');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Simpan_' + Date.now());
         
         await driver.executeScript(`
             let btns = document.querySelectorAll('.btn-hapus-pengumuman'); 
@@ -176,6 +195,7 @@ import { sleep, testDataTables } from '../helpers.js';
         await sleep(800);
         await executeScriptClick('#btnHapusPengumuman');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'Test1_MasterTest_Hapus_' + Date.now());
 
         // LOGOUT
         console.log("   -> Logout...");

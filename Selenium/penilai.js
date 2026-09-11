@@ -1,7 +1,6 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
-
-import { testDataTables } from './helpers.js';
+import { testDataTables, takeScreenshotSession } from './helpers.js';
 
 (async function runPenilaiWorkflow() {
     // Setup WebDriver
@@ -72,6 +71,7 @@ import { testDataTables } from './helpers.js';
         console.log("   -> Menekan tombol Masuk...");
         await pressButton('Masuk');
         await sleep(3000);
+        await takeScreenshotSession(driver, 'penilai_Masuk_' + Date.now());
 
         console.log("4. Ke halaman Riwayat melalui sidebar...");
         await clickLink('Riwayat');
@@ -139,41 +139,63 @@ import { testDataTables } from './helpers.js';
         console.log("16. Memberi nilai kepada 10 inovator...");
         // Beri delay untuk memastikan DataTables render selesai
         await sleep(1000);
-        const btnNilai = await driver.findElements(By.css('.btn-input-nilai'));
-        const btnCatatan = await driver.findElements(By.css('.btn-catatan'));
+        let btnNilai = await driver.findElements(By.css('.btn-input-nilai'));
+        let loopCount = Math.min(10, btnNilai.length);
         
-        for (let i = 0; i < Math.min(10, btnNilai.length); i++) {
-            // Klik modal nilai
-            await driver.executeScript("arguments[0].scrollIntoView({block: 'center'}); arguments[0].click();", btnNilai[i]);
-            await sleep(1000);
-            
-            // Isi form nilai jika kosong (simulasi ketik)
-            const inputs = await driver.findElements(By.css('.input-nilai-item'));
-            for (let j = 0; j < inputs.length; j++) {
-                try {
-                    await inputs[j].clear();
-                    const minVal = await inputs[j].getAttribute('min');
-                    await inputs[j].sendKeys(minVal || '10');
-                } catch(e){}
-            }
-            
-            await pressButton('Simpan Nilai');
-            await sleep(1000);
-            
-            // Klik modal catatan
-            await driver.executeScript("arguments[0].scrollIntoView({block: 'center'}); arguments[0].click();", btnCatatan[i]);
-            await sleep(1000);
-            const textareas = await driver.findElements(By.css('textarea.form-control'));
-            // Ambil textarea yang terlihat
-            for (const ta of textareas) {
-                if (await ta.isDisplayed()) {
-                    await ta.clear();
-                    await ta.sendKeys('Catatan otomatis dari Selenium untuk inovator ke-' + (i+1));
-                    break;
+        for (let i = 0; i < loopCount; i++) {
+            // Re-fetch untuk mencegah StaleElementReferenceError jika tabel ter-render ulang
+            btnNilai = await driver.findElements(By.css('.btn-input-nilai'));
+            if (btnNilai[i]) {
+                await driver.executeScript("arguments[0].scrollIntoView({block: 'center'}); arguments[0].click();", btnNilai[i]);
+                await sleep(1500);
+                
+                // Isi form nilai jika kosong (hanya yang terlihat di modal aktif)
+                const inputs = await driver.findElements(By.css('.input-nilai-item'));
+                for (let j = 0; j < inputs.length; j++) {
+                    try {
+                        if (await inputs[j].isDisplayed()) {
+                            await inputs[j].clear();
+                            const minVal = await inputs[j].getAttribute('min');
+                            await inputs[j].sendKeys(minVal || '10');
+                        }
+                    } catch(e){}
                 }
+                
+                await pressButton('Simpan Nilai');
+                await sleep(1500); // Jeda ekstra agar modal tertutup sempurna
             }
-            await pressButton('Simpan Catatan');
-            await sleep(1000);
+            await takeScreenshotSession(driver, 'penilai_Simpan_' + Date.now());
+            
+            let btnCatatan = await driver.findElements(By.css('.btn-catatan'));
+            if (btnCatatan[i]) {
+                // Klik modal catatan
+                await driver.executeScript("arguments[0].scrollIntoView({block: 'center'}); arguments[0].click();", btnCatatan[i]);
+                await sleep(1500); // Tambah jeda agar modal termuat sempurna
+                
+                const textareas = await driver.findElements(By.css('textarea.form-control'));
+                let success = false;
+                // Ambil textarea yang terlihat (berada di modal aktif)
+                for (const ta of textareas) {
+                    try {
+                        if (await ta.isDisplayed()) {
+                            // Fokuskan kursor ke textarea dan gunakan executeScript fallback jika clear() gagal
+                            await driver.executeScript("arguments[0].focus();", ta);
+                            await ta.clear();
+                            await ta.sendKeys('Catatan otomatis dari Selenium untuk inovator ke-' + (i+1));
+                            success = true;
+                            break;
+                        }
+                    } catch (e) {}
+                }
+                
+                if (!success) {
+                    console.log(`   -> [WARNING] Textarea catatan tidak ditemukan untuk index ${i}`);
+                }
+                
+                await pressButton('Simpan Catatan');
+                await sleep(1500); // Jeda ekstra agar modal tertutup sempurna
+            }
+            await takeScreenshotSession(driver, 'penilai_Simpan_' + Date.now());
         }
 
         console.log("17. Filter Total Nilai (Klik header Total Nilai)...");
@@ -192,6 +214,7 @@ import { testDataTables } from './helpers.js';
         console.log("19. Menekan tombol Simpan di Tahap 1...");
         await pressButton('Simpan');
         await sleep(3000);
+        await takeScreenshotSession(driver, 'penilai_Simpan_' + Date.now());
 
         console.log("20. Menekan tombol Kembali...");
         await clickLink('Kembali');
@@ -209,10 +232,12 @@ import { testDataTables } from './helpers.js';
         console.log("23. Menekan tombol Ranking...");
         await pressButton('Ranking');
         await sleep(2000);
+        await takeScreenshotSession(driver, 'penilai_Aksi_' + Date.now());
 
         console.log("24. Menekan tombol Simpan Ranking...");
         await pressButton('Simpan Ranking');
         await sleep(3000);
+        await takeScreenshotSession(driver, 'penilai_Simpan_' + Date.now());
 
         console.log("25. Menekan tombol Kembali...");
         await clickLink('Kembali');

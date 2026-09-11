@@ -623,8 +623,8 @@
                     ? updateRow(activeUpdateId, nama, status)
                     : appendRow(res.bidang, activeSubEventId);
                     
-                if (dt) {
-                    dt.search(nama).draw();
+                if (dtMap[activeSubEventId]) {
+                    dtMap[activeSubEventId].search(nama).draw();
                 }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');

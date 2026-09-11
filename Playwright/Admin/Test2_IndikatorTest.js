@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
     const page = await context.newPage();
-    const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl = "http://mantappdh.test";
 
     try {
         console.log("[2] INDIKATOR DATA (Playwright)");
@@ -22,7 +22,6 @@ import { chromium } from 'playwright';
         await page.goto(baseUrl + '/indikator/tahap-1');
         await page.waitForTimeout(2000);
         
-        // Klik tombol formulasi
         const btnFormulasi1 = page.locator('.btn-open-formulasi1').first();
         if (await btnFormulasi1.count() > 0) {
             await page.evaluate(() => {
@@ -40,6 +39,52 @@ import { chromium } from 'playwright';
                 if(b) b.click();
             });
             await page.waitForTimeout(2000);
+        }
+
+        console.log("   -> Detail Indikator Tahap 1...");
+        const detailBtn1 = page.locator('a.btn-primary[href*="/inovasi"]').first();
+        if (await detailBtn1.count() > 0) {
+            await detailBtn1.click();
+            await page.waitForTimeout(2000);
+
+            console.log("      -> Tambah Indikator Tahap 1...");
+            await page.click('#btnTambahIndikator');
+            await page.waitForTimeout(1000);
+            await page.fill('#inputNamaIndikator', 'Test Indikator PW');
+            await page.selectOption('#selectJenis', 'substansi');
+            await page.click('#btnSimpanIndikator');
+            await page.waitForTimeout(2000);
+
+            console.log("      -> Ubah Indikator Tahap 1...");
+            const btnEdit = page.locator('.btn-edit-indikator').last();
+            if (await btnEdit.count() > 0) {
+                await btnEdit.click();
+                await page.waitForTimeout(1000);
+                await page.fill('#inputNamaIndikator', 'Test Indikator PW Edit');
+                await page.click('#btnSimpanIndikator');
+                await page.waitForTimeout(2000);
+                
+                console.log("      -> Tambah Keterangan Tahap 1...");
+                await page.locator('a.btn-primary[href*="/detail/"]').last().click();
+                await page.waitForTimeout(2000);
+
+                await page.click('#btnTambahKeterangan');
+                await page.waitForTimeout(1000);
+                await page.fill('#inputKeterangan', 'Keterangan Uji Coba');
+                await page.fill('#inputNilaiMinimal', '10');
+                await page.fill('#inputNilaiMaksimal', '90');
+                await page.click('#formKeterangan button[type="submit"]');
+                await page.waitForTimeout(2000);
+                
+                await page.locator('a.btn-dark').first().click();
+                await page.waitForTimeout(3000);
+                
+                console.log("      -> Hapus Indikator Tahap 1...");
+                await page.locator('.btn-hapus-indikator').last().click();
+                await page.waitForTimeout(1000);
+                await page.click('#formHapusIndikator button[type="submit"]');
+                await page.waitForTimeout(2000);
+            }
         }
 
         // INDIKATOR TAHAP 2
@@ -66,6 +111,40 @@ import { chromium } from 'playwright';
             await page.waitForTimeout(2000);
         }
 
+        console.log("   -> Detail Indikator Tahap 2...");
+        const detailBtn2 = page.locator('a.btn-primary[href*="/indikator"]').first();
+        if (await detailBtn2.count() > 0) {
+            await detailBtn2.click();
+            await page.waitForTimeout(2000);
+
+            console.log("      -> Tambah Indikator Tahap 2...");
+            await page.click('#btnTambahIndikator');
+            await page.waitForTimeout(1000);
+            await page.fill('#inputNamaIndikator', 'Test Indikator T2 PW');
+            await page.selectOption('#inputJenis', 'Subtansi Inovasi');
+            await page.fill('#inputKeterangan', 'Keterangan T2 PW');
+            await page.fill('#inputNilaiMinimal', '0');
+            await page.fill('#inputNilaiMaksimal', '100');
+            await page.click('#formIndikator button[type="submit"]');
+            await page.waitForTimeout(2000);
+
+            console.log("      -> Ubah Indikator Tahap 2...");
+            const btnEdit2 = page.locator('.btn-edit-indikator').last();
+            if (await btnEdit2.count() > 0) {
+                await btnEdit2.click();
+                await page.waitForTimeout(1000);
+                await page.fill('#inputKeterangan', 'Keterangan T2 PW Edit');
+                await page.click('#formIndikator button[type="submit"]');
+                await page.waitForTimeout(2000);
+
+                console.log("      -> Hapus Indikator Tahap 2...");
+                await page.locator('.btn-hapus-indikator').last().click();
+                await page.waitForTimeout(1000);
+                await page.click('#formHapus button[type="submit"]');
+                await page.waitForTimeout(2000);
+            }
+        }
+
         // LOGOUT
         console.log("   -> Logout...");
         await page.goto(baseUrl);
@@ -81,7 +160,7 @@ import { chromium } from 'playwright';
         });
         await page.waitForTimeout(2000);
 
-        console.log("✅ INDIKATOR TEST SELESAI");
+        console.log("✅ Workflow Indikator E2E (Playwright) Selesai dengan Sukses!");
 
     } catch (e) {
         console.error("❌ Error:", e);

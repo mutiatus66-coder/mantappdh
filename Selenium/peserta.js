@@ -3,7 +3,7 @@ import chrome from 'selenium-webdriver/chrome.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { testDataTables } from './helpers.js';
+import { testDataTables, takeScreenshotSession } from './helpers.js';
 
 // Karena menggunakan ES Module, kita buat __dirname secara manual
 const __filename = fileURLToPath(import.meta.url);
@@ -90,6 +90,7 @@ const __dirname = path.dirname(__filename);
         console.log("   -> Menekan Daftar...");
         await pressButton('Daftar');
         await sleep(3000);
+        await takeScreenshotSession(driver, 'peserta_Daftar_' + Date.now());
 
         console.log("4. Ke halaman Riwayat melalui sidebar...");
         await clickLink('Riwayat');
@@ -103,6 +104,7 @@ const __dirname = path.dirname(__filename);
         console.log("6. Menekan Tambah Usulan...");
         await pressButton('Tambah Usulan');
         await sleep(1000);
+        await takeScreenshotSession(driver, 'peserta_Tambah_' + Date.now());
 
         console.log("7. Mengisi Form Langkah 1...");
         await driver.wait(until.elementLocated(By.name('nama_inovasi')), 10000).sendKeys('Inovasi E2E Test');
@@ -125,6 +127,7 @@ const __dirname = path.dirname(__filename);
         
         await pressButton('Selanjutnya');
         await sleep(1000);
+        await takeScreenshotSession(driver, 'peserta_Aksi_' + Date.now());
 
         console.log("8. Mengisi Form Langkah 2...");
         await driver.wait(until.elementLocated(By.name('latar_belakang')), 10000).sendKeys('Latar Belakang ...');
@@ -139,6 +142,7 @@ const __dirname = path.dirname(__filename);
         
         await pressButton('Selanjutnya');
         await sleep(1000);
+        await takeScreenshotSession(driver, 'peserta_Aksi_' + Date.now());
 
         console.log("9. Mengisi Form Langkah 3 (Upload File)...");
         await driver.wait(until.elementLocated(By.name('file_surat_pernyataan')), 10000).sendKeys(pdfPath);
@@ -150,6 +154,7 @@ const __dirname = path.dirname(__filename);
         console.log("   -> Menekan Simpan Usulan...");
         await pressButton('Simpan Usulan');
         await sleep(3000);
+        await takeScreenshotSession(driver, 'peserta_Simpan_' + Date.now());
 
         console.log("10. Kembali ke menu Riwayat...");
         await clickLink('Kembali');

@@ -18,7 +18,7 @@ class PenilaiWorkflowTest extends DuskTestCase
             $browser->resize(1280, 720);
 
             echo "1. Membuka landing page...\n";
-            $browser->visit('http://127.0.0.1:8000/');
+            $browser->visit('http://mantappdh.test/');
             $browser->pause(1000);
 
             echo "2. Menekan tombol Login...\n";
@@ -101,7 +101,7 @@ class PenilaiWorkflowTest extends DuskTestCase
                     "});"
                 );
                 $browser->script(
-                    "let btn2 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Nilai'));" .
+                    "let btn2 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Nilai') && (b.offsetWidth > 0 || b.offsetHeight > 0));" .
                     "if(btn2) { btn2.scrollIntoView({block: 'center'}); btn2.click(); }"
                 );
                 $browser->pause(1000);
@@ -117,7 +117,7 @@ class PenilaiWorkflowTest extends DuskTestCase
                     "if(ta) { ta.value = 'Catatan otomatis dari Dusk untuk inovator ke-' + ($i+1); }"
                 );
                 $browser->script(
-                    "let btn4 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Catatan'));" .
+                    "let btn4 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Catatan') && (b.offsetWidth > 0 || b.offsetHeight > 0));" .
                     "if(btn4) { btn4.scrollIntoView({block: 'center'}); btn4.click(); }"
                 );
                 $browser->pause(1000);
@@ -163,14 +163,14 @@ class PenilaiWorkflowTest extends DuskTestCase
 
             echo "23. Menekan tombol Ranking...\n";
             $browser->script(
-                "let btn6 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Ranking'));" .
+                "let btn6 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Ranking') && (b.offsetWidth > 0 || b.offsetHeight > 0));" .
                 "if(btn6) { btn6.scrollIntoView({block: 'center'}); btn6.click(); }"
             );
             $browser->pause(2000);
 
             echo "24. Menekan tombol Simpan Ranking...\n";
             $browser->script(
-                "let btn7 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Ranking'));" .
+                "let btn7 = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Simpan Ranking') && (b.offsetWidth > 0 || b.offsetHeight > 0));" .
                 "if(btn7) { btn7.scrollIntoView({block: 'center'}); btn7.click(); }"
             );
             $browser->pause(3000);

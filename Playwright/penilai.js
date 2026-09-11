@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
     const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
     const page = await context.newPage();
 
-    const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl = "http://mantappdh.test";
     const emailPenilai = "ahmad.fauzi@example.com";
     const passwordPenilai = "password";
 
@@ -95,39 +95,37 @@ import { chromium } from 'playwright';
             await btnVerifikasi.click();
 
             console.log("16. Memberi nilai kepada inovator...");
-            const btnNilai = page.locator('.btn-input-nilai');
-            const btnCatatan = page.locator('.btn-catatan');
+            const btnNilai = page.locator('.tab-pane.active .btn-input-nilai');
+            const btnCatatan = page.locator('.tab-pane.active .btn-catatan');
             
             await btnNilai.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
             const count = await btnNilai.count();
             const limit = Math.min(7, count); 
             
             for (let i = 0; i < limit; i++) {
+                await page.waitForTimeout(500);
                 await btnNilai.nth(i).click();
                 
-                const inputs = page.locator('.input-nilai-item');
-                await inputs.first().waitFor({ state: 'visible' }).catch(() => {});
+                const modalNilai = page.locator('.modal.show');
+                await modalNilai.waitFor({ state: 'visible' });
+                const inputs = modalNilai.locator('.input-nilai-item');
                 const inputsCount = await inputs.count();
                 for (let j = 0; j < inputsCount; j++) {
-                    if (await inputs.nth(j).isVisible()) {
-                        await inputs.nth(j).fill('10');
-                    }
+                    await inputs.nth(j).fill('10');
                 }
-                await page.getByRole('button', { name: /Simpan Nilai/i }).first().click();
-                await page.waitForTimeout(500);
+                await modalNilai.locator('.btn-simpan-nilai-modal').evaluate(b => b.click());
+                await modalNilai.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
                 
                 await btnCatatan.nth(i).click();
-                const textareas = page.locator('textarea.form-control');
-                await textareas.first().waitFor({ state: 'visible' }).catch(() => {});
+                const modalCatatan = page.locator('.modal.show');
+                await modalCatatan.waitFor({ state: 'visible' });
+                const textareas = modalCatatan.locator('textarea.form-control');
                 const taCount = await textareas.count();
                 for (let k = 0; k < taCount; k++) {
-                    if (await textareas.nth(k).isVisible()) {
-                        await textareas.nth(k).fill('Catatan otomatis dari Playwright untuk inovator ke-' + (i+1));
-                        break;
-                    }
+                    await textareas.nth(k).fill('Catatan otomatis dari Playwright untuk inovator ke-' + (i+1));
                 }
-                await page.getByRole('button', { name: /Simpan Catatan/i }).first().click();
-                await page.waitForTimeout(500);
+                await modalCatatan.locator('.btn-simpan-catatan').evaluate(b => b.click());
+                await modalCatatan.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
             }
 
             console.log("17. Filter Total Nilai (Klik header Total Nilai)...");
@@ -175,42 +173,42 @@ import { chromium } from 'playwright';
             const btnSimpanRanking = page.getByRole('button', { name: /Simpan Ranking/i }).first();
             if (await btnSimpanRanking.isVisible()) await btnSimpanRanking.click();
 
-            console.log("24.5. Menekan tombol Download Excel...");
+            console.log("25. Menekan tombol Download Excel...");
             const btnExcelTahap2 = page.locator('.buttons-excel').first();
             if (await btnExcelTahap2.isVisible()) await btnExcelTahap2.click();
 
-            console.log("25. Menekan tombol Kembali...");
+            console.log("26. Menekan tombol Kembali...");
             await page.getByRole('link', { name: /Kembali/i }).first().click();
         } else {
             console.log("   -> (Tombol Lihat Nilai Nominator tidak ditemukan)");
         }
 
-        console.log("26. Ke halaman Rekap Nilai...");
+        console.log("27. Ke halaman Rekap Nilai...");
         await page.goto(baseUrl + '/inovasi/rekap-nilai');
         await page.waitForTimeout(2000);
 
-        console.log("27. Menekan tombol Lihat Nilai (kembali ke Rekap Pendaftar)...");
+        console.log("28. Menekan tombol Lihat Nilai (kembali ke Rekap Pendaftar)...");
         const btnLihatNilai = page.getByRole('link', { name: /Lihat Nilai/i }).first();
         await btnLihatNilai.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         if (await btnLihatNilai.isVisible()) {
             await btnLihatNilai.click();
 
-            console.log("28. Mencoba export PDF...");
+            console.log("29. Mencoba export PDF...");
             const btnPdf = page.locator('.buttons-pdf').first();
             if (await btnPdf.isVisible()) await btnPdf.click();
 
-            console.log("29. Mencoba export Excel...");
+            console.log("30. Mencoba export Excel...");
             const btnExcel = page.locator('.buttons-excel').first();
             if (await btnExcel.isVisible()) await btnExcel.click();
 
-            console.log("30. Menekan tombol Kembali...");
+            console.log("31. Menekan tombol Kembali...");
             await page.locator('text="Kembali"').first().click();
             await page.waitForTimeout(1500);
         } else {
             console.log("   -> (Tombol Lihat Nilai Rekap tidak ditemukan)");
         }
 
-        console.log("31. Log Out...");
+        console.log("32. Log Out...");
         await page.goto(baseUrl);
         await page.waitForTimeout(2000);
         await page.evaluate(() => {
@@ -224,7 +222,7 @@ import { chromium } from 'playwright';
         });
         await page.waitForTimeout(2000);
 
-        console.log("✅ Workflow E2E Playwright untuk Penilai selesai tanpa error!");
+        console.log("✅ Workflow Penilai E2E (Playwright) Selesai dengan Sukses!");
 
     } catch (err) {
         console.error("❌ Terjadi kesalahan:", err);

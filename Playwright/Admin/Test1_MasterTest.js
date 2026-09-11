@@ -7,7 +7,7 @@ import { chromium } from 'playwright';
     const page = await context.newPage();
     const waktu = Date.now();
 
-    const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl = "http://mantappdh.test";
 
     try {
         // Fungsi pembantu sederhana untuk menguji fitur DataTables secara natural
@@ -177,7 +177,7 @@ import { chromium } from 'playwright';
         await page.waitForTimeout(3000);
         */
 
-        console.log("✅ Testing Admin (Master Data) Selesai dengan Sukses!");
+        console.log("✅ Workflow Master E2E (Playwright) Selesai dengan Sukses!");
 
     } catch (error) {
         console.error("❌ Terjadi kesalahan pada Admin:", error);

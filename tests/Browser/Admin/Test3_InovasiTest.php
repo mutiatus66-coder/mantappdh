@@ -10,7 +10,7 @@ class Test3_InovasiTest extends DuskTestCase
 {
     private function loginAdmin(Browser $browser): void
     {
-        $browser->visit('http://127.0.0.1:8000/')
+        $browser->visit('http://mantappdh.test/')
                 ->pause(1000)
                 ->clickLink('Login')
                 ->pause(2000)

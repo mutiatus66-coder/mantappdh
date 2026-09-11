@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl = "http://mantappdh.test";
     const uniqueEmail = `peserta_${Date.now()}@test.com`;
 
     const pdfPath = path.join(__dirname, 'contoh.pdf');
@@ -145,6 +145,15 @@ const __dirname = path.dirname(__filename);
                 page.getByRole('button', { name: 'Simpan Usulan' }).click()
             ]);
             await page.waitForTimeout(2000);
+            
+            console.log("9.5. Mengirim Usulan...");
+            const btnKirim = page.locator('.btn-kirim').first();
+            if (await btnKirim.isVisible()) {
+                await btnKirim.click();
+                await page.waitForTimeout(1000);
+                await page.locator('#btnOkKirim').click();
+                await page.waitForTimeout(3000);
+            }
         } else {
             console.log("   -> (Form Usulan tidak ditemukan, kemungkinan tidak ada Event aktif untuk diikuti. Melanjutkan ke Logout...)");
         }
@@ -167,7 +176,7 @@ const __dirname = path.dirname(__filename);
         });
         await page.waitForTimeout(2000);
 
-        console.log("✅ Workflow E2E Playwright untuk Peserta selesai tanpa error!");
+        console.log("✅ Workflow Peserta E2E (Playwright) Selesai dengan Sukses!");
 
     } catch (error) {
         console.error("❌ Terjadi kesalahan:", error);

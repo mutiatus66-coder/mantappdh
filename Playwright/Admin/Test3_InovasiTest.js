@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
     const page = await context.newPage();
-    const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl = "http://mantappdh.test";
 
     try {
         console.log("[3] INOVASI DATA (Playwright)");
@@ -89,7 +89,7 @@ import { chromium } from 'playwright';
         });
         await page.waitForTimeout(2000);
 
-        console.log("✅ INOVASI TEST SELESAI");
+        console.log("✅ Workflow Inovasi E2E (Playwright) Selesai dengan Sukses!");
 
     } catch (e) {
         console.error("❌ Error:", e);

@@ -12,9 +12,7 @@ const tests = [
     'Test4_PenilaianTest.js'
 ];
 
-console.log("==========================================");
-console.log("🚀 MEMULAI SEMUA PENGUJIAN ADMIN DENGAN SELENIUM");
-console.log("==========================================\n");
+console.log("Mulai menjalankan seluruh bagian E2E Admin (Selenium)...");
 
 for (const test of tests) {
     console.log(`\n▶️  Menjalankan: ${test}...`);
@@ -26,6 +24,4 @@ for (const test of tests) {
     }
 }
 
-console.log("\n==========================================");
-console.log("PENGUJIAN ADMIN DENGAN SELENIUM TELAH BERJALAN DENGAN SUKSES ✅");
-console.log("==========================================\n");
+console.log("✅ Workflow Seluruh Bagian E2E Admin (Selenium) Selesai dengan Sukses!");
