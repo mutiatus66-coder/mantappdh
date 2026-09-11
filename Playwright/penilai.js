@@ -228,6 +228,8 @@ import { chromium } from 'playwright';
 
     } catch (err) {
         console.error("❌ Terjadi kesalahan:", err);
+        await page.screenshot({ path: 'Playwright/Error/penilai_playwright.png', fullPage: true });
+        console.log("📸 Screenshot error telah disimpan sebagai 'penilai_playwright.png'");
         process.exit(1);
     } finally {
         await browser.close();

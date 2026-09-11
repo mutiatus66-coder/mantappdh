@@ -438,6 +438,10 @@
                 isUpdate
                     ? updateRow(activeUpdateId, res.penilai.nama, res.penilai.email, res.penilai.user_id)
                     : appendRow(res.penilai);
+                    
+                if (dt) {
+                    dt.search(res.penilai.nama).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

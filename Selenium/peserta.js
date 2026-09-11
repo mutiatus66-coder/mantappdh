@@ -3,6 +3,7 @@ import chrome from 'selenium-webdriver/chrome.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { testDataTables } from './helpers.js';
 
 // Karena menggunakan ES Module, kita buat __dirname secara manual
 const __filename = fileURLToPath(import.meta.url);
@@ -97,6 +98,7 @@ const __dirname = path.dirname(__filename);
         console.log("5. Menekan Kelola Usulan...");
         await clickLink('Kelola Usulan');
         await sleep(2000);
+        await testDataTables(driver, 'Kelola Usulan');
 
         console.log("6. Menekan Tambah Usulan...");
         await pressButton('Tambah Usulan');

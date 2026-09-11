@@ -613,6 +613,10 @@
                 isUpdate
                     ? updateRow(updateId, judul, deskripsi, status, res.file_url)
                     : appendRow(res.pengumuman);
+                    
+                if (dt) {
+                    dt.search(judul).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

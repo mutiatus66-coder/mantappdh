@@ -622,6 +622,10 @@
                 isUpdate
                     ? updateRow(activeUpdateId, nama, status)
                     : appendRow(res.bidang, activeSubEventId);
+                    
+                if (dt) {
+                    dt.search(nama).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

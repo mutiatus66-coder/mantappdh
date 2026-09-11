@@ -1,6 +1,8 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
+import { testDataTables } from './helpers.js';
+
 (async function runPenilaiWorkflow() {
     // Setup WebDriver
     let options = new chrome.Options();
@@ -78,6 +80,7 @@ import chrome from 'selenium-webdriver/chrome.js';
         console.log("5. Menekan Lihat Usulan...");
         await clickLink('Lihat Usulan');
         await sleep(2000);
+        await testDataTables(driver, 'Riwayat Usulan');
 
         console.log("6. Menggunakan search Datatables di Riwayat Usulan...");
         const searchInputRiwayat = await driver.wait(until.elementLocated(By.css('.dt-search input')), 5000);
@@ -104,6 +107,7 @@ import chrome from 'selenium-webdriver/chrome.js';
         console.log("10. Menekan Lihat Nilai...");
         await clickLink('Lihat Nilai');
         await sleep(2000);
+        await testDataTables(driver, 'Rekap Nilai');
 
         console.log("11. Menggunakan search Datatables di Rekap Nilai...");
         const searchInputRekap = await driver.wait(until.elementLocated(By.css('.dt-search input')), 5000);
@@ -130,6 +134,7 @@ import chrome from 'selenium-webdriver/chrome.js';
         console.log("15. Menekan Lihat Nilai Verifikasi...");
         await clickLink('Lihat Nilai Verifikasi');
         await sleep(2000);
+        await testDataTables(driver, 'Penilaian Tahap 1');
 
         console.log("16. Memberi nilai kepada 10 inovator...");
         // Beri delay untuk memastikan DataTables render selesai
@@ -199,6 +204,7 @@ import chrome from 'selenium-webdriver/chrome.js';
         console.log("22. Menekan Lihat Nilai Nominator...");
         await clickLink('Lihat Nilai Nominator');
         await sleep(2000);
+        await testDataTables(driver, 'Penilaian Tahap 2');
 
         console.log("23. Menekan tombol Ranking...");
         await pressButton('Ranking');

@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep, testDataTables } from '../helpers.js';
 
 (async function test3Inovasi() {
     let options = new chrome.Options();
@@ -39,6 +39,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Riwayat Inovasi...");
         await executeScriptClick('a.ri-menu-item[href="/inovasi/riwayat"]');
         await sleep(2000);
+        await testDataTables(driver, 'Riwayat Inovasi');
         await clickByText('Lihat Usulan');
         await sleep(2000);
         await driver.executeScript(`
@@ -53,6 +54,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Rekap Nilai (Export)...");
         await executeScriptClick('a.ri-menu-item[href="/inovasi/rekap-nilai"]');
         await sleep(2000);
+        await testDataTables(driver, 'Rekap Nilai');
         await clickByText('Lihat Nilai');
         await sleep(3000);
         await driver.executeScript(`

@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep, testDataTables } from '../helpers.js';
 
 (async function test2Indikator() {
     let options = new chrome.Options();
@@ -34,6 +34,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Indikator Tahap 1...");
         await executeScriptClick('a.ri-menu-item[href="/indikator/tahap-1"]');
         await sleep(2000);
+        await testDataTables(driver, 'Indikator Tahap 1');
         await driver.executeScript(`
             let btn = document.querySelector('.btn-open-formulasi1'); 
             if(btn) { btn.scrollIntoView({block:'center'}); btn.click(); }
@@ -60,6 +61,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Indikator Tahap 2...");
         await executeScriptClick('a.ri-menu-item[href="/indikator/tahap-2"]');
         await sleep(2000);
+        await testDataTables(driver, 'Indikator Tahap 2');
         await driver.executeScript(`
             let btn2 = document.querySelector('.btn-open-formulasi'); 
             if(btn2) { btn2.scrollIntoView({block:'center'}); btn2.click(); }

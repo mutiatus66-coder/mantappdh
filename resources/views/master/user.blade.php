@@ -546,6 +546,10 @@ $hakAksesLabel = [
                 isUpdate
                     ? updateRow(activeUpdateId, nama, email, hakAkses, status)
                     : appendRow(res.user);
+                    
+                if (dt) {
+                    dt.search(nama).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

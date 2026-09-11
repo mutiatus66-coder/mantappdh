@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep, testDataTables } from '../helpers.js';
 
 (async function test1Master() {
     let options = new chrome.Options();
@@ -50,6 +50,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Event: Tambah, Ubah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/event"]');
         await sleep(2000);
+        await testDataTables(driver, 'Event');
         await executeScriptClick('#btnTambahEvent');
         await sleep(800);
         await driver.findElement(By.css('#inputNamaEvent')).sendKeys(`Event ${waktu}`);
@@ -80,6 +81,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Sub Event: Tambah, Ubah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/sub-event"]');
         await sleep(2000);
+        await testDataTables(driver, 'Sub Event');
         await executeScriptClick('#btnTambahSubEvent');
         await sleep(800);
         await driver.findElement(By.css('#seTahun')).sendKeys(String(new Date().getFullYear() + 1));
@@ -106,6 +108,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Bidang: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/bidang"]');
         await sleep(2000);
+        await testDataTables(driver, 'Bidang');
         await driver.executeScript(`
             let acc = document.querySelector('.bidang-accordion-btn'); 
             if(acc) { acc.scrollIntoView({block:'center'}); acc.click(); }
@@ -133,6 +136,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> User: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/user"]');
         await sleep(2000);
+        await testDataTables(driver, 'User');
         await executeScriptClick('#btnTambahUser');
         await sleep(800);
         await driver.findElement(By.css('#inputNama')).sendKeys('User Test');
@@ -156,6 +160,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Pengumuman: Tambah, Hapus...");
         await executeScriptClick('a.ri-menu-item[href="/pengumuman"]');
         await sleep(2000);
+        await testDataTables(driver, 'Pengumuman');
         await executeScriptClick('#btnTambahPengumuman');
         await sleep(800);
         await driver.findElement(By.css('#pJudul')).sendKeys(`Pengumuman ${waktu}`);

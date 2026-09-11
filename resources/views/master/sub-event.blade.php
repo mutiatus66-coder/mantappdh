@@ -513,6 +513,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     appendRow(res.subEvent);
                 }
+                
+                if (dt) {
+                    dt.search(subEvent).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

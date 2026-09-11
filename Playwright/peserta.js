@@ -171,8 +171,8 @@ const __dirname = path.dirname(__filename);
 
     } catch (error) {
         console.error("❌ Terjadi kesalahan:", error);
-        await page.screenshot({ path: 'error_playwright.png', fullPage: true });
-        console.log("📸 Screenshot error telah disimpan sebagai 'error_playwright.png'");
+        await page.screenshot({ path: 'Playwright/Error/peserta_playwright.png', fullPage: true });
+        console.log("📸 Screenshot error telah disimpan sebagai 'peserta_playwright.png'");
     } finally {
         await browser.close();
         if (fs.existsSync(pdfPath)) fs.unlinkSync(pdfPath);

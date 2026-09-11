@@ -20,6 +20,8 @@ for (const test of tests) {
         execSync(`node ${path.join(__dirname, 'Admin', test)}`, { stdio: 'inherit' });
     } catch (err) {
         console.error(`\n❌ Pengujian ${test} GAGAL! Menghentikan eksekusi selanjutnya.`);
+        await page.screenshot({ path: 'Playwright/Error/admin_playwright.png', fullPage: true });
+        console.log("📸 Screenshot error telah disimpan sebagai 'admin_playwright.png'");
         process.exit(1);
     }
 }

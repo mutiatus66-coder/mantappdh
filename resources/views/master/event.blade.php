@@ -418,6 +418,10 @@
                 modalEvent.hide();
                 toast(isUpdate ? 'Event berhasil diubah!' : 'Event berhasil ditambahkan!');
                 isUpdate ? updateRow(activeUpdateId, namaEvent, jenis) : appendRow(res.event);
+                
+                if (dt) {
+                    dt.search(namaEvent).draw();
+                }
             } else {
                 toast(res.message ?? 'Gagal menyimpan data.', 'error');
             }

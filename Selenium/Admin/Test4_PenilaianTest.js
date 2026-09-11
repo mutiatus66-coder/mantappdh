@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep, testDataTables } from '../helpers.js';
 
 (async function test4Penilaian() {
     let options = new chrome.Options();
@@ -39,6 +39,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Penilaian Tahap 1 (Simpan Kurasi)...");
         await executeScriptClick('a.ri-menu-item[href="/penilaian/tahap-1"]');
         await sleep(2000);
+        await testDataTables(driver, 'Penilaian Tahap 1');
         await clickByText('Lihat Nilai Verifikasi');
         await sleep(2000);
         await driver.executeScript(`
@@ -58,6 +59,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         console.log("   -> Penilaian Tahap 2 (Auto Ranking)...");
         await executeScriptClick('a.ri-menu-item[href="/penilaian/tahap-2"]');
         await sleep(2000);
+        await testDataTables(driver, 'Penilaian Tahap 2');
         await clickByText('Lihat Nilai Nominator');
         await sleep(2000);
         await driver.executeScript(`
