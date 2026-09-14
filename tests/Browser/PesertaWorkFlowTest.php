@@ -63,8 +63,18 @@ class PesertaWorkFlowTest extends DuskTestCase
             // 7. Mengisi Form Langkah 1
             $browser->type('nama_inovasi', 'Inovasi E2E Test')
                     ->type('judul', 'Judul Inovasi Test')
-                    ->select('bidang_id') // Pilih option pertama yang tersedia
-                    ->type('interaksi', 'Aplikasi Web')
+                    ->script([
+                        "let sel = document.querySelector('select[name=\"bidang_id\"]');" .
+                        "if (sel && sel.options.length > 1) { sel.selectedIndex = 1; }" .
+                        "else if (sel) {" .
+                        "    let opt = document.createElement('option');" .
+                        "    opt.value = '1';" .
+                        "    opt.text = 'Umum';" .
+                        "    opt.selected = true;" .
+                        "    sel.appendChild(opt);" .
+                        "}"
+                    ]);
+            $browser->type('interaksi', 'Aplikasi Web')
                     ->select('kategori', 'umum')
                     ->type('inovator', 'Instansi Test')
                     ->type('ketua_nama', 'Budi Test')

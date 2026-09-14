@@ -22,13 +22,13 @@ Selenium
 
     Super Admin
     -   Bisa dijalankan sekaligus berurutan:
-        node Selenium/admin.js
+        node selenium/admin.js
 
     -   Atau dijalankan terpisah satu per satu:
-        node Selenium/Admin/Test1_MasterTest.js
-        node Selenium/Admin/Test2_IndikatorTest.js
-        node Selenium/Admin/Test3_InovasiTest.js
-        node Selenium/Admin/Test4_PenilaianTest.js
+        node selenium/Admin/Test1_MasterTest.js
+        node selenium/Admin/Test2_IndikatorTest.js
+        node selenium/Admin/Test3_InovasiTest.js
+        node selenium/Admin/Test4_PenilaianTest.js
 
 Playwright
     Penilai
@@ -39,13 +39,13 @@ Playwright
 
     Super Admin
     -   Bisa dijalankan sekaligus berurutan:
-        node Playwright/admin.js
+        node playwright/admin.js
 
     -   Atau dijalankan terpisah satu per satu:
-        node Playwright/Admin/Test1_MasterTest.js
-        node Playwright/Admin/Test2_IndikatorTest.js
-        node Playwright/Admin/Test3_InovasiTest.js
-        node Playwright/Admin/Test4_PenilaianTest.js
+        node playwright/Admin/Test1_MasterTest.js
+        node playwright/Admin/Test2_IndikatorTest.js
+        node playwright/Admin/Test3_InovasiTest.js
+        node playwright/Admin/Test4_PenilaianTest.js
 
                 ROLLBACK DATA
 

@@ -11,14 +11,6 @@
 @section('content')
 <div class="page-container">
 
-    @if(session('success'))
-        <div class="alert alert-dismissible fade show mb-4" role="alert"
-             style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.25);color:#1e40af;">
-            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     {{-- Header --}}
     <div class="sub-event-header">
         <div class="sub-event-title">

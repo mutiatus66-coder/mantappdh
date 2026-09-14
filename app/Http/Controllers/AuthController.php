@@ -45,9 +45,9 @@ class AuthController extends Controller
             'password'  => Hash::make($request->password),
         ]);
 
-        Log::info('REGISTER', ['email' => $request->email, 'ip' => $request->ip()]);
+        Auth::login($user);
 
-        return redirect()->route('sign-in')->with('success', 'Pendaftaran berhasil! Silahkan login.');
+        return redirect('/index')->with('success', 'Pendaftaran berhasil!');
     }
 
     public function logout(Request $request)

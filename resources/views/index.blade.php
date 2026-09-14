@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -228,6 +228,48 @@
         attributes: true, attributeFilter: ['data-bs-theme']
       });
     })();
+
+    // ── Global Toast Notification (ri-toast) ──────────────────────────────────
+    function toast(msg, type = 'success') {
+      const existing = document.querySelectorAll('.ri-toast');
+      existing.forEach(function (t) { t.remove(); });
+
+      const el = document.createElement('div');
+      el.className = `ri-toast ri-toast-${type === 'success' ? 'success' : 'error'}`;
+      el.innerHTML = `
+        <span class="ri-toast-icon">
+          <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+        </span>
+        <span class="ri-toast-msg">${msg}</span>
+        <button class="ri-toast-close" onclick="this.parentElement.remove()" aria-label="Tutup">
+          <i class="bi bi-x-lg"></i>
+        </button>`;
+      document.body.appendChild(el);
+      requestAnimationFrame(function () { el.classList.add('ri-toast-show'); });
+      setTimeout(function () {
+        el.classList.remove('ri-toast-show');
+        setTimeout(function () { el.remove(); }, 300);
+      }, 3500);
+    }
+    window.toast = toast;
+
+    @if(session('success'))
+      document.addEventListener('DOMContentLoaded', function () {
+        toast(@json(session('success')), 'success');
+      });
+    @endif
+
+    @if(session('error'))
+      document.addEventListener('DOMContentLoaded', function () {
+        toast(@json(session('error')), 'error');
+      });
+    @endif
+
+    @if($errors->has('total'))
+      document.addEventListener('DOMContentLoaded', function () {
+        toast(@json($errors->first('total')), 'error');
+      });
+    @endif
   </script>
 
   @stack('scripts')

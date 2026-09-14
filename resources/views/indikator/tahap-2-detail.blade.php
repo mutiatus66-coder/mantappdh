@@ -11,14 +11,6 @@
 @section('content')
 <div class="page-container">
 
-    @if(session('success'))
-        <div class="alert alert-dismissible fade show mb-4" role="alert"
-             style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#92400e;">
-            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     {{-- Header --}}
     <div class="sub-event-header">
         <div class="sub-event-title">
@@ -250,9 +242,8 @@
             pageLength: 25,
             lengthMenu: [10, 25, 50, 100],
 
-            // Urutkan berdasarkan kolom Jenis (index 6) agar group terkumpul,
-            // lalu dalam grup urut berdasarkan No (index 0)
-            order: [[6, 'asc'], [0, 'asc']],
+            // Urutkan jenis (Subtansi Inovasi dulu, lalu Peragaan), kemudian nomor urut
+            order: [[6, 'desc'], [0, 'asc']],
 
             columnDefs: [
                 { targets: [0], searchable: false, width: '50px', className: 'dt-center' },

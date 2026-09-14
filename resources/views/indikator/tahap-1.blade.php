@@ -11,20 +11,6 @@
 @section('content')
 <div class="page-container">
 
-    {{-- Alert session --}}
-    @if(session('success'))
-        <div class="alert alert-success-indikator alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if($errors->has('total'))
-        <div class="alert alert-danger alert-dismissible fade show mb-4">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ $errors->first('total') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
 
     {{-- Header --}}
     <div class="sub-event-header">
@@ -322,7 +308,7 @@
                 })
                 .catch(err => {
                     console.error('Gagal memuat data formulasi tahap 1:', err);
-                    alert('Gagal memuat data formulasi. Silakan coba lagi.');
+                    toast('Gagal memuat data formulasi. Silakan coba lagi.', 'error');
                 });
         }
 
