@@ -50,7 +50,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['setup'],
     },
-<<<<<<< HEAD
 
     // {
     //   name: 'firefox',
@@ -63,9 +62,7 @@ export default defineConfig({
     // },
 
     /* Test against mobile viewports. */
-=======
     // Firefox dan WebKit dinonaktifkan sementara agar tes tidak jalan 3x lipat
->>>>>>> f4f153e1de5a537227a1b693e1f4114a96ebbd31
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
