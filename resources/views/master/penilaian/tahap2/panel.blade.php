@@ -245,6 +245,13 @@
             columnDefs,
         });
 
+        /* Renumber baris kolom 0 agar selalu urut 1, 2, 3... saat sorting/search */
+        window['dt_' + TABLE_ID].on('order.dt search.dt', function () {
+            window['dt_' + TABLE_ID].column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        });
+
         /*
          * btn-auto-ranking — wajib pakai DT API (bukan DOM langsung).
          * Setelah DT aktif, baris di-manage DT; DOM manipulation langsung
@@ -272,16 +279,19 @@
                 const inp = node.querySelector('.input-ranking');
                 if (inp) inp.value = rank;
 
-                /* Update data-sort & badge di cell Total Rank */
+                /* Update data-sort, data-order & badge di cell Total Rank */
                 const rankCell = node.querySelector('.rv-total-rank');
                 if (rankCell) {
                     rankCell.dataset.sort = rank;
+                    rankCell.setAttribute('data-sort', rank);
+                    rankCell.setAttribute('data-order', rank);
                     rankCell.innerHTML   = renderRankBadge(rank);
                 }
             });
 
-            /* Beritahu DT bahwa DOM sudah berubah, redraw tanpa reset halaman/pagination */
-            dt.rows().invalidate('dom').draw(false);
+            /* Beritahu DT bahwa DOM sudah berubah, urutkan tabel langsung berdasar ranking & total nilai, redraw tanpa reset pagination */
+            dt.rows().invalidate('dom');
+            dt.order([[COL_TOTAL_RANK, 'asc'], [3, 'desc']]).draw(false);
         });
     });
 

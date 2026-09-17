@@ -555,6 +555,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }); // end document click delegation
 
+    /* ═══════════════════════════════════════════════════════════════════════
+     * LOGIKA MUTUAL EXCLUSION & BACKUP/RESTORE 1 INPUT PER SUBSTANSI
+     * ═══════════════════════════════════════════════════════════════════════ */
+    document.addEventListener('focusin', function (e) {
+        if (e.target.matches('.input-nilai-item')) {
+            const substansi = e.target.closest('.mb-4');
+            if (!substansi) return;
+            substansi._inputLama = null;
+            substansi._nilaiLama = '';
+            substansi.querySelectorAll('.input-nilai-item').forEach(inp => {
+                if (inp !== e.target && inp.value !== '' && inp.value !== '0') {
+                    substansi._inputLama = inp;
+                    substansi._nilaiLama = inp.value;
+                }
+            });
+        }
+    });
+
+    document.addEventListener('input', function (e) {
+        if (e.target.matches('.input-nilai-item')) {
+            const substansi = e.target.closest('.mb-4');
+            if (!substansi) return;
+            const val = e.target.value.trim();
+
+            if (val !== '' && val !== '0') {
+                // Jika 1 input diisi nilai baru, kosongkan input lain dalam 1 substansi ini
+                substansi.querySelectorAll('.input-nilai-item').forEach(inp => {
+                    if (inp !== e.target) {
+                        inp.value = '';
+                    }
+                });
+            } else if ((val === '' || val === '0') && substansi._inputLama && substansi._nilaiLama) {
+                // Jika input baru dikosongkan/batal diisi, kembalikan nilai input sebelumnya
+                substansi._inputLama.value = substansi._nilaiLama;
+            }
+        }
+    });
+
 });
 </script>
 @endpush

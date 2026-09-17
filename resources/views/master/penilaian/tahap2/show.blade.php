@@ -106,7 +106,7 @@
     const CSRF       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     // ════════════════════════════════════════════════════════════════
-    // TOAST
+    // TOAST / NOTIFIKASI (Kanan Bawah)
     // ════════════════════════════════════════════════════════════════
     function toast(msg, type = 'success') {
         const el = document.createElement('div');
@@ -137,7 +137,9 @@
             const pane  = document.getElementById('tab-' + group);
             if (!pane) return;
 
-            const inputs  = pane.querySelectorAll('.input-ranking');
+            const tableId = group === 'umum' ? 'tbl-nominasi-umum' : 'tbl-nominasi-pelajar';
+            const dt      = window['dt_' + tableId];
+            const inputs  = dt ? Array.from(dt.$('.input-ranking')) : Array.from(pane.querySelectorAll('.input-ranking'));
             const ranking = {};
             let valid     = true;
 

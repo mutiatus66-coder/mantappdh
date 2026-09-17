@@ -20,9 +20,9 @@ class UserSeeder extends Seeder
                 'status'    => 'aktif',
             ],
             [
-                'name'      => 'pesertasatu',
-                'nama'      => 'Peserta Satu',
-                'email'     => 'peserta1@inovasi.test',
+                'name'      => 'pesertadummy',
+                'nama'      => 'Peserta Dummy',
+                'email'     => 'pesertadummy@inovasi.test',
                 'password'  => Hash::make('password'),
                 'hak_akses' => 'peserta',            // Peserta / Inovator
                 'status'    => 'aktif',

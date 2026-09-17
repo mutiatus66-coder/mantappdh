@@ -156,6 +156,13 @@ import { chromium } from 'playwright';
                 });
                 await page.waitForTimeout(2000);
             }
+
+            const btnExcel = page.locator('.buttons-excel').first();
+            if (await btnExcel.count() > 0 && await btnExcel.isVisible()) {
+                console.log("   -> Demonstrasi Ekspor Excel Penilaian Tahap 2...");
+                await btnExcel.click();
+                await page.waitForTimeout(2000);
+            }
         } else {
             console.log("   -> (Tidak ada card Tahap 2 dengan data nominator)");
         }

@@ -21,8 +21,15 @@ abstract class DuskTestCase extends BaseTestCase
             static::useChromedriver('/usr/bin/chromedriver');
         }
 
-        if (! static::runningInSail()) {
-            static::startChromeDriver(['--port=9515']);
+        $driverUrl = $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL');
+
+        if (! static::runningInSail() && ! $driverUrl) {
+            // If running inside container where glibc chromedriver binary cannot execute, don't fail hard
+            try {
+                static::startChromeDriver(['--port=9515']);
+            } catch (\Throwable $e) {
+                // Fallback to external driver
+            }
         }
     }
 
@@ -52,14 +59,23 @@ abstract class DuskTestCase extends BaseTestCase
             '--ignore-certificate-errors',
         ];
 
-        if (env('DUSK_HEADLESS', true) && ! env('DUSK_HEADLESS_DISABLED', false)) {
+        if (env('DUSK_HEADLESS', false) && ! env('DUSK_HEADLESS_DISABLED', false)) {
             $arguments[] = '--headless=new';
         }
 
         $options = (new ChromeOptions)->addArguments($arguments);
 
+        $driverUrl = $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL');
+        if (! $driverUrl) {
+            if (file_exists('/.dockerenv') || file_exists('/run/.containerenv')) {
+                $driverUrl = 'http://host.docker.internal:9515';
+            } else {
+                $driverUrl = 'http://localhost:9515';
+            }
+        }
+
         return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL') ?? 'http://localhost:9515',
+            $driverUrl,
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )
