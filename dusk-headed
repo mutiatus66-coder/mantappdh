@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Menyalakan chromedriver di host (NixOS) pada port 9515 di background
+echo "Memulai ChromeDriver di host..."
+/home/focarix/.nix-profile/bin/chromedriver --port=9515 --allowed-ips="" --allowed-origins="*" > /dev/null 2>&1 &
+CHROMEDRIVER_PID=$!
+
+# Pastikan chromedriver dimatikan saat script ini selesai (meskipun error/dibatalkan)
+trap "kill $CHROMEDRIVER_PID > /dev/null 2>&1; echo 'ChromeDriver dimatikan.'" EXIT
+
+# Menunggu 1 detik agar ChromeDriver siap
+sleep 1
+
+# Menjalankan Dusk melalui Lerd (meneruskan semua argumen file yang diketik user)
+echo "Menjalankan Laravel Dusk..."
+lerd php artisan dusk "$@"

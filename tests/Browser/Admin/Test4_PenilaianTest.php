@@ -24,7 +24,7 @@ class Test4_PenilaianTest extends DuskTestCase
     public function test_penilaian_features(): void
     {
         $this->browse(function (Browser $browser) {
-            try { $browser->resize(1920, 1080); } catch (\Throwable $e) {}
+            try {  } catch (\Throwable $e) {}
             echo "[4] PENILAIAN DATA\n";
             $this->loginAdmin($browser);
 

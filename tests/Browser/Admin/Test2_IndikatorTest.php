@@ -24,7 +24,7 @@ class Test2_IndikatorTest extends DuskTestCase
     public function test_indikator_features(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->resize(1920, 1080);
+            
             echo "[2] INDIKATOR DATA\n";
             $this->loginAdmin($browser);
 

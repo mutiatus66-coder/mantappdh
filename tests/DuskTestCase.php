@@ -17,7 +17,7 @@ abstract class DuskTestCase extends BaseTestCase
     #[BeforeClass]
     public static function prepare(): void
     {
-        if (file_exists('/usr/bin/chromedriver')) {
+        if (! env('DUSK_HEADLESS_DISABLED', false) && file_exists('/usr/bin/chromedriver')) {
             static::useChromedriver('/usr/bin/chromedriver');
         }
 
@@ -65,9 +65,17 @@ abstract class DuskTestCase extends BaseTestCase
 
         $options = (new ChromeOptions)->addArguments($arguments);
 
+        if (! env('DUSK_HEADLESS_DISABLED', false)) {
+            if (file_exists('/usr/bin/chromium')) {
+                $options->setBinary('/usr/bin/chromium');
+            } elseif (file_exists('/usr/bin/chromium-browser')) {
+                $options->setBinary('/usr/bin/chromium-browser');
+            }
+        }
+
         $driverUrl = $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL');
         if (! $driverUrl) {
-            if (file_exists('/.dockerenv') || file_exists('/run/.containerenv')) {
+            if (env('DUSK_HEADLESS_DISABLED', false) && (file_exists('/.dockerenv') || file_exists('/run/.containerenv'))) {
                 $driverUrl = 'http://host.docker.internal:9515';
             } else {
                 $driverUrl = 'http://localhost:9515';

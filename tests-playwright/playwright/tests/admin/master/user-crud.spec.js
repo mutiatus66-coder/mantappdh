@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8000';
-// const ADMIN_EMAIL = 'admin@demo.test';
-// const ADMIN_PASSWORD = 'password';
+const ADMIN_EMAIL = 'admin@admin.com';
+const ADMIN_PASSWORD = 'password';
 
 // 🔥 SET TIMEOUT JADI 60 DETIK
 test.setTimeout(60000);

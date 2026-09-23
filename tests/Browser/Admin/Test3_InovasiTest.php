@@ -24,7 +24,7 @@ class Test3_InovasiTest extends DuskTestCase
     public function test_inovasi_features(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->resize(1920, 1080);
+            
             echo "[3] INOVASI DATA\n";
             $this->loginAdmin($browser);
 
