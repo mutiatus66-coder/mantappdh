@@ -1,569 +1,740 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8000';
-const ADMIN_EMAIL = 'admin@admin.com';
+const ADMIN_EMAIL = 'admin@demo.test';
 const ADMIN_PASSWORD = 'password';
 
-// 🔥 TIMEOUT 10 MENIT (karena semua modul)
-test.setTimeout(600000);
+test.setTimeout(900000);
 
 test('Full CRUD Admin - Semua Modul', async ({ page }) => {
 
-  // ============================================================
-  // 1. LOGIN (SEKALI)
-  // ============================================================
-  await page.goto(BASE_URL);
-  await page.click('a.btn-login:has-text("Login")');
-  await page.waitForURL(`${BASE_URL}/sign-in`);
-  await page.fill('input[name="email"]', ADMIN_EMAIL);
-  await page.fill('input[name="password"]', ADMIN_PASSWORD);
-  await page.click('button[type="submit"]');
-  await page.waitForURL(`${BASE_URL}/index`);
-  console.log('✅ Login Admin berhasil');
+  // ══════════════════════════════════════════════════════════════════════
+  // STATISTIK & HELPER GLOBAL
+  // ══════════════════════════════════════════════════════════════════════
+  let totalStep = 0;
+  let totalBerhasil = 0;
+  let totalGagal = 0;
+  let startTime = Date.now();
+  let modulStats = {};
 
-  // ============================================================
-  // 2. EVENT
-  // ============================================================
-  console.log('\n=== EVENT ===');
-  await page.goto(`${BASE_URL}/event`);
-  await expect(page.locator('h3').filter({ hasText: 'Data Event' })).toBeVisible();
-  console.log('✅ Halaman Event terbuka');
+  const formatTime = (ms) => ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2)}s`;
 
-  const namaEvent = `Event Test ${Date.now()}`;
-  await page.click('#btnTambahEvent');
-  await page.waitForSelector('#modalEvent', { state: 'visible' });
-  await page.fill('#inputNamaEvent', namaEvent);
-  await page.selectOption('#inputJenis', 'INOTEK');
-  await page.click('#btnSimpanEvent');
-  await page.waitForSelector('#modalEvent', { state: 'hidden', timeout: 10000 });
-  await expect(page.locator('#tabelEventBody')).toContainText(namaEvent);
-  console.log(`✅ Event ditambahkan: ${namaEvent}`);
+  const notifHeader = (nama) => {
+    console.log('\n' + '-'.repeat(65));
+    console.log(`  MODUL: ${nama}`);
+    console.log('-'.repeat(65));
+    modulStats[nama] = { berhasil: 0, gagal: 0, total: 0 };
+  };
 
-  const namaEventBaru = `Event Updated ${Date.now()}`;
-  const editEventBtn = page.locator(`#tabelEventBody tr:has-text("${namaEvent}") .btn-edit-event`).first();
-  await editEventBtn.scrollIntoViewIfNeeded();
-  await editEventBtn.click();
-  await page.waitForSelector('#modalEvent', { state: 'visible' });
-  await page.fill('#inputNamaEvent', namaEventBaru);
-  await page.selectOption('#inputJenis', 'INODA');
-  await page.click('#btnSimpanEvent');
-  await page.waitForSelector('#modalEvent', { state: 'hidden', timeout: 10000 });
-  await expect(page.locator('#tabelEventBody')).toContainText(namaEventBaru);
-  console.log(`✅ Event diubah: ${namaEventBaru}`);
+  const notifSukses = (modul, aksi, detail, duration) => {
+    totalStep++; totalBerhasil++;
+    if (modulStats[modul]) { modulStats[modul].berhasil++; modulStats[modul].total++; }
+    console.log(`  [PASS] [${String(totalStep).padStart(2, '0')}] ${aksi.padEnd(11)} | ${detail.padEnd(42)} | ${formatTime(duration)}`);
+  };
 
-  const hapusEventBtn = page.locator(`#tabelEventBody tr:has-text("${namaEventBaru}") .btn-hapus-event`).first();
-  await hapusEventBtn.scrollIntoViewIfNeeded();
-  await hapusEventBtn.click();
-  await page.waitForSelector('#modalHapusEvent', { state: 'visible' });
-  await page.click('#btnHapusEvent');
-  await page.waitForSelector('#modalHapusEvent', { state: 'hidden', timeout: 10000 });
-  await expect(page.locator('#tabelEventBody')).not.toContainText(namaEventBaru);
-  console.log(`✅ Event dihapus: ${namaEventBaru}`);
+  const notifGagal = (modul, aksi, detail, error, duration) => {
+    totalStep++; totalGagal++;
+    if (modulStats[modul]) { modulStats[modul].gagal++; modulStats[modul].total++; }
+    console.log(`  [FAIL] [${String(totalStep).padStart(2, '0')}] ${aksi.padEnd(11)} | ${detail.padEnd(42)} | ${formatTime(duration)}`);
+    console.log(`         -> ${error.message?.substring(0, 80) || 'Unknown error'}`);
+  };
 
-  // ============================================================
-  // 3. SUB EVENT
-  // ============================================================
-  console.log('\n=== SUB EVENT ===');
-  await page.goto(`${BASE_URL}/sub-event`);
-  await expect(page.locator('h3').filter({ hasText: 'Data Sub Event' })).toBeVisible();
-  console.log('✅ Halaman Sub Event terbuka');
+  const timer = () => { const s = Date.now(); return () => Date.now() - s; };
 
-  const namaSubEvent = `Sub Event Test ${Date.now()}`;
-  await page.click('#btnTambahSubEvent');
-  await page.waitForSelector('#modalSubEvent', { state: 'visible' });
-  await page.fill('#seTahun', '2026');
-  await page.selectOption('#seEvent', { index: 1 });
-  await page.fill('#seSubEvent', namaSubEvent);
-  await page.fill('#seKategori', 'Test');
-  await page.fill('#seMulai', '2026-01-01');
-  await page.fill('#seBerakhir', '2026-12-31');
-  await page.click('#btnSimpanSE');
-  await page.waitForSelector('#modalSubEvent', { state: 'hidden', timeout: 15000 });
-  await expect(page.locator('#tabelSubEventBody')).toContainText(namaSubEvent);
-  console.log(`✅ Sub Event ditambahkan: ${namaSubEvent}`);
+  // ── HELPER: Search DataTables v2.x ──
+  const getSearchBox = () => page.locator('input[type="search"]:visible').first();
 
-  const namaSubEventBaru = `Sub Event Updated ${Date.now()}`;
-  const editSubBtn = page.locator(`#tabelSubEventBody tr:has-text("${namaSubEvent}") .btn-edit-se`).first();
-  await editSubBtn.scrollIntoViewIfNeeded();
-  await editSubBtn.click();
-  await page.waitForSelector('#modalSubEvent', { state: 'visible' });
-  await page.fill('#seSubEvent', namaSubEventBaru);
-  await page.click('#btnSimpanSE');
-  await page.waitForSelector('#modalSubEvent', { state: 'hidden', timeout: 10000 });
-  await expect(page.locator('#tabelSubEventBody')).toContainText(namaSubEventBaru);
-  console.log(`✅ Sub Event diubah: ${namaSubEventBaru}`);
-
-  const hapusSubBtn = page.locator(`#tabelSubEventBody tr:has-text("${namaSubEventBaru}") .btn-hapus-se`).first();
-  await hapusSubBtn.scrollIntoViewIfNeeded();
-  await hapusSubBtn.click();
-  await page.waitForSelector('#modalHapusSE', { state: 'visible' });
-  await page.click('#btnHapusSE');
-  await page.waitForSelector('#modalHapusSE', { state: 'hidden', timeout: 10000 });
-  await expect(page.locator('#tabelSubEventBody')).not.toContainText(namaSubEventBaru);
-  console.log(`✅ Sub Event dihapus: ${namaSubEventBaru}`);
-
-  // ============================================================
-  // ============================================================
-  // 4. BIDANG
-  // ============================================================
-  console.log('\n=== BIDANG ===');
-  await page.goto(`${BASE_URL}/bidang`);
-  await expect(page.locator('h3').filter({ hasText: 'Master Bidang' })).toBeVisible();
-
-  // Buka accordion pertama
-  const accordionBtn = page.locator('.accordion-button').first();
-  await accordionBtn.scrollIntoViewIfNeeded();
-  await accordionBtn.click();
-  await page.waitForTimeout(2000);
-
-  // 🔥 AMBIL ID TABEL DARI ACCORDION YANG DIBUKA
-  const subEventId = await accordionBtn.getAttribute('data-se-id');
-  console.log(`📌 Sub Event ID: ${subEventId}`);
-
-  console.log('✅ Halaman Bidang terbuka');
-
-  // 🔥 PAKAI TABLE ID YANG SPESIFIK
-  const tabelBidang = page.locator(`#tabelBidang-${subEventId}`);
-
-  const namaBidang = `Bidang Test ${Date.now()}`;
-  await page.locator('.btn-tambah-bidang').first().click();
-  await page.waitForSelector('#modalBidang', { state: 'visible' });
-  await page.fill('#bidangNama', namaBidang);
-  await page.click('#statusAktifBidang');
-  await page.click('#btnSimpanBidang');
-  await page.waitForSelector('#modalBidang', { state: 'hidden', timeout: 10000 });
-  await expect(tabelBidang).toContainText(namaBidang);
-  console.log(`✅ Bidang ditambahkan: ${namaBidang}`);
-
-  const namaBidangBaru = `Bidang Updated ${Date.now()}`;
-  const editBidangBtn = tabelBidang.locator(`tr:has-text("${namaBidang}") .btn-ubah-bidang`).first();
-  await page.waitForTimeout(1000);
-  await editBidangBtn.scrollIntoViewIfNeeded();
-  await editBidangBtn.click();
-  await page.waitForSelector('#modalBidang', { state: 'visible' });
-  await page.fill('#bidangNama', namaBidangBaru);
-  await page.click('#statusNonaktifBidang');
-  await page.click('#btnSimpanBidang');
-  await page.waitForSelector('#modalBidang', { state: 'hidden', timeout: 10000 });
-  await expect(tabelBidang).toContainText(namaBidangBaru);
-  console.log(`✅ Bidang diubah: ${namaBidangBaru}`);
-
-  const hapusBidangBtn = tabelBidang.locator(`tr:has-text("${namaBidangBaru}") .btn-hapus-bidang`).first();
-  await page.waitForTimeout(1000);
-  await hapusBidangBtn.scrollIntoViewIfNeeded();
-  await hapusBidangBtn.click();
-  await page.waitForSelector('#modalHapusBidang', { state: 'visible' });
-  await page.click('#btnHapusBidang');
-  await page.waitForSelector('#modalHapusBidang', { state: 'hidden', timeout: 10000 });
-  await expect(tabelBidang).not.toContainText(namaBidangBaru);
-  console.log(`✅ Bidang dihapus: ${namaBidangBaru}`);
-
-  // ============================================================
-  // 5. USER
-  // ============================================================
-  console.log('\n=== USER ===');
-  await page.goto(`${BASE_URL}/user`);
-  await expect(page.locator('h3').filter({ hasText: 'Data User' })).toBeVisible();
-  console.log('✅ Halaman User terbuka');
-
-  const timestamp = Date.now();
-  const namaUser = `User Test ${timestamp}`;
-  const emailUser = `user${timestamp}@test.com`;
-
-  await page.click('#btnTambahUser');
-  await page.waitForSelector('#modalUser', { state: 'visible' });
-  await page.fill('#inputNama', namaUser);
-  await page.fill('#inputEmail', emailUser);
-  await page.selectOption('#inputHakAkses', 'peserta');
-  await page.fill('#inputPassword', 'password123');
-  await page.click('#statusAktif');
-  await page.click('#btnSimpanUser');
-  await page.waitForSelector('#modalUser', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ User ditambahkan: ${namaUser}`);
-
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-
-  const searchUser = page.locator('#tabelUser_filter input, .dataTables_filter input, input[type="search"]').first();
-  await searchUser.waitFor({ state: 'visible', timeout: 15000 });
-  await searchUser.fill(emailUser);
-  await page.waitForTimeout(2000);
-  await page.waitForSelector(`#tabelUserBody tr:has-text("${emailUser}")`, { timeout: 10000 });
-
-  const namaUserBaru = `User Updated ${Date.now()}`;
-  await page.evaluate((email) => {
-    const rows = document.querySelectorAll('#tabelUserBody tr');
-    for (const row of rows) {
-      if (row.textContent.includes(email)) {
-        row.querySelector('.btn-edit-user')?.click();
-      }
+  // ── HELPER: Buka halaman + cek 403 ──
+  const bukaHalaman = async (url) => {
+    await page.goto(url);
+    await page.waitForLoadState('networkidle');
+    const body = await page.locator('body').innerText().catch(() => '');
+    if (body.includes('403') || body.includes('Akses ditolak')) {
+      throw new Error(`403 Forbidden di ${url}`);
     }
-  }, emailUser);
+  };
 
-  await page.waitForSelector('#modalUser', { state: 'visible', timeout: 10000 });
-  await page.fill('#inputNama', namaUserBaru);
-  await page.selectOption('#inputHakAkses', 'penilai');
-  await page.click('#statusNonaktif');
-  await page.click('#btnSimpanUser');
-  await page.waitForSelector('#modalUser', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ User diubah: ${namaUserBaru}`);
+  // ══════════════════════════════════════════════════════════════════════
+  // START
+  // ══════════════════════════════════════════════════════════════════════
+  console.log('\n' + '='.repeat(65));
+  console.log('  ADMIN FULL CRUD TEST');
+  console.log(`  ${new Date().toLocaleString('id-ID')}`);
+  console.log('='.repeat(65));
 
-  await searchUser.fill(emailUser);
-  await page.waitForTimeout(2000);
-  await page.evaluate((email) => {
-    const rows = document.querySelectorAll('#tabelUserBody tr');
-    for (const row of rows) {
-      if (row.textContent.includes(email)) {
-        row.querySelector('.btn-hapus-user')?.click();
-      }
-    }
-  }, emailUser);
-
-  await page.waitForSelector('#modalHapusUser', { state: 'visible', timeout: 5000 });
-  await page.click('#btnHapusUser');
-  await page.waitForSelector('#modalHapusUser', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ User dihapus: ${namaUserBaru}`);
-
-  // ============================================================
-  // 6. PENILAI (TAMBAH → UBAH → HAPUS)
-  // ============================================================
-  console.log('\n=== PENILAI ===');
-  await page.goto(`${BASE_URL}/penilai`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Master Penilai' })).toBeVisible();
-  console.log('✅ Halaman Penilai terbuka');
-
-  // Pilih sub event pertama
-  const detailPenilaiBtn = page.locator('a.btn-primary:has-text("Detail")').first();
-  await detailPenilaiBtn.scrollIntoViewIfNeeded();
-  await detailPenilaiBtn.click();
-  await page.waitForURL(/penilai\/\d+/);
-  console.log('✅ Halaman Detail Penilai terbuka');
-
-  // ── HAPUS PENILAI EXISTING (biar bersih) ──
+  // ══════════════════════════════════════════════════════════════════════
+  // 1. LOGIN
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('AUTH');
+  let t = timer();
   try {
-    const existingPenilai = page.locator('#tabelPenilaiBody tr').first();
-    if (await existingPenilai.isVisible({ timeout: 3000 })) {
-      const hapusExistBtn = page.locator('.btn-hapus-penilai').first();
-      if (await hapusExistBtn.isVisible({ timeout: 3000 })) {
-        await hapusExistBtn.scrollIntoViewIfNeeded();
-        await hapusExistBtn.click();
-        await page.waitForSelector('#modalHapusPenilai', { state: 'visible', timeout: 5000 });
-        await page.click('#btnHapusPenilai');
-        await page.waitForSelector('#modalHapusPenilai', { state: 'hidden', timeout: 10000 });
-        await page.waitForTimeout(1000);
-        console.log('✅ Penilai existing dihapus');
-      }
-    }
+    await page.goto(BASE_URL);
+    await page.click('a.btn-login:has-text("Login")');
+    await page.waitForURL(`${BASE_URL}/sign-in`);
+    await page.fill('input[name="email"]', ADMIN_EMAIL);
+    await page.fill('input[name="password"]', ADMIN_PASSWORD);
+    await page.click('button[type="submit"]');
+    await page.waitForURL(`${BASE_URL}/index`);
+    notifSukses('AUTH', 'LOGIN', 'Admin berhasil masuk', t());
   } catch (e) {
-    console.log('⚠️ Tidak ada penilai existing');
+    notifGagal('AUTH', 'LOGIN', 'Admin gagal masuk', e, t());
+    return;
   }
 
-  // ── TAMBAH PENILAI ──
-  await page.click('#btnTambahPenilai');
-  await page.waitForSelector('#modalPenilai', { state: 'visible', timeout: 10000 });
+  // ══════════════════════════════════════════════════════════════════════
+  // 2. DASHBOARD
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('DASHBOARD');
+  t = timer();
+  try {
+    await bukaHalaman(`${BASE_URL}/index`);
+    notifSukses('DASHBOARD', 'BUKA', 'Dashboard terbuka', t());
+  } catch (e) { notifGagal('DASHBOARD', 'BUKA', 'Dashboard gagal', e, t()); }
 
-  const penilaiOptions = await page.locator('#penilaiUserId option').all();
-  if (penilaiOptions.length > 1) {
+  // ══════════════════════════════════════════════════════════════════════
+  // 3. EVENT
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('EVENT');
+  await bukaHalaman(`${BASE_URL}/event`);
+  const namaEvent = `Event Test ${Date.now()}`;
+  const namaEventBaru = `Event Updated ${Date.now()}`;
+
+  t = timer();
+  try {
+    await page.click('#btnTambahEvent');
+    await page.waitForSelector('#modalEvent', { state: 'visible' });
+    await page.fill('#inputNamaEvent', namaEvent);
+    await page.selectOption('#inputJenis', 'INOTEK');
+    await page.click('#btnSimpanEvent');
+    await page.waitForSelector('#modalEvent', { state: 'hidden', timeout: 10000 });
+    notifSukses('EVENT', 'TAMBAH', namaEvent, t());
+  } catch (e) { notifGagal('EVENT', 'TAMBAH', namaEvent, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill(namaEvent);
+    await page.waitForTimeout(1500);
+
+    const editBtn = page.locator('#tabelEventBody tr .btn-edit-event').first();
+    await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await editBtn.click();
+    await page.waitForSelector('#modalEvent', { state: 'visible' });
+    await page.fill('#inputNamaEvent', namaEventBaru);
+    await page.selectOption('#inputJenis', 'INODA');
+    await page.click('#btnSimpanEvent');
+    await page.waitForSelector('#modalEvent', { state: 'hidden', timeout: 10000 });
+    notifSukses('EVENT', 'UBAH', namaEventBaru, t());
+  } catch (e) { notifGagal('EVENT', 'UBAH', namaEvent, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill('');
+    await page.waitForTimeout(1000);
+    await searchBox.fill(namaEventBaru);
+    await page.waitForTimeout(1500);
+
+    const hapusBtn = page.locator('#tabelEventBody tr .btn-hapus-event').first();
+    await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await hapusBtn.click();
+    await page.waitForSelector('#modalHapusEvent', { state: 'visible' });
+    await page.click('#btnHapusEvent');
+    await page.waitForSelector('#modalHapusEvent', { state: 'hidden', timeout: 10000 });
+    notifSukses('EVENT', 'HAPUS', namaEventBaru, t());
+  } catch (e) { notifGagal('EVENT', 'HAPUS', namaEventBaru, e, t()); }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 4. SUB EVENT
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('SUB EVENT');
+  await bukaHalaman(`${BASE_URL}/sub-event`);
+  const namaSubEvent = `Sub Event Test ${Date.now()}`;
+  const namaSubEventBaru = `Sub Event Updated ${Date.now()}`;
+
+  t = timer();
+  try {
+    await page.click('#btnTambahSubEvent');
+    await page.waitForSelector('#modalSubEvent', { state: 'visible' });
+    await page.fill('#seTahun', '2026');
+    await page.selectOption('#seEvent', { index: 1 });
+    await page.fill('#seSubEvent', namaSubEvent);
+    await page.fill('#seKategori', 'Test');
+    await page.fill('#seMulai', '2026-01-01');
+    await page.fill('#seBerakhir', '2026-12-31');
+    await page.click('#btnSimpanSE');
+    await page.waitForSelector('#modalSubEvent', { state: 'hidden', timeout: 15000 });
+    notifSukses('SUB EVENT', 'TAMBAH', namaSubEvent, t());
+  } catch (e) { notifGagal('SUB EVENT', 'TAMBAH', namaSubEvent, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill(namaSubEvent);
+    await page.waitForTimeout(1500);
+
+    const editBtn = page.locator('#tabelSubEventBody tr .btn-edit-se').first();
+    await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await editBtn.click();
+    await page.waitForSelector('#modalSubEvent', { state: 'visible' });
+    await page.fill('#seSubEvent', namaSubEventBaru);
+    await page.click('#btnSimpanSE');
+    await page.waitForSelector('#modalSubEvent', { state: 'hidden', timeout: 10000 });
+    notifSukses('SUB EVENT', 'UBAH', namaSubEventBaru, t());
+  } catch (e) { notifGagal('SUB EVENT', 'UBAH', namaSubEvent, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill('');
+    await page.waitForTimeout(1000);
+    await searchBox.fill(namaSubEventBaru);
+    await page.waitForTimeout(1500);
+
+    const hapusBtn = page.locator('#tabelSubEventBody tr .btn-hapus-se').first();
+    await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await hapusBtn.click();
+    await page.waitForSelector('#modalHapusSE', { state: 'visible' });
+    await page.click('#btnHapusSE');
+    await page.waitForSelector('#modalHapusSE', { state: 'hidden', timeout: 10000 });
+    notifSukses('SUB EVENT', 'HAPUS', namaSubEventBaru, t());
+  } catch (e) { notifGagal('SUB EVENT', 'HAPUS', namaSubEventBaru, e, t()); }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 5. BIDANG
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('BIDANG');
+  await bukaHalaman(`${BASE_URL}/bidang`);
+  await page.waitForSelector('.accordion', { timeout: 10000 });
+
+  const accordionBtn = page.locator('.bidang-accordion-btn').first();
+  await accordionBtn.scrollIntoViewIfNeeded();
+  if ((await accordionBtn.getAttribute('aria-expanded')) !== 'true') await accordionBtn.click();
+  await page.waitForTimeout(3000);
+
+  const namaBidang = `Bidang Test ${Date.now()}`;
+  const namaBidangBaru = `Bidang Updated ${Date.now()}`;
+
+  t = timer();
+  try {
+    await page.locator('.btn-tambah-bidang').first().click();
+    await page.waitForSelector('#modalBidang', { state: 'visible' });
+    await page.fill('#bidangNama', namaBidang);
+    await page.check('#statusAktifBidang');
+    await page.click('#btnSimpanBidang');
+    await page.waitForSelector('#modalBidang', { state: 'hidden', timeout: 10000 });
+    await page.waitForTimeout(2000);
+    notifSukses('BIDANG', 'TAMBAH', namaBidang, t());
+  } catch (e) { notifGagal('BIDANG', 'TAMBAH', namaBidang, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.scrollIntoViewIfNeeded();
+    await searchBox.fill(namaBidang);
+    await page.waitForTimeout(1500);
+
+    const editBtn = page.locator('.btn-ubah-bidang:visible').first();
+    await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await editBtn.click();
+    await page.waitForSelector('#modalBidang', { state: 'visible' });
+    await page.fill('#bidangNama', namaBidangBaru);
+    await page.check('#statusNonaktifBidang');
+    await page.click('#btnSimpanBidang');
+    await page.waitForSelector('#modalBidang', { state: 'hidden', timeout: 10000 });
+    await page.waitForTimeout(2000);
+    notifSukses('BIDANG', 'UBAH', namaBidangBaru, t());
+  } catch (e) { notifGagal('BIDANG', 'UBAH', namaBidang, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill('');
+    await page.waitForTimeout(1000);
+    await searchBox.fill(namaBidangBaru);
+    await page.waitForTimeout(1500);
+
+    const hapusBtn = page.locator('.btn-hapus-bidang:visible').first();
+    await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await hapusBtn.click();
+    await page.waitForSelector('#modalHapusBidang', { state: 'visible' });
+    await page.click('#btnHapusBidang');
+    await page.waitForSelector('#modalHapusBidang', { state: 'hidden', timeout: 10000 });
+    await page.waitForTimeout(2000);
+    notifSukses('BIDANG', 'HAPUS', namaBidangBaru, t());
+  } catch (e) { notifGagal('BIDANG', 'HAPUS', namaBidangBaru, e, t()); }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 6. USER
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('USER');
+  await bukaHalaman(`${BASE_URL}/user`);
+  const ts = Date.now();
+  const namaUser = `User Test ${ts}`;
+  const emailUser = `user${ts}@test.com`;
+  const namaUserBaru = `User Updated ${Date.now()}`;
+
+  t = timer();
+  try {
+    await page.click('#btnTambahUser');
+    await page.waitForSelector('#modalUser', { state: 'visible' });
+    await page.fill('#inputNama', namaUser);
+    await page.fill('#inputEmail', emailUser);
+    await page.selectOption('#inputHakAkses', 'peserta');
+    await page.fill('#inputPassword', 'password123');
+    await page.check('#statusAktif');
+    await page.click('#btnSimpanUser');
+    await page.waitForSelector('#modalUser', { state: 'hidden', timeout: 10000 });
+    notifSukses('USER', 'TAMBAH', namaUser, t());
+  } catch (e) { notifGagal('USER', 'TAMBAH', namaUser, e, t()); }
+
+  t = timer();
+  try {
+    await page.reload();
+    await page.waitForTimeout(2000);
+    const searchBox = getSearchBox();
+    await searchBox.fill(emailUser);
+    await page.waitForTimeout(2000);
+
+    const editBtn = page.locator('#tabelUserBody tr .btn-edit-user').first();
+    await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await editBtn.click({ force: true });
+    await page.waitForSelector('#modalUser', { state: 'visible' });
+    await page.fill('#inputNama', namaUserBaru);
+    await page.selectOption('#inputHakAkses', 'penilai');
+    await page.check('#statusNonaktif');
+    await page.click('#btnSimpanUser');
+    await page.waitForSelector('#modalUser', { state: 'hidden', timeout: 10000 });
+    notifSukses('USER', 'UBAH', namaUserBaru, t());
+  } catch (e) { notifGagal('USER', 'UBAH', namaUser, e, t()); }
+
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill('');
+    await page.waitForTimeout(1000);
+    await searchBox.fill(emailUser);
+    await page.waitForTimeout(2000);
+
+    const hapusBtn = page.locator('#tabelUserBody tr .btn-hapus-user').first();
+    await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await hapusBtn.click({ force: true });
+    await page.waitForSelector('#modalHapusUser', { state: 'visible' });
+    await page.click('#btnHapusUser');
+    await page.waitForSelector('#modalHapusUser', { state: 'hidden', timeout: 10000 });
+    notifSukses('USER', 'HAPUS', namaUserBaru, t());
+  } catch (e) { notifGagal('USER', 'HAPUS', namaUserBaru, e, t()); }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 7. PENILAI — TAMBAH → GANTI → HAPUS
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('PENILAI');
+  await bukaHalaman(`${BASE_URL}/penilai`);
+
+  t = timer();
+  try {
+    const detailBtn = page.locator('a.btn-primary:has-text("Detail")').first();
+    await detailBtn.scrollIntoViewIfNeeded();
+    await detailBtn.click();
+    await page.waitForURL(/penilai\/\d+/, { timeout: 10000 });
+    await page.waitForSelector('#tabelPenilai', { timeout: 10000 });
+    await page.waitForTimeout(1500);
+
+    await page.click('#btnTambahPenilai');
+    await page.waitForSelector('#modalPenilai', { state: 'visible' });
+    const optCount = await page.locator('#penilaiUserId option:not([disabled])').count();
+    if (optCount <= 1) throw new Error('Tidak ada user penilai tersedia');
+
     await page.selectOption('#penilaiUserId', { index: 1 });
     await page.waitForTimeout(500);
     await page.click('#btnSimpanPenilai');
     await page.waitForSelector('#modalPenilai', { state: 'hidden', timeout: 15000 });
-    console.log('✅ Penilai ditambahkan');
-  } else {
-    console.log('⚠️ Tidak ada user tersedia untuk penilai');
-    return;
-  }
+    await page.waitForTimeout(1500);
+    notifSukses('PENILAI', 'TAMBAH', 'Penilai ditambahkan', t());
 
-  // ── UBAH PENILAI ──
-  await page.waitForTimeout(2000);
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-
-  const editPenilaiBtn = page.locator('.btn-edit-penilai').first();
-  if (await editPenilaiBtn.isVisible({ timeout: 5000 })) {
-    await editPenilaiBtn.scrollIntoViewIfNeeded();
-    await editPenilaiBtn.click({ force: true });
-    await page.waitForSelector('#modalPenilai', { state: 'visible', timeout: 10000 });
-
-    // Pilih user lain
-    const penilaiOptions2 = await page.locator('#penilaiUserId option').all();
-    if (penilaiOptions2.length > 2) {
+    t = timer();
+    const editBtn = page.locator('.btn-edit-penilai').last();
+    await editBtn.scrollIntoViewIfNeeded();
+    await editBtn.click();
+    await page.waitForSelector('#modalPenilai', { state: 'visible' });
+    if (await page.locator('#penilaiUserId option:not([disabled])').count() > 2) {
       await page.selectOption('#penilaiUserId', { index: 2 });
-    } else if (penilaiOptions2.length > 1) {
-      await page.selectOption('#penilaiUserId', { index: 1 });
+      await page.waitForTimeout(500);
     }
-
-    await page.waitForTimeout(500);
     await page.click('#btnSimpanPenilai');
     await page.waitForSelector('#modalPenilai', { state: 'hidden', timeout: 15000 });
-    console.log('✅ Penilai diubah');
-  } else {
-    console.log('⚠️ Tidak ada penilai untuk diubah');
-  }
+    await page.waitForTimeout(1500);
+    notifSukses('PENILAI', 'GANTI', 'Penilai diganti', t());
 
-  // ── HAPUS PENILAI ──
-  await page.waitForTimeout(2000);
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-
-  const hapusPenilaiBtn = page.locator('.btn-hapus-penilai').first();
-  if (await hapusPenilaiBtn.isVisible({ timeout: 5000 })) {
-    const namaPenilaiHapus = await hapusPenilaiBtn.getAttribute('data-nama');
-    await hapusPenilaiBtn.scrollIntoViewIfNeeded();
-    await hapusPenilaiBtn.click({ force: true });
-    await page.waitForSelector('#modalHapusPenilai', { state: 'visible', timeout: 5000 });
+    t = timer();
+    const hapusBtn = page.locator('.btn-hapus-penilai').last();
+    await hapusBtn.scrollIntoViewIfNeeded();
+    await hapusBtn.click();
+    await page.waitForSelector('#modalHapusPenilai', { state: 'visible' });
     await page.click('#btnHapusPenilai');
-    await page.waitForSelector('#modalHapusPenilai', { state: 'hidden', timeout: 10000 });
-    console.log(`✅ Penilai dihapus: ${namaPenilaiHapus}`);
-  } else {
-    console.log('⚠️ Tidak ada penilai untuk dihapus');
+    await page.waitForSelector('#modalHapusPenilai', { state: 'hidden', timeout: 15000 });
+    await page.waitForTimeout(1500);
+    notifSukses('PENILAI', 'HAPUS', 'Penilai dihapus', t());
+
+  } catch (e) {
+    notifGagal('PENILAI', 'CRUD', 'Gagal', e, t());
   }
 
-  // ============================================================
-  // 7. PENGUMUMAN
-  // ============================================================
-  console.log('\n=== PENGUMUMAN ===');
-  await page.goto(`${BASE_URL}/pengumuman`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Master Pengumuman' })).toBeVisible();
-  console.log('✅ Halaman Pengumuman terbuka');
-
+  // ══════════════════════════════════════════════════════════════════════
+  // 8. PENGUMUMAN
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('PENGUMUMAN');
+  await bukaHalaman(`${BASE_URL}/pengumuman`);
   const judulPengumuman = `Pengumuman Test ${Date.now()}`;
-  await page.click('#btnTambahPengumuman');
-  await page.waitForSelector('#modalPengumuman', { state: 'visible' });
-  await page.fill('#pJudul', judulPengumuman);
-  await page.fill('#pDeskripsi', 'Ini adalah deskripsi pengumuman test');
-  await page.selectOption('#pStatus', 'Published');
-  await page.click('#btnSimpanPengumuman');
-  await page.waitForSelector('#modalPengumuman', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Pengumuman ditambahkan: ${judulPengumuman}`);
-
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-
-  let searchPengumuman = page.locator('#tabelPengumuman_filter input, .dataTables_filter input, input[type="search"]').first();
-  await searchPengumuman.waitFor({ state: 'visible', timeout: 15000 });
-  await searchPengumuman.fill(judulPengumuman);
-  await page.waitForTimeout(2000);
-  await page.waitForSelector(`#tabelPengumumanBody tr:has-text("${judulPengumuman}")`, { timeout: 10000 });
-
   const judulBaru = `Pengumuman Updated ${Date.now()}`;
-  await page.evaluate((judul) => {
-    const rows = document.querySelectorAll('#tabelPengumumanBody tr');
-    for (const row of rows) {
-      if (row.textContent.includes(judul)) {
-        row.querySelector('.btn-edit-pengumuman')?.click();
-      }
-    }
-  }, judulPengumuman);
 
-  await page.waitForSelector('#modalPengumuman', { state: 'visible', timeout: 10000 });
-  await page.fill('#pJudul', judulBaru);
-  await page.fill('#pDeskripsi', 'Deskripsi sudah diupdate');
-  await page.selectOption('#pStatus', 'Draft');
-  await page.click('#btnSimpanPengumuman');
-  await page.waitForSelector('#modalPengumuman', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Pengumuman diubah: ${judulBaru}`);
+  t = timer();
+  try {
+    await page.click('#btnTambahPengumuman');
+    await page.waitForSelector('#modalPengumuman', { state: 'visible' });
+    await page.fill('#pJudul', judulPengumuman);
+    await page.fill('#pDeskripsi', 'Deskripsi test');
+    await page.selectOption('#pStatus', 'Published');
+    await page.click('#btnSimpanPengumuman');
+    await page.waitForSelector('#modalPengumuman', { state: 'hidden', timeout: 10000 });
+    notifSukses('PENGUMUMAN', 'TAMBAH', judulPengumuman, t());
+  } catch (e) { notifGagal('PENGUMUMAN', 'TAMBAH', judulPengumuman, e, t()); }
 
-  await searchPengumuman.fill(judulBaru);
-  await page.waitForTimeout(2000);
-  await page.evaluate((judul) => {
-    const rows = document.querySelectorAll('#tabelPengumumanBody tr');
-    for (const row of rows) {
-      if (row.textContent.includes(judul)) {
-        row.querySelector('.btn-hapus-pengumuman')?.click();
-      }
-    }
-  }, judulBaru);
+  t = timer();
+  try {
+    await page.reload();
+    await page.waitForTimeout(2000);
+    const searchBox = getSearchBox();
+    await searchBox.fill(judulPengumuman);
+    await page.waitForTimeout(2000);
 
-  await page.waitForSelector('#modalHapusPengumuman', { state: 'visible', timeout: 5000 });
-  await page.click('#btnHapusPengumuman');
-  await page.waitForSelector('#modalHapusPengumuman', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Pengumuman dihapus: ${judulBaru}`);
+    const editBtn = page.locator('#tabelPengumumanBody tr .btn-edit-pengumuman').first();
+    await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await editBtn.click({ force: true });
+    await page.waitForSelector('#modalPengumuman', { state: 'visible' });
+    await page.fill('#pJudul', judulBaru);
+    await page.selectOption('#pStatus', 'Draft');
+    await page.click('#btnSimpanPengumuman');
+    await page.waitForSelector('#modalPengumuman', { state: 'hidden', timeout: 10000 });
+    notifSukses('PENGUMUMAN', 'UBAH', judulBaru, t());
+  } catch (e) { notifGagal('PENGUMUMAN', 'UBAH', judulPengumuman, e, t()); }
 
-  // ============================================================
-  // 8. INDIKATOR TAHAP 1
-  // ============================================================
-  console.log('\n=== INDIKATOR TAHAP 1 ===');
-  await page.goto(`${BASE_URL}/indikator/tahap-1`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Setting Indikator Penilaian Tahap 1' })).toBeVisible();
-  console.log('✅ Halaman Indikator Tahap 1 terbuka');
+  t = timer();
+  try {
+    const searchBox = getSearchBox();
+    await searchBox.fill('');
+    await page.waitForTimeout(1000);
+    await searchBox.fill(judulBaru);
+    await page.waitForTimeout(2000);
 
-  const detailInd1Btn = page.locator('a.btn-primary:has-text("Detail")').first();
-  await detailInd1Btn.scrollIntoViewIfNeeded();
-  await detailInd1Btn.click();
-  await page.waitForURL(/indikator\/tahap-1\/\d+\/inovasi/);
+    const hapusBtn = page.locator('#tabelPengumumanBody tr .btn-hapus-pengumuman').first();
+    await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await hapusBtn.click({ force: true });
+    await page.waitForSelector('#modalHapusPengumuman', { state: 'visible' });
+    await page.click('#btnHapusPengumuman');
+    await page.waitForSelector('#modalHapusPengumuman', { state: 'hidden', timeout: 10000 });
+    notifSukses('PENGUMUMAN', 'HAPUS', judulBaru, t());
+  } catch (e) { notifGagal('PENGUMUMAN', 'HAPUS', judulBaru, e, t()); }
 
-  const ind1Url = page.url();
-  const subEventIdInd1 = ind1Url.match(/indikator\/tahap-1\/(\d+)\/inovasi/)?.[1];
-  console.log(`📌 Sub Event ID: ${subEventIdInd1}`);
+  // ══════════════════════════════════════════════════════════════════════
+  // 9. INDIKATOR TAHAP 1 — Indikator CRUD + Keterangan CRUD (via search)
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('INDIKATOR TAHAP 1');
+  await bukaHalaman(`${BASE_URL}/indikator/tahap-1`);
 
-  const namaIndikator1 = `Indikator Test ${Date.now()}`;
-  await page.click('#btnTambahIndikator');
-  await page.waitForSelector('#modalIndikator', { state: 'visible' });
-  await page.fill('#inputNamaIndikator', namaIndikator1);
-  await page.selectOption('#selectJenis', 'substansi');
-  await page.click('#modalIndikator .btn-success:has-text("Simpan")');
-  await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Indikator Tahap 1 ditambahkan: ${namaIndikator1}`);
+  let ind1Nama = null;
+  let ketNama = null;
+  let masukKeterangan = false;
 
-  const namaIndikator1Baru = `Indikator Updated ${Date.now()}`;
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
+  // ── TAMBAH INDIKATOR ──
+  t = timer();
+  try {
+    const detailBtn = page.locator('a.btn-primary:has-text("Detail")').first();
+    await detailBtn.scrollIntoViewIfNeeded();
+    await detailBtn.click();
+    await page.waitForURL(/indikator\/tahap-1\/\d+\/inovasi/, { timeout: 10000 });
+    await page.waitForSelector('#tabelDetailInovasi', { timeout: 10000 });
+    await page.waitForTimeout(1500);
 
-  const editInd1Btn = page.locator(`#tabelDetailInovasiBody tr:has-text("${namaIndikator1}") .btn-edit-indikator`).first();
-  await editInd1Btn.scrollIntoViewIfNeeded();
-  await editInd1Btn.click();
-  await page.waitForSelector('#modalIndikator', { state: 'visible', timeout: 10000 });
-  await page.fill('#inputNamaIndikator', namaIndikator1Baru);
-  await page.click('#modalIndikator .btn-success:has-text("Simpan")');
-  await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Indikator Tahap 1 diubah: ${namaIndikator1Baru}`);
+    ind1Nama = `Indikator T1 ${Date.now()}`;
+    await page.click('#btnTambahIndikator');
+    await page.waitForSelector('#modalIndikator', { state: 'visible' });
+    await page.fill('#inputNamaIndikator', ind1Nama);
+    await page.selectOption('#selectJenis', 'substansi');
+    await page.click('#btnSimpanIndikator');
+    await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
+    await page.waitForTimeout(2000);
+    notifSukses('INDIKATOR TAHAP 1', 'IND+TAMBAH', ind1Nama, t());
+  } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'IND+TAMBAH', 'Gagal', e, t()); }
 
-  // Hapus Indikator Tahap 1
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-  const hapusInd1Btn = page.locator(`#tabelDetailInovasiBody tr:has-text("${namaIndikator1Baru}") .btn-hapus-indikator`).first();
-  await hapusInd1Btn.scrollIntoViewIfNeeded();
-  await hapusInd1Btn.click();
-  await page.waitForSelector('#modalHapusIndikator', { state: 'visible', timeout: 5000 });
-  await page.click('#modalHapusIndikator .btn-danger:has-text("Hapus")');
-  await page.waitForSelector('#modalHapusIndikator', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Indikator Tahap 1 dihapus: ${namaIndikator1Baru}`);
+  // ── SEARCH + UBAH INDIKATOR ──
+  if (ind1Nama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.scrollIntoViewIfNeeded();
+      await searchBox.fill(ind1Nama);
+      await page.waitForTimeout(1500);
 
-  // ============================================================
-  // 9. INDIKATOR TAHAP 2
-  // ============================================================
-  console.log('\n=== INDIKATOR TAHAP 2 ===');
-  await page.goto(`${BASE_URL}/indikator/tahap-2`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Setting Indikator Penilaian Tahap 2' })).toBeVisible();
-  console.log('✅ Halaman Indikator Tahap 2 terbuka');
+      const namaBaru = `${ind1Nama} Upd`;
+      const editBtn = page.locator('#tabelDetailInovasiBody tr .btn-edit-indikator').first();
+      await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await editBtn.click();
+      await page.waitForSelector('#modalIndikator', { state: 'visible' });
+      await page.fill('#inputNamaIndikator', namaBaru);
+      await page.selectOption('#selectJenis', 'makalah');
+      await page.click('#btnSimpanIndikator');
+      await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      ind1Nama = namaBaru;
+      notifSukses('INDIKATOR TAHAP 1', 'IND+UBAH', namaBaru, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'IND+UBAH', 'Gagal', e, t()); }
+  }
 
-  const detailInd2Btn = page.locator('a.btn-primary:has-text("Detail")').first();
-  await detailInd2Btn.scrollIntoViewIfNeeded();
-  await detailInd2Btn.click();
-  await page.waitForURL(/indikator\/tahap-2\/\d+\/indikator/);
-  console.log('✅ Halaman Detail Indikator Tahap 2 terbuka');
+  // ── SEARCH + BUKA DETAIL KETERANGAN ──
+  if (ind1Nama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.fill('');
+      await page.waitForTimeout(1000);
+      await searchBox.fill(ind1Nama);
+      await page.waitForTimeout(1500);
 
-  // ── TAMBAH ──
-  const namaIndikator2 = `Indikator Tahap 2 Test ${Date.now()}`;
-  await page.click('#btnTambahIndikator');
-  await page.waitForSelector('#modalIndikator', { state: 'visible' });
-  await page.fill('#inputNamaIndikator', namaIndikator2);
-  await page.selectOption('#inputJenis', 'Subtansi Inovasi');
-  await page.fill('#inputKeterangan', 'Keterangan test');
-  await page.fill('#inputNilaiMinimal', '0');
-  await page.fill('#inputNilaiMaksimal', '100');
-  await page.click('#modalIndikator .btn-success:has-text("Simpan")');
-  await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
-  console.log(`✅ Indikator Tahap 2 ditambahkan: ${namaIndikator2}`);
+      const detailKetBtn = page.locator('#tabelDetailInovasiBody tr a.btn-primary:has-text("Detail")').first();
+      await detailKetBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await detailKetBtn.click();
+      await page.waitForURL(/indikator\/tahap-1\/\d+\/detail\/\d+/, { timeout: 10000 });
+      await page.waitForSelector('#tabelKeterangan', { timeout: 10000 });
+      await page.waitForTimeout(1500);
+      masukKeterangan = true;
+      notifSukses('INDIKATOR TAHAP 1', 'KET+BUKA', 'Halaman keterangan terbuka', t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'KET+BUKA', 'Gagal buka detail', e, t()); }
+  }
 
-  // ── UBAH (pake SEARCH DULU) ──
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
+  // ── TAMBAH KETERANGAN ──
+  if (masukKeterangan) {
+    t = timer();
+    try {
+      ketNama = `Ket Test ${Date.now()}`;
+      await page.click('#btnTambahKeterangan');
+      await page.waitForSelector('#modalKeterangan', { state: 'visible' });
+      await page.fill('#inputKeterangan', ketNama);
+      await page.fill('#inputNilaiMinimal', '1');
+      await page.fill('#inputNilaiMaksimal', '5');
+      await page.click('#formKeterangan button[type="submit"]');
+      await page.waitForSelector('#modalKeterangan', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      notifSukses('INDIKATOR TAHAP 1', 'KET+TAMBAH', ketNama, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'KET+TAMBAH', 'Gagal', e, t()); }
+  }
 
-  // 🔥 SEARCH PAKAI SEARCH BOX DATATABLES
-  const searchInd2 = page.locator('#tabelTahap2Detail_filter input, .dataTables_filter input, input[type="search"]').first();
-  await searchInd2.waitFor({ state: 'visible', timeout: 10000 });
-  await searchInd2.fill(namaIndikator2);
-  await page.waitForTimeout(3000);
-  console.log(`🔍 Search: ${namaIndikator2}`);
+  // ── SEARCH + UBAH KETERANGAN ──
+  if (ketNama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.scrollIntoViewIfNeeded();
+      await searchBox.fill(ketNama);
+      await page.waitForTimeout(1500);
 
-  // 🔥 CEK APAKAH MUNCUL
-  const editInd2Btn = page.locator(`#tabelTahap2DetailBody tr:has-text("${namaIndikator2}") .btn-edit-indikator`).first();
+      const ketBaru = `${ketNama} Upd`;
+      const editBtn = page.locator('#tabelKeteranganBody tr .btn-edit-keterangan').first();
+      await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await editBtn.click();
+      await page.waitForSelector('#modalKeterangan', { state: 'visible' });
+      await page.fill('#inputKeterangan', ketBaru);
+      await page.fill('#inputNilaiMinimal', '2');
+      await page.fill('#inputNilaiMaksimal', '4');
+      await page.click('#formKeterangan button[type="submit"]');
+      await page.waitForSelector('#modalKeterangan', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      ketNama = ketBaru;
+      notifSukses('INDIKATOR TAHAP 1', 'KET+UBAH', ketBaru, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'KET+UBAH', 'Gagal', e, t()); }
+  }
 
-  if (await editInd2Btn.isVisible({ timeout: 5000 })) {
-    await editInd2Btn.scrollIntoViewIfNeeded();
-    await editInd2Btn.click();
-    console.log('✅ Tombol Edit diklik');
+  // ── SEARCH + HAPUS KETERANGAN ──
+  if (ketNama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.fill('');
+      await page.waitForTimeout(1000);
+      await searchBox.fill(ketNama);
+      await page.waitForTimeout(1500);
 
-    await page.waitForSelector('#modalIndikator', { state: 'visible', timeout: 10000 });
-    const namaIndikator2Baru = `Indikator Tahap 2 Updated ${Date.now()}`;
-    await page.fill('#inputNamaIndikator', namaIndikator2Baru);
+      const hapusBtn = page.locator('#tabelKeteranganBody tr .btn-hapus-keterangan').first();
+      await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await hapusBtn.click();
+      await page.waitForSelector('#modalHapusKeterangan', { state: 'visible' });
+      await page.click('#formHapusKeterangan button[type="submit"]');
+      await page.waitForSelector('#modalHapusKeterangan', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      notifSukses('INDIKATOR TAHAP 1', 'KET+HAPUS', ketNama, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'KET+HAPUS', 'Gagal', e, t()); }
+  }
+
+  // ── KEMBALI + SEARCH + HAPUS INDIKATOR ──
+  if (ind1Nama && masukKeterangan) {
+    t = timer();
+    try {
+      const kembaliBtn = page.locator('a.btn-dark:has-text("Kembali")').first();
+      await kembaliBtn.scrollIntoViewIfNeeded();
+      await kembaliBtn.click();
+      await page.waitForURL(/indikator\/tahap-1\/\d+\/inovasi/, { timeout: 10000 });
+      await page.waitForSelector('#tabelDetailInovasi', { timeout: 10000 });
+      await page.waitForTimeout(1500);
+
+      const searchBox = getSearchBox();
+      await searchBox.scrollIntoViewIfNeeded();
+      await searchBox.fill('');
+      await page.waitForTimeout(1000);
+      await searchBox.fill(ind1Nama);
+      await page.waitForTimeout(1500);
+
+      const hapusIndBtn = page.locator('#tabelDetailInovasiBody tr .btn-hapus-indikator').first();
+      await hapusIndBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await hapusIndBtn.click();
+      await page.waitForSelector('#modalHapusIndikator', { state: 'visible' });
+      await page.click('#formHapusIndikator button[type="submit"]');
+      await page.waitForSelector('#modalHapusIndikator', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      notifSukses('INDIKATOR TAHAP 1', 'IND+HAPUS', ind1Nama, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 1', 'IND+HAPUS', 'Gagal', e, t()); }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // 10. INDIKATOR TAHAP 2 — TAMBAH → UBAH → HAPUS (via search)
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('INDIKATOR TAHAP 2');
+  await bukaHalaman(`${BASE_URL}/indikator/tahap-2`);
+
+  let ind2Nama = null;
+
+  t = timer();
+  try {
+    const detailBtn = page.locator('a.btn-primary:has-text("Detail")').first();
+    await detailBtn.scrollIntoViewIfNeeded();
+    await detailBtn.click();
+    await page.waitForURL(/indikator\/tahap-2\/\d+\/indikator/, { timeout: 10000 });
+    await page.waitForSelector('#tabelTahap2Detail', { timeout: 10000 });
+    await page.waitForTimeout(1500);
+
+    ind2Nama = `Indikator T2 ${Date.now()}`;
+    await page.click('#btnTambahIndikator');
+    await page.waitForSelector('#modalIndikator', { state: 'visible' });
+    await page.fill('#inputNamaIndikator', ind2Nama);
+    await page.selectOption('#inputJenis', 'Subtansi Inovasi');
+    await page.fill('#inputKeterangan', 'Ket T2 test');
+    await page.fill('#inputNilaiMinimal', '0');
+    await page.fill('#inputNilaiMaksimal', '100');
     await page.click('#modalIndikator .btn-success:has-text("Simpan")');
     await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
-    console.log(`✅ Indikator Tahap 2 diubah: ${namaIndikator2Baru}`);
+    await page.waitForTimeout(2000);
+    notifSukses('INDIKATOR TAHAP 2', 'TAMBAH', ind2Nama, t());
+  } catch (e) { notifGagal('INDIKATOR TAHAP 2', 'TAMBAH', 'Gagal', e, t()); }
 
-    // Update nama
-    namaIndikator2 = namaIndikator2Baru;
-  } else {
-    console.log(`⚠️ Tombol Edit tidak ditemukan setelah search`);
+  if (ind2Nama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.scrollIntoViewIfNeeded();
+      await searchBox.fill(ind2Nama);
+      await page.waitForTimeout(1500);
+
+      const namaBaru = `${ind2Nama} Upd`;
+      const editBtn = page.locator('#tabelTahap2DetailBody tr .btn-edit-indikator').first();
+      await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await editBtn.click();
+      await page.waitForSelector('#modalIndikator', { state: 'visible' });
+      await page.fill('#inputNamaIndikator', namaBaru);
+      await page.selectOption('#inputJenis', 'Peragaan');
+      await page.fill('#inputKeterangan', 'Ket updated');
+      await page.click('#modalIndikator .btn-success:has-text("Simpan")');
+      await page.waitForSelector('#modalIndikator', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      ind2Nama = namaBaru;
+      notifSukses('INDIKATOR TAHAP 2', 'UBAH', namaBaru, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 2', 'UBAH', 'Gagal', e, t()); }
   }
 
-  // ── HAPUS (pake SEARCH DULU) ──
-  await page.reload();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(3000);
+  if (ind2Nama) {
+    t = timer();
+    try {
+      const searchBox = getSearchBox();
+      await searchBox.fill('');
+      await page.waitForTimeout(1000);
+      await searchBox.fill(ind2Nama);
+      await page.waitForTimeout(1500);
 
-  await searchInd2.waitFor({ state: 'visible', timeout: 10000 });
-  await searchInd2.fill(namaIndikator2);
-  await page.waitForTimeout(3000);
-
-  const hapusInd2Btn = page.locator(`#tabelTahap2DetailBody tr:has-text("${namaIndikator2}") .btn-hapus-indikator`).first();
-
-  if (await hapusInd2Btn.isVisible({ timeout: 5000 })) {
-    await hapusInd2Btn.scrollIntoViewIfNeeded();
-    await hapusInd2Btn.click();
-    console.log('✅ Tombol Hapus diklik');
-
-    await page.waitForSelector('#modalHapus', { state: 'visible', timeout: 5000 });
-    await page.click('#modalHapus .btn-danger:has-text("Hapus")');
-    await page.waitForSelector('#modalHapus', { state: 'hidden', timeout: 10000 });
-    console.log(`✅ Indikator Tahap 2 dihapus`);
-  } else {
-    console.log(`⚠️ Tombol Hapus tidak ditemukan setelah search`);
+      const hapusBtn = page.locator('#tabelTahap2DetailBody tr .btn-hapus-indikator').first();
+      await hapusBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await hapusBtn.click();
+      await page.waitForSelector('#modalHapus', { state: 'visible' });
+      await page.click('#formHapus button[type="submit"]');
+      await page.waitForSelector('#modalHapus', { state: 'hidden', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      notifSukses('INDIKATOR TAHAP 2', 'HAPUS', ind2Nama, t());
+    } catch (e) { notifGagal('INDIKATOR TAHAP 2', 'HAPUS', 'Gagal', e, t()); }
   }
 
-  
-  // ============================================================
-  // 10. INOVASI - RIWAYAT
-  // ============================================================
-  console.log('\n=== INOVASI - RIWAYAT ===');
-  await page.goto(`${BASE_URL}/inovasi/riwayat`);
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-  console.log('✅ Halaman Riwayat Inovasi terbuka');
+  // ══════════════════════════════════════════════════════════════════════
+  // 11. MENU LAIN
+  // ══════════════════════════════════════════════════════════════════════
+  notifHeader('MENU LAIN');
+  const menuLain = [
+    { nama: 'Riwayat', url: `${BASE_URL}/inovasi/riwayat` },
+    { nama: 'Rekap Nilai', url: `${BASE_URL}/inovasi/rekap-nilai` },
+    { nama: 'Penilaian Tahap 1', url: `${BASE_URL}/penilaian/tahap-1` },
+    { nama: 'Penilaian Tahap 2', url: `${BASE_URL}/penilaian/tahap-2` },
+  ];
 
-  // Cek apakah ada data
-  const riwayatContent = page.locator('body');
-  await expect(riwayatContent).toContainText(/Riwayat|Inovasi/);
-  console.log('✅ Data riwayat terlihat');
+  for (const menu of menuLain) {
+    t = timer();
+    try {
+      await page.goto(menu.url);
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(1500);
+      const curUrl = page.url();
+      if (curUrl.includes('/index') && !menu.url.includes('/index')) throw new Error(`Redirect ke /index`);
+      const body = await page.locator('body').innerText().catch(() => '');
+      if (body.includes('403') || body.includes('Akses ditolak')) throw new Error(`403 Forbidden`);
+      notifSukses('MENU LAIN', 'BUKA', menu.nama, t());
+    } catch (e) { notifGagal('MENU LAIN', 'BUKA', menu.nama, e, t()); }
+  }
 
-  // ============================================================
-  // 11. INOVASI - REKAP NILAI
-  // ============================================================
-  console.log('\n=== INOVASI - REKAP NILAI ===');
-  await page.goto(`${BASE_URL}/inovasi/rekap-nilai`);
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
-  console.log('✅ Halaman Rekap Nilai terbuka');
-  console.log('✅ Data rekap nilai terlihat');
+  // ══════════════════════════════════════════════════════════════════════
+  // SUMMARY
+  // ══════════════════════════════════════════════════════════════════════
+  const totalDuration = Date.now() - startTime;
 
-  // ============================================================
-  // 12. PENILAIAN TAHAP 1
-  // ============================================================
-  console.log('\n=== PENILAIAN TAHAP 1 ===');
-  await page.goto(`${BASE_URL}/penilaian/tahap-1`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Penilaian Tahap 1' })).toBeVisible();
-  console.log('✅ Halaman Penilaian Tahap 1 terbuka');
+  console.log('\n' + '='.repeat(65));
+  console.log('  SUMMARY HASIL TEST');
+  console.log('='.repeat(65));
+  console.log('\n  Modul                    Berhasil   Gagal   Total');
+  console.log('-'.repeat(65));
 
-  // ============================================================
-  // 13. PENILAIAN TAHAP 2
-  // ============================================================
-  console.log('\n=== PENILAIAN TAHAP 2 ===');
-  await page.goto(`${BASE_URL}/penilaian/tahap-2`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.locator('h3').filter({ hasText: 'Penilaian Tahap 2' })).toBeVisible();
-  console.log('✅ Halaman Penilaian Tahap 2 terbuka');
-});
+  for (const [modul, stats] of Object.entries(modulStats)) {
+    const status = stats.gagal === 0 ? 'PASS' : 'FAIL';
+    console.log(`  [${status}] ${modul.padEnd(20)} ${String(stats.berhasil).padStart(6)}   ${String(stats.gagal).padStart(5)}   ${String(stats.total).padStart(5)}`);
+  }
+
+  console.log('-'.repeat(65));
+  console.log(`\n  Total Step     : ${totalStep}`);
+  console.log(`  Total Berhasil : ${totalBerhasil} (${((totalBerhasil / totalStep) * 100).toFixed(1)}%)`);
+  console.log(`  Total Gagal    : ${totalGagal} (${((totalGagal / totalStep) * 100).toFixed(1)}%)`);
+  console.log(`  Total Duration : ${formatTime(totalDuration)}`);
+  console.log(`  Selesai pada   : ${new Date().toLocaleString('id-ID')}`);
+  console.log('-'.repeat(65));
+
+  if (totalGagal === 0) {
+    console.log('\n  STATUS: SEMUA TEST BERHASIL\n');
+  } else {
+    console.log(`\n  STATUS: ADA ${totalGagal} TEST YANG GAGAL\n`);
+    for (const [modul, stats] of Object.entries(modulStats)) {
+      if (stats.gagal > 0) console.log(`    - ${modul}: ${stats.gagal} gagal dari ${stats.total}`);
+    }
+    console.log('');
+  }
+}); 

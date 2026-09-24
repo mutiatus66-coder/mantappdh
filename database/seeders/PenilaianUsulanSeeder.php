@@ -18,7 +18,6 @@ class PenilaianUsulanSeeder extends Seeder
 
         $usulans = Usulan::query()
             ->where('is_submitted', true)
-            ->take(15)
             ->get();
 
         if ($usulans->isEmpty()) {
@@ -33,8 +32,14 @@ class PenilaianUsulanSeeder extends Seeder
         );
 
         $total = 0;
+        $index = 0;
 
         foreach ($usulans as $usulan) {
+            // Loloskan minimal 8 usulan ke Tahap 2 agar memiliki data penuh di Tahap 2
+            if ($index < 8) {
+                $usulan->update(['lolos_tahap1' => true]);
+            }
+            $index++;
 
             $penilais = Penilai::query()
                 ->where('sub_event_id', $usulan->sub_event_id)
@@ -59,9 +64,7 @@ class PenilaianUsulanSeeder extends Seeder
             }
 
             foreach ($penilais as $penilai) {
-
                 foreach ($indikators as $indikator) {
-
                     $keterangans = KeteranganIndikator::query()
                         ->where('indikator_id', $indikator->id)
                         ->get();
@@ -70,12 +73,9 @@ class PenilaianUsulanSeeder extends Seeder
                         continue;
                     }
 
-                    $ket = $keterangans->random();
-
-                    $nilai = rand(
-                        (int) $ket->nilai_minimal,
-                        (int) $ket->nilai_maksimal
-                    );
+                    // Gunakan nilai maksimal agar usulan mendapat nilai penuh
+                    $ket = $keterangans->sortByDesc('nilai_maksimal')->first() ?? $keterangans->first();
+                    $nilai = (int) $ket->nilai_maksimal;
 
                     PenilaianUsulan::updateOrCreate(
                         [

@@ -24,13 +24,14 @@ class Test4_PenilaianTest extends DuskTestCase
     public function test_penilaian_features(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->resize(1920, 1080);
+            try {  } catch (\Throwable $e) {}
             echo "[4] PENILAIAN DATA\n";
             $this->loginAdmin($browser);
 
             // PENILAIAN TAHAP 1
             echo "   -> Penilaian Tahap 1 (Simpan Kurasi)...\n";
-            $browser->click('a.ri-menu-item[href="/penilaian/tahap-1"]')->pause(2000);
+            $browser->script("let el = document.querySelector('a.ri-menu-item[href=\"/penilaian/tahap-1\"]'); if(el) { el.scrollIntoView({block:'center'}); el.click(); }");
+            $browser->pause(2000);
             $browser->clickLink('Lihat Nilai Verifikasi')->pause(2000);
             $browser->script("let chk = document.querySelector('.chk-all'); if(chk && !chk.checked) { chk.scrollIntoView({block:'center'}); chk.click(); }");
             $browser->pause(1000);
@@ -39,12 +40,16 @@ class Test4_PenilaianTest extends DuskTestCase
 
             // PENILAIAN TAHAP 2
             echo "   -> Penilaian Tahap 2 (Auto Ranking)...\n";
-            $browser->click('a.ri-menu-item[href="/penilaian/tahap-2"]')->pause(2000);
+            $browser->script("let el = document.querySelector('a.ri-menu-item[href=\"/penilaian/tahap-2\"]'); if(el) { el.scrollIntoView({block:'center'}); el.click(); }");
+            $browser->pause(2000);
             $browser->clickLink('Lihat Nilai Nominator')->pause(2000);
             $browser->script("let btn = document.querySelector('.btn-auto-ranking'); if(btn) { btn.scrollIntoView({block:'center'}); btn.click(); }");
             $browser->pause(2000);
             $browser->script("let btn2 = document.querySelector('.btn-simpan-ranking'); if(btn2) { btn2.scrollIntoView({block:'center'}); btn2.click(); }");
-            $browser->pause(3000)->clickLink('Kembali')->pause(1500);
+            $browser->pause(2000);
+            $browser->script("let btnExcel = document.querySelector('.buttons-excel'); if(btnExcel) { btnExcel.scrollIntoView({block:'center'}); btnExcel.click(); }");
+            $browser->pause(2000);
+            $browser->clickLink('Kembali')->pause(1500);
             
             // AUDIT LOG (RIWAYAT HALAMAN)
             echo "   -> Buka Audit Log / Riwayat Halaman...\n";

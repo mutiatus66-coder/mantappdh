@@ -24,7 +24,7 @@ class Test1_MasterTest extends DuskTestCase
     public function test_master_crud_features(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->resize(1920, 1080);
+            
             $waktu = time();
 
             echo "[1] MASTER DATA\n";

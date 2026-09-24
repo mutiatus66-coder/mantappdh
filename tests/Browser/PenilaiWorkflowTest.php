@@ -15,7 +15,7 @@ class PenilaiWorkflowTest extends DuskTestCase
     public function test_penilai_workflow(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->resize(1280, 720);
+            
 
             echo "1. Membuka landing page...\n";
             $browser->visit('http://127.0.0.1:8000/');

@@ -271,13 +271,13 @@
 
     $(document).ready(function () {
         const columnDefs = [
-            /* Checkbox — tidak bisa di-sort/search */
+            /* Checkbox — tidak bisa di-sort/search/colvis */
             {
                 targets    : COL_CHECKBOX,
                 orderable  : false,
                 searchable : false,
                 width      : '48px',
-                className  : 'dt-center',
+                className  : 'dt-center no-vis',
             },
             /* No — tidak perlu search */
             {
@@ -333,7 +333,10 @@
                 topStart: [
                     'pageLength',
                     {
-                        buttons: ['colvis'],
+                        buttons: [{
+                            extend: 'colvis',
+                            columns: ':not(.no-vis)'
+                        }],
                     },
                 ],
                 topEnd     : 'search',

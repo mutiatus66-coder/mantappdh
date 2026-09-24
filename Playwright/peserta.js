@@ -29,7 +29,7 @@ const __dirname = path.dirname(__filename);
         await page.locator('.btn-register').click();
 
         console.log("3. Mengisi form pendaftaran...");
-        await page.fill('input[name="name"]', 'Peserta Baru Real');
+        await page.fill('input[name="name"]', 'Contoh Nama Peserta');
         await page.fill('input[name="email"]', uniqueEmail);
         await page.fill('input[name="password"]', 'Password123!');
         await page.fill('input[name="password_confirmation"]', 'Password123!');

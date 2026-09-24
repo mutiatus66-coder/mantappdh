@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8000';
+<<<<<<< HEAD
 const ADMIN_EMAIL = 'admin@demo.test';
+=======
+const ADMIN_EMAIL = 'admin@admin.com';
+>>>>>>> 05ae2b9fe0d396e707e2accab1eb16705c2febb0
 const ADMIN_PASSWORD = 'password';
 
 test.setTimeout(60000);

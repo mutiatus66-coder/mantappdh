@@ -15,13 +15,14 @@ Dusk
 
 Selenium
     Penilai
-    -   node selenium/penilai.js
+    -   python3 selenium/penilai.py
 
     Peserta
-    -   node selenium/peserta.js
+    -   python3 selenium/peserta.py
 
     Super Admin
     -   Bisa dijalankan sekaligus berurutan:
+<<<<<<< HEAD
         node Selenium/admin.js
 
     -   Atau dijalankan terpisah satu per satu:
@@ -29,6 +30,15 @@ Selenium
         node Selenium/Admin/Test2_IndikatorTest.js
         node Selenium/Admin/Test3_InovasiTest.js
         node Selenium/Admin/Test4_PenilaianTest.js
+=======
+        python3 selenium/admin.py
+
+    -   Atau dijalankan terpisah satu per satu:
+        python3 selenium/Admin/Test1_MasterTest.py
+        python3 selenium/Admin/Test2_IndikatorTest.py
+        python3 selenium/Admin/Test3_InovasiTest.py
+        python3 selenium/Admin/Test4_PenilaianTest.py
+>>>>>>> 05ae2b9fe0d396e707e2accab1eb16705c2febb0
 
 Playwright
     Penilai
